@@ -1,0 +1,7 @@
+{
+  "name": "dream",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
