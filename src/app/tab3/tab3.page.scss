@@ -1,0 +1,110 @@
+.row_konten {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.justify{
+    text-align: justify;
+    text-justify: inter-word;
+}
+
+.header{
+    background: linear-gradient(270deg, #FF0300 30%, #A50200 100%);
+    border-radius: 0 0 2rem 2rem;
+    width: 100%;
+    height: 25%;
+
+    ion-icon{
+        height: 50px;
+        width: 50px;
+    }
+}
+
+.konten_header{
+    display: flex;
+    align-items: center;
+}
+
+.card{
+    height: 50%;
+    width: 100%;
+    // background: yellow;
+    position: absolute;
+    top: 60px;
+}
+
+.images{
+    // border-radius: 50%;
+    // background: yellow;
+    position: relative;
+    // top: -4.5rem;
+    width: 40%;
+    height: 50%;
+    display: block;
+    transform: translateX(77%);
+}
+
+.ikut_parent{
+    width: 100%;
+    height: 100%; 
+    object-fit: contain;
+    border-radius: 50%;
+    position: absolute;
+}
+
+.card_header{
+    background-color: red;
+    padding-bottom: 5px;
+    padding-top: 5px;
+}
+
+.text_konten{
+    font-size: 42px;
+}
+
+.posisi_card{
+    position: relative;
+    // top: -90px;
+    // transform: translateX(-50%);
+}
+
+.content{
+    position: relative;
+    // top: -90px;
+    height: auto;
+}
+
+.text_oprasional{
+    margin-top: 0px;
+    margin-bottom: 5px;
+}
+
+.margin_bawah{
+    margin-bottom: 0px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.no_border{
+    border: 0px;
+}
+
+.float_right{
+    float: right;
+}
+
+.hr{
+    background: #FF0300 !important;
+    height: 2px !important;
+    width: 100% !important;
+    display: block !important;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.i_card_margin{
+    margin: 0;
+
+}

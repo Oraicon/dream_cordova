@@ -1,17 +1,340 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Tab 3
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content>
+  <div class="header">
+    <ion-grid >
+      <ion-row justify-content-start align-items-start>
+        <ion-col class="konten_header" size="10">
+          <ion-text>
+            <h1 class="warna_putih font_nama_pengguna bold ">Profil</h1>
+          </ion-text>    
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 3</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <div class="card">
+    <div class="images">
+      <img class="ikut_parent ion-text-center" src="assets/test.jpg">
+    </div>
 
-  <app-explore-container name="Tab 3 page"></app-explore-container>
+    <div class="content">
+      <ion-grid>
+        <ion-row>
+          <ion-col size="12">
+            <div>
+              <ion-text>
+                <h1 class="text_oprasional ">Data Akun</h1>
+              </ion-text>   
+            </div>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="12" class="card_konten_info">
+            <div>
+              <ion-card class="i_card_margin card_border">
+                <ion-card-content class="">
+                  <ion-grid>
+                    <ion-row class="row_konten">
+                      <ion-col size="3">
+                        <ion-text color="dark">
+                          <p class="">Username</p>
+                        </ion-text>                      
+                      </ion-col>
+                      <ion-col size="6">
+                        <ion-text color="dark">
+                          <p class="justify ">
+                            Nama Pengguna
+                          </p>
+                        </ion-text>                      
+                      </ion-col>
+                      <ion-col size="3">
+                        <ion-button (click)="ubahusername()" expand="block" fill="outline" shape="round">Ubah</ion-button>
+                      </ion-col>
+                    </ion-row>
+                    <div class="hr">
+                    </div>
+                    <ion-row class="row_konten">
+                      <ion-col size="3">
+                        <ion-text color="dark">
+                          <p class="">Password</p>
+                        </ion-text>                      
+                      </ion-col>
+                      <ion-col size="6">
+                        <ion-text color="dark">
+                          <p class="justify ">
+                            Sandi Pengguna
+                          </p>
+                        </ion-text>                      
+                      </ion-col>
+                      <ion-col size="3">
+                        <ion-button (click)="ubahpassword()" class="" expand="block" fill="outline" shape="round">Ubah</ion-button>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+                </ion-card-content>
+              </ion-card>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+
+    <div class="content">
+      <ion-grid>
+        <ion-row>
+          <ion-col size="12">
+            <div>
+              <ion-text>
+                <h1 class="text_oprasional ">Informasi Pengguna</h1>
+              </ion-text>   
+            </div>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="12" class="card_konten_info">
+            <div>
+              <ion-card class="i_card_margin card_border">
+                <ion-card-content class="">
+                  <ion-grid>
+                    <ion-row class="row_konten">
+                      <ion-col size="3">
+                        <ion-text color="dark">
+                          <p class="">NIK</p>
+                        </ion-text>                      
+                      </ion-col>
+                      <ion-col size="6">
+                        <ion-text color="dark">
+                          <p class="justify ">
+                            7894561236547891
+                          </p>
+                        </ion-text>                      
+                      </ion-col>
+                      <ion-col size="3">
+                        <ion-button (click)="ubahnik()" class="" expand="block" fill="outline" shape="round">Ubah</ion-button>
+                      </ion-col>
+                    </ion-row>
+
+                    <ion-row class="row_konten">
+                      <ion-col size="3">
+                        <ion-text color="dark">
+                          <p class="">Nama</p>
+                        </ion-text>                      
+                      </ion-col>
+                      <ion-col size="6">
+                        <ion-text color="dark">
+                          <p class="justify">
+                            Nama Pengguna
+                          </p>
+                        </ion-text>                      
+                      </ion-col>
+                      <ion-col size="3">
+                        <ion-button class="" expand="block" fill="outline" shape="round">Ubah</ion-button>
+                      </ion-col>
+                    </ion-row>
+
+                    <ion-row class="row_konten">
+                      <ion-col size="3">
+                        <ion-text color="dark">
+                          <p class="">Email</p>
+                        </ion-text>                      
+                      </ion-col>
+                      <ion-col size="6">
+                        <ion-text color="dark">
+                          <p class="justify ">
+                            Nama@email.com
+                          </p>
+                        </ion-text>                      
+                      </ion-col>
+                      <ion-col size="3">
+                        <ion-button (click)="ubahemail()" class="" expand="block" fill="outline" shape="round">Ubah</ion-button>
+                      </ion-col>
+                    </ion-row>
+
+                    <ion-row class="row_konten">
+                      <ion-col size="3">
+                        <ion-text color="dark">
+                          <p class="">No.HP</p>
+                        </ion-text>                      
+                      </ion-col>
+                      <ion-col size="6">
+                        <ion-text color="dark">
+                          <p class="justify ">
+                            012345678902
+                          </p>
+                        </ion-text>                      
+                      </ion-col>
+                      <ion-col size="3">
+                        <ion-button class="" expand="block" fill="outline" shape="round">Ubah</ion-button>
+                      </ion-col>
+                    </ion-row>
+
+                    <ion-row class="row_konten">
+                      <ion-col size="3">
+                        <ion-text color="dark">
+                          <p class="">Tempat Lahir</p>
+                        </ion-text>                      
+                      </ion-col>
+                      <ion-col size="6">
+                        <ion-text color="dark">
+                          <p class="justify ">
+                            Tempat Lahir Pengguna
+                          </p>
+                        </ion-text>                      
+                      </ion-col>
+                      <ion-col size="3">
+                        <ion-button class="" expand="block" fill="outline" shape="round">Ubah</ion-button>
+                      </ion-col>
+                    </ion-row>
+
+                    <ion-row class="row_konten">
+                      <ion-col size="3">
+                        <ion-text color="dark">
+                          <p class="">Tanggal Lahir</p>
+                        </ion-text>                      
+                      </ion-col>
+                      <ion-col size="6">
+                        <ion-text color="dark">
+                          <p class="justify ">
+                            2000-02-20
+                          </p>
+                        </ion-text>                      
+                      </ion-col>
+                      <ion-col size="3">
+                        <ion-button (click)="ubahtanggallahir()" class="" expand="block" fill="outline" shape="round">Ubah</ion-button>
+                      </ion-col>
+                    </ion-row>
+
+                    <ion-row class="row_konten">
+                      <ion-col size="3">
+                        <ion-text color="dark">
+                          <p class="">Jenis Kelamin</p>
+                        </ion-text>                      
+                      </ion-col>
+                      <ion-col size="6">
+                        <ion-text color="dark">
+                          <p class="justify ">
+                            Laki laki
+                          </p>
+                        </ion-text>                      
+                      </ion-col>
+                      <ion-col size="3">
+                        <ion-button (click)="ubahkelamin()" class="" expand="block" fill="outline" shape="round">Ubah</ion-button>
+                      </ion-col>
+                    </ion-row>
+
+                    <ion-row class="row_konten">
+                      <ion-col size="3">
+                        <ion-text color="dark">
+                          <p class="">Alamat</p>
+                        </ion-text>                      
+                      </ion-col>
+                      <ion-col size="6">
+                        <ion-text color="dark">
+                          <p class="justify ">
+                            Alamat Pengguna
+                          </p>
+                        </ion-text>                      
+                      </ion-col>
+                      <ion-col size="3">
+                        <ion-button class="" expand="block" fill="outline" shape="round">Ubah</ion-button>
+                      </ion-col>
+                    </ion-row>
+
+                    <ion-row class="row_konten">
+                      <ion-col size="3">
+                        <ion-text color="dark">
+                          <p class="justify ">Jabatan</p>
+                        </ion-text>                      
+                      </ion-col>
+                      <ion-col size="6">
+                        <ion-text color="dark">
+                          <p class="justify ">
+                            Jabatan Pengguna
+                          </p>
+                        </ion-text>                      
+                      </ion-col>
+                      <ion-col size="3">
+                      </ion-col>
+                    </ion-row>
+
+                    <ion-row class="row_konten">
+                      <ion-col size="3">
+                        <ion-text color="dark">
+                          <p class="justify ">Posisi</p>
+                        </ion-text>                      
+                      </ion-col>
+                      <ion-col size="6">
+                        <ion-text color="dark">
+                          <p class="justify ">
+                            Posisi Pengguna
+                          </p>
+                        </ion-text>                      
+                      </ion-col>
+                      <ion-col size="3">
+                      </ion-col>
+                    </ion-row>
+
+                    <ion-row class="row_konten">
+                      <ion-col size="3">
+                        <ion-text color="dark">
+                          <p class="justify ">Tanggal Bergabung</p>
+                        </ion-text>                      
+                      </ion-col>
+                      <ion-col size="6">
+                        <ion-text color="dark">
+                          <p class="justify ">
+                            2000-02-20
+                          </p>
+                        </ion-text>                      
+                      </ion-col>
+                      <ion-col size="3">
+                      </ion-col>
+                    </ion-row>
+
+                    <ion-row class="row_konten">
+                      <ion-col size="3">
+                        <ion-text color="dark">
+                          <p class="justify ">Status Pengguna</p>
+                        </ion-text>                      
+                      </ion-col>
+                      <ion-col size="6">
+                        <ion-text color="dark">
+                          <p class="justify ">
+                            Aktif
+                          </p>
+                        </ion-text>                      
+                      </ion-col>
+                      <ion-col size="3">
+                      </ion-col>
+                    </ion-row>
+
+                    <ion-row class="row_konten">
+                      <ion-col size="3">
+                        <ion-text color="dark">
+                          <p class="justify ">Departemen</p>
+                        </ion-text>                      
+                      </ion-col>
+                      <ion-col size="6">
+                        <ion-text color="dark">
+                          <p class="justify ">
+                            Departemen Pengguna
+                          </p>
+                        </ion-text>                      
+                      </ion-col>
+                      <ion-col size="3">
+                      </ion-col>
+                    </ion-row>
+
+                  </ion-grid>
+                </ion-card-content>
+              </ion-card>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+
+  </div>
+
 </ion-content>
