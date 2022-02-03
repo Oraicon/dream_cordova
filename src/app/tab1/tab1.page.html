@@ -1,17 +1,132 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Tab 1
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content>
+  <div class="header">
+    <ion-grid >
+      <ion-row justify-content-start align-items-start>
+        <ion-col class="konten_header" size="10">
+          <ion-text>
+            <h1 class="warna_putih font_nama_pengguna bold">Nama Pengguna</h1>
+          </ion-text>    
+        </ion-col>
+        <ion-col size="2" class="konten_header ikon_rotate" (click)="keluar()">
+            <ion-icon class="warna_putih" size="large" name="log-out-outline"></ion-icon>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 1</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <div class="card">
+    <div class="images">
+      <ion-card class="card_border margin_bawah">
+        <ion-card-header class="card_header">
+          <ion-card-subtitle class="title_text">Lokasi Pengerjaan :</ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-content class="konten_size_hedder">
+          <h1 class="ion-text-right text_konten font_konten_size bold">
+            Cirebon
+          </h1>
+        </ion-card-content>
+      </ion-card>
+    </div>
 
-  <app-explore-container name="Tab 1 page"></app-explore-container>
+    <div class="content">
+      <ion-grid>
+        <ion-row>
+          <ion-col size="12">
+            <div>
+              <ion-text>
+                <h1 class="text_oprasional">Rincian Oprasional</h1>
+              </ion-text>   
+            </div>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="12" class="card_konten_info">
+            <div>
+              <ion-card class="i_card_margin card_border">
+                <ion-card-header class="card_header warna_merah">
+                  <ion-card-subtitle class="title_text warna_putih">Penarikan Kabel</ion-card-subtitle>
+                </ion-card-header>
+                <ion-card-content class="konten_size">
+                  <p class="ion-text-right font_konten_size_konten bold">
+                    2000/4000<small class="konten_satuan"> Meter</small>
+                  </p>
+                </ion-card-content>
+              </ion-card>
+            </div>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="12" class="card_konten_info">
+            <div>
+              <ion-card class="i_card_margin card_border">
+                <ion-card-header class="card_header warna_merah">
+                  <ion-card-subtitle class="title_text warna_putih ">Pemasangan Fiber Optik</ion-card-subtitle>
+                </ion-card-header>
+                <ion-card-content class="konten_size">
+                  <p class="ion-text-right font_konten_size_konten bold ">
+                    2/5<small class="konten_satuan "> Meter</small>
+                  </p>
+                </ion-card-content>
+              </ion-card>
+            </div>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="12" class="card_konten_info">
+            <div>
+              <ion-card class="i_card_margin card_border">
+                <ion-card-header class="card_header warna_merah">
+                  <ion-card-subtitle class="title_text warna_putih ">Pemasangan Material Jasa</ion-card-subtitle>
+                </ion-card-header>
+                <ion-card-content class="konten_size">
+                  <p class="ion-text-right font_konten_size_konten bold ">
+                    80/651<small class="konten_satuan "> Meter</small>
+                  </p>
+                </ion-card-content>
+              </ion-card>
+            </div>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="12" class="card_konten_info">
+            <div>
+              <ion-card class="i_card_margin card_border">
+                <ion-card-header class="card_header warna_merah">
+                  <ion-card-subtitle class="title_text warna_putih ">Penyambungan Kabel Optik</ion-card-subtitle>
+                </ion-card-header>
+                <ion-card-content class="konten_size">
+                  <p class="ion-text-right font_konten_size_konten bold ">
+                    561/1.064<small class="konten_satuan"> Unit</small>
+                  </p>
+                </ion-card-content>
+              </ion-card>
+            </div>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="12" class="card_konten_info">
+            <div>
+              <ion-card class="i_card_margin card_border">
+                <ion-card-header class="card_header warna_merah">
+                  <ion-card-subtitle class="title_text warna_putih">Pekerjaan Cut Over</ion-card-subtitle>
+                </ion-card-header>
+                <ion-card-content class="konten_size">
+                  <p class="ion-text-right font_konten_size_konten bold">
+                    51/168<small class="konten_satuan"> Unit</small>
+                  </p>
+                </ion-card-content>
+              </ion-card>
+            </div>
+          </ion-col>
+        </ion-row>
+        
+      </ion-grid>
+    </div>
+  </div>
+
 </ion-content>

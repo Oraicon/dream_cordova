@@ -238,3 +238,32 @@
     --ion-card-background: #1e1e1e;
   }
 }
+
+//css sendiri
+ion-content {
+  --background: #E5E5E5;
+  position: relative;
+}
+
+.warna_putih{
+  color: white;
+}
+
+.font_nama_pengguna{
+  font-size: 24px;
+}
+
+.bold{
+  font-weight: bold;
+}
+
+.card_border{
+  border-color: #FF0300;
+  border-width: thin;
+  border-style: solid;
+  border-radius: 15px;
+}
+
+.title_text{
+  font-size: 18px;
+}
