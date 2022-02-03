@@ -1,9 +1,60 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>modal-kegiatan</ion-title>
+    <ion-title>Pilih kegiatan</ion-title>
+    <ion-button slot="end" (click)="tutup()" class="posisi">
+      <ion-icon class="rotate_icon" slot="icon-only" name="add-outline" size="large"></ion-icon>
+    </ion-button>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content fullscreen>
+  <ion-list>
+
+    <ion-radio-group allow-empty-selection value="anchovies">
+      <ion-item>
+        <ion-label class="ion-text-wrap">Jasa Penarikan Kabel 12c</ion-label>
+        <ion-radio slot="end" color="primary" value="a"></ion-radio>
+      </ion-item>
+
+      <ion-item>
+        <ion-label class="ion-text-wrap">Pengadaan dan pemasangan alat sambung (cabang/ lurus) untuk Fiber Optik kapasitas 12 - 24 core</ion-label>
+        <ion-radio slot="end" color="primary" value="b"></ion-radio>
+      </ion-item>
+
+      <ion-item>
+        <ion-label class="ion-text-wrap">Jasa Pemasangan Tiang Besi 7 meter, berikut cat & cor pondasi dan Pengadaan assesories dengan kekuatan tarik 140 kg (Material & Jasa)</ion-label>
+        <ion-radio slot="end" color="primary" value="c"></ion-radio>
+      </ion-item>
+
+      <ion-item>
+        <ion-label class="ion-text-wrap">Pengadaan dan Pemasangan Asesoris tiang eksisting</ion-label>
+        <ion-radio slot="end" color="primary" value="d"></ion-radio>
+      </ion-item>
+
+      <ion-item>
+        <ion-label class="ion-text-wrap">Penyambungan Kabel Optik Single Mode kap 1 core dengan cara fusion splice</ion-label>
+        <ion-radio slot="end" color="primary" value="e"></ion-radio>
+      </ion-item>
+
+      <ion-item>
+        <ion-label class="ion-text-wrap">pemasangan kabinet ODC (Outdoor) kap 144 core dengan space untuk spliter modular termasuk material adaptor SC, pigtail, pondasi berlapis keramik, lantai kerja keramik, patok pengaman (5 buah *), berikut pelabelan
+        </ion-label>
+        <ion-radio slot="end" color="primary" value="f"></ion-radio>
+      </ion-item>
+
+    </ion-radio-group>
+
+    <ion-grid fixed>
+      <ion-row>
+        <ion-col size="6">
+          <ion-button expand="block" fill="outline" color="primary" class="font_jsr">Batal</ion-button>
+        </ion-col>
+        <ion-col size="6">
+          <ion-button expand="block" color="primary" class="font_jsr">Pilih Kegiatan</ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-list>
+
 
 </ion-content>
