@@ -1,9 +1,50 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>login</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content [fullscreen]="true">
 
-<ion-content>
+  <div class="header">
+    <div class="gambar ion-text-center">
+      <img class="gambar_skala" src="assets/ss.png">
+      <p class="josefinr ion-text-center">dream 1.0</p>
+    </div> 
+  </div>
 
+  <div class="bg_card">
+    <ion-card class="padding_card">
+      <ion-card-content>
+        <ion-grid fixed>
+          <ion-row>
+            <ion-col size="12" class="padding_col">
+              <ion-text>
+                <h1 class="text_login font_jsr">Login</h1>
+              </ion-text>
+            </ion-col>
+  
+            <ion-col size="12" class="padding_col">
+              <ion-item class="item_border">
+                <ion-icon name="person-outline" size="large" class="padding_icon font_jsr warna_abu"></ion-icon>
+                <ion-input placeholder="Nama" type="text"></ion-input>
+              </ion-item>
+            </ion-col>
+  
+            <ion-col size="12" class="padding_col">
+              <ion-item class="item_border">
+                <ion-icon name="key-outline" size="large" class="padding_icon font_jsr warna_abu"></ion-icon>
+                <ion-input placeholder="Sanbi" [type]="showPassword ? 'text' : 'password'"></ion-input>
+                <ion-icon name="eye-outline" size="large"></ion-icon>
+              </ion-item>
+            </ion-col>
+  
+            <ion-col size="12" class="padding_col">
+                <ion-button color="primary" expand="block" class="border_text font_jsr">Masuk</ion-button>
+            </ion-col>
+
+            <ion-col size="12" class="padding_col">
+              <ion-text color="dark" class="ion-text-center">
+                <h5>Lupa Password ?</h5>
+              </ion-text>
+          </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </ion-card>
+  </div>
 </ion-content>
