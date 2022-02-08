@@ -11,12 +11,14 @@ import { AppComponent } from './app.component';
 import { HTTP } from '@awesome-cordova-plugins/http/ngx';
 import { Camera } from '@awesome-cordova-plugins/camera/ngx';
 import { IonicStorageModule } from '@ionic/storage-angular';
+import { FileTransfer, FileTransferObject } from '@awesome-cordova-plugins/file-transfer/ngx';
+
 
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, IonicStorageModule.forRoot()],
-  providers: [HTTP, Camera, { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
+  providers: [HTTP, Camera, FileTransfer, FileTransferObject, { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
