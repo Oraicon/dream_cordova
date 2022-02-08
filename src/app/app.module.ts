@@ -9,12 +9,13 @@ import { AppComponent } from './app.component';
 
 //importlibrary
 import { HTTP } from '@awesome-cordova-plugins/http/ngx';
+import { Camera } from '@awesome-cordova-plugins/camera/ngx';
 
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule],
-  providers: [HTTP, { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
+  providers: [HTTP, Camera, { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
