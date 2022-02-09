@@ -19,14 +19,14 @@
             </ion-col>
   
             <ion-col size="12" class="padding_col">
-              <ion-item class="item_border">
+              <ion-item class="item_border" lines="none">
                 <ion-icon name="person-outline" size="large" class="padding_icon warna_abu"></ion-icon>
-                <ion-input placeholder="Nama" type="text"></ion-input>
+                <ion-input placeholder="Nama" type="text" [(ngModel)]="binding"></ion-input>
               </ion-item>
             </ion-col>
   
             <ion-col size="12" class="padding_col">
-              <ion-item class="item_border">
+              <ion-item class="item_border" lines="none">
                 <ion-icon name="key-outline" size="large" class="padding_icon warna_abu"></ion-icon>
                 <ion-input placeholder="Sanbi" [type]="showPassword ? 'text' : 'password'"></ion-input>
                 <ion-icon name="eye-outline" size="large"></ion-icon>

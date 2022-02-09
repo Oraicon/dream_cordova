@@ -79,3 +79,7 @@ ion-content {
 .warna_abu{
     color: grey;
 }
+
+.item-interactive.item-has-focus {
+    --highlight-background: var(--highlight-color-focused);
+}
