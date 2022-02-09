@@ -3,13 +3,15 @@
 }
 
 ion-input {
-    font-size: 20px;
-    font-family: JosefinSansRegular;
+    font-size: 20px !important;
 }
 
 ion-textarea {
-    font-size: 20px;
-    font-family: JosefinSansRegular;
+    font-size: 20px !important;
+}
+
+ion-label{
+    font-size: 18px !important;
 }
 
 .font_kegiatan{

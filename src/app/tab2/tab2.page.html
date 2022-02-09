@@ -4,7 +4,7 @@
       <ion-row justify-content-start align-items-start>
         <ion-col class="konten_header" size="10">
           <ion-text>
-            <h1 class="warna_putih font_nama_pengguna bold ">Laporan</h1>
+            <h1 class="warna_putih font_nama_pengguna bold ">Laporan Harian</h1>
           </ion-text>    
         </ion-col>
       </ion-row>
@@ -21,7 +21,7 @@
           <ion-grid fixed>
             <ion-row>
               <ion-col size="12" class="ion-text-center">
-                <img src="assets/tiang.jpg" height="200" width="170">
+                <img class="card_border" src="assets/tiang.jpg" height="250px" width="250px">
               </ion-col>
             </ion-row>
 
@@ -69,14 +69,14 @@
 
                     <ion-row>
                       <ion-col size="12">                        
-                        <ion-button expand="block" color="primary" class="font_jsr" (click)="pilihkegiatan()">Pilih Tahapan</ion-button>
+                        <ion-button expand="block" color="primary" class="" (click)="pilihkegiatan()">Pilih Tahapan</ion-button>
                       </ion-col>
                     </ion-row>
 
                     <ion-row>
                       <ion-col size="12">                        
                         <ion-text color="dark" class="">
-                          <p class="font_jsr font_kegiatan">
+                          <p class=" font_kegiatan">
                             Nama tahapan
                           </p>
                         </ion-text> 
@@ -86,7 +86,7 @@
                     <ion-row>
                       <ion-col size="12">
                         <ion-item>
-                          <ion-label position="floating" class="">Volume Barang</ion-label>
+                          <ion-label position="floating">Volume Barang</ion-label>
                           <ion-input placeholder="Banyaknya Unit/Panjang Barang"></ion-input>
                         </ion-item>
                       </ion-col>

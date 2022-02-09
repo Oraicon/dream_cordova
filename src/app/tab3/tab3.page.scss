@@ -5,10 +5,10 @@
     height: 100%;
 }
 
-.justify{
-    text-align: justify;
-    text-justify: inter-word;
-}
+// .justify{
+//     text-align: justify;
+//     text-justify: inter-word;
+// }
 
 .header{
     background: linear-gradient(270deg, #FF0300 30%, #A50200 100%);
@@ -30,7 +30,7 @@
 .card{
     height: 50%;
     width: 100%;
-    // background: yellow;
+    // background: green;
     position: absolute;
     top: 60px;
 }
@@ -40,18 +40,20 @@
     // background: yellow;
     position: relative;
     // top: -4.5rem;
-    width: 40%;
+    width: 50%;
     height: 50%;
     display: block;
-    transform: translateX(77%);
+    transform: translateX(50%);
 }
 
 .ikut_parent{
-    width: 100%;
-    height: 100%; 
-    object-fit: contain;
     border-radius: 50%;
-    position: absolute;
+    // position: relative;
+    // top: -4.5rem;
+    width: 100%;
+    height: 100%;
+    // display: block;
+    // transform: translateX(0%);
 }
 
 .card_header{
