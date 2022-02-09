@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 
 @Component({
@@ -8,7 +9,7 @@ import { AlertController } from '@ionic/angular';
 })
 export class Tab1Page {
 
-  constructor(private alertCtrl: AlertController) {}
+  constructor(private alertCtrl: AlertController, private router: Router) {}
 
   keluar(){
     this.alertCtrl.create({
@@ -20,6 +21,9 @@ export class Tab1Page {
         },
         {
           text: 'Ya',
+          handler: () =>{
+            this.router.navigateByUrl("")
+          }
         }
       ]
     }).then(res => {
