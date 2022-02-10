@@ -29,7 +29,7 @@
               <ion-item class="item_border" lines="none">
                 <ion-icon name="key-outline" size="large" class="padding_icon warna_abu"></ion-icon>
                 <ion-input placeholder="Sanbi" [type]="showPassword ? 'text' : 'password'" [(ngModel)]="data_sandi_f"></ion-input>
-                <ion-icon name="eye-outline" size="large"></ion-icon>
+                <ion-icon [name]="passwordToggleIcon" (click)="lihat_sandi()" size="large"></ion-icon>
               </ion-item>
             </ion-col>
   

@@ -4,7 +4,6 @@ import { ModalController } from '@ionic/angular';
 import { ModalLupasandiPage } from 'src/app/modal/modal-lupasandi/modal-lupasandi.page';
 import { ApiServicesService } from 'src/app/services/api-services.service';
 import { Storage } from '@ionic/storage-angular';
-import { JsonPipe } from '@angular/common';
 
 @Component({
   selector: 'app-login',
@@ -24,6 +23,8 @@ export class LoginPage implements OnInit {
   //variable frontend
   data_nama_f;
   data_sandi_f;
+  showPassword = false;
+  passwordToggleIcon = 'eye-outline';
 
   ngOnInit() {
     this.storage.create();
@@ -54,6 +55,7 @@ export class LoginPage implements OnInit {
             
           } else if (data_status == 2) {
             console.log(data_json);
+
           } else if (data_status == 3) {
             console.log(data_json);
           }
@@ -85,6 +87,16 @@ export class LoginPage implements OnInit {
       cssClass: 'small-modal'
     });
     await modal.present();
+  }
+
+  lihat_sandi(){
+    this.showPassword = !this.showPassword;
+
+    if (this.passwordToggleIcon == 'eye-outline') {
+      this.passwordToggleIcon = 'eye-off-outline';
+    } else {
+      this.passwordToggleIcon = 'eye-outline';
+    }
   }
 
 }
