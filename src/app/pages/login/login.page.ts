@@ -4,6 +4,7 @@ import { ModalController } from '@ionic/angular';
 import { ModalLupasandiPage } from 'src/app/modal/modal-lupasandi/modal-lupasandi.page';
 import { ApiServicesService } from 'src/app/services/api-services.service';
 import { Storage } from '@ionic/storage-angular';
+import { AlertServicesService } from '../../services/alert-services.service';
 
 @Component({
   selector: 'app-login',
@@ -15,7 +16,8 @@ export class LoginPage implements OnInit {
   constructor(
   private router:Router,
   private storage:Storage,
-  private apiService:ApiServicesService, 
+  private apiService:ApiServicesService,
+  private alertService:AlertServicesService, 
   private modalCtrl: ModalController) { 
     this.ngOnInit();
   }
@@ -36,11 +38,11 @@ export class LoginPage implements OnInit {
     let var_sandi = "";
 
     if (this.data_nama_f == null) {
-      console.log("nama kosong");
+      this.alertService.alert_nama_kosong();
     } else {
       var_nama = this.data_nama_f;
       if (this.data_sandi_f == null) {
-        console.log("sandi kodong");
+        this.alertService.alert_sandi_kosong();
       } else {
         var_sandi = this.data_sandi_f;
         
@@ -51,29 +53,36 @@ export class LoginPage implements OnInit {
     
           if (data_status == 1) {
             this.storage.set('auth', true);
+            this.storage.set('nama', var_nama);
+            this.storage.set('sandi', var_sandi);
+
             this.router.navigateByUrl("/tabs/tab1");
             
           } else if (data_status == 2) {
-            console.log(data_json);
+            this.alertService.alert_gagal_login2();
 
           } else if (data_status == 3) {
-            console.log(data_json);
+            this.alertService.alert_gagal_login3();
+
+          } else {
+            this.alertService.alert_error_login1();
+
           }
     
     
     
         })
         .catch(err => {
-          console.log(err);
-
           const err_json = JSON.parse(err.error);
           const err_error = err_json.status;
 
           if (err_error == 0) {
-        
-            console.log("user tidak ditemukan");     
+            this.alertService.alert_gagal_login0();
+            
+          }else {
+            this.alertService.alert_error_login2();
           }
-          
+
         });
       }
     }
