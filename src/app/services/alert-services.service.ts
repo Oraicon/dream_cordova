@@ -32,6 +32,19 @@ export class AlertServicesService {
     });
   }
 
+  alert_tidak_ada_koneksi() {
+    this.alertCtrl.create({
+      header: 'Tidak ada internet !',
+      subHeader: 'Anda tidak terhubung dengan internet !.',
+      message: 'Coba beberapa saat lagi !.',
+      buttons: ['OK']
+    }).then(res => {
+
+      res.present();
+
+    });
+  }
+
   alert_gagal_login2(){
     this.alertCtrl.create({
       header: 'Login gagal !',
@@ -84,6 +97,18 @@ export class AlertServicesService {
     this.alertCtrl.create({
       header: 'Login gagal !',
       message: 'Code Error 2 !',
+      buttons: ['OK']
+    }).then(res => {
+
+      res.present();
+
+    });
+  }
+
+  alert_error_login3(){
+    this.alertCtrl.create({
+      header: 'Login gagal !',
+      message: 'Code Error 3 !',
       buttons: ['OK']
     }).then(res => {
 
