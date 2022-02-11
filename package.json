@@ -22,6 +22,7 @@
     "@awesome-cordova-plugins/camera": "^5.39.0",
     "@awesome-cordova-plugins/file-transfer": "^5.39.0",
     "@awesome-cordova-plugins/http": "^5.39.0",
+    "@awesome-cordova-plugins/network": "^5.39.0",
     "@capacitor/app": "1.1.0",
     "@capacitor/core": "3.4.0",
     "@capacitor/haptics": "1.1.4",
@@ -57,6 +58,7 @@
     "cordova-plugin-file-transfer": "github:apache/cordova-plugin-file-transfer",
     "cordova-plugin-ionic-keyboard": "^2.0.5",
     "cordova-plugin-ionic-webview": "^5.0.0",
+    "cordova-plugin-network-information": "^3.0.0",
     "cordova-plugin-splashscreen": "5.0.2",
     "cordova-plugin-statusbar": "^2.4.2",
     "eslint": "^7.6.0",
@@ -85,7 +87,8 @@
       "cordova-plugin-device": {},
       "cordova-plugin-splashscreen": {},
       "cordova-plugin-ionic-webview": {},
-      "cordova-plugin-ionic-keyboard": {}
+      "cordova-plugin-ionic-keyboard": {},
+      "cordova-plugin-network-information": {}
     },
     "platforms": [
       "android"
