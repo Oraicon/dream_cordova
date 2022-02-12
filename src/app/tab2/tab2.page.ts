@@ -11,16 +11,10 @@ import { WebView } from '@awesome-cordova-plugins/ionic-webview/ngx';
 })
 export class Tab2Page {
 
-  imgURL:any = 'https://oraicon.000webhostapp.com/upload/0210202260505.JPEG';
-
-  // public url_img = 'https://oraicon.000webhostapp.com/upload/0210202260505.JPEG';
-  // url_img = 'https://oraicon.000webhostapp.com/upload/0210202260505.JPEG';
+  imgURL:any = 'assets/ss.png';
 
   constructor(private modalCtrl: ModalController, private webview: WebView) {
-    // this.imgurl = "assets/tiang.jpg";
 
-    // console.log(this.url_img);
-    // console.log(this.imgData_url);
   }
 
   async  pilihkegiatan(){

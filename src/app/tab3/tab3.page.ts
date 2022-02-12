@@ -8,7 +8,7 @@ import { AlertController } from '@ionic/angular';
 })
 export class Tab3Page {
 
-  imgURL:any = 'https://oraicon.000webhostapp.com/upload/0210202260505.JPEG';
+  imgURL:any = 'assets/ss.png';
 
   constructor(private alertCtrl: AlertController) {}
 
