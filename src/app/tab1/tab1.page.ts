@@ -4,6 +4,7 @@ import { AlertController } from '@ionic/angular';
 import { Storage } from '@ionic/storage-angular';
 
 
+
 @Component({
   selector: 'app-tab1',
   templateUrl: 'tab1.page.html',
@@ -11,12 +12,14 @@ import { Storage } from '@ionic/storage-angular';
 })
 export class Tab1Page {
 
-  constructor(private alertCtrl: AlertController, private storage:Storage, private router: Router) {}
+  constructor(private alertCtrl: AlertController, private storage:Storage, private router: Router) {
+
+  }
 
   keluar(){
     this.alertCtrl.create({
-      header: 'Keluar dari aplikasi',
-      message: 'Anda yakin ingin keluar dari aplikasi ?',
+      header: 'Kembali ke login ?',
+      message: 'Anda akan kembali ke halaman login anda yakin ?',
       buttons: [
         {
           text: 'Tidak',
@@ -25,7 +28,7 @@ export class Tab1Page {
           text: 'Ya',
           handler: () =>{
             this.storage.clear();
-            this.router.navigateByUrl("")
+            this.router.navigate(["/login"], { replaceUrl: true });
           }
         }
       ]

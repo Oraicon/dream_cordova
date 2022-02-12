@@ -9,6 +9,7 @@ import { Network } from '@awesome-cordova-plugins/network/ngx';
 import { LoadingServiceService } from 'src/app/services/loading-service.service';
 
 
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
@@ -37,7 +38,7 @@ export class LoginPage implements OnInit {
   ngOnInit() {
     this.storage.create();
     this.storage.set('auth', false);
-
+    
     this.network.onDisconnect().subscribe(() => {
       this.cek_koneksi = false;
     });
@@ -47,6 +48,7 @@ export class LoginPage implements OnInit {
         this.cek_koneksi = true;
       }, 3000);
     });
+
   }
 
   login(){
@@ -81,32 +83,32 @@ export class LoginPage implements OnInit {
               this.storage.set('sandi', var_sandi);
               
               this.loadingService.tutuploading();
-              this.data_nama_f = "";
-              this.data_sandi_f = "";
+              this.data_nama_f = null;
+              this.data_sandi_f = null;
 
-              this.router.navigateByUrl("/tabs/tab1");
+              this.ionViewDidLeave();
               
             } else if (data_status == 2) {
               this.loadingService.tutuploading();
               
               this.alertService.alert_gagal_login2();
-              this.data_nama_f = "";
-              this.data_sandi_f = "";
+              this.data_nama_f = null;
+              this.data_sandi_f = null;
 
             } else if (data_status == 3) {
               this.loadingService.tutuploading();
 
               this.alertService.alert_gagal_login3();
-              this.data_nama_f = "";
-              this.data_sandi_f = "";
+              this.data_nama_f = null;
+              this.data_sandi_f = null;
 
             } else {
               this.loadingService.tutuploading();
 
               this.alertService.alert_error_login1();
               
-              this.data_nama_f = "";
-              this.data_sandi_f = "";
+              this.data_nama_f = null;
+              this.data_sandi_f = null;
             }
       
       
@@ -121,16 +123,16 @@ export class LoginPage implements OnInit {
 
 
               this.alertService.alert_gagal_login0();
-              this.data_nama_f = "";
-              this.data_sandi_f = "";
+              this.data_nama_f = null;
+              this.data_sandi_f = null;
 
             }else {
               this.loadingService.tutuploading();
 
 
               this.alertService.alert_error_login2();
-              this.data_nama_f = "";
-              this.data_sandi_f = "";
+              this.data_nama_f = null;
+              this.data_sandi_f = null;
             }
   
           });
@@ -164,6 +166,10 @@ export class LoginPage implements OnInit {
     } else {
       this.passwordToggleIcon = 'eye-outline';
     }
+  }
+
+  ionViewDidLeave(){
+    this.router.navigate(["/tabs/tab1"], { replaceUrl: true });
   }
 
 }
