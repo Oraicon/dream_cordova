@@ -32,8 +32,8 @@ export class AppComponent {
 
   async alertkeluar(){
     const alert = await this.alertCtrl.create({
-      header: 'Kembali ke login ?',
-      message: 'Anda akan kembali ke halaman login anda yakin ?',
+      header: 'Keluar dari aplikasi ?',
+      message: 'Anda yakin keluar dari aplikasi ?',
       buttons: [
         {
           text: 'Tidak',
@@ -42,7 +42,7 @@ export class AppComponent {
           text: 'Ya',
           handler: () =>{
             this.storage.clear();
-            this.router.navigateByUrl("")
+            navigator['app'].exitApp();
           }
         }
       ]
