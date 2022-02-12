@@ -4,7 +4,13 @@
       <ion-row justify-content-start align-items-start>
         <ion-col class="konten_header" size="10">
           <ion-text>
-            <h1 class="warna_putih font_nama_pengguna bold">Nama Pengguna</h1>
+
+            <h1 *ngIf="data_pengguna; else data_pengguna_ada" class="warna_putih font_nama_pengguna bold">Nama Pengguna</h1>
+
+            <ng-template #data_pengguna_ada>
+            <h1 class="warna_putih font_nama_pengguna bold">{{ data_nama }}</h1>
+            </ng-template>
+
           </ion-text>    
         </ion-col>
         <ion-col size="2" class="konten_header ikon_rotate">

@@ -39,15 +39,17 @@ export class LoginPage implements OnInit {
     this.storage.create();
     this.storage.set('auth', false);
     
-    this.network.onDisconnect().subscribe(() => {
-      this.cek_koneksi = false;
-    });
+    // this.network.onDisconnect().subscribe(() => {
+    //   this.cek_koneksi = false;
+    // });
   
-    this.network.onConnect().subscribe(() => {
-      setTimeout(() => {
-        this.cek_koneksi = true;
-      }, 3000);
-    });
+    // this.network.onConnect().subscribe(() => {
+    //   setTimeout(() => {
+    //     this.cek_koneksi = true;
+    //   }, 3000);
+    // });
+
+    this.cek_koneksi = true;
 
   }
 
@@ -72,7 +74,7 @@ export class LoginPage implements OnInit {
           
           this.loadingService.tampil_loading_login();
 
-          this.apiService.panggil_api_awal(var_nama, var_sandi)
+          this.apiService.panggil_api_data_karyawan(var_nama, var_sandi)
           .then(res => {
             const data_json = JSON.parse(res.data);
             const data_status = data_json.status;
