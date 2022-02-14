@@ -10,10 +10,10 @@
 <ion-content fullscreen>
   <ion-list>
 
-    <ion-radio-group allow-empty-selection value="anchovies">
+    <ion-radio-group (ionChange)="checkValue($event)">
       <ion-item>
         <ion-label class="ion-text-wrap">Jasa Penarikan Kabel 12c</ion-label>
-        <ion-radio slot="end" color="primary" value="a"></ion-radio>
+        <ion-radio slot="end"  color="primary" value="a"></ion-radio>
       </ion-item>
 
       <ion-item>
@@ -41,7 +41,7 @@
         </ion-label>
         <ion-radio slot="end" color="primary" value="f"></ion-radio>
       </ion-item>
-
+      
     </ion-radio-group>
 
 
@@ -58,7 +58,7 @@
           <ion-button expand="block" fill="outline" color="primary" class="font_jsr">Batal</ion-button>
         </ion-col>
         <ion-col size="6">
-          <ion-button expand="block" color="primary" class="font_jsr">Pilih Kegiatan</ion-button>
+          <ion-button expand="block" color="primary" class="font_jsr" (click)="pilih()">Pilih Kegiatan</ion-button>
         </ion-col>
       </ion-row>
     </ion-grid>

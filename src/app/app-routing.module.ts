@@ -17,10 +17,6 @@ const routes: Routes = [
     loadChildren: () => import('./modal/modal-kegiatan/modal-kegiatan.module').then( m => m.ModalKegiatanPageModule)
   },
   {
-    path: 'modal-gambar',
-    loadChildren: () => import('./modal/modal-gambar/modal-gambar.module').then( m => m.ModalGambarPageModule)
-  },
-  {
     path: 'modal-lupasandi',
     loadChildren: () => import('./modal/modal-lupasandi/modal-lupasandi.module').then( m => m.ModalLupasandiPageModule)
   },

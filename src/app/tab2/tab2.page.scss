@@ -74,3 +74,20 @@ ion-label{
     margin-right: 10px;
     margin-bottom: 10px;
 }
+
+.modal-tab2{
+    --backdrop-opacity: var(--ion-backdrop-opacity, 2);
+}
+
+.posisi{
+    margin-right: 5%;
+}
+
+.rotate_icon{
+    transform: rotate(45deg);
+}
+
+.padding_icon{
+    padding-left: 9px;
+    padding-bottom: 6px;
+}

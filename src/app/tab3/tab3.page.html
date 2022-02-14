@@ -15,6 +15,11 @@
     <div class="images">
       <!-- <img class="ikut_parent ion-text-center" src="assets/test.jpg"> -->
       <img class="ikut_parent ion-text-center" src="{{ imgURL }}">
+      <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+        <ion-fab-button color="secondary">
+          <ion-icon name="add" size="large"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
     </div>
 
     <div class="content">
@@ -99,7 +104,7 @@
                 <ion-card-content class="">
                   <ion-grid>
                     <ion-row class="row_konten">
-                      <ion-col size="3">
+                      <ion-col size="6">
                         <ion-text color="dark">
                           <p class="">NIK</p>
                         </ion-text>                      
@@ -111,13 +116,10 @@
                           </p>
                         </ion-text>                      
                       </ion-col>
-                      <ion-col size="3">
-                        <ion-button (click)="ubahnik()" class="" expand="block" fill="outline" shape="round">Ubah</ion-button>
-                      </ion-col>
                     </ion-row>
 
                     <ion-row class="row_konten">
-                      <ion-col size="3">
+                      <ion-col size="6">
                         <ion-text color="dark">
                           <p class="">Nama</p>
                         </ion-text>                      
@@ -129,13 +131,10 @@
                           </p>
                         </ion-text>                      
                       </ion-col>
-                      <ion-col size="3">
-                        <ion-button class="" expand="block" fill="outline" shape="round">Ubah</ion-button>
-                      </ion-col>
                     </ion-row>
 
                     <ion-row class="row_konten">
-                      <ion-col size="3">
+                      <ion-col size="6">
                         <ion-text color="dark">
                           <p class="">Email</p>
                         </ion-text>                      
@@ -147,13 +146,10 @@
                           </p>
                         </ion-text>                      
                       </ion-col>
-                      <ion-col size="3">
-                        <ion-button (click)="ubahemail()" class="" expand="block" fill="outline" shape="round">Ubah</ion-button>
-                      </ion-col>
                     </ion-row>
 
                     <ion-row class="row_konten">
-                      <ion-col size="3">
+                      <ion-col size="6">
                         <ion-text color="dark">
                           <p class="">No.HP</p>
                         </ion-text>                      
@@ -165,13 +161,10 @@
                           </p>
                         </ion-text>                      
                       </ion-col>
-                      <ion-col size="3">
-                        <ion-button class="" expand="block" fill="outline" shape="round">Ubah</ion-button>
-                      </ion-col>
                     </ion-row>
 
                     <ion-row class="row_konten">
-                      <ion-col size="3">
+                      <ion-col size="6">
                         <ion-text color="dark">
                           <p class="">Tempat Lahir</p>
                         </ion-text>                      
@@ -183,13 +176,10 @@
                           </p>
                         </ion-text>                      
                       </ion-col>
-                      <ion-col size="3">
-                        <ion-button class="" expand="block" fill="outline" shape="round">Ubah</ion-button>
-                      </ion-col>
                     </ion-row>
 
                     <ion-row class="row_konten">
-                      <ion-col size="3">
+                      <ion-col size="6">
                         <ion-text color="dark">
                           <p class="">Tanggal Lahir</p>
                         </ion-text>                      
@@ -201,13 +191,10 @@
                           </p>
                         </ion-text>                      
                       </ion-col>
-                      <ion-col size="3">
-                        <ion-button (click)="ubahtanggallahir()" class="" expand="block" fill="outline" shape="round">Ubah</ion-button>
-                      </ion-col>
                     </ion-row>
 
                     <ion-row class="row_konten">
-                      <ion-col size="3">
+                      <ion-col size="6">
                         <ion-text color="dark">
                           <p class="">Jenis Kelamin</p>
                         </ion-text>                      
@@ -219,13 +206,10 @@
                           </p>
                         </ion-text>                      
                       </ion-col>
-                      <ion-col size="3">
-                        <ion-button (click)="ubahkelamin()" class="" expand="block" fill="outline" shape="round">Ubah</ion-button>
-                      </ion-col>
                     </ion-row>
 
                     <ion-row class="row_konten">
-                      <ion-col size="3">
+                      <ion-col size="6">
                         <ion-text color="dark">
                           <p class="">Alamat</p>
                         </ion-text>                      
@@ -237,13 +221,10 @@
                           </p>
                         </ion-text>                      
                       </ion-col>
-                      <ion-col size="3">
-                        <ion-button class="" expand="block" fill="outline" shape="round">Ubah</ion-button>
-                      </ion-col>
                     </ion-row>
 
                     <ion-row class="row_konten">
-                      <ion-col size="3">
+                      <ion-col size="6">
                         <ion-text color="dark">
                           <p class="justify ">Jabatan</p>
                         </ion-text>                      
@@ -255,12 +236,10 @@
                           </p>
                         </ion-text>                      
                       </ion-col>
-                      <ion-col size="3">
-                      </ion-col>
                     </ion-row>
 
                     <ion-row class="row_konten">
-                      <ion-col size="3">
+                      <ion-col size="6">
                         <ion-text color="dark">
                           <p class="justify ">Posisi</p>
                         </ion-text>                      
@@ -272,12 +251,10 @@
                           </p>
                         </ion-text>                      
                       </ion-col>
-                      <ion-col size="3">
-                      </ion-col>
                     </ion-row>
 
                     <ion-row class="row_konten">
-                      <ion-col size="3">
+                      <ion-col size="6">
                         <ion-text color="dark">
                           <p class="justify ">Tanggal Bergabung</p>
                         </ion-text>                      
@@ -289,12 +266,10 @@
                           </p>
                         </ion-text>                      
                       </ion-col>
-                      <ion-col size="3">
-                      </ion-col>
                     </ion-row>
 
                     <ion-row class="row_konten">
-                      <ion-col size="3">
+                      <ion-col size="6">
                         <ion-text color="dark">
                           <p class="justify ">Status Pengguna</p>
                         </ion-text>                      
@@ -306,12 +281,10 @@
                           </p>
                         </ion-text>                      
                       </ion-col>
-                      <ion-col size="3">
-                      </ion-col>
                     </ion-row>
 
                     <ion-row class="row_konten">
-                      <ion-col size="3">
+                      <ion-col size="6">
                         <ion-text color="dark">
                           <p class="justify ">Departemen</p>
                         </ion-text>                      
@@ -322,8 +295,6 @@
                             Departemen Pengguna
                           </p>
                         </ion-text>                      
-                      </ion-col>
-                      <ion-col size="3">
                       </ion-col>
                     </ion-row>
 
