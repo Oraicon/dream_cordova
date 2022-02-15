@@ -22,7 +22,7 @@
             <ion-row>
               <ion-col size="12" class="ion-text-center">
                 <!-- <img class="card_border" src="assets/tiang.jpg" height="250px" width="250px"> -->
-                <img class="card_border" src="{{ imgURL }}" height="250px" width="250px" (ionChange)="checkValue($event)">
+                <img class="card_border" src="{{ imgURL }}" height="250px" width="250px">
                 <!-- <img class="card_border" [src]="imgurl" height="250px" width="250px"> -->
               </ion-col>
             </ion-row>
@@ -32,7 +32,7 @@
                 <ion-button expand="block" color="primary" id="modal-pilih-gambar">Pilih Gambar</ion-button>
               </ion-col>
               <ion-col size="6">
-                <ion-button expand="block" fill="outline" color="primary" class="">Batal</ion-button>
+                <ion-button expand="block" fill="outline" color="primary" (click)="batal_gambar()">Batal</ion-button>
               </ion-col>
             </ion-row>
           </ion-grid>
@@ -96,16 +96,16 @@
 
                     <ion-row>
                       <ion-col size="12">
-                        <ion-item>
+                        <ion-item lines="none">
                           <ion-label position="floating" class="">Keterangan</ion-label>
-                          <ion-textarea maxlength="255" placeholder="Keterangan dari foto . . "></ion-textarea>
+                          <ion-textarea [(ngModel)]="data_keterangan_f" maxlength="255" placeholder="Keterangan dari foto . . "></ion-textarea>
                         </ion-item>
                       </ion-col>
                     </ion-row>
 
                     <ion-row class="ion-text-center">
                       <ion-col size="6">
-                        <ion-button click="batal()" expand="block" fill="outline" color="primary" class="">Batal</ion-button>
+                        <ion-button (click)="batal_laporan()" expand="block" fill="outline" color="primary" class="">Batal</ion-button>
                       </ion-col>
                       <ion-col size="6">
                         <ion-button (click)="kirim()" expand="block" color="primary" class="">Kirim</ion-button>
