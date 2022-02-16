@@ -117,4 +117,96 @@ export class AlertServicesService {
     });
   }
 
+  alert_error_lupapassword(){
+    this.alertCtrl.create({
+      header: 'Lupa sandi gagal !',
+      message: 'Code Error 4 !',
+      buttons: ['OK']
+    }).then(res => {
+
+      res.present();
+
+    });
+  }
+
+  alert_berhasil_upload(){
+    this.alertCtrl.create({
+      header: 'Upload berhasil !',
+      message: 'Data sudah terkirim !',
+      buttons: ['OK']
+    }).then(res => {
+
+      res.present();
+
+    });
+  }
+
+  alert_gagal_upload(){
+    this.alertCtrl.create({
+      header: 'Upload gagal !',
+      message: 'Terjadi kesalahan !',
+      buttons: ['OK']
+    }).then(res => {
+
+      res.present();
+
+    });
+  }
+
+  alert_berhasil_lupa_password(alert_email){
+    this.alertCtrl.create({
+      header: 'Ubah sandi berhasil !',
+      message: 'Lihat sandi terbaru anda pada email : '+ alert_email,
+      buttons: ['OK']
+    }).then(res => {
+
+      res.present();
+
+    });
+  }
+
+  alert_gagal_lupa_password(){
+    this.alertCtrl.create({
+      header: 'Terjadi kesalahan !',
+      message: 'Sandi gagal dikirim ke email',
+      buttons: ['OK']
+    }).then(res => {
+
+      res.present();
+    });
+  }
+
+  alert_lupa_password_tidak_ditemukan(){
+    this.alertCtrl.create({
+      header: 'Terjadi kesalahan !',
+      message: 'Nama pengguna tidak ditemukan !',
+      buttons: ['OK']
+    }).then(res => {
+
+      res.present();
+    });
+  }
+
+  alert_berhasil_mengubah(teks1, teks2){
+    this.alertCtrl.create({
+      header: 'Ubah '+teks1+' berhasil !',
+      message: teks1 + ' anda telah diubah menjadi "' +teks2+'"',
+      buttons: ['OK']
+    }).then(res => {
+
+      res.present();
+    });
+  }
+
+  alert_gagal_mengubah(teks1){
+    this.alertCtrl.create({
+      header: 'Ubah '+teks1+' gagal !',
+      message: 'Terjadi kesalahan pada saat mengubah'+teks1,
+      buttons: ['OK']
+    }).then(res => {
+
+      res.present();
+    });
+  }
+
 }

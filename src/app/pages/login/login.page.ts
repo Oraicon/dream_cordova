@@ -104,11 +104,16 @@ export class LoginPage implements OnInit {
               this.data_nama_f = null;
               this.data_sandi_f = null;
 
+            } else if (data_status == 0){
+              this.loadingService.tutuploading();
+
+              this.alertService.alert_gagal_login0();
+              this.data_nama_f = null;
+              this.data_sandi_f = null;
             } else {
               this.loadingService.tutuploading();
 
               this.alertService.alert_error_login1();
-              
               this.data_nama_f = null;
               this.data_sandi_f = null;
             }
@@ -117,26 +122,13 @@ export class LoginPage implements OnInit {
       
           })
           .catch(err => {
-            const err_json = JSON.parse(err.error);
-            const err_error = err_json.status;
-  
-            if (err_error == 0) {
-              this.loadingService.tutuploading();
 
+            this.loadingService.tutuploading();
 
-              this.alertService.alert_gagal_login0();
-              this.data_nama_f = null;
-              this.data_sandi_f = null;
+            this.alertService.alert_error_login2();
+            this.data_nama_f = null;
+            this.data_sandi_f = null;
 
-            }else {
-              this.loadingService.tutuploading();
-
-
-              this.alertService.alert_error_login2();
-              this.data_nama_f = null;
-              this.data_sandi_f = null;
-            }
-  
           });
         }
       }
@@ -155,7 +147,8 @@ export class LoginPage implements OnInit {
   async lupasandi(){
     const modal = await this.modalCtrl.create({
       component: ModalLupasandiPage,
-      cssClass: 'small-modal'
+      cssClass: 'small-modal',
+      backdropDismiss:false
     });
     await modal.present();
   }

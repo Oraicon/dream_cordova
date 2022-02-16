@@ -44,8 +44,9 @@
 .small-modal{
     &::part(content){
         width: 80%;
-        height: 30%;
-        margin: auto;
+        height: 255px;
         border-radius: 10px;
+        position: absolute; 
+        display: block; 
     }
 }

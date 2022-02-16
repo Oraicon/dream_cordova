@@ -19,15 +19,33 @@ export class AppComponent {
       this.hardbackbutton();
     });
   }
+  
+  a = 0;
 
   hardbackbutton(){
-    this.platform.backButton.subscribeWithPriority(10, () => {
-      if(!this.routerOutlet.canGoBack()){
-        this.alertkeluar();
-      }else{
-        this.location.back();
+    this.platform.backButton.subscribeWithPriority(11, ()=>{
+      console.log("priority15")
+      this.a++;
+
+      setTimeout( () => {
+        // somecode
+        console.log("ey");
+        this.a = 0;
+      }, 500);
+
+      if (this.a == 2) { // logic for double tap
+        this.validasi();
+        this.a = 0;
       }
     });
+  }
+
+  validasi(){
+    if(!this.routerOutlet.canGoBack()){
+      this.alertkeluar();
+    }else{
+      this.location.back();
+    }
   }
 
   async alertkeluar(){

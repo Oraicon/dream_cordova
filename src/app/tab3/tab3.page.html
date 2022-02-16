@@ -49,7 +49,7 @@
                       <ion-col size="6">
                         <ion-text color="dark">
                           <p class="justify ">
-                            Nama Pengguna
+                            {{ username_pengguna }}
                           </p>
                         </ion-text>                      
                       </ion-col>
@@ -65,11 +65,18 @@
                           <p class="">Password</p>
                         </ion-text>                      
                       </ion-col>
-                      <ion-col size="6">
+                      <ion-col size="6" (click)="lihat_password()">
                         <ion-text color="dark">
-                          <p class="justify ">
-                            Sandi Pengguna
+                          <p *ngIf="lihatsandi; else tidakterlihat" class="justify">
+                            {{ sandi_pengguna }}
                           </p>
+
+                          <ng-template #tidakterlihat>
+                            <p class="justify">
+                              {{ sandi_pengguna_tidak_terlihat }}
+                            </p>
+                          </ng-template>
+
                         </ion-text>                      
                       </ion-col>
                       <ion-col size="3">
@@ -127,7 +134,7 @@
                       <ion-col size="6">
                         <ion-text color="dark">
                           <p class="justify">
-                            Nama Pengguna
+                            {{ nama_pengguna }}
                           </p>
                         </ion-text>                      
                       </ion-col>
@@ -142,7 +149,7 @@
                       <ion-col size="6">
                         <ion-text color="dark">
                           <p class="justify ">
-                            Nama@email.com
+                            {{ email_pengguna }}
                           </p>
                         </ion-text>                      
                       </ion-col>
@@ -157,7 +164,7 @@
                       <ion-col size="6">
                         <ion-text color="dark">
                           <p class="justify ">
-                            012345678902
+                            {{ nohp_pengguna }}
                           </p>
                         </ion-text>                      
                       </ion-col>
@@ -172,7 +179,7 @@
                       <ion-col size="6">
                         <ion-text color="dark">
                           <p class="justify ">
-                            Tempat Lahir Pengguna
+                            {{ tempatlahir_pengguna }}
                           </p>
                         </ion-text>                      
                       </ion-col>
@@ -187,7 +194,7 @@
                       <ion-col size="6">
                         <ion-text color="dark">
                           <p class="justify ">
-                            2000-02-20
+                            {{ tanggallahir_pengguna }}
                           </p>
                         </ion-text>                      
                       </ion-col>
@@ -202,7 +209,7 @@
                       <ion-col size="6">
                         <ion-text color="dark">
                           <p class="justify ">
-                            Laki laki
+                            {{ kelamin_pengguna }}
                           </p>
                         </ion-text>                      
                       </ion-col>
@@ -217,7 +224,7 @@
                       <ion-col size="6">
                         <ion-text color="dark">
                           <p class="justify ">
-                            Alamat Pengguna
+                            {{ alamat_pengguna }}
                           </p>
                         </ion-text>                      
                       </ion-col>
@@ -232,7 +239,7 @@
                       <ion-col size="6">
                         <ion-text color="dark">
                           <p class="justify ">
-                            Jabatan Pengguna
+                            {{ jabatan_pengguna }}
                           </p>
                         </ion-text>                      
                       </ion-col>
@@ -247,7 +254,7 @@
                       <ion-col size="6">
                         <ion-text color="dark">
                           <p class="justify ">
-                            Posisi Pengguna
+                            {{ posisi_pengguna }}
                           </p>
                         </ion-text>                      
                       </ion-col>
@@ -262,27 +269,13 @@
                       <ion-col size="6">
                         <ion-text color="dark">
                           <p class="justify ">
-                            2000-02-20
+                            {{ tanggalbergabung_pengguna }}
                           </p>
                         </ion-text>                      
                       </ion-col>
                     </ion-row>
 
-                    <ion-row class="row_konten">
-                      <ion-col size="6">
-                        <ion-text color="dark">
-                          <p class="justify ">Status Pengguna</p>
-                        </ion-text>                      
-                      </ion-col>
-                      <ion-col size="6">
-                        <ion-text color="dark">
-                          <p class="justify ">
-                            Aktif
-                          </p>
-                        </ion-text>                      
-                      </ion-col>
-                    </ion-row>
-
+                    
                     <ion-row class="row_konten">
                       <ion-col size="6">
                         <ion-text color="dark">
@@ -292,7 +285,37 @@
                       <ion-col size="6">
                         <ion-text color="dark">
                           <p class="justify ">
-                            Departemen Pengguna
+                            {{ departemen_pengguna }}
+                          </p>
+                        </ion-text>                      
+                      </ion-col>
+                    </ion-row>
+                    
+                    <ion-row class="row_konten">
+                      <ion-col size="6">
+                        <ion-text color="dark">
+                          <p class="justify ">Bank Pengguna</p>
+                        </ion-text>                      
+                      </ion-col>
+                      <ion-col size="6">
+                        <ion-text color="dark">
+                          <p class="justify ">
+                            {{ bank_pengguna }}
+                          </p>
+                        </ion-text>                      
+                      </ion-col>
+                    </ion-row>
+
+                    <ion-row class="row_konten">
+                      <ion-col size="6">
+                        <ion-text color="dark">
+                          <p class="justify ">No Rekening</p>
+                        </ion-text>                      
+                      </ion-col>
+                      <ion-col size="6">
+                        <ion-text color="dark">
+                          <p class="justify ">
+                            {{ rekening_pengguna }}
                           </p>
                         </ion-text>                      
                       </ion-col>

@@ -14,10 +14,14 @@ export class ApiServicesService {
   }
 
   panggil_api_upload_teknisi(api_keterangan, api_file_img){
-    return this.http.post('https://dads-demo-1.000webhostapp.com/api/uploadProgressTeknisi', {"keterangan" :api_keterangan, "url_image" :"upload/"+ api_file_img}, {'Accept': 'application/json', 'Content-Type':'application/x-www-form-urlencoded'})
+    return this.http.post('https://dads-demo-1.000webhostapp.com/api/uploadProgressTeknisi', {"keterangan" :api_keterangan, "url_image" :api_file_img}, {'Accept': 'application/json', 'Content-Type':'application/x-www-form-urlencoded'})
   }
 
   panggil_api_update_data_karyawan(api_type_akun, api_flagusername, api_new_username, api_new_password, api_image){
     return this.http.post('https://dads-demo-1.000webhostapp.com/api/updateDataKaryawan', {"type" :api_type_akun, "flag_username" :api_flagusername, "new_username" :api_new_username, "new_password" :api_new_password, "image" :api_image}, {'Accept': 'application/json', 'Content-Type':'application/x-www-form-urlencoded'})
+  }
+
+  panggil_api_reset_password(api_name){
+    return this.http.post('https://dads-demo-1.000webhostapp.com/api/forgotpassword', {"username" :api_name}, {'Accept': 'application/json', 'Content-Type':'application/x-www-form-urlencoded'})
   }
 }

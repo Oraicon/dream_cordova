@@ -38,6 +38,8 @@ export class Tab1Page {
       
       this.data_pengguna = false;
       this.data_nama = data_status_data.nama;
+
+      this.loadingCtrl.tutuploading();
       
       console.log(data_status_data);
   

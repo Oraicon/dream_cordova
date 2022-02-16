@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { AlertController, ModalController } from '@ionic/angular';
 import { ModalKegiatanPage } from '../modal/modal-kegiatan/modal-kegiatan.page';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@awesome-cordova-plugins/file-transfer/ngx';
 import { Camera, CameraOptions } from '@awesome-cordova-plugins/camera/ngx';
 import { DatePipe } from '@angular/common';
 import { HTTP } from '@awesome-cordova-plugins/http/ngx';
 import { ApiServicesService } from '../services/api-services.service';
+import { LoadingServiceService } from '../services/loading-service.service';
+import { AlertServicesService } from '../services/alert-services.service';
 
 
 @Component({
@@ -41,29 +43,30 @@ export class Tab2Page {
     mediaType: this.camera.MediaType.PICTURE
   }
 
-  constructor(private apiService : ApiServicesService, private modalCtrl: ModalController, private http: HTTP, private transfer: FileTransfer, private camera: Camera, private datepipe: DatePipe) {
+  constructor(private alertService: AlertServicesService, private alertCtrl: AlertController, private loadingService: LoadingServiceService, private apiService : ApiServicesService, private modalCtrl: ModalController, private http: HTTP, private transfer: FileTransfer, private camera: Camera, private datepipe: DatePipe) {
   }
 
 
   kamera(){
+    this.modalCtrl.dismiss();
     this.camera.getPicture(this.cameraOptions).then(res=>{
       this.imgURL = 'data:image/jpeg;base64,' + res;
       console.log(this.imgURL);
       this.base64_img = this.imgURL;
-      this.modalCtrl.dismiss();
     });
   }
 
   galeri(){
+    this.modalCtrl.dismiss();
     this.camera.getPicture(this.galeriOptions).then(res=>{
       this.imgURL = 'data:image/jpeg;base64,' + res;
       console.log(this.imgURL);
       this.base64_img = this.imgURL;
-      this.modalCtrl.dismiss();
     });
   }
 
   kirim(){
+    this.loadingService.tampil_loading_login();
     const fileTransfer: FileTransferObject = this.transfer.create();
 
     let URL="https://oraicon.000webhostapp.com/upload.php";
@@ -93,34 +96,72 @@ export class Tab2Page {
 
           if (data_status == 1) {
             
-            this.imgURL = 'assets/icon/favicon.png';
-            
-            console.log("berhasil upload");
+            this.imgURL = 'assets/ss.png';
+            this.loadingService.tutuploading();
+            this.alertService.alert_berhasil_upload();
+
           } else {
-            this.imgURL = 'assets/icon/favicon.png';
+
+            this.imgURL = 'assets/ss.png';
+            this.loadingService.tutuploading();
+            this.alertService.alert_gagal_upload();
+
           }
 
         })
         .catch(error => {
+          //error upload ke database data teknisi 
 
           console.log(error.status);
           console.log(error.error); // error message as string
           console.log(error.headers);
 
 
-          this.imgURL = 'assets/icon/favicon.png';
+          this.imgURL = 'assets/ss.png';
+          this.loadingService.tutuploading();
+
         });
       } else {
+          //error response upload foto
+
         console.log(res);
+        this.loadingService.tutuploading();
       }
 
     }, (err) => {
-      // error
+      // error upload foto
       console.log(err)
     });
   }
 
-  async  pilihkegiatan(){
+  validasi(){
+    let data_keterangan = this.data_keterangan_f;
+    
+    if(data_keterangan == null || data_keterangan == ""){
+      this.alertCtrl.create({
+        header: 'Keterangan kosong !',
+        message: 'Anda yakin akan mengirim dengan keterangan kosong ?',
+        buttons: [
+          {
+            text: 'Tidak',
+          },
+          {
+            text: 'Ya',
+            handler: () =>{
+              this.kirim();
+            }
+          }
+        ]
+      }).then(res => {
+        res.present();
+      });
+    }else{
+      this.kirim();
+    }
+
+  }
+
+  async pilihkegiatan(){
     let modal = await this.modalCtrl.create({
       component: ModalKegiatanPage,
     });
@@ -133,11 +174,12 @@ export class Tab2Page {
 
   batal_gambar(){
     console.log("yow");
-
+    this.imgURL = 'assets/ss.png';
   }
 
   batal_laporan(){
     console.log("eyy");
+    this.data_keterangan_f = null;
   }
 
   tutup(){
