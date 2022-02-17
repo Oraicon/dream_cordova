@@ -244,6 +244,8 @@ export class Tab3Page {
     this.modalCtrl.dismiss();
     this.camera.getPicture(this.cameraOptions).then(res=>{
       // this.imgURL = 'data:image/jpeg;base64,' + res;
+      this.loadingCtrl.tampil_loading_login();
+
       let data_img_base64 = 'data:image/jpeg;base64,' + res;
       this.base64_img = data_img_base64;
       this.upload();
@@ -254,6 +256,8 @@ export class Tab3Page {
     this.modalCtrl.dismiss();
     this.camera.getPicture(this.galeriOptions).then(res=>{
       // this.imgURL = 'data:image/jpeg;base64,' + res;
+      this.loadingCtrl.tampil_loading_login();
+
       let data_img_base64 = 'data:image/jpeg;base64,' + res;
       this.base64_img = data_img_base64;
       this.upload();
@@ -288,19 +292,28 @@ export class Tab3Page {
           console.log(res);
 
           this.imgURL = this.base64_img;
+          this.loadingCtrl.tutuploading();
+          this.alertService.alert_berhasil_mengubah_foto();
+
         })
         .catch(error => {
 
           console.log(error); // error message as string
+          this.loadingCtrl.tutuploading();
+          this.alertService.alert_gagal_mengubah_foto();
 
         });
       } else {
         console.log(res);
+        this.loadingCtrl.tutuploading();
+
       }
 
     }, (err) => {
       // error
       console.log(err)
+      this.loadingCtrl.tutuploading();
+
     });
   }
 

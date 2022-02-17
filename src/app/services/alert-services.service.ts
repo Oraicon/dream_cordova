@@ -209,4 +209,26 @@ export class AlertServicesService {
     });
   }
 
+
+  alert_berhasil_mengubah_foto(){
+    this.alertCtrl.create({
+      header: 'Ubah foto berhasil !',
+      message: 'Foto profil anda berhasil diubah !',
+      buttons: ['OK']
+    }).then(res => {
+
+      res.present();
+    });
+  }
+
+  alert_gagal_mengubah_foto(){
+    this.alertCtrl.create({
+      header: 'Ubah foto gagal !',
+      message: 'Terjadi kesalahan pada saat mengubah foto',
+      buttons: ['OK']
+    }).then(res => {
+
+      res.present();
+    });
+  }
 }

@@ -20,6 +20,7 @@ export class Tab2Page {
   imgURL:any = 'assets/ss.png';
   nama_kegiatan:any = "Nama Kegiatan";
   data_keterangan_f;
+  img_default;
 
   base64_img:string="";
   name_img:string="";
@@ -44,6 +45,7 @@ export class Tab2Page {
   }
 
   constructor(private alertService: AlertServicesService, private alertCtrl: AlertController, private loadingService: LoadingServiceService, private apiService : ApiServicesService, private modalCtrl: ModalController, private http: HTTP, private transfer: FileTransfer, private camera: Camera, private datepipe: DatePipe) {
+  const img_default = this.imgURL;
   }
 
 
@@ -135,29 +137,35 @@ export class Tab2Page {
   }
 
   validasi(){
+
     let data_keterangan = this.data_keterangan_f;
     
-    if(data_keterangan == null || data_keterangan == ""){
-      this.alertCtrl.create({
-        header: 'Keterangan kosong !',
-        message: 'Anda yakin akan mengirim dengan keterangan kosong ?',
-        buttons: [
-          {
-            text: 'Tidak',
-          },
-          {
-            text: 'Ya',
-            handler: () =>{
-              this.kirim();
+    if (this.imgURL == 'assets/ss.png') {
+      console.log("gambar masih sama");
+    } else {
+      if(data_keterangan == null || data_keterangan == ""){
+        this.alertCtrl.create({
+          header: 'Keterangan kosong !',
+          message: 'Anda yakin akan mengirim dengan keterangan kosong ?',
+          buttons: [
+            {
+              text: 'Tidak',
+            },
+            {
+              text: 'Ya',
+              handler: () =>{
+                this.kirim();
+              }
             }
-          }
-        ]
-      }).then(res => {
-        res.present();
-      });
-    }else{
-      this.kirim();
+          ]
+        }).then(res => {
+          res.present();
+        });
+      }else{
+        this.kirim();
+      }
     }
+
 
   }
 
@@ -173,12 +181,10 @@ export class Tab2Page {
   }
 
   batal_gambar(){
-    console.log("yow");
     this.imgURL = 'assets/ss.png';
   }
 
   batal_laporan(){
-    console.log("eyy");
     this.data_keterangan_f = null;
   }
 

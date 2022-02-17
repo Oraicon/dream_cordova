@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AlertController, ModalController } from '@ionic/angular';
+import { ModalController } from '@ionic/angular';
 import { AlertServicesService } from 'src/app/services/alert-services.service';
 import { ApiServicesService } from 'src/app/services/api-services.service';
 import { LoadingServiceService } from 'src/app/services/loading-service.service';
@@ -28,7 +28,6 @@ export class ModalLupasandiPage implements OnInit {
       this.modalCtrl.dismiss();
       this.apiService.panggil_api_reset_password(var_nama)
       .then(res => {
-        // console.log(res); // data received by server
 
         const data_json = JSON.parse(res.data);
         const data_status = data_json.status;        
@@ -50,7 +49,6 @@ export class ModalLupasandiPage implements OnInit {
         
       })
       .catch(err => {    
-        console.log(err); // error message as string
         
         this.loadingService.tutuploading();
         this.alertService.alert_lupa_password_tidak_ditemukan();

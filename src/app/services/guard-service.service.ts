@@ -19,17 +19,17 @@ export class GuardServiceService {
   async canActivate(){
     
     let authInfo;
-    // const dataauth = await this.strg.get('auth');
+    const dataauth = await this.strg.get('auth');
     
-    // if(dataauth == true){
+    if(dataauth == true){
       authInfo= {
         authenticated: true
       };
-    // }else{
-    //   authInfo= {
-    //     authenticated: false
-    //   };
-    // }
+    }else{
+      authInfo= {
+        authenticated: false
+      };
+    }
 
     // console.log(authInfo.authenticated);
     if (!authInfo.authenticated) {

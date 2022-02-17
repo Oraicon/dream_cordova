@@ -41,8 +41,6 @@ export class Tab1Page {
 
       this.loadingCtrl.tutuploading();
       
-      console.log(data_status_data);
-  
     })
     .catch(err => {
   
