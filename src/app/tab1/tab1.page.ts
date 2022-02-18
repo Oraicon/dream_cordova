@@ -54,6 +54,8 @@ export class Tab1Page {
     this.alertCtrl.create({
       header: 'Kembali ke login ?',
       message: 'Anda akan kembali ke halaman login anda yakin ?',
+      cssClass:'my-custom-class',
+      mode: "ios",
       buttons: [
         {
           text: 'Tidak',

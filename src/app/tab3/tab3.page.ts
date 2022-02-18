@@ -115,6 +115,8 @@ export class Tab3Page {
     this.alertCtrl.create({
       header: 'Perubahan nama pengguna',
       message: 'Silahkan untuk mengisi nama pengguna baru anda',
+      cssClass:'my-custom-class',
+      mode: "ios",
       inputs: [
         {
           name: 'username',
@@ -177,6 +179,8 @@ export class Tab3Page {
     this.alertCtrl.create({
       header: 'Perubahan sandi pengguna',
       message: 'Silahkan untuk mengisi sandi pengguna baru anda',
+      cssClass:'my-custom-class',
+      mode: "ios",
       inputs: [
         {
           name: 'password',
