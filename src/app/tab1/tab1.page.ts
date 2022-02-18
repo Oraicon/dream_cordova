@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { Storage } from '@ionic/storage-angular';
+import { AlertServicesService } from '../services/alert-services.service';
 import { ApiServicesService } from '../services/api-services.service';
 import { LoadingServiceService } from '../services/loading-service.service';
 
@@ -18,7 +19,7 @@ export class Tab1Page {
   data_pengguna;
   data_nama;
 
-  constructor(private loadingCtrl:LoadingServiceService, private alertCtrl: AlertController, private storage:Storage, private router: Router, private apiService:ApiServicesService) {
+  constructor(private loadingCtrl:LoadingServiceService, private alertService: AlertServicesService,private alertCtrl: AlertController, private storage:Storage, private router: Router, private apiService:ApiServicesService) {
     this.data_pengguna = true;
     this.tampilkan_data();
     this.loadingCtrl.tampil_loading_login();
@@ -43,9 +44,9 @@ export class Tab1Page {
       
     })
     .catch(err => {
-  
-      console.log(err);
-  
+      this.loadingCtrl.tutuploading();
+      
+      this.alertService.alert_error_tampilkan_data_tab1();
     });
   }
 

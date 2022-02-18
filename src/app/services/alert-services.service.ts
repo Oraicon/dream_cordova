@@ -129,6 +129,78 @@ export class AlertServicesService {
     });
   }
 
+  alert_error_tampilkan_data_tab1(){
+    this.alertCtrl.create({
+      header: 'Menampilkan data gagal !',
+      message: 'Code Error 5 !',
+      buttons: ['OK']
+    }).then(res => {
+
+      res.present();
+
+    });
+  }
+
+  alert_error_upload_gambar_tab2(){
+    this.alertCtrl.create({
+      header: 'Mengirim gambar gagal !',
+      message: 'Code Error 6 !',
+      buttons: ['OK']
+    }).then(res => {
+
+      res.present();
+
+    });
+  }
+
+  alert_error_upload_gambar2_tab2(){
+    this.alertCtrl.create({
+      header: 'Terjadi kesalahan pada saat mengirim !',
+      message: 'Code Error 7 !',
+      buttons: ['OK']
+    }).then(res => {
+
+      res.present();
+
+    });
+  }
+
+  alert_error_upload_gambar3_tab2(){
+    this.alertCtrl.create({
+      header: 'Terjadi kesalahan pada saat mengirim !',
+      message: 'Code Error 8 !',
+      buttons: ['OK']
+    }).then(res => {
+
+      res.present();
+
+    });
+  }
+
+  alert_error_update_tab3(nama, angka){
+    this.alertCtrl.create({
+      header: 'Terjadi kesalahan pada saat mengubah '+nama+' !',
+      message: 'Code Error '+angka+' !',
+      buttons: ['OK']
+    }).then(res => {
+
+      res.present();
+
+    });
+  }
+
+  alert_pilih_gambar_tab2(){
+    this.alertCtrl.create({
+      header: 'Gambar kosong !',
+      message: 'Anda belum memilih gambar',
+      buttons: ['OK']
+    }).then(res => {
+
+      res.present();
+
+    });
+  }
+
   alert_berhasil_upload(){
     this.alertCtrl.create({
       header: 'Upload berhasil !',
@@ -144,7 +216,7 @@ export class AlertServicesService {
   alert_gagal_upload(){
     this.alertCtrl.create({
       header: 'Upload gagal !',
-      message: 'Terjadi kesalahan !',
+      message: 'Terjadi kesalahan pada server!',
       buttons: ['OK']
     }).then(res => {
 
@@ -209,6 +281,16 @@ export class AlertServicesService {
     });
   }
 
+  alert_tidakboleh_kosong(nama){
+    this.alertCtrl.create({
+      header: 'Terjadi kesalahan !',
+      message: nama+' tidak boleh kosong !',
+      buttons: ['OK']
+    }).then(res => {
+
+      res.present();
+    });
+  }
 
   alert_berhasil_mengubah_foto(){
     this.alertCtrl.create({

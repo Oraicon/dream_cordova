@@ -100,14 +100,11 @@ export class Tab3Page {
 
       this.imgURL = data_status_data.image;
 
-      console.log(data_status_data);
       this.loadingCtrl.tutuploading();
     })
     .catch(err => {
-  
-      console.log(err);
+      this.alertService.alert_error_tampilkan_data_tab1();
       this.loadingCtrl.tutuploading();
-  
     });
   }
 
@@ -133,15 +130,19 @@ export class Tab3Page {
           text: 'Simpan',
             handler: (alertData) =>{
               this.loadingCtrl.tampil_loading_login();
+
+              //persiapan variable
               const nama_data = alertData.username;
               
+              //proses update
               this.apiService.panggil_api_update_data_karyawan(this.type_update_akun, l_storage_data_nama, nama_data, "", "")
               .then(res => {
+                //mendapatkan data
                 const data_json = JSON.parse(res.data);
                 const data_status = data_json.status;
 
+                //validasi data
                 if (data_status == 1) {
-                  console.log("berhasil");
                   this.storage.set('nama', nama_data);
                   this.username_pengguna = nama_data;
                   this.loadingCtrl.tutuploading();
@@ -149,16 +150,16 @@ export class Tab3Page {
                   this.alertService.alert_berhasil_mengubah("nama pengguna", nama_data);
                 
                 } else {
+                  //jika status != 1
                   this.loadingCtrl.tutuploading();
                   this.alertService.alert_gagal_mengubah("nama pengguna");
-                  console.log("gagal");
                 }
                 
               })
               .catch(err => {
+                //error
+                this.alertService.alert_error_update_tab3("nama", "9");
                 this.loadingCtrl.tutuploading();
-                console.log(err);
-
               });
             
           }
@@ -191,36 +192,34 @@ export class Tab3Page {
           text: 'Simpan',
           handler: (alertData) =>{
             this.loadingCtrl.tampil_loading_login();
-
+            //persiapan variable
             const sandi_data = alertData.password;
-
-            console.log(l_storage_data_nama);
-            console.log(sandi_data);
-            console.log(this.type_update_akun);
             
+            //proses update
             this.apiService.panggil_api_update_data_karyawan(this.type_update_akun, l_storage_data_nama, "", sandi_data, "")
             .then(res => {
               const data_json = JSON.parse(res.data);
               const data_status = data_json.status;
 
+              //validasi data
               if (data_status == 1) {
-                console.log("berhasil");
+                //mendapatkan data
                 this.storage.set('sandi', sandi_data);
                 this.sandi_pengguna = sandi_data;
                 this.loadingCtrl.tutuploading();
                 this.alertService.alert_berhasil_mengubah("sandi pengguna", sandi_data);
               
               } else {
+                //jika status != 1
                 this.loadingCtrl.tutuploading();
-                console.log("gagal");
                 this.alertService.alert_gagal_mengubah("sandi pengguna");
               }
               
             })
             .catch(err => {
+              //error
               this.loadingCtrl.tutuploading();
-              console.log(err);
-
+              this.alertService.alert_error_update_tab3("sandi", "10");
             });
           }
         }
@@ -243,7 +242,6 @@ export class Tab3Page {
   kamera(){
     this.modalCtrl.dismiss();
     this.camera.getPicture(this.cameraOptions).then(res=>{
-      // this.imgURL = 'data:image/jpeg;base64,' + res;
       this.loadingCtrl.tampil_loading_login();
 
       let data_img_base64 = 'data:image/jpeg;base64,' + res;
@@ -255,7 +253,6 @@ export class Tab3Page {
   galeri(){
     this.modalCtrl.dismiss();
     this.camera.getPicture(this.galeriOptions).then(res=>{
-      // this.imgURL = 'data:image/jpeg;base64,' + res;
       this.loadingCtrl.tampil_loading_login();
 
       let data_img_base64 = 'data:image/jpeg;base64,' + res;
@@ -265,13 +262,16 @@ export class Tab3Page {
   }
 
   async upload(){
+    //perisapan mengirim
     const fileTransfer: FileTransferObject = this.transfer.create();
     const l_storage_data_nama = await this.storage.get('nama');
 
+    //persiapan url dan nama
     let URL="https://oraicon.000webhostapp.com/upload.php";
     this.name_img = this.datepipe.transform((new Date), 'MMddyyyyhmmss.')+ this.format_img;
     let nama_file = this.name_img.toString();
 
+    //mengisi data option
     let options: FileUploadOptions = {
       fileKey: 'filekey',
       fileName: nama_file,
@@ -280,16 +280,16 @@ export class Tab3Page {
       headers: {}
     }
 
+    //upload ke server
     fileTransfer.upload(this.base64_img, URL, options)
     .then((res) => {
-      // success
+      // success upload foto
       const get_respon_code = res.responseCode;
       const url_path = "https://oraicon.000webhostapp.com/upload/"+this.name_img;
 
       if (get_respon_code == 200) {
         this.apiService.panggil_api_update_data_karyawan(this.type_update_gambar, l_storage_data_nama, "", "", url_path)
         .then(res => {
-          console.log(res);
 
           this.imgURL = this.base64_img;
           this.loadingCtrl.tutuploading();
@@ -298,15 +298,16 @@ export class Tab3Page {
         })
         .catch(error => {
 
-          console.log(error); // error message as string
+          //error upload ke database data profil
           this.loadingCtrl.tutuploading();
           this.alertService.alert_gagal_mengubah_foto();
 
         });
       } else {
         console.log(res);
+        //error response upload foto
         this.loadingCtrl.tutuploading();
-
+        this.alertService.alert_error_upload_gambar3_tab2();
       }
 
     }, (err) => {
