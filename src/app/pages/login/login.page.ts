@@ -38,18 +38,20 @@ export class LoginPage implements OnInit {
   ngOnInit() {
     this.storage.create();
     this.storage.set('auth', false);
+    this.storage.set('nama', null);
+    this.storage.set('sandi', null);
     
-    // this.network.onDisconnect().subscribe(() => {
-    //   this.cek_koneksi = false;
-    // });
+    this.network.onDisconnect().subscribe(() => {
+      this.cek_koneksi = false;
+    });
   
-    // this.network.onConnect().subscribe(() => {
-    //   setTimeout(() => {
-    //     this.cek_koneksi = true;
-    //   }, 3000);
-    // });
+    this.network.onConnect().subscribe(() => {
+      setTimeout(() => {
+        this.cek_koneksi = true;
+      }, 3000);
+    });
 
-    this.cek_koneksi = true;
+    // this.cek_koneksi = true;
 
   }
 

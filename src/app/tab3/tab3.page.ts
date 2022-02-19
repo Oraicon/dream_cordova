@@ -49,7 +49,7 @@ export class Tab3Page {
   type_update_gambar = "update_image_akun";
 
   cameraOptions: CameraOptions = {
-    quality: 100,
+    quality: 50,
     sourceType: this.camera.PictureSourceType.CAMERA,
     destinationType: this.camera.DestinationType.DATA_URL,
     encodingType: this.camera.EncodingType.JPEG,
@@ -57,7 +57,7 @@ export class Tab3Page {
   }
 
   galeriOptions: CameraOptions = {
-    quality: 100,
+    quality: 50,
     sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
     destinationType: this.camera.DestinationType.DATA_URL,
     encodingType: this.camera.EncodingType.JPEG,

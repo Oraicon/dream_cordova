@@ -22,10 +22,11 @@ export class Tab1Page {
   constructor(private loadingCtrl:LoadingServiceService, private alertService: AlertServicesService,private alertCtrl: AlertController, private storage:Storage, private router: Router, private apiService:ApiServicesService) {
     this.data_pengguna = true;
     this.tampilkan_data();
-    this.loadingCtrl.tampil_loading_login();
   }
 
   async tampilkan_data(){
+    this.loadingCtrl.tampil_loading_login();
+
 
     const data_l_nama = await this.storage.get('nama');
     const data_l_sandi = await this.storage.get('sandi');
@@ -63,7 +64,8 @@ export class Tab1Page {
         {
           text: 'Ya',
           handler: () =>{
-            this.storage.clear();
+            this.storage.set('nama', null);
+            this.storage.set('sandi', null);
             this.router.navigate(["/login"], { replaceUrl: true });
           }
         }

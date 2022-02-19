@@ -25,7 +25,11 @@ const routes: Routes = [
     // redirectTo: '/tabs/tab3',
     redirectTo: '/login',
     pathMatch: 'full'
+  },  {
+    path: 'modal-gantisandi',
+    loadChildren: () => import('./modal/modal-gantisandi/modal-gantisandi.module').then( m => m.ModalGantisandiPageModule)
   }
+
 ];
 @NgModule({
   imports: [

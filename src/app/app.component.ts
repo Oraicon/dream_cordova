@@ -31,7 +31,7 @@ export class AppComponent {
         // somecode
         console.log("ey");
         this.a = 0;
-      }, 500);
+      }, 250);
 
       if (this.a == 2) { // logic for double tap
         this.validasi();
