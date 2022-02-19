@@ -31,7 +31,6 @@ export class GuardServiceService {
       };
     }
 
-    // console.log(authInfo.authenticated);
     if (!authInfo.authenticated) {
       this.router.navigate(["/login"]);
       return false;

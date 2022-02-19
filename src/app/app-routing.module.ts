@@ -22,10 +22,11 @@ const routes: Routes = [
   },
   {
     path: '',
-    // redirectTo: '/tabs/tab3',
+    // redirectTo: '/tabs/tab2',
     redirectTo: '/login',
     pathMatch: 'full'
-  },  {
+  },
+  {
     path: 'modal-gantisandi',
     loadChildren: () => import('./modal/modal-gantisandi/modal-gantisandi.module').then( m => m.ModalGantisandiPageModule)
   }

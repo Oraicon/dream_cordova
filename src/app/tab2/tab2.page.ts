@@ -20,6 +20,7 @@ export class Tab2Page {
   //variable frontend
   imgURL:any = 'assets/ss.png';
   nama_kegiatan:any = "Nama Kegiatan";
+  pilih_tahapan = true;
   data_keterangan_f;
   img_default;
 
@@ -47,7 +48,6 @@ export class Tab2Page {
   }
 
   constructor(private alertService: AlertServicesService, private alertCtrl: AlertController, private loadingService: LoadingServiceService, private apiService : ApiServicesService, private modalCtrl: ModalController, private http: HTTP, private transfer: FileTransfer, private camera: Camera, private datepipe: DatePipe) {
-
   }
 
   //dapatkan gambar dari kamera
@@ -104,6 +104,7 @@ export class Tab2Page {
           if (data_status == 1) {
             
             this.imgURL = 'assets/ss.png';
+            this.data_keterangan_f = null;
             this.loadingService.tutuploading();
             this.alertService.alert_berhasil_upload();
 
@@ -178,8 +179,14 @@ export class Tab2Page {
       component: ModalKegiatanPage,
     });
     modal.onDidDismiss().then(data => {
-      console.log(data.data.data);
-      this.nama_kegiatan = data.data.data;
+      if (data.data.data == null) {
+        
+      } else {
+        this.nama_kegiatan = data.data.data;
+        this.pilih_tahapan = false;
+      }
+    }).catch(err => {
+      // console.log(err);
     });
     return await modal.present();
   }
