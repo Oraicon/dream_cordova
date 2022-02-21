@@ -10,6 +10,7 @@ export class LoadingServiceService {
 
   tampil_loading_login(){
     this.loadingCtrl.create({
+        spinner: "bubbles",
         message: 'Sedang memproses . . .'
     }).then((response) => {
         response.present();

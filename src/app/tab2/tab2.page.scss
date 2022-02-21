@@ -14,8 +14,20 @@ ion-label{
     font-size: 18px !important;
 }
 
+.image_hw{
+    height: 100%;
+    width: 100%;
+}
+
 .font_kegiatan{
     padding-left: 15px;
+    padding-top: 10px;
+    padding-bottom: 0px;
+    font-size: 18px;
+}
+
+.font_title{
+    padding-left: 4px;
     padding-top: 10px;
     padding-bottom: 0px;
     font-size: 18px;
@@ -86,3 +98,13 @@ ion-label{
 .rotate_icon{
     transform: rotate(45deg);
 }
+
+.fab_position{
+    top: -20px;
+    left: 255px;
+}
+
+// .button_margin{
+//     margin-left: 20px;
+//     margin-right: 20px;
+// }

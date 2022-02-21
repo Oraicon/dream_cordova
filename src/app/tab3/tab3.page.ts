@@ -103,8 +103,25 @@ export class Tab3Page {
       this.loadingCtrl.tutuploading();
     })
     .catch(err => {
-      this.alertService.alert_error_tampilkan_data_tab1();
       this.loadingCtrl.tutuploading();
+
+      this.alertCtrl.create({
+        header: 'Terjadi kesalahan !',
+        message: 'Data tidak terbaca, silahkan tekan OK untuk mencoba lagi !',
+        cssClass:'my-custom-class',
+        backdropDismiss: false,
+        mode: "ios",
+        buttons: [{
+          text: 'OK !',
+          handler: () => {
+            this.tampilkandata();
+          }
+        }]
+      }).then(res => {
+  
+        res.present();
+  
+      });
     });
   }
 

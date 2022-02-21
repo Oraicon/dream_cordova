@@ -21,6 +21,7 @@ export class Tab2Page {
   imgURL:any = 'assets/ss.png';
   nama_kegiatan:any = "Nama Kegiatan";
   pilih_tahapan = true;
+  data_gambar = true;
   data_keterangan_f;
   img_default;
 
@@ -55,6 +56,7 @@ export class Tab2Page {
     this.modalCtrl.dismiss();
     this.camera.getPicture(this.cameraOptions).then(res=>{
       this.imgURL = 'data:image/jpeg;base64,' + res;
+      this.data_gambar = false;
       this.base64_img = this.imgURL;
     });
   }
@@ -64,6 +66,7 @@ export class Tab2Page {
     this.modalCtrl.dismiss();
     this.camera.getPicture(this.galeriOptions).then(res=>{
       this.imgURL = 'data:image/jpeg;base64,' + res;
+      this.data_gambar = false;
       this.base64_img = this.imgURL;
     });
   }
@@ -103,6 +106,7 @@ export class Tab2Page {
 
           if (data_status == 1) {
             
+            this.data_gambar = true;
             this.imgURL = 'assets/ss.png';
             this.data_keterangan_f = null;
             this.loadingService.tutuploading();
@@ -110,6 +114,7 @@ export class Tab2Page {
 
           } else {
 
+            this.data_gambar = true;
             this.imgURL = 'assets/ss.png';
             this.loadingService.tutuploading();
             this.alertService.alert_gagal_upload();
@@ -119,6 +124,7 @@ export class Tab2Page {
         })
         .catch(error => {
           //error upload ke database data teknisi 
+          this.data_gambar = true;
           this.imgURL = 'assets/ss.png';
           this.loadingService.tutuploading();
           this.alertService.alert_error_upload_gambar3_tab2();
@@ -126,6 +132,7 @@ export class Tab2Page {
         });
       } else {
         //error response upload foto
+        this.data_gambar = true;
         this.imgURL = 'assets/ss.png';
         this.loadingService.tutuploading();
         this.alertService.alert_error_upload_gambar2_tab2();
@@ -133,6 +140,7 @@ export class Tab2Page {
 
     }, (err) => {
       // error upload foto
+      this.data_gambar = true;
       this.imgURL = 'assets/ss.png';
       this.loadingService.tutuploading();
       this.alertService.alert_error_upload_gambar_tab2();
@@ -151,6 +159,7 @@ export class Tab2Page {
       if(data_keterangan == null || data_keterangan == ""){
         this.alertCtrl.create({
           header: 'Keterangan kosong !',
+          mode: 'ios',
           message: 'Anda yakin akan mengirim dengan keterangan kosong ?',
           buttons: [
             {
@@ -193,10 +202,13 @@ export class Tab2Page {
 
   batal_gambar(){
     this.imgURL = 'assets/ss.png';
+    this.data_gambar = true;
   }
 
   batal_laporan(){
     this.data_keterangan_f = null;
+    this.pilih_tahapan = true;
+    this.nama_kegiatan = "Nama Kegiatan";
   }
 
   tutup(){

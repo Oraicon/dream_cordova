@@ -47,7 +47,23 @@ export class Tab1Page {
     .catch(err => {
       this.loadingCtrl.tutuploading();
       
-      this.alertService.alert_error_tampilkan_data_tab1();
+      this.alertCtrl.create({
+        header: 'Terjadi kesalahan !',
+        message: 'Data tidak terbaca, silahkan tekan OK untuk mencoba lagi !',
+        cssClass:'my-custom-class',
+        backdropDismiss: false,
+        mode: "ios",
+        buttons: [{
+          text: 'OK !',
+          handler: () => {
+            this.tampilkan_data();
+          }
+        }]
+      }).then(res => {
+  
+        res.present();
+  
+      });
     });
   }
 

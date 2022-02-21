@@ -109,3 +109,7 @@ ion-content {
 .title_text{
   font-size: 18px;
 }
+
+.item-interactive.item-has-focus {
+  --highlight-background: var(--highlight-color-focused);
+}
