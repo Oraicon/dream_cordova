@@ -5,6 +5,8 @@ import { Storage } from '@ionic/storage-angular';
 import { AlertServicesService } from '../services/alert-services.service';
 import { ApiServicesService } from '../services/api-services.service';
 import { LoadingServiceService } from '../services/loading-service.service';
+import Swal from 'sweetalert2';
+
 
 
 
@@ -42,6 +44,14 @@ export class Tab1Page {
       this.data_nama = data_status_data.nama;
 
       this.loadingCtrl.tutuploading();
+
+      // Swal.fire({
+      //   icon: 'success',
+      //   title: 'Sukses !',
+      //   // allowOutsideClick: true,
+      //   text: 'Selamat datang !',
+      //   // backdrop: false
+      // })
       
     })
     .catch(err => {

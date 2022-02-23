@@ -24,12 +24,9 @@ export class AppComponent {
 
   hardbackbutton(){
     this.platform.backButton.subscribeWithPriority(11, ()=>{
-      console.log("priority15")
       this.a++;
 
       setTimeout( () => {
-        // somecode
-        console.log("ey");
         this.a = 0;
       }, 250);
 
@@ -51,7 +48,7 @@ export class AppComponent {
   async alertkeluar(){
     const alert = await this.alertCtrl.create({
       header: 'Keluar dari aplikasi ?',
-      message: 'Anda yakin keluar dari aplikasi ?',
+      message: 'Anda yakin ingin keluar dari aplikasi ?',
       buttons: [
         {
           text: 'Tidak',
@@ -59,7 +56,8 @@ export class AppComponent {
         {
           text: 'Ya',
           handler: () =>{
-            this.storage.clear();
+            this.storage.set('nama', null);
+            this.storage.set('sandi', null);
             navigator['app'].exitApp();
           }
         }

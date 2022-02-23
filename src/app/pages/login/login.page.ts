@@ -29,7 +29,7 @@ export class LoginPage implements OnInit {
   }
 
   //variable
-  cek_koneksi;
+  cek_koneksi = true;
   data_nama_f;
   data_sandi_f;
   showPassword = false;
@@ -48,7 +48,7 @@ export class LoginPage implements OnInit {
     this.network.onConnect().subscribe(() => {
       setTimeout(() => {
         this.cek_koneksi = true;
-      }, 3000);
+      }, 250);
     });
 
     // this.cek_koneksi = true;
