@@ -34,6 +34,7 @@ export class Tab2Page {
   //persiapan kamera
   cameraOptions: CameraOptions = {
     quality: 50,
+    correctOrientation: true,
     sourceType: this.camera.PictureSourceType.CAMERA,
     destinationType: this.camera.DestinationType.DATA_URL,
     encodingType: this.camera.EncodingType.JPEG,

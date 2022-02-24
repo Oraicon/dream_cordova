@@ -89,6 +89,7 @@
 }
 
 .text_oprasional{
+    font-size: 170%;
     margin-top: 0px;
     margin-bottom: 5px;
 }
@@ -131,4 +132,13 @@
 
 .rotate_icon{
     transform: rotate(45deg);
+}
+
+.fab_position{
+    bottom: 0px;
+    left: 120px;
+}
+
+.isi_konten{
+    font-size: 110%;
 }

@@ -16,12 +16,12 @@ ion-header{
 }
 
 .padding_card{
-    margin-left: 5%;
-    margin-right: 5%;
+    margin-left: 6%;
+    margin-right: 6%;
     margin-top: 10%;
     padding-left: 3%;
     padding-right: 3%;
-    border-radius: 10px;
+    border-radius: 1rem;
 }
 .padding_col{
     margin-top: 2%;
@@ -54,7 +54,7 @@ ion-content {
 }
 
 .bg_card {
-    background: linear-gradient(180deg, #FF0300 5%, #790200 100%);
+    background: linear-gradient(180deg, #FF0300 30%, #790200 100%);
     position: absolute;
     border-radius: 2rem 2rem 0 0;
     height: 100%;

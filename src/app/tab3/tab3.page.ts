@@ -19,7 +19,7 @@ import { AlertServicesService } from '../services/alert-services.service';
 export class Tab3Page {
 
   //persiapan variable
-  imgURL:any = 'assets/ss.png';
+  imgURL:any = 'assets/pp.jpg';
 
   //variable frontend
   lihatsandi = false;
@@ -50,6 +50,7 @@ export class Tab3Page {
 
   cameraOptions: CameraOptions = {
     quality: 50,
+    correctOrientation: true,
     sourceType: this.camera.PictureSourceType.CAMERA,
     destinationType: this.camera.DestinationType.DATA_URL,
     encodingType: this.camera.EncodingType.JPEG,
@@ -66,7 +67,7 @@ export class Tab3Page {
 
 
   constructor(private alertService: AlertServicesService, private passwordService: PasswordServiceService, private datepipe: DatePipe, private transfer: FileTransfer, private camera: Camera,private modalCtrl: ModalController,private loadingCtrl:LoadingServiceService, private alertCtrl: AlertController, private storage:Storage, private router: Router, private apiService:ApiServicesService) {
-    this.tampilkandata();
+    // this.tampilkandata();
   }
 
   async tampilkandata(){

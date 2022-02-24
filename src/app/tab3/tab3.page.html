@@ -1,7 +1,7 @@
 <ion-content>
   <div class="header">
     <ion-grid >
-      <ion-row justify-content-start align-items-start>
+      <ion-row isi_konten-content-start align-items-start>
         <ion-col class="konten_header" size="10">
           <ion-text>
             <h1 class="warna_putih font_nama_pengguna bold ">Profil</h1>
@@ -15,7 +15,7 @@
     <div class="images">
       <!-- <img class="ikut_parent ion-text-center" src="assets/test.jpg"> -->
       <img class="ikut_parent ion-text-center" src="{{ imgURL }}">
-      <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+      <ion-fab vertical="bottom" horizontal="end" slot="fixed" class="fab_position">
         <ion-fab-button color="secondary" id="moda_pilih-gammbar_tabs3">
           <ion-icon name="add" size="large"></ion-icon>
         </ion-fab-button>
@@ -43,18 +43,18 @@
                     <ion-row class="row_konten">
                       <ion-col size="3">
                         <ion-text color="dark">
-                          <p class="">Nama</p>
+                          <p class="isi_konten">Nama</p>
                         </ion-text>                      
                       </ion-col>
                       <ion-col size="6">
                         <ion-text color="dark">
-                          <p class="justify ">
+                          <p class="isi_konten ">
                             {{ username_pengguna }}
                           </p>
                         </ion-text>                      
                       </ion-col>
                       <ion-col size="3">
-                        <ion-button (click)="ubahusername()" expand="block" fill="outline" shape="round">Ubah</ion-button>
+                        <ion-button (click)="ubahusername()" expand="block" fill="outline" shape="block">Ubah</ion-button>
                       </ion-col>
                     </ion-row>
                     <div class="hr">
@@ -62,17 +62,17 @@
                     <ion-row class="row_konten">
                       <ion-col size="3">
                         <ion-text color="dark">
-                          <p class="">Sandi</p>
+                          <p class="isi_konten">Sandi</p>
                         </ion-text>                      
                       </ion-col>
                       <ion-col size="6" (click)="lihat_password()">
                         <ion-text color="dark">
-                          <p *ngIf="lihatsandi; else tidakterlihat" class="justify">
+                          <p *ngIf="lihatsandi; else tidakterlihat" class="isi_konten">
                             {{ sandi_pengguna }}
                           </p>
 
                           <ng-template #tidakterlihat>
-                            <p class="justify">
+                            <p class="isi_konten">
                               {{ sandi_pengguna_tidak_terlihat }}
                             </p>
                           </ng-template>
@@ -80,7 +80,7 @@
                         </ion-text>                      
                       </ion-col>
                       <ion-col size="3">
-                        <ion-button (click)="ubahpassword()" class="" expand="block" fill="outline" shape="round">Ubah</ion-button>
+                        <ion-button (click)="ubahpassword()" class="" expand="block" fill="outline" shape="block">Ubah</ion-button>
                       </ion-col>
                     </ion-row>
                   </ion-grid>
@@ -113,12 +113,12 @@
                     <ion-row class="row_konten">
                       <ion-col size="6">
                         <ion-text color="dark">
-                          <p class="">NIK</p>
+                          <p class="isi_konten">NIK</p>
                         </ion-text>                      
                       </ion-col>
                       <ion-col size="6">
                         <ion-text color="dark">
-                          <p class="justify ">
+                          <p class="isi_konten ">
                             7894561236547891
                           </p>
                         </ion-text>                      
@@ -128,12 +128,12 @@
                     <ion-row class="row_konten">
                       <ion-col size="6">
                         <ion-text color="dark">
-                          <p class="">Pengguna</p>
+                          <p class="isi_konten">Pengguna</p>
                         </ion-text>                      
                       </ion-col>
                       <ion-col size="6">
                         <ion-text color="dark">
-                          <p class="justify">
+                          <p class="isi_konten">
                             {{ nama_pengguna }}
                           </p>
                         </ion-text>                      
@@ -143,12 +143,12 @@
                     <ion-row class="row_konten">
                       <ion-col size="6">
                         <ion-text color="dark">
-                          <p class="">Email</p>
+                          <p class="isi_konten">Email</p>
                         </ion-text>                      
                       </ion-col>
                       <ion-col size="6">
                         <ion-text color="dark">
-                          <p class="justify ">
+                          <p class="isi_konten ">
                             {{ email_pengguna }}
                           </p>
                         </ion-text>                      
@@ -158,12 +158,12 @@
                     <ion-row class="row_konten">
                       <ion-col size="6">
                         <ion-text color="dark">
-                          <p class="">No.HP</p>
+                          <p class="isi_konten">No.HP</p>
                         </ion-text>                      
                       </ion-col>
                       <ion-col size="6">
                         <ion-text color="dark">
-                          <p class="justify ">
+                          <p class="isi_konten ">
                             {{ nohp_pengguna }}
                           </p>
                         </ion-text>                      
@@ -173,12 +173,12 @@
                     <ion-row class="row_konten">
                       <ion-col size="6">
                         <ion-text color="dark">
-                          <p class="">Tempat Lahir</p>
+                          <p class="isi_konten">Tempat Lahir</p>
                         </ion-text>                      
                       </ion-col>
                       <ion-col size="6">
                         <ion-text color="dark">
-                          <p class="justify ">
+                          <p class="isi_konten ">
                             {{ tempatlahir_pengguna }}
                           </p>
                         </ion-text>                      
@@ -188,12 +188,12 @@
                     <ion-row class="row_konten">
                       <ion-col size="6">
                         <ion-text color="dark">
-                          <p class="">Tanggal Lahir</p>
+                          <p class="isi_konten">Tanggal Lahir</p>
                         </ion-text>                      
                       </ion-col>
                       <ion-col size="6">
                         <ion-text color="dark">
-                          <p class="justify ">
+                          <p class="isi_konten ">
                             {{ tanggallahir_pengguna }}
                           </p>
                         </ion-text>                      
@@ -203,12 +203,12 @@
                     <ion-row class="row_konten">
                       <ion-col size="6">
                         <ion-text color="dark">
-                          <p class="">Jenis Kelamin</p>
+                          <p class="isi_konten">Jenis Kelamin</p>
                         </ion-text>                      
                       </ion-col>
                       <ion-col size="6">
                         <ion-text color="dark">
-                          <p class="justify ">
+                          <p class="isi_konten ">
                             {{ kelamin_pengguna }}
                           </p>
                         </ion-text>                      
@@ -218,12 +218,12 @@
                     <ion-row class="row_konten">
                       <ion-col size="6">
                         <ion-text color="dark">
-                          <p class="">Alamat</p>
+                          <p class="isi_konten">Alamat</p>
                         </ion-text>                      
                       </ion-col>
                       <ion-col size="6">
                         <ion-text color="dark">
-                          <p class="justify ">
+                          <p class="isi_konten ">
                             {{ alamat_pengguna }}
                           </p>
                         </ion-text>                      
@@ -233,12 +233,12 @@
                     <ion-row class="row_konten">
                       <ion-col size="6">
                         <ion-text color="dark">
-                          <p class="justify ">Jabatan</p>
+                          <p class="isi_konten ">Jabatan</p>
                         </ion-text>                      
                       </ion-col>
                       <ion-col size="6">
                         <ion-text color="dark">
-                          <p class="justify ">
+                          <p class="isi_konten ">
                             {{ jabatan_pengguna }}
                           </p>
                         </ion-text>                      
@@ -248,12 +248,12 @@
                     <ion-row class="row_konten">
                       <ion-col size="6">
                         <ion-text color="dark">
-                          <p class="justify ">Posisi</p>
+                          <p class="isi_konten ">Posisi</p>
                         </ion-text>                      
                       </ion-col>
                       <ion-col size="6">
                         <ion-text color="dark">
-                          <p class="justify ">
+                          <p class="isi_konten ">
                             {{ posisi_pengguna }}
                           </p>
                         </ion-text>                      
@@ -263,12 +263,12 @@
                     <ion-row class="row_konten">
                       <ion-col size="6">
                         <ion-text color="dark">
-                          <p class="justify ">Tanggal Bergabung</p>
+                          <p class="isi_konten ">Tanggal Bergabung</p>
                         </ion-text>                      
                       </ion-col>
                       <ion-col size="6">
                         <ion-text color="dark">
-                          <p class="justify ">
+                          <p class="isi_konten ">
                             {{ tanggalbergabung_pengguna }}
                           </p>
                         </ion-text>                      
@@ -279,12 +279,12 @@
                     <ion-row class="row_konten">
                       <ion-col size="6">
                         <ion-text color="dark">
-                          <p class="justify ">Departemen</p>
+                          <p class="isi_konten ">Departemen</p>
                         </ion-text>                      
                       </ion-col>
                       <ion-col size="6">
                         <ion-text color="dark">
-                          <p class="justify ">
+                          <p class="isi_konten ">
                             {{ departemen_pengguna }}
                           </p>
                         </ion-text>                      
@@ -294,12 +294,12 @@
                     <ion-row class="row_konten">
                       <ion-col size="6">
                         <ion-text color="dark">
-                          <p class="justify ">Bank Pengguna</p>
+                          <p class="isi_konten ">Bank Pengguna</p>
                         </ion-text>                      
                       </ion-col>
                       <ion-col size="6">
                         <ion-text color="dark">
-                          <p class="justify ">
+                          <p class="isi_konten ">
                             {{ bank_pengguna }}
                           </p>
                         </ion-text>                      
@@ -309,12 +309,12 @@
                     <ion-row class="row_konten">
                       <ion-col size="6">
                         <ion-text color="dark">
-                          <p class="justify ">No Rekening</p>
+                          <p class="isi_konten ">No Rekening</p>
                         </ion-text>                      
                       </ion-col>
                       <ion-col size="6">
                         <ion-text color="dark">
-                          <p class="justify ">
+                          <p class="isi_konten ">
                             {{ rekening_pengguna }}
                           </p>
                         </ion-text>                      
