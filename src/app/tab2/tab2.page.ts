@@ -4,6 +4,7 @@ import { ModalKegiatanPage } from '../modal/modal-kegiatan/modal-kegiatan.page';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@awesome-cordova-plugins/file-transfer/ngx';
 import { Camera, CameraOptions } from '@awesome-cordova-plugins/camera/ngx';
 import { DatePipe } from '@angular/common';
+import { Storage } from '@ionic/storage-angular';
 import { HTTP } from '@awesome-cordova-plugins/http/ngx';
 import { ApiServicesService } from '../services/api-services.service';
 import { LoadingServiceService } from '../services/loading-service.service';
@@ -16,14 +17,22 @@ import { AlertServicesService } from '../services/alert-services.service';
 })
 export class Tab2Page {
 
-
   //variable frontend
-  imgURL:any = 'assets/ss.png';
+  informasi_proyek = true;
+  formulir_laporan = true;
+  text_ = true;
+
+  imgURL:any = 'assets/ss_.png';
   nama_kegiatan:any = "Nama Kegiatan";
   pilih_tahapan = true;
   data_gambar = true;
   data_keterangan_f;
   img_default;
+  judul_progress = "Judul Proyek";
+  regional_progress = "Regional";
+  lop_progress = "LOP";
+  supervisi_progress = "Nama Supervisi";
+  mandor_progress = "Nama Mandor";
 
   base64_img:string="";
   name_img:string="";
@@ -49,7 +58,83 @@ export class Tab2Page {
     mediaType: this.camera.MediaType.PICTURE
   }
 
-  constructor(private alertService: AlertServicesService, private alertCtrl: AlertController, private loadingService: LoadingServiceService, private apiService : ApiServicesService, private modalCtrl: ModalController, private http: HTTP, private transfer: FileTransfer, private camera: Camera, private datepipe: DatePipe) {
+  constructor(private storage: Storage, private alertService: AlertServicesService, private alertCtrl: AlertController, private loadingService: LoadingServiceService, private apiService : ApiServicesService, private modalCtrl: ModalController, private http: HTTP, private transfer: FileTransfer, private camera: Camera, private datepipe: DatePipe) {
+  this.tampilkan_data();
+  }
+
+  async tampilkan_data(){
+    this.loadingService.tampil_loading_login();
+
+
+    const data_l_nama = await this.storage.get('nama');
+
+    
+    this.apiService.panggil_api_progres_header(data_l_nama)
+    .then(res => {
+      
+      const data_json = JSON.parse(res.data);
+      const data_status = JSON.parse(data_json.status);
+      
+      if (data_status == 1) {
+        const data_status_data = data_json.data[0];
+
+        this.informasi_proyek = false;
+        this.formulir_laporan = false;
+
+        this.judul_progress = data_status_data.nama_proyek;
+        this.regional_progress = data_status_data.nama_regional;
+        this.lop_progress = data_status_data.lop;
+        this.supervisi_progress = data_status_data.nama_supervisi;
+        this.mandor_progress = data_status_data.nama_mandor;
+
+        this.loadingService.tutuploading();
+      } else if (data_status == 2) {
+        this.judul_progress = "Data Tidak Di Temukan";
+        this.text_ = false;
+        
+        this.loadingService.tutuploading();
+      } else if (data_status == 0) {
+
+        this.loadingService.tutuploading();
+      }else{
+
+        this.loadingService.tutuploading();
+      }
+      
+      
+
+      this.loadingService.tutuploading();
+
+      // Swal.fire({
+      //   icon: 'success',
+      //   title: 'Sukses !',
+      //   // allowOutsideClick: true,
+      //   text: 'Selamat datang !',
+      //   // backdrop: false
+      // })
+      
+    })
+    .catch(err => {
+      this.loadingService.tutuploading();
+      
+      this.alertCtrl.create({
+        header: 'Terjadi kesalahan !',
+        message: 'Data tidak terbaca, silahkan tekan OK untuk mencoba lagi !',
+        cssClass:'my-custom-class',
+        backdropDismiss: false,
+        mode: "ios",
+        buttons: [{
+          text: 'OK !',
+          handler: () => {
+            this.tampilkan_data();
+          }
+        }]
+      }).then(res => {
+  
+        res.present();
+  
+      });
+    });
   }
 
   //dapatkan gambar dari kamera

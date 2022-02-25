@@ -48,6 +48,7 @@ ion-label{
 .konten_header{
     display: flex;
     align-items: center;
+    // padding: 0;
 }
 
 .card{
@@ -103,4 +104,38 @@ ion-label{
     border-color: red;
     border-width: thin;
     border-style: solid;
+}
+
+.ikon_css{
+    // transform: rotate(180deg);
+    display: flex;
+    align-items: center;
+    padding: 0;
+    // left: 3%;
+}
+
+.tittle_text{
+    font-size: 180%;
+    font-weight: bold;
+}
+
+.text_start{
+    font-size: 120%;
+}
+
+.text_end{
+    font-size: 120%;
+}
+
+.text_tidak_ada{
+    font-size: 125%;
+}
+
+.hr{
+    background: #FF0300 !important;
+    height: 2px !important;
+    width: 100% !important;
+    display: block !important;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }

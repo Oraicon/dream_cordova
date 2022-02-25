@@ -67,7 +67,7 @@ export class Tab3Page {
 
 
   constructor(private alertService: AlertServicesService, private passwordService: PasswordServiceService, private datepipe: DatePipe, private transfer: FileTransfer, private camera: Camera,private modalCtrl: ModalController,private loadingCtrl:LoadingServiceService, private alertCtrl: AlertController, private storage:Storage, private router: Router, private apiService:ApiServicesService) {
-    // this.tampilkandata();
+    this.tampilkandata();
   }
 
   async tampilkandata(){
