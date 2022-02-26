@@ -22,14 +22,26 @@ const routes: Routes = [
   },
   {
     path: '',
-    // redirectTo: '/tabs/tab2',
-    redirectTo: '/login',
+    redirectTo: '/tabs/tab2',
+    // redirectTo: '/login',
     pathMatch: 'full'
   },
   {
     path: 'modal-gantisandi',
     loadChildren: () => import('./modal/modal-gantisandi/modal-gantisandi.module').then( m => m.ModalGantisandiPageModule)
+  },  {
+    path: 'proses',
+    loadChildren: () => import('./pages/proses/proses.module').then( m => m.ProsesPageModule)
+  },
+  {
+    path: 'selesai',
+    loadChildren: () => import('./pages/selesai/selesai.module').then( m => m.SelesaiPageModule)
+  },
+  {
+    path: 'proses-log',
+    loadChildren: () => import('./pages/proses-log/proses-log.module').then( m => m.ProsesLogPageModule)
   }
+
 
 ];
 @NgModule({

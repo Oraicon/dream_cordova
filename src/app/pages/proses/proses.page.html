@@ -1,0 +1,82 @@
+<ion-content>
+  <div class="header">
+    <ion-grid >
+      <ion-row justify-content-start align-items-start>
+        <ion-col class="konten_header" size="10">
+          <ion-text>
+
+            <h1 class="warna_putih font_nama_pengguna bold">Dalam Proses</h1>
+
+          </ion-text>    
+        </ion-col>
+        <ion-col size="2" class="konten_header ikon_rotate">
+          <ion-icon (click)="keluar()" class="warna_putih" size="large" name="log-out-outline"></ion-icon>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+
+  <div class="card">
+    <div class="images">
+      <ion-card class="card_border margin_bawah">
+
+        <ion-card-content class="konten_size_hedder">
+          <div class="ion-text-center">
+            <p class="tittle_text">{{ datajudul }}</p>
+          </div>
+          <div class="hr">
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <div class="content">
+      <ion-grid>
+        <ion-row>
+          <ion-col size="12">
+            <div>
+              <ion-text>
+                <h1 class="text_oprasional">Rincian Kegiatan</h1>
+              </ion-text>   
+            </div>
+          </ion-col>
+        </ion-row>
+
+        <ion-row  *ngFor='let data of array_progress;'>
+          <ion-col size="12" class="card_konten_info">
+            <div>
+              <ion-card class="i_card_margin card_border" (click)="card_klik(data.id)">
+                <ion-card-header class="card_header warna_merah">
+                  <ion-card-subtitle class="title_text ion-text-center warna_putih">{{ data.nama_kegiatan }}</ion-card-subtitle>
+                  <div class="hr2"></div>
+                </ion-card-header>
+                <ion-card-content class="">
+                  <ion-grid>
+
+                    <ion-row>
+                      <ion-label>lattitude</ion-label>
+                      <ion-col size="12" class="padding_col">{{ data.lattitude }}</ion-col>
+                    </ion-row>
+
+                    <ion-row>
+                      <ion-label>longitude</ion-label>
+                      <ion-col size="12" class="padding_col">{{ data.longitude }}</ion-col>
+                    </ion-row>
+
+                    <ion-row>
+                      <ion-label>Alamat</ion-label>
+                      <ion-col size="12" class="padding_col">{{ data.alamat_pengerjaan }}</ion-col>
+                    </ion-row>
+
+                  </ion-grid>
+                </ion-card-content>
+              </ion-card>
+            </div>
+          </ion-col>
+        </ion-row>
+        
+      </ion-grid>
+    </div>
+  </div>
+
+</ion-content>

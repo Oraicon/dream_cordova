@@ -1,0 +1,132 @@
+.header{
+    background: linear-gradient(90deg, #FF0300 30%, #A50200 100%);
+    // border-radius: 0 0 2rem 2rem;
+    width: 100%;
+    height: 11%;
+    position: absolute;
+
+
+    ion-icon{
+        height: 50px;
+        width: 50px;
+    }
+}
+
+.konten_header{
+    display: flex;
+    align-items: center;
+}
+
+.card{
+    height: 50%;
+    width: 100%;
+    // background: yellow;
+    position: absolute;
+    top: 90px;
+}
+
+.text_konten{
+    font-size: 42px;
+}
+
+.posisi_card{
+    position: relative;
+    // top: -90px;
+    // transform: translateX(-50%);
+}
+
+.content{
+    position: relative;
+    // top: -90px;
+    height: auto;
+}
+
+.i_card_margin{
+    margin: 0;
+
+}
+
+.ikon_rotate{
+    transform: rotate(180deg);
+    padding: 0;
+}
+
+.text_oprasional{
+    margin-top: 0px;
+    margin-bottom: 5px;
+}
+
+.card_konten_info{
+    padding-bottom: 10px;
+}
+
+.margin_bawah{
+    margin-bottom: 0px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.no_border{
+    border: 0px;
+}
+
+.float_right{
+    float: right;
+}
+
+.konten_size_hedder{
+    padding-top: 10px;
+    padding-bottom: 5px;
+}
+
+.konten_size{
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.font_konten_size{
+    margin: 0px;
+    font-size: 48px;
+}
+
+.font_konten_size_konten{
+    margin: 0px;
+    font-size: 32px;
+}
+
+.konten_satuan{
+    font-size: 18px;
+}
+
+.warna_putih{
+    color: white;
+}
+
+.font_nama_pengguna{
+    font-size: 24px;
+}
+
+.bold{
+    font-weight: bold;
+}
+
+.warna_merah{
+    background-color: red;
+    border-color: red;
+    border-width: thin;
+    border-style: solid;
+}
+
+.button-native{
+    padding-left: 5px !important; 
+}
+
+.padding_col{
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+.tittle_text{
+    font-size: 180%;
+    font-weight: bold;
+}

@@ -8,8 +8,6 @@ import { LoadingServiceService } from '../services/loading-service.service';
 import Swal from 'sweetalert2';
 
 
-
-
 @Component({
   selector: 'app-tab1',
   templateUrl: 'tab1.page.html',
@@ -23,7 +21,7 @@ export class Tab1Page {
 
   constructor(private loadingCtrl:LoadingServiceService, private alertService: AlertServicesService,private alertCtrl: AlertController, private storage:Storage, private router: Router, private apiService:ApiServicesService) {
     this.data_pengguna = true;
-    this.tampilkan_data();
+    // this.tampilkan_data();
   }
 
   async tampilkan_data(){

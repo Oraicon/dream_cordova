@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AlertController, ModalController } from '@ionic/angular';
+import { AlertController, ModalController, NavController } from '@ionic/angular';
 import { ModalKegiatanPage } from '../modal/modal-kegiatan/modal-kegiatan.page';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@awesome-cordova-plugins/file-transfer/ngx';
 import { Camera, CameraOptions } from '@awesome-cordova-plugins/camera/ngx';
@@ -9,6 +9,9 @@ import { HTTP } from '@awesome-cordova-plugins/http/ngx';
 import { ApiServicesService } from '../services/api-services.service';
 import { LoadingServiceService } from '../services/loading-service.service';
 import { AlertServicesService } from '../services/alert-services.service';
+import { NavigationExtras } from '@angular/router';
+import { SetGetServiceService } from '../services/set-get-service.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-tab2',
@@ -18,21 +21,17 @@ import { AlertServicesService } from '../services/alert-services.service';
 export class Tab2Page {
 
   //variable frontend
-  informasi_proyek = true;
+  informasi_proyek = false;
   formulir_laporan = true;
   text_ = true;
-
   imgURL:any = 'assets/ss_.png';
   nama_kegiatan:any = "Nama Kegiatan";
   pilih_tahapan = true;
   data_gambar = true;
   data_keterangan_f;
   img_default;
+  dataArray;
   judul_progress = "Judul Proyek";
-  regional_progress = "Regional";
-  lop_progress = "LOP";
-  supervisi_progress = "Nama Supervisi";
-  mandor_progress = "Nama Mandor";
 
   base64_img:string="";
   name_img:string="";
@@ -58,8 +57,30 @@ export class Tab2Page {
     mediaType: this.camera.MediaType.PICTURE
   }
 
-  constructor(private storage: Storage, private alertService: AlertServicesService, private alertCtrl: AlertController, private loadingService: LoadingServiceService, private apiService : ApiServicesService, private modalCtrl: ModalController, private http: HTTP, private transfer: FileTransfer, private camera: Camera, private datepipe: DatePipe) {
-  this.tampilkan_data();
+  constructor(public navCtrl: NavController, private router: Router, private setget: SetGetServiceService, private storage: Storage, private alertService: AlertServicesService, private alertCtrl: AlertController, private loadingService: LoadingServiceService, private apiService : ApiServicesService, private modalCtrl: ModalController, private http: HTTP, private transfer: FileTransfer, private camera: Camera, private datepipe: DatePipe) {
+  // this.tampilkan_data();
+    this.dataArray = [
+        {
+            "id": "1",
+            "nama_proyek": "PROYEK MERANGKUL INDONESIA TIMUR",
+            "lop": "1000",
+            "nama_regional": "REGIONAL 6",
+            "nama_mandor": "Flor Tiesman",
+            "nama_supervisi": "Tracy Chitson",
+            "create_date": "2022-02-24",
+            "due_date": "2022-05-24"
+        },
+        {
+            "id": "2",
+            "nama_proyek": "PROYEK 100 TIANG HSI",
+            "lop": "100",
+            "nama_regional": "REGIONAL 2",
+            "nama_mandor": "Flor Tiesman",
+            "nama_supervisi": "Papagena Ginn",
+            "create_date": "2022-02-24",
+            "due_date": "2022-05-24"
+        }
+    ];
   }
 
   async tampilkan_data(){
@@ -76,16 +97,17 @@ export class Tab2Page {
       const data_status = JSON.parse(data_json.status);
       
       if (data_status == 1) {
-        const data_status_data = data_json.data[0];
-
+        const data_status_data = data_json.data;
+        
         this.informasi_proyek = false;
         this.formulir_laporan = false;
-
-        this.judul_progress = data_status_data.nama_proyek;
-        this.regional_progress = data_status_data.nama_regional;
-        this.lop_progress = data_status_data.lop;
-        this.supervisi_progress = data_status_data.nama_supervisi;
-        this.mandor_progress = data_status_data.nama_mandor;
+        
+        this.dataArray = data_status_data
+        // this.judul_progress = data_status_data.nama_proyek;
+        // this.regional_progress = data_status_data.nama_regional;
+        // this.lop_progress = data_status_data.lop;
+        // this.supervisi_progress = data_status_data.nama_supervisi;
+        // this.mandor_progress = data_status_data.nama_mandor;
 
         this.loadingService.tutuploading();
       } else if (data_status == 2) {
@@ -299,6 +321,28 @@ export class Tab2Page {
 
   tutup(){
     this.modalCtrl.dismiss();
+  }
+
+  getid_progres(get_id, get_judul){
+    console.log("progres : " + get_id);
+
+    let navigationExtras: NavigationExtras = {
+      queryParams: {
+          data_id: get_id,
+          data_judul: get_judul
+      }
+  };
+
+  console.log(navigationExtras);
+
+  this.navCtrl.navigateForward(['/proses'], navigationExtras);
+    // this.setget.setData(get_id);
+    // this.router.navigate(['/proses', get_judul]);
+    
+  }
+
+  getid_complete(get_id){
+    console.log("complete : " + get_id);
   }
 
 }

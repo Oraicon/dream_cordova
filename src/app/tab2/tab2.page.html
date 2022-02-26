@@ -4,12 +4,8 @@
       <ion-row justify-content-start align-items-start>
         <ion-col class="konten_header" size="10">
           <ion-text>
-            <h1 class="warna_putih font_nama_pengguna bold ">Laporan Harian</h1>
+            <h1 class="warna_putih font_nama_pengguna bold ">Proyek</h1>
           </ion-text>    
-        </ion-col>
-
-        <ion-col size="2" class="ikon_css ion-text-end">
-          <ion-icon (click)="keluar()" class="warna_putih" size="large" name="alert-circle-outline"></ion-icon>
         </ion-col>
       </ion-row>
     </ion-grid>
@@ -38,8 +34,7 @@
                           <div class="ion-text-center">
                             <p class="tittle_text">{{ judul_progress }}</p>
                           </div>
-                          <div class="hr">
-                          </div>
+                          <div class="hr"></div>
                           <div class="ion-text-center">
 
                             <div *ngIf="text_; else text_ada" class="warna_putih font_nama_pengguna bold"></div>
@@ -61,87 +56,121 @@
       </div>
 
       <ng-template #informasi_proyek_ada>
-        <ion-grid>
-          <ion-row>
-            <ion-col size="12" class="card_konten_info">
-              <div>
-                <ion-card class="i_card_margin card_border">
-                  <ion-card-header class="card_header warna_merah">
-                    <ion-card-subtitle class="title_text warna_putih">Informasi Proyek</ion-card-subtitle>
-                  </ion-card-header>
-  
-                  <ion-card-content class="">
-                    <ion-grid fixed>
-          
-                      <ion-row>
-                        <ion-col size="12">
-                          <div class="ion-text-center">
-                            <p class="tittle_text">{{ judul_progress }}</p>
-                          </div>
-                          <div class="hr">
-                          </div>
-                        </ion-col>
-                      </ion-row>
-          
-                      <ion-row>
-                        <ion-col size="6">
-                          <div class="ion-text-start">
-                            <p class="text_start">Regional</p>
-                          </div>
-                        </ion-col>
-                        <ion-col size="6">
-                          <div class="ion-text-end">
-                            <p class="text_end">{{ regional_progress }}</p>
-                          </div>
-                        </ion-col>              
-                      </ion-row>
-  
-                      <ion-row>
-                        <ion-col size="6">
-                          <div class="ion-text-start">
-                            <p class="text_start">LOP</p>
-                          </div>
-                        </ion-col>
-                        <ion-col size="6">
-                          <div class="ion-text-end">
-                            <p class="text_end">{{ lop_progress }}</p>
-                          </div>
-                        </ion-col>              
-                      </ion-row>
-  
-                      <ion-row>
-                        <ion-col size="6">
-                          <div class="ion-text-start">
-                            <p class="text_start">Supervisi</p>
-                          </div>
-                        </ion-col>
-                        <ion-col size="6">
-                          <div class="ion-text-end">
-                            <p class="text_end">{{ supervisi_progress }}</p>
-                          </div>
-                        </ion-col>              
-                      </ion-row>
-  
-                      <ion-row>
-                        <ion-col size="6">
-                          <div class="ion-text-start">
-                            <p class="text_start">Mandor</p>
-                          </div>
-                        </ion-col>
-                        <ion-col size="6">
-                          <div class="ion-text-end">
-                            <p class="text_end">{{ mandor_progress }}</p>
-                          </div>
-                        </ion-col>              
-                      </ion-row>
-          
-                    </ion-grid>
-                  </ion-card-content>
-                </ion-card>
-              </div>
-            </ion-col>
-          </ion-row>
-        </ion-grid>
+          <ion-grid>
+
+            <ion-row *ngFor='let data of dataArray; let i=index;'>
+              <ion-col size="12" class="card_konten_info">
+                <div>
+                  <ion-card class="i_card_margin card_border">
+                    <ion-card-header class="card_header warna_merah">
+                      <ion-card-subtitle class="title_text warna_putih">Informasi Proyek {{ i + 1}}</ion-card-subtitle>
+                    </ion-card-header>
+    
+                    <ion-card-content class="">
+                      <ion-grid fixed>
+            
+                        <ion-row>
+                          <ion-col size="12">
+                            <div class="ion-text-center">
+                              <p class="tittle_text">{{ data.nama_proyek }}</p>
+                            </div>
+                            <div class="hr">
+                            </div>
+                          </ion-col>
+                        </ion-row>
+            
+                        <ion-row>
+                          <ion-col size="6">
+                            <div class="ion-text-start">
+                              <p class="text_start">Regional</p>
+                            </div>
+                          </ion-col>
+                          <ion-col size="6">
+                            <div class="ion-text-end">
+                              <p class="text_end">{{ data.nama_regional }}</p>
+                            </div>
+                          </ion-col>              
+                          <div class="hr2"></div>
+                        </ion-row>
+    
+                        <ion-row>
+                          <ion-col size="6">
+                            <div class="ion-text-start">
+                              <p class="text_start">LOP</p>
+                            </div>
+                          </ion-col>
+                          <ion-col size="6">
+                            <div class="ion-text-end">
+                              <p class="text_end">{{ data.lop }}</p>
+                            </div>
+                          </ion-col>       
+                          <div class="hr2"></div>
+                        </ion-row>
+    
+                        <ion-row>
+                          <ion-col size="6">
+                            <div class="ion-text-start">
+                              <p class="text_start">Supervisi</p>
+                            </div>
+                          </ion-col>
+                          <ion-col size="6">
+                            <div class="ion-text-end">
+                              <p class="text_end">{{ data.nama_supervisi }}</p>
+                            </div>
+                          </ion-col>    
+                          <div class="hr2"></div>
+                        </ion-row>
+    
+                        <ion-row>
+                          <ion-col size="6">
+                            <div class="ion-text-start">
+                              <p class="text_start">Mandor</p>
+                            </div>
+                          </ion-col>
+                          <ion-col size="6">
+                            <div class="ion-text-end">
+                              <p class="text_end">{{ data.nama_mandor }}</p>
+                            </div>
+                          </ion-col>    
+                          <div class="hr2"></div>
+                        </ion-row>
+
+                        <ion-row>
+                          <ion-col size="6">
+                            <div class="ion-text-start">
+                              <p class="text_start">Deadline</p>
+                            </div>
+                          </ion-col>
+                          <ion-col size="6">
+                            <div class="ion-text-end">
+                              <p class="text_end">{{ data.due_date }}</p>
+                            </div>
+                          </ion-col>    
+                          <div class="hr2"></div>
+                        </ion-row>
+
+                        <ion-row>
+                          <ion-col size="6">
+                            <ion-button (click)="getid_progres(data.id, data.nama_proyek)" expand="block" shape="block">
+                              Masih Proses
+                            </ion-button>
+                          </ion-col>
+                          <ion-col size="6">
+                            <ion-button (click)="getid_complete(data.id)" expand="block" shape="block">
+                              Selesai
+                            </ion-button>
+                          </ion-col>    
+                        </ion-row>
+            
+                      </ion-grid>
+                    </ion-card-content>
+                  </ion-card>
+                </div>
+              </ion-col>
+            </ion-row>
+
+            
+          </ion-grid>
       </ng-template>
 
     </div>

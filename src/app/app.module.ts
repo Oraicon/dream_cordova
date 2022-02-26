@@ -15,6 +15,7 @@ import { FileTransfer, FileTransferObject } from '@awesome-cordova-plugins/file-
 import { Network } from '@awesome-cordova-plugins/network/ngx';
 import { DatePipe } from '@angular/common';
 import { WebView } from '@awesome-cordova-plugins/ionic-webview/ngx';
+import { SetGetServiceService } from './services/set-get-service.service';
 
 
 
@@ -22,7 +23,7 @@ import { WebView } from '@awesome-cordova-plugins/ionic-webview/ngx';
   declarations: [AppComponent],
   entryComponents: [],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, IonicStorageModule.forRoot()],
-  providers: [HTTP, Camera, FileTransfer, FileTransferObject, Network, DatePipe, WebView, { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
+  providers: [HTTP, Camera, SetGetServiceService, FileTransfer, FileTransferObject, Network, DatePipe, WebView, { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
