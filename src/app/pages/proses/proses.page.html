@@ -42,38 +42,59 @@
           </ion-col>
         </ion-row>
 
-        <ion-row  *ngFor='let data of array_progress;'>
-          <ion-col size="12" class="card_konten_info">
-            <div>
-              <ion-card class="i_card_margin card_border" (click)="card_klik(data.id, data.nama_kegiatan)">
-                <ion-card-header class="card_header warna_merah">
-                  <ion-card-subtitle class="title_text ion-text-center warna_putih">{{ data.nama_kegiatan }}</ion-card-subtitle>
-                  <div class="hr2"></div>
-                </ion-card-header>
-                <ion-card-content class="">
-                  <ion-grid>
+        <ion-row *ngIf="data_kegiatan; else data_kegiatan_ada">
+          <ion-col size="12">
 
-                    <ion-row>
-                      <ion-label>lattitude</ion-label>
-                      <ion-col size="12" class="padding_col">{{ data.lattitude }}</ion-col>
-                    </ion-row>
-
-                    <ion-row>
-                      <ion-label>longitude</ion-label>
-                      <ion-col size="12" class="padding_col">{{ data.longitude }}</ion-col>
-                    </ion-row>
-
-                    <ion-row>
-                      <ion-label>Alamat</ion-label>
-                      <ion-col size="12" class="padding_col">{{ data.alamat_pengerjaan }}</ion-col>
-                    </ion-row>
-
-                  </ion-grid>
-                </ion-card-content>
-              </ion-card>
-            </div>
+            <ion-card class="card_border i_card_margin">
+      
+              <ion-card-content class="konten_size_hedder">
+                <div class="ion-text-center">
+                  <p class="tittle_text">Tidak Ada Kegiatan</p>
+                </div>
+              </ion-card-content>
+            </ion-card>
           </ion-col>
         </ion-row>
+
+        <ng-template #data_kegiatan_ada>
+          
+          <ion-row  *ngFor='let data of array_progress;'>
+            <ion-col size="12" class="card_konten_info">
+              <div>
+                <ion-card class="i_card_margin card_border" (click)="card_klik(data.id, data.nama_kegiatan)">
+                  <ion-card-header class="card_header warna_merah">
+                    <ion-card-subtitle class="title_text ion-text-center warna_putih">{{ data.nama_kegiatan }}</ion-card-subtitle>
+                  </ion-card-header>
+                  <ion-card-content class="card_padding_top">
+                    <ion-grid>
+  
+                      <ion-row>
+                        <ion-label>lattitude</ion-label>
+                        <ion-col size="12" class="padding_col">{{ data.lattitude }}</ion-col>
+                        <div class="hr2"></div>
+                      </ion-row>
+  
+                      <ion-row>
+                        <ion-label>longitude</ion-label>
+                        <ion-col size="12" class="padding_col">{{ data.longitude }}</ion-col>
+                        <div class="hr2"></div>
+                      </ion-row>
+  
+                      <ion-row>
+                        <ion-label>Alamat</ion-label>
+                        <ion-col size="12" class="padding_col">{{ data.alamat_pengerjaan }}</ion-col>
+                        <!-- <div class="hr2"></div> -->
+                      </ion-row>
+  
+                    </ion-grid>
+                  </ion-card-content>
+                </ion-card>
+              </div>
+            </ion-col>
+          </ion-row>
+
+        </ng-template>
+
         
       </ion-grid>
     </div>

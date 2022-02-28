@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { HTTP } from '@awesome-cordova-plugins/http/ngx';
 import { ActivatedRoute, Router } from "@angular/router";
 import { NavController } from '@ionic/angular';
-import { NavigationExtras } from '@angular/router';
 import { LoadingServiceService } from 'src/app/services/loading-service.service';
 
 
@@ -16,6 +15,7 @@ export class ProsesLogPage implements OnInit {
   dataid;
   datanamakegiatan;
   array_detail;
+  data_laporan = true;
 
   constructor(private navCtrl: NavController, private route: ActivatedRoute, private http: HTTP, private loadingService: LoadingServiceService) { }
 
@@ -23,6 +23,15 @@ export class ProsesLogPage implements OnInit {
   }
 
   ionViewWillEnter() {
+    // this.array_detail =[
+    //   {
+    //       "id": "3",
+    //       "evidence_img": "/DATA/img/image_3.jpg",
+    //       "remark": "baru penggalian awal",
+    //       "progress_pengerjaan": "10%",
+    //       "create_date": "2022-02-24"
+    //   }
+    // ];
     this.tampilkan_data();
   }
 
@@ -30,7 +39,6 @@ export class ProsesLogPage implements OnInit {
     this.loadingService.tampil_loading_login();
 
     this.route.queryParams.subscribe(params => {
-      console.log(params);
       this.dataid = params.data_id;
       this.datanamakegiatan = params.data_nama_kegiatan;
     });
@@ -38,17 +46,18 @@ export class ProsesLogPage implements OnInit {
     this.http.post('https://dads-demo-1.000webhostapp.com/api/getProgressMilestone', {'progress_detail_id' : this.dataid}, {'Accept': 'application/json', 'Content-Type':'application/x-www-form-urlencoded'})
     .then(data => {
 
+      console.log(data);
+
       const data_json = JSON.parse(data.data);
-      console.log(data_json);
       
       const data_status = JSON.parse(data_json.status);
-      const array_master = data_json.data;
-
+      
       if (data_status == 1) {
-        this.array_detail = array_master;
+        this.data_laporan = false;
+        this.array_detail =  data_json.data;
         this.loadingService.tutuploading();
       } else {
-        console.log("kosong");
+      //   console.log("kosong");
         this.loadingService.tutuploading();
       }
 

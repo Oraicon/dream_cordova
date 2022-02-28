@@ -22,8 +22,8 @@ const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: '/tabs/tab2',
-    // redirectTo: '/login',
+    // redirectTo: '/tabs/tab2',
+    redirectTo: '/login',
     pathMatch: 'full'
   },
   {
@@ -41,7 +41,12 @@ const routes: Routes = [
   {
     path: 'proses_log',
     loadChildren: () => import('./pages/proses-log/proses-log.module').then( m => m.ProsesLogPageModule)
+  },
+  {
+    path: 'lapor',
+    loadChildren: () => import('./pages/lapor/lapor.module').then( m => m.LaporPageModule)
   }
+
 
 
 ];

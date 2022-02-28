@@ -29,24 +29,40 @@
           </ion-col>
         </ion-row>
 
-        <ion-row *ngFor='let data of array_detail;'>
+        <ion-row *ngIf="data_laporan; else data_laporan_ada">
           <ion-col size="12" class="card_konten_info">
-            <div>
-              <ion-card class="i_card_margin">
-                <img src="https://oraicon.000webhostapp.com/upload/0210202260505.JPEG"/>
-                <ion-card-header class="margin_header">
-                  <ion-card-subtitle class="proses">Proses Pengerjaan</ion-card-subtitle>
-                  <ion-card-title class="persen">{{ data.progress_pengerjaan }}</ion-card-title>
-                </ion-card-header>
-                <ion-card-content class="">
-                  <p>tanggal : {{ data.create_date }}</p>
-                  <p>keterangan</p>
-                  <p>{{ data.remark }}</p>
-                </ion-card-content>
-              </ion-card>
-            </div>
+            <ion-card class="i_card_margin">
+              <ion-card-content class="konten_size_hedder">
+                <div class="ion-text-center">
+                  <p class="tittle_text">Tidak Ada Laporan</p>
+                </div>
+              </ion-card-content>
+            </ion-card>
           </ion-col>
         </ion-row>
+
+        <ng-template #data_laporan_ada>
+
+          <ion-row *ngFor='let data of array_detail;'>
+            <ion-col size="12" class="card_konten_info">
+              <div>
+                <ion-card class="i_card_margin">
+                  <img src="https://oraicon.000webhostapp.com/upload/0210202260505.JPEG"/>
+                  <ion-card-header class="margin_header">
+                    <ion-card-subtitle class="proses">Proses Pengerjaan</ion-card-subtitle>
+                    <ion-card-title class="persen">{{ data.progress_pengerjaan }}</ion-card-title>
+                  </ion-card-header>
+                  <ion-card-content class="">
+                    <p>tanggal : {{ data.create_date }}</p>
+                    <p>keterangan</p>
+                    <p>{{ data.remark }}</p>
+                  </ion-card-content>
+                </ion-card>
+              </div>
+            </ion-col>
+          </ion-row>
+
+      </ng-template>
 
       </ion-grid>
     </div>

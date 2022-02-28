@@ -5,6 +5,7 @@ import { SetGetServiceService } from 'src/app/services/set-get-service.service';
 import Swal from 'sweetalert2';
 import { NavController } from '@ionic/angular';
 import { NavigationExtras } from '@angular/router';
+import { LoadingServiceService } from 'src/app/services/loading-service.service';
 
 @Component({
   selector: 'app-proses',
@@ -17,13 +18,15 @@ export class ProsesPage implements OnInit {
   array_progress = [];
   dataid;
   datajudul;
+  data_kegiatan = true;
 
-  constructor(private navCtrl: NavController, private route: ActivatedRoute, private setget: SetGetServiceService, private http :HTTP) { }
+  constructor(private loadingService: LoadingServiceService, private navCtrl: NavController, private route: ActivatedRoute, private setget: SetGetServiceService, private http :HTTP) { }
 
   ngOnInit() {
   }
 
   ionViewWillEnter(){
+    this.data_kegiatan = false;
     this.array_progress = [
       {
           "id": "1",
@@ -66,44 +69,45 @@ export class ProsesPage implements OnInit {
           "create_date": "2022-02-24"
       }
   ];
-    this.tampilkan_data();
+    // this.tampilkan_data();
   }
 
   tampilkan_data(){
     // const data_id = this.setget.getData();
+    this.loadingService.tampil_loading_login();
     this.route.queryParams.subscribe(params => {
-      console.log(params.data_id);
       this.dataid = params.data_id;
       this.datajudul = params.data_judul;
     });
   
     
-    // this.http.post('https://dads-demo-1.000webhostapp.com/api/getProgressDetail', {'progress_id' : data_id}, {'Accept': 'application/json', 'Content-Type':'application/x-www-form-urlencoded'})
-    // .then(data => {
+    this.http.post('https://dads-demo-1.000webhostapp.com/api/getProgressDetail', {'progress_id' : this.dataid}, {'Accept': 'application/json', 'Content-Type':'application/x-www-form-urlencoded'})
+    .then(data => {
 
-    //   const data_json = JSON.parse(data.data);
-    //   console.log(data_json);
+      const data_json = JSON.parse(data.data);
+      // console.log(data_json);
       
-    //   const data_status = JSON.parse(data_json.status);
-    //   const array_master = data_json.data;
+      const data_status = JSON.parse(data_json.status);
+      const array_master = data_json.data;
 
-    //   if (data_status == 1) {
-    //     for (let i = 0; i < array_master.length; i++) {
-    //       if (array_master[i].status_pengerjaan == "IN PROGRESS") {
-    //         this.array_progress.push(array_master[i]);
-    //       }
-    //     }
-    //     console.log(this.array_progress);
-    //   } else {
-        
-    //   }
+      if (data_status == 1) {
+        for (let i = 0; i < array_master.length; i++) {
+          if (array_master[i].status_pengerjaan == "IN PROGRESS") {
+            this.array_progress.push(array_master[i]);
+          }
+        }
+        // console.log(this.array_progress);
+        this.loadingService.tutuploading();
+      } else {
+        this.loadingService.tutuploading();
+      }
 
-    // })
-    // .catch(error => {
+    })
+    .catch(error => {
 
-    //   console.log(error); // error message as string
+      console.log(error); // error message as string
 
-    // });
+    });
   }
 
   card_klik(get_id, get_nama_kegiatan){
