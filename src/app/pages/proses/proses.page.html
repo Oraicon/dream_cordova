@@ -10,7 +10,7 @@
           </ion-text>    
         </ion-col>
         <ion-col size="2" class="konten_header ikon_rotate">
-          <ion-icon (click)="keluar()" class="warna_putih" size="large" name="log-out-outline"></ion-icon>
+          <ion-icon (click)="kembali()" class="warna_putih" size="large" name="arrow-forward-outline"></ion-icon>
         </ion-col>
       </ion-row>
     </ion-grid>
@@ -45,7 +45,7 @@
         <ion-row  *ngFor='let data of array_progress;'>
           <ion-col size="12" class="card_konten_info">
             <div>
-              <ion-card class="i_card_margin card_border" (click)="card_klik(data.id)">
+              <ion-card class="i_card_margin card_border" (click)="card_klik(data.id, data.nama_kegiatan)">
                 <ion-card-header class="card_header warna_merah">
                   <ion-card-subtitle class="title_text ion-text-center warna_putih">{{ data.nama_kegiatan }}</ion-card-subtitle>
                   <div class="hr2"></div>

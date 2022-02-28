@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { HTTP } from '@awesome-cordova-plugins/http/ngx';
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { SetGetServiceService } from 'src/app/services/set-get-service.service';
 import Swal from 'sweetalert2';
+import { NavController } from '@ionic/angular';
+import { NavigationExtras } from '@angular/router';
 
 @Component({
   selector: 'app-proses',
@@ -16,7 +18,7 @@ export class ProsesPage implements OnInit {
   dataid;
   datajudul;
 
-  constructor(private route: ActivatedRoute, private setget: SetGetServiceService, private http :HTTP) { }
+  constructor(private navCtrl: NavController, private route: ActivatedRoute, private setget: SetGetServiceService, private http :HTTP) { }
 
   ngOnInit() {
   }
@@ -73,9 +75,7 @@ export class ProsesPage implements OnInit {
       console.log(params.data_id);
       this.dataid = params.data_id;
       this.datajudul = params.data_judul;
-
-
-  });
+    });
   
     
     // this.http.post('https://dads-demo-1.000webhostapp.com/api/getProgressDetail', {'progress_id' : data_id}, {'Accept': 'application/json', 'Content-Type':'application/x-www-form-urlencoded'})
@@ -106,7 +106,19 @@ export class ProsesPage implements OnInit {
     // });
   }
 
-  card_klik(get_id){
-    console.log(get_id);
+  card_klik(get_id, get_nama_kegiatan){
+    
+    let navigationExtras: NavigationExtras = {
+      queryParams: {
+          data_id: get_id,
+          data_nama_kegiatan: get_nama_kegiatan,
+      }
+    };
+
+    this.navCtrl.navigateForward(['/proses_log'], navigationExtras);
+  }
+
+  kembali(){
+    this.navCtrl.back();
   }
 }

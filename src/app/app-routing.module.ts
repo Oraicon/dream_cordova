@@ -29,7 +29,8 @@ const routes: Routes = [
   {
     path: 'modal-gantisandi',
     loadChildren: () => import('./modal/modal-gantisandi/modal-gantisandi.module').then( m => m.ModalGantisandiPageModule)
-  },  {
+  },
+  {
     path: 'proses',
     loadChildren: () => import('./pages/proses/proses.module').then( m => m.ProsesPageModule)
   },
@@ -38,7 +39,7 @@ const routes: Routes = [
     loadChildren: () => import('./pages/selesai/selesai.module').then( m => m.SelesaiPageModule)
   },
   {
-    path: 'proses-log',
+    path: 'proses_log',
     loadChildren: () => import('./pages/proses-log/proses-log.module').then( m => m.ProsesLogPageModule)
   }
 

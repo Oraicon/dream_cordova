@@ -1,9 +1,63 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>proses-log</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content>
+  <div class="header">
+    <ion-grid >
+      <ion-row justify-content-start align-items-start>
+        <ion-col class="konten_header" size="10">
+          <ion-text>
+
+            <h1 class="warna_putih font_nama_pengguna bold">{{ datanamakegiatan }}</h1>
+
+          </ion-text>    
+        </ion-col>
+        <ion-col size="2" class="konten_header ikon_rotate">
+          <ion-icon (click)="kembali()" class="warna_putih" size="large" name="arrow-forward-outline"></ion-icon>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+
+  <div class="card">
+    <div class="content">
+      <ion-grid>
+        <ion-row>
+          <ion-col size="12">
+            <div>
+              <ion-text>
+                <h1 class="text_oprasional">Riwayat Laporan</h1>
+              </ion-text>   
+            </div>
+          </ion-col>
+        </ion-row>
+
+        <ion-row *ngFor='let data of array_detail;'>
+          <ion-col size="12" class="card_konten_info">
+            <div>
+              <ion-card class="i_card_margin">
+                <img src="https://oraicon.000webhostapp.com/upload/0210202260505.JPEG"/>
+                <ion-card-header class="margin_header">
+                  <ion-card-subtitle class="proses">Proses Pengerjaan</ion-card-subtitle>
+                  <ion-card-title class="persen">{{ data.progress_pengerjaan }}</ion-card-title>
+                </ion-card-header>
+                <ion-card-content class="">
+                  <p>tanggal : {{ data.create_date }}</p>
+                  <p>keterangan</p>
+                  <p>{{ data.remark }}</p>
+                </ion-card-content>
+              </ion-card>
+            </div>
+          </ion-col>
+        </ion-row>
+
+      </ion-grid>
+    </div>
+  </div>
 
 </ion-content>
+
+<ion-footer class="ion-no-border">
+  <ion-toolbar>
+    <ion-button (click)="onClick()" expand="block" fill="clear" >
+      Laporkan Proses !
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>
