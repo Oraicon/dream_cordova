@@ -50,7 +50,7 @@
                   <img src="https://oraicon.000webhostapp.com/upload/0210202260505.JPEG"/>
                   <ion-card-header class="margin_header">
                     <ion-card-subtitle class="proses">Proses Pengerjaan</ion-card-subtitle>
-                    <ion-card-title class="persen">{{ data.progress_pengerjaan }}</ion-card-title>
+                    <ion-card-title class="persen">{{ data.progress_pengerjaan }}%</ion-card-title>
                   </ion-card-header>
                   <ion-card-content class="">
                     <p>tanggal : {{ data.create_date }}</p>
@@ -70,10 +70,16 @@
 
 </ion-content>
 
-<ion-footer class="ion-no-border">
-  <ion-toolbar>
-    <ion-button (click)="onClick()" expand="block" fill="clear" >
-      Laporkan Proses !
-    </ion-button>
-  </ion-toolbar>
-</ion-footer>
+<div *ngIf="footer_; else footer_ada"></div>
+
+<ng-template #footer_ada>
+
+  <ion-footer class="ion-no-border">
+    <ion-toolbar>
+      <ion-button (click)="laporan()" expand="block" fill="clear" >
+        Laporkan Proses !
+      </ion-button>
+    </ion-toolbar>
+  </ion-footer>
+
+</ng-template>

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HTTP } from '@awesome-cordova-plugins/http/ngx';
 import { ActivatedRoute, Router } from "@angular/router";
+import { NavigationExtras } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { LoadingServiceService } from 'src/app/services/loading-service.service';
 
@@ -14,34 +15,77 @@ export class ProsesLogPage implements OnInit {
 
   dataid;
   datanamakegiatan;
+  datapage;
   array_detail;
   data_laporan = true;
+  footer_ = false;
+  new_arr = [];
+  persen_tertinggi;
 
-  constructor(private navCtrl: NavController, private route: ActivatedRoute, private http: HTTP, private loadingService: LoadingServiceService) { }
+  constructor(private navCtrl: NavController, private route: ActivatedRoute, private http: HTTP, private loadingService: LoadingServiceService) { 
+  }
 
   ngOnInit() {
   }
 
   ionViewWillEnter() {
-    // this.array_detail =[
-    //   {
-    //       "id": "3",
-    //       "evidence_img": "/DATA/img/image_3.jpg",
-    //       "remark": "baru penggalian awal",
-    //       "progress_pengerjaan": "10%",
-    //       "create_date": "2022-02-24"
-    //   }
-    // ];
-    this.tampilkan_data();
+    this.data_laporan = true;
+
+    this.data_statik();
+    // this.tampilkan_data();
+  }
+
+  data_statik(){
+    this.data_laporan = false;
+    this.array_detail =[
+      {
+          "id": "3",
+          "evidence_img": "/DATA/img/image_3.jpg",
+          "remark": "baru penggalian awal",
+          "progress_pengerjaan": "10",
+          "create_date": "2022-02-24"
+      },
+      {
+        "id": "4",
+        "evidence_img": "/DATA/img/image_3.jpg",
+        "remark": "baru penggalian awal",
+        "progress_pengerjaan": "30",
+        "create_date": "2022-02-24"
+      },
+      {
+        "id": "5",
+        "evidence_img": "/DATA/img/image_3.jpg",
+        "remark": "baru penggalian awal",
+        "progress_pengerjaan": "20",
+        "create_date": "2022-02-24"
+      }
+    ];
+
+    this.array_detail.sort(this.compare);
+    this.array_detail.reverse();
+    this.persen_tertinggi = this.array_detail[0].progress_pengerjaan;
+    
+  }
+
+  compare( a, b ) {
+    return a.progress_pengerjaan - b.progress_pengerjaan;
   }
 
   tampilkan_data(){
+    this.array_detail = [];
     this.loadingService.tampil_loading_login();
 
     this.route.queryParams.subscribe(params => {
       this.dataid = params.data_id;
       this.datanamakegiatan = params.data_nama_kegiatan;
+      this.datapage = params.data_page;
     });
+
+    if (this.datapage == 1) {
+      this.footer_ = false;
+    } else {
+      this.footer_ = true;
+    }
 
     this.http.post('https://dads-demo-1.000webhostapp.com/api/getProgressMilestone', {'progress_detail_id' : this.dataid}, {'Accept': 'application/json', 'Content-Type':'application/x-www-form-urlencoded'})
     .then(data => {
@@ -53,11 +97,21 @@ export class ProsesLogPage implements OnInit {
       const data_status = JSON.parse(data_json.status);
       
       if (data_status == 1) {
-        this.data_laporan = false;
-        this.array_detail =  data_json.data;
+        this.array_detail =  data_json.data.reverse();
+        
+        if (this.array_detail.length == 0) {
+          this.data_laporan = true;
+        } else {
+          this.data_laporan = false;
+        }
+        
+        
+        console.log(this.array_detail);
+
         this.loadingService.tutuploading();
       } else {
-      //   console.log("kosong");
+        console.log("kosong");
+        this.data_laporan = true;
         this.loadingService.tutuploading();
       }
 
@@ -68,10 +122,23 @@ export class ProsesLogPage implements OnInit {
       console.log(error); // error message as string
 
     });
+
   }
 
   kembali(){
     this.navCtrl.back();
+  }
+
+  laporan(get_id, get_nama_kegiatan){
+    let navigationExtras: NavigationExtras = {
+      queryParams: {
+          data_id: get_id,
+          data_nama_kegiatan: get_nama_kegiatan,
+          data_persen: this.persen_tertinggi
+      }
+    };
+
+    this.navCtrl.navigateForward(['/lapor'], navigationExtras);
   }
 
 }

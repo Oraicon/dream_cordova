@@ -1,9 +1,155 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>lapor</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content>
+  <div class="header">
+    <ion-grid >
+      <ion-row justify-content-start align-items-start>
+        <ion-col class="konten_header" size="10">
+          <ion-text>
+
+            <h1 class="warna_putih font_nama_pengguna bold">{{ datanamakegiatan }}</h1>
+
+          </ion-text>    
+        </ion-col>
+        <ion-col size="2" class="konten_header ikon_rotate">
+          <ion-icon (click)="kembali()" class="warna_putih" size="large" name="arrow-forward-outline"></ion-icon>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+
+  <div class="card">
+    <div class="content">
+      <ion-grid>
+        <ion-row>
+          <ion-col size="12">
+            <div>
+              <ion-text>
+                <h1 class="text_oprasional">Formulir Laporan</h1>
+              </ion-text>   
+            </div>
+          </ion-col>
+        </ion-row>
+
+          <ion-grid>
+            <ion-row>
+              <ion-col size="12" class="card_konten_padding">
+                <div>
+                  <ion-card class="i_card_margin card_border">
+    
+                    <ion-card-content class="">
+                      <ion-grid fixed>
+            
+                        <ion-row>
+                          <ion-col size="12">                        
+                            <ion-item>
+                              <ion-label>Persen Pengerjaan</ion-label>
+                              <ion-select [interfaceOptions]="customAlertOptions" interface="alert" placeholder="0%" (ionChange)="diklik();" [(ngModel)]="place">
+                                <ion-select-option *ngFor="let data of array_persen" value="{{ data }}">{{ data }}%</ion-select-option>
+                              </ion-select>
+                            </ion-item>
+                          </ion-col>
+                        </ion-row>
+            
+                        <ion-row>
+                          <ion-col size="12">
+                            <ion-item>
+                              <ion-label position="floating" class="">Keterangan</ion-label>
+                              <ion-textarea [(ngModel)]="data_keterangan_f" maxlength="255" placeholder="Keterangan dari foto . . "></ion-textarea>
+                            </ion-item>
+                          </ion-col>
+            
+                          <ion-row>
+                            <ion-col size="12">                        
+                              <ion-text color="dark" class="">
+                                <p class=" font_kegiatan">
+                                  Foto Laporan
+                                </p>
+                              </ion-text> 
+                            </ion-col>
+                          </ion-row>
+            
+                        </ion-row>
+                        
+                        <ion-row>
+                          <ion-col size="12" class="ion-text-center">
+                            
+                            <div *ngIf="data_gambar; else data_gambar_ada"></div>
+                
+                            <ng-template #data_gambar_ada>
+                              <ion-fab vertical="top" horizontal="end" class="fab_position">
+                                <ion-fab-button>
+                                  <ion-icon (click)="batal_gambar()" name="add" size="large" class="rotate_icon" ></ion-icon>
+                                </ion-fab-button>
+                              </ion-fab>
+                            </ng-template>
+            
+                            <img class="card_border image_hw" src="{{ imgURL }}">
+                          </ion-col>
+                        </ion-row>
+            
+                        <ion-row class="ion-text-center">
+                          <ion-col size="12">
+                            <ion-button expand="block" color="primary" (click)="presentActionSheet()" class="button_margin">Pilih Gambar</ion-button>
+                          </ion-col>
+                        </ion-row>
+
+                        <ion-row class="ion-text-center">
+                          <ion-col size="6">
+                            <ion-button (click)="batal_laporan()" expand="block" fill="outline" color="primary" class="">Batal</ion-button>
+                          </ion-col>
+                          <ion-col size="6">
+                            <ion-button (click)="validasi()" expand="block" color="primary" class="">Kirim</ion-button>
+                          </ion-col>
+                        </ion-row>
+            
+                      </ion-grid>
+                    </ion-card-content>
+                  </ion-card>
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+
+      </ion-grid>
+    </div>
+  </div>
 
 </ion-content>
+
+<!-- modal pilih gambar -->
+<ion-modal trigger="modal-pilih-gambar" class="modal-tab2" [initialBreakpoint]="0.2">
+  <ng-template>
+    <ion-header>
+  
+      <ion-toolbar>
+        <ion-title>Pilih Gambar</ion-title>
+        <ion-button slot="end" (click)="tutup()" class="posisi">
+          <ion-icon class="rotate_icon" slot="icon-only" name="add-outline" size="large"></ion-icon>
+        </ion-button>
+      </ion-toolbar>
+    </ion-header>
+    
+    <ion-content>
+      
+      <ion-grid fixed>
+        <ion-row>
+          <ion-col size="6">
+            <ion-button expand="full" (click)="kamera()" class="ion-text-center" size="large" shape="round">
+              <!-- <ion-icon slot="start" name="camera-outline"> -->
+                Kamera
+              <!-- </ion-icon> -->
+            </ion-button>
+          </ion-col>
+          <ion-col size="6">
+            <ion-button expand="full" (click)="galeri()" class="ion-text-center" size="large" shape="round">
+              <!-- <ion-icon slot="start" name="image-outline"> -->
+                Galeri
+              <!-- </ion-icon> -->
+            </ion-button>  
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    
+    </ion-content>
+    
+  </ng-template>
+</ion-modal>

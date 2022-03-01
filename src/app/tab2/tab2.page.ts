@@ -10,7 +10,6 @@ import { ApiServicesService } from '../services/api-services.service';
 import { LoadingServiceService } from '../services/loading-service.service';
 import { AlertServicesService } from '../services/alert-services.service';
 import { NavigationExtras } from '@angular/router';
-import { SetGetServiceService } from '../services/set-get-service.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -21,7 +20,7 @@ import { Router } from '@angular/router';
 export class Tab2Page {
 
   //variable frontend
-  informasi_proyek = false;
+  informasi_proyek = true;
   formulir_laporan = true;
   text_ = true;
   imgURL:any = 'assets/ss_.png';
@@ -57,8 +56,15 @@ export class Tab2Page {
     mediaType: this.camera.MediaType.PICTURE
   }
 
-  constructor(public navCtrl: NavController, private router: Router, private setget: SetGetServiceService, private storage: Storage, private alertService: AlertServicesService, private alertCtrl: AlertController, private loadingService: LoadingServiceService, private apiService : ApiServicesService, private modalCtrl: ModalController, private http: HTTP, private transfer: FileTransfer, private camera: Camera, private datepipe: DatePipe) {
-  // this.tampilkan_data();
+  constructor(public navCtrl: NavController, private router: Router, private storage: Storage, private alertService: AlertServicesService, private alertCtrl: AlertController, private loadingService: LoadingServiceService, private apiService : ApiServicesService, private modalCtrl: ModalController, private http: HTTP, private transfer: FileTransfer, private camera: Camera, private datepipe: DatePipe) {
+    
+    this.data_statik();
+    // this.tampilkan_data();
+
+  }
+
+  data_statik(){
+    this.informasi_proyek = false;
     this.dataArray = [
         {
             "id": "1",
@@ -97,17 +103,17 @@ export class Tab2Page {
       const data_status = JSON.parse(data_json.status);
       
       if (data_status == 1) {
-        const data_status_data = data_json.data;
+        this.dataArray = data_json.data;
+
+        if (this.dataArray.length == 0) {
+          this.informasi_proyek = true;
+          this.formulir_laporan = true;
+        }else{
+          this.informasi_proyek = false;
+          this.formulir_laporan = false;
+        }
+
         
-        this.informasi_proyek = false;
-        this.formulir_laporan = false;
-        
-        this.dataArray = data_status_data
-        // this.judul_progress = data_status_data.nama_proyek;
-        // this.regional_progress = data_status_data.nama_regional;
-        // this.lop_progress = data_status_data.lop;
-        // this.supervisi_progress = data_status_data.nama_supervisi;
-        // this.mandor_progress = data_status_data.nama_mandor;
 
         this.loadingService.tutuploading();
       } else if (data_status == 2) {
@@ -123,17 +129,7 @@ export class Tab2Page {
         this.loadingService.tutuploading();
       }
       
-      
-
       this.loadingService.tutuploading();
-
-      // Swal.fire({
-      //   icon: 'success',
-      //   title: 'Sukses !',
-      //   // allowOutsideClick: true,
-      //   text: 'Selamat datang !',
-      //   // backdrop: false
-      // })
       
     })
     .catch(err => {
@@ -324,25 +320,29 @@ export class Tab2Page {
   }
 
   getid_progres(get_id, get_judul){
-    console.log("progres : " + get_id);
-
     let navigationExtras: NavigationExtras = {
       queryParams: {
           data_id: get_id,
-          data_judul: get_judul
+          data_judul: get_judul,
+          data_page: 1
       }
   };
 
-  console.log(navigationExtras);
-
   this.navCtrl.navigateForward(['/proses'], navigationExtras);
-    // this.setget.setData(get_id);
-    // this.router.navigate(['/proses', get_judul]);
-    
+  
   }
 
-  getid_complete(get_id){
-    console.log("complete : " + get_id);
+  getid_complete(get_id, get_judul){
+    let navigationExtras: NavigationExtras = {
+      queryParams: {
+          data_id: get_id,
+          data_judul: get_judul,
+          data_page: 2
+      }
+  };
+
+  this.navCtrl.navigateForward(['/proses'], navigationExtras);
+
   }
 
 }
