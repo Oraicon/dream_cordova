@@ -69,14 +69,20 @@
                     <ion-grid>
   
                       <ion-row>
-                        <ion-label>lattitude</ion-label>
-                        <ion-col size="12" class="padding_col">{{ data.lattitude }}</ion-col>
+                        <ion-label>Status</ion-label>
+                        <ion-col size="12" class="padding_col">
+                          {{ data.status_pengerjaan }}
+                        </ion-col>
                         <div class="hr2"></div>
                       </ion-row>
   
                       <ion-row>
-                        <ion-label>longitude</ion-label>
-                        <ion-col size="12" class="padding_col">{{ data.longitude }}</ion-col>
+                        <ion-label>Keterangan</ion-label>
+                        <ion-col size="12" class="padding_col">
+                          <p *ngIf="data.keterangan != null">
+                            yuyuyuyu
+                          </p>
+                        </ion-col>
                         <div class="hr2"></div>
                       </ion-row>
   

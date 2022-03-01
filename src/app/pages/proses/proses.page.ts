@@ -42,7 +42,7 @@ export class ProsesPage implements OnInit {
           {
               "id": "1",
               "nama_kegiatan": "Gali Tanam",
-              "keterangan": null,
+              "keterangan": "asik",
               "alamat_pengerjaan": "Kec. Manokwari Bar. Kabupaten Manokwari Papua Bar.",
               "lattitude": "-0.8425675",
               "longitude": "134.0020447",

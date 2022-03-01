@@ -76,7 +76,6 @@ export class LaporPage implements OnInit {
 
     });
     this.logik_array(this.datapersen);
-    console.log(this.array_persen);
     
   }
 
@@ -84,7 +83,6 @@ export class LaporPage implements OnInit {
     let a = Number(yey);
     for (let index = 1; index <= 100/10; index++) {
       let j = index * 10;
-      console.log(j);
       if (j >= a) {
         this.array_persen.push(j);
       }
@@ -140,6 +138,11 @@ export class LaporPage implements OnInit {
 
   diklik(){
     console.log(this.place);
+  }
+
+  batal_laporan(){
+    this.place = null;
+    this.nama_kegiatan = "Nama Kegiatan";
   }
 
 }

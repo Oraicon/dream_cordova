@@ -35,6 +35,11 @@ export class ProsesLogPage implements OnInit {
     // this.tampilkan_data();
   }
 
+  errorHandler(event) {
+    console.debug(event);
+    event.target.src = "assets/bi.png";
+  }
+
   data_statik(){
     this.data_laporan = false;
     this.array_detail =[

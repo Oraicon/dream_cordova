@@ -21,7 +21,6 @@ export class Tab2Page {
 
   //variable frontend
   informasi_proyek = true;
-  formulir_laporan = true;
   text_ = true;
   imgURL:any = 'assets/ss_.png';
   nama_kegiatan:any = "Nama Kegiatan";
@@ -107,13 +106,9 @@ export class Tab2Page {
 
         if (this.dataArray.length == 0) {
           this.informasi_proyek = true;
-          this.formulir_laporan = true;
         }else{
           this.informasi_proyek = false;
-          this.formulir_laporan = false;
         }
-
-        
 
         this.loadingService.tutuploading();
       } else if (data_status == 2) {
@@ -342,7 +337,5 @@ export class Tab2Page {
   };
 
   this.navCtrl.navigateForward(['/proses'], navigationExtras);
-
   }
-
 }
