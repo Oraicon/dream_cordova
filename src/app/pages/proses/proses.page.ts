@@ -31,8 +31,8 @@ export class ProsesPage implements OnInit {
     this.data_kegiatan = true;
     this.array_progress = [];
 
-    this.data_statik();
-    // this.tampilkan_data();
+    // this.data_statik();
+    this.tampilkan_data();
   }
 
   data_statik(){
@@ -114,7 +114,8 @@ export class ProsesPage implements OnInit {
           } else {
             this.data_kegiatan = false;
           }
-
+          
+          this.loadingService.tutuploading();
         } else {
           this.loadingService.tutuploading();
         }

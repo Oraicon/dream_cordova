@@ -126,6 +126,10 @@ export class Tab3Page {
     });
   }
 
+  errorHandler(event) {
+    event.target.src = "assets/bi.png";
+  }
+
   async ubahusername(){
 
     const l_storage_data_nama = await this.storage.get('nama');

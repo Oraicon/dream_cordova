@@ -57,8 +57,8 @@ export class Tab2Page {
 
   constructor(public navCtrl: NavController, private router: Router, private storage: Storage, private alertService: AlertServicesService, private alertCtrl: AlertController, private loadingService: LoadingServiceService, private apiService : ApiServicesService, private modalCtrl: ModalController, private http: HTTP, private transfer: FileTransfer, private camera: Camera, private datepipe: DatePipe) {
     
-    this.data_statik();
-    // this.tampilkan_data();
+    // this.data_statik();
+    this.tampilkan_data();
 
   }
 

@@ -79,9 +79,12 @@
                       <ion-row>
                         <ion-label>Keterangan</ion-label>
                         <ion-col size="12" class="padding_col">
-                          <p *ngIf="data.keterangan != null">
-                            yuyuyuyu
+                          <p *ngIf="data.keterangan == null;  else data_keterangan_ada">
+                            Tidak ada keterangan
                           </p>
+                          <ng-template #data_keterangan_ada>
+                              {{ data.keterangan }}
+                          </ng-template>
                         </ion-col>
                         <div class="hr2"></div>
                       </ion-row>

@@ -82,7 +82,7 @@
                               </ion-fab>
                             </ng-template>
             
-                            <img class="card_border image_hw" src="{{ imgURL }}">
+                            <img class="card_border image_hw" src="{{ imgURL }}" (error)="errorHandler($event)">
                           </ion-col>
                         </ion-row>
             

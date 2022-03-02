@@ -145,4 +145,8 @@ export class LaporPage implements OnInit {
     this.nama_kegiatan = "Nama Kegiatan";
   }
 
+  errorHandler(event) {
+    event.target.src = "assets/bi.png";
+  }
+
 }

@@ -14,7 +14,7 @@
   <div class="card">
     <div class="images">
       <!-- <img class="ikut_parent ion-text-center" src="assets/test.jpg"> -->
-      <img class="ikut_parent ion-text-center" src="{{ imgURL }}">
+      <img class="ikut_parent ion-text-center" src="{{ imgURL }}" (error)="errorHandler($event)">
       <ion-fab vertical="bottom" horizontal="end" slot="fixed" class="fab_position">
         <ion-fab-button color="secondary" id="moda_pilih-gammbar_tabs3">
           <ion-icon name="add" size="large"></ion-icon>

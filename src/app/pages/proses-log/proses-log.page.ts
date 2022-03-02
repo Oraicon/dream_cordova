@@ -31,12 +31,11 @@ export class ProsesLogPage implements OnInit {
   ionViewWillEnter() {
     this.data_laporan = true;
 
-    this.data_statik();
-    // this.tampilkan_data();
+    // this.data_statik();
+    this.tampilkan_data();
   }
 
   errorHandler(event) {
-    console.debug(event);
     event.target.src = "assets/bi.png";
   }
 
