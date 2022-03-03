@@ -94,14 +94,15 @@ export class ProsesLogPage implements OnInit {
     this.http.post('https://dads-demo-1.000webhostapp.com/api/getProgressMilestone', {'progress_detail_id' : this.dataid}, {'Accept': 'application/json', 'Content-Type':'application/x-www-form-urlencoded'})
     .then(data => {
 
-      console.log(data);
 
       const data_json = JSON.parse(data.data);
       
       const data_status = JSON.parse(data_json.status);
       
       if (data_status == 1) {
-        this.array_detail =  data_json.data.reverse();
+        this.array_detail.sort(this.compare);
+        this.array_detail.reverse();
+        this.persen_tertinggi = this.array_detail[0].progress_pengerjaan;
         
         if (this.array_detail.length == 0) {
           this.data_laporan = true;
@@ -109,12 +110,8 @@ export class ProsesLogPage implements OnInit {
           this.data_laporan = false;
         }
         
-        
-        console.log(this.array_detail);
-
         this.loadingService.tutuploading();
       } else {
-        console.log("kosong");
         this.data_laporan = true;
         this.loadingService.tutuploading();
       }

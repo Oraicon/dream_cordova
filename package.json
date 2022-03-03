@@ -33,6 +33,7 @@
     "@ionic/storage-angular": "^3.0.6",
     "cordova-android": "10.1.1",
     "cordova-browser": "6.0.0",
+    "moment": "^2.29.1",
     "rxjs": "~6.6.0",
     "sweetalert2": "^11.4.4",
     "tslib": "^2.2.0",

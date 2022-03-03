@@ -9,6 +9,7 @@ import { FileTransfer, FileUploadOptions, FileTransferObject } from '@awesome-co
 import { DatePipe } from '@angular/common';
 import { PasswordServiceService } from '../services/password-service.service';
 import { AlertServicesService } from '../services/alert-services.service';
+import { MomentService } from '../services/moment.service';
 
 
 @Component({
@@ -66,7 +67,7 @@ export class Tab3Page {
   }
 
 
-  constructor(private alertService: AlertServicesService, private passwordService: PasswordServiceService, private datepipe: DatePipe, private transfer: FileTransfer, private camera: Camera,private modalCtrl: ModalController,private loadingCtrl:LoadingServiceService, private alertCtrl: AlertController, private storage:Storage, private router: Router, private apiService:ApiServicesService) {
+  constructor(private momentService: MomentService, private alertService: AlertServicesService, private passwordService: PasswordServiceService, private datepipe: DatePipe, private transfer: FileTransfer, private camera: Camera,private modalCtrl: ModalController,private loadingCtrl:LoadingServiceService, private alertCtrl: AlertController, private storage:Storage, private router: Router, private apiService:ApiServicesService) {
     this.tampilkandata();
   }
 
@@ -89,12 +90,12 @@ export class Tab3Page {
       this.email_pengguna = data_status_data.email;
       this.nohp_pengguna = data_status_data.no_hp;
       this.tempatlahir_pengguna = data_status_data.tempat_lahir;
-      this.tanggallahir_pengguna = data_status_data.tgl_lahir;
+      this.tanggallahir_pengguna = this.momentService.ubah_format_tanggal(data_status_data.tgl_lahir);
       this.kelamin_pengguna = data_status_data.jenis_kelamin;
       this.alamat_pengguna = data_status_data.alamat;
       this.jabatan_pengguna = data_status_data.nama_jabatan;
       this.posisi_pengguna = data_status_data.nama_posisi;
-      this.tanggalbergabung_pengguna = data_status_data.tgl_bergabung;
+      this,this.tanggalbergabung_pengguna = this.momentService.ubah_format_tanggal(data_status_data.tgl_bergabung);
       this.departemen_pengguna = data_status_data.nama_departemen;
       this.bank_pengguna = data_status_data.nama_bank;
       this.rekening_pengguna = data_status_data.no_rek;
