@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ModalController } from '@ionic/angular';
+import { AlertController, IonRouterOutlet, ModalController, Platform } from '@ionic/angular';
 import { ModalLupasandiPage } from 'src/app/modal/modal-lupasandi/modal-lupasandi.page';
 import { ApiServicesService } from 'src/app/services/api-services.service';
 import { Storage } from '@ionic/storage-angular';
 import { AlertServicesService } from '../../services/alert-services.service';
 import { Network } from '@awesome-cordova-plugins/network/ngx';
 import { LoadingServiceService } from 'src/app/services/loading-service.service';
+import { SetGetServiceService } from 'src/app/services/set-get-service.service';
+import { ToastService } from 'src/app/services/toast.service';
 
 
 
@@ -18,14 +20,24 @@ import { LoadingServiceService } from 'src/app/services/loading-service.service'
 export class LoginPage implements OnInit {
 
   constructor(
-  private network: Network,
-  private router:Router,
-  private storage:Storage,
-  private loadingService:LoadingServiceService,
-  private apiService:ApiServicesService,
-  private alertService:AlertServicesService, 
-  private modalCtrl: ModalController) { 
+    private alertCtrl: AlertController,
+    private toastService: ToastService,
+    private setget: SetGetServiceService,
+    private routerOutlet: IonRouterOutlet,
+    private platform: Platform,
+    private network: Network,
+    private router:Router,
+    private storage:Storage,
+    private loadingService:LoadingServiceService,
+    private apiService:ApiServicesService,
+    private alertService:AlertServicesService, 
+    private modalCtrl: ModalController) { 
+
     this.ngOnInit();
+
+    // this.platform.ready().then(()=>{
+      // this.hardbutton();
+    // });
   }
 
   //variable
@@ -168,5 +180,44 @@ export class LoginPage implements OnInit {
   ionViewDidLeave(){
     this.router.navigate(["/tabs/tab1"], { replaceUrl: true });
   }
+
+  // async hardbutton(){
+  //   this.platform.backButton.subscribeWithPriority(10, () => {
+  //     let a = this.setget.getData();
+      
+  //     if (a == 1) {
+  //       this.toastService.Toast_tampil();
+  //     } else {
+  //       if (!this.routerOutlet.canGoBack()) {
+  //         this.exitapp();
+  //       }else{
+  //         this.routerOutlet.canGoBack()
+  //       }
+  //     }
+  //   });
+  // }
+
+  // async exitapp() {
+  //   const alert = await this.alertCtrl.create({
+  //     header: 'Keluar dari aplikasi ?',
+  //     message: 'Anda akan keluar dari aplikasi anda yakin ?',
+  //     cssClass:'my-custom-class',
+  //     mode: "ios",
+  //     buttons: [
+  //       {
+  //         text: 'Tidak',
+  //       }, {
+  //         text: 'Ok',
+  //         handler: () => {
+  //           this.storage.set('nama', null);
+  //           this.storage.set('sandi', null);
+  //           navigator['app'].exitApp();
+  //         }
+  //       }
+  //     ]
+  //   });
+  
+  //   await alert.present();
+  // }
 
 }

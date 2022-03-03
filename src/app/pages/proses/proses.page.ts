@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { HTTP } from '@awesome-cordova-plugins/http/ngx';
 import { ActivatedRoute, Router } from "@angular/router";
 import { SetGetServiceService } from 'src/app/services/set-get-service.service';
-import Swal from 'sweetalert2';
 import { NavController } from '@ionic/angular';
 import { NavigationExtras } from '@angular/router';
 import { LoadingServiceService } from 'src/app/services/loading-service.service';
+import { Storage } from '@ionic/storage';
 
 @Component({
   selector: 'app-proses',
@@ -22,7 +22,7 @@ export class ProsesPage implements OnInit {
   datapage;
   data_kegiatan = true;
 
-  constructor(private loadingService: LoadingServiceService, private navCtrl: NavController, private route: ActivatedRoute, private setget: SetGetServiceService, private http :HTTP) { }
+  constructor(private loadingService: LoadingServiceService, private navCtrl: NavController, private route: ActivatedRoute, private setget: SetGetServiceService, private http :HTTP, private strg: Storage) { }
 
   ngOnInit() {
   }
@@ -178,6 +178,7 @@ export class ProsesPage implements OnInit {
   }
 
   kembali(){
+    this.strg.set('auth', true);
     this.navCtrl.back();
   }
 }

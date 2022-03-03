@@ -16,17 +16,15 @@ import Swal from 'sweetalert2';
 export class Tab1Page {
 
   //variabel
-  data_pengguna;
+  data_pengguna = true;
   data_nama;
 
   constructor(private loadingCtrl:LoadingServiceService, private alertService: AlertServicesService,private alertCtrl: AlertController, private storage:Storage, private router: Router, private apiService:ApiServicesService) {
-    this.data_pengguna = true;
-    // this.tampilkan_data();
+    this.tampilkan_data();
   }
 
   async tampilkan_data(){
     this.loadingCtrl.tampil_loading_login();
-
 
     const data_l_nama = await this.storage.get('nama');
     const data_l_sandi = await this.storage.get('sandi');
@@ -41,16 +39,7 @@ export class Tab1Page {
       this.data_pengguna = false;
       this.data_nama = data_status_data.nama;
 
-      this.loadingCtrl.tutuploading();
-
-      // Swal.fire({
-      //   icon: 'success',
-      //   title: 'Sukses !',
-      //   // allowOutsideClick: true,
-      //   text: 'Selamat datang !',
-      //   // backdrop: false
-      // })
-      
+      this.loadingCtrl.tutuploading();      
     })
     .catch(err => {
       this.loadingCtrl.tutuploading();

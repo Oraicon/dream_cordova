@@ -3,6 +3,7 @@ import { NavController } from '@ionic/angular';
 import { Camera, CameraOptions } from '@awesome-cordova-plugins/camera/ngx';
 import { ActionSheetController } from '@ionic/angular';
 import { ActivatedRoute } from '@angular/router';
+import { LoadingServiceService } from 'src/app/services/loading-service.service';
 
 @Component({
   selector: 'app-lapor',
@@ -11,30 +12,22 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class LaporPage implements OnInit {
 
-    //variable frontend
-    informasi_proyek = true;
-    formulir_laporan = true;
+    //variable
     imgURL:any = 'assets/ss_.png';
     nama_kegiatan:any = "Nama Kegiatan";
-    pilih_tahapan = true;
     data_gambar = true;
     data_keterangan_f;
     img_default;
-    dataArray;
-    judul_progress = "Judul Proyek";
-    dataid;
-    datanamakegiatan;
+    lapor_id;
+    lapor_namakegiatan;
     datapersen;
     array_persen = [];
+    place;
   
     base64_img:string="";
     name_img:string="";
     format_img:string="JPEG";
   
-    data_text;
-
-    place;
-
     //persiapan kamera
     cameraOptions: CameraOptions = {
       quality: 50,
@@ -59,28 +52,29 @@ export class LaporPage implements OnInit {
       translucent: true
     };
 
-  constructor(private route: ActivatedRoute, private actionSheetController: ActionSheetController, private navCtrl:NavController, private camera: Camera) {
+  constructor(private route: ActivatedRoute, private actionSheetController: ActionSheetController, private navCtrl:NavController, private camera: Camera, private loadingService: LoadingServiceService) {
   }
   
   ngOnInit() {
+  }
+
+  ionViewWillEnter(){
     this.tampilkan_data();
   }
 
   tampilkan_data(){
+
     this.route.queryParams.subscribe(params => {
-
-      this.dataid = params.data_id;
-      this.datanamakegiatan = params.data_nama_kegiatan;
+      this.lapor_id = params.data_id;
+      this.lapor_namakegiatan = params.data_nama_kegiatan;
       this.datapersen = params.data_persen;
-      console.log(this.datapersen);
-
     });
-    this.logik_array(this.datapersen);
     
+    this.logik_array(this.datapersen);
   }
 
-  logik_array(yey){
-    let a = Number(yey);
+  logik_array(nilai){
+    let a = Number(nilai);
     for (let index = 1; index <= 100/10; index++) {
       let j = index * 10;
       if (j >= a) {
@@ -147,6 +141,11 @@ export class LaporPage implements OnInit {
 
   errorHandler(event) {
     event.target.src = "assets/bi.png";
+  }
+
+  batal_gambar(){
+    this.imgURL = 'assets/ss.png';
+    this.data_gambar = true;
   }
 
 }

@@ -4,6 +4,8 @@ import { Location } from '@angular/common';
 import { AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { Storage } from '@ionic/storage-angular';
+import { SetGetServiceService } from './services/set-get-service.service';
+import { ToastService } from './services/toast.service';
 
 
 @Component({
@@ -13,58 +15,70 @@ import { Storage } from '@ionic/storage-angular';
 })
 export class AppComponent {
   @ViewChild(IonRouterOutlet,{static:true}) routerOutlet: IonRouterOutlet;
-  constructor(private platform: Platform, private location: Location, private alertCtrl : AlertController, private storage:Storage, private router: Router) {
+  constructor(private platform: Platform, private location: Location, private alertCtrl : AlertController, private storage:Storage, private router: Router, private setget: SetGetServiceService, private toastService: ToastService) {
 
     this.platform.ready().then(()=>{
       this.hardbackbutton();
     });
   }
   
-  a = 0;
+  // b = 0;
 
-  hardbackbutton(){
-    this.platform.backButton.subscribeWithPriority(11, ()=>{
-      this.a++;
+  // hardbackbutton(){
+  //   this.platform.backButton.subscribeWithPriority(11, ()=>{
+  //     this.a++;
 
-      setTimeout( () => {
-        this.a = 0;
-      }, 250);
+  //     setTimeout( () => {
+  //       this.a = 0;
+  //     }, 250);
 
-      if (this.a == 2) { // logic for double tap
-        this.validasi();
-        this.a = 0;
+  //     if (this.a == 2) { // logic for double tap
+  //       this.validasi();
+  //       this.a = 0;
+  //     }
+  //   });
+  // }
+
+  async hardbackbutton(){
+    this.platform.backButton.subscribeWithPriority(10, () => {
+      let a = this.setget.getData();
+      
+      if (a == 1) {
+        this.toastService.Toast_tampil();
+      } else {
+        if (!this.routerOutlet.canGoBack()) {
+          this.exitapp();
+        }else{
+          this.storage.set('auth', true);
+          this.location.back();
+        }
       }
     });
   }
 
-  validasi(){
-    if(!this.routerOutlet.canGoBack()){
-      this.alertkeluar();
-    }else{
-      this.location.back();
-    }
-  }
+  async exitapp() {
+    console.log("hii");
 
-  async alertkeluar(){
-    const alert = await this.alertCtrl.create({
-      header: 'Keluar dari aplikasi ?',
-      message: 'Anda yakin ingin keluar dari aplikasi ?',
-      buttons: [
-        {
-          text: 'Tidak',
-        },
-        {
-          text: 'Ya',
-          handler: () =>{
-            this.storage.set('nama', null);
-            this.storage.set('sandi', null);
-            navigator['app'].exitApp();
+      const alert = await this.alertCtrl.create({
+        header: 'Keluar dari aplikasi ?',
+        message: 'Anda akan keluar dari aplikasi anda yakin ?',
+        cssClass:'my-custom-class',
+        mode: "ios",
+        buttons: [
+          {
+            text: 'Tidak',
+          }, {
+            text: 'Ok',
+            handler: () => {
+              this.storage.set('nama', null);
+              this.storage.set('sandi', null);
+              navigator['app'].exitApp();
+            }
           }
-        }
-      ]
-    });
-    await alert.present();
-  }
-
+        ]
+      });
+    
+      await alert.present();
+    }
   
 }

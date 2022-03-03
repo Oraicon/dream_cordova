@@ -1,20 +1,25 @@
 import { Injectable } from '@angular/core';
 import { LoadingController } from '@ionic/angular';
+import { SetGetServiceService } from './set-get-service.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoadingServiceService {
 
-  constructor(private loadingCtrl: LoadingController) { }
+  constructor(private loadingCtrl: LoadingController, private setget: SetGetServiceService) { }
 
-  tampil_loading_login(){
-    this.loadingCtrl.create({
-        spinner: "bubbles",
-        message: 'Sedang memproses . . .'
-    }).then((response) => {
-        response.present();
+  async tampil_loading_login(){
+    const loading = await this.loadingCtrl.create({
+      message: 'Sedang memproses . . .',
+      spinner: 'bubbles'
     });
+    await loading.present().then(() => {
+      this.setget.setData(1);
+    });
+    await loading.onDidDismiss().then(() => {
+      this.setget.setData(0);
+    })
   }
 
   tutuploading(){

@@ -5,7 +5,7 @@
         <ion-col class="konten_header" size="10">
           <ion-text>
 
-            <h1 class="warna_putih font_nama_pengguna bold">{{ datanamakegiatan }}</h1>
+            <h1 class="warna_putih font_nama_pengguna bold">{{ lapor_namakegiatan }}</h1>
 
           </ion-text>    
         </ion-col>
@@ -114,42 +114,3 @@
   </div>
 
 </ion-content>
-
-<!-- modal pilih gambar -->
-<ion-modal trigger="modal-pilih-gambar" class="modal-tab2" [initialBreakpoint]="0.2">
-  <ng-template>
-    <ion-header>
-  
-      <ion-toolbar>
-        <ion-title>Pilih Gambar</ion-title>
-        <ion-button slot="end" (click)="tutup()" class="posisi">
-          <ion-icon class="rotate_icon" slot="icon-only" name="add-outline" size="large"></ion-icon>
-        </ion-button>
-      </ion-toolbar>
-    </ion-header>
-    
-    <ion-content>
-      
-      <ion-grid fixed>
-        <ion-row>
-          <ion-col size="6">
-            <ion-button expand="full" (click)="kamera()" class="ion-text-center" size="large" shape="round">
-              <!-- <ion-icon slot="start" name="camera-outline"> -->
-                Kamera
-              <!-- </ion-icon> -->
-            </ion-button>
-          </ion-col>
-          <ion-col size="6">
-            <ion-button expand="full" (click)="galeri()" class="ion-text-center" size="large" shape="round">
-              <!-- <ion-icon slot="start" name="image-outline"> -->
-                Galeri
-              <!-- </ion-icon> -->
-            </ion-button>  
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-    
-    </ion-content>
-    
-  </ng-template>
-</ion-modal>

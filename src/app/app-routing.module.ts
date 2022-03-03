@@ -22,8 +22,8 @@ const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: '/tabs/tab2',
-    // redirectTo: '/login',
+    // redirectTo: '/proses_log',
+    redirectTo: '/login',
     pathMatch: 'full'
   },
   {

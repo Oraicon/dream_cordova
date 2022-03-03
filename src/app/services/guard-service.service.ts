@@ -19,8 +19,8 @@ export class GuardServiceService {
   async canActivate(){
     
     let authInfo;
-    // const dataauth = await this.strg.get('auth');
-    const dataauth = true;
+    const dataauth = await this.strg.get('auth');
+    // const dataauth = true;
     
     if(dataauth == true){
       authInfo= {
@@ -31,6 +31,8 @@ export class GuardServiceService {
         authenticated: false
       };
     }
+
+    // console.log(authInfo.authenticated);
 
     if (!authInfo.authenticated) {
       this.router.navigate(["/login"]);

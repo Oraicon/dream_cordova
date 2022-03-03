@@ -4,16 +4,16 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class SetGetServiceService {
-
+  
+  private _data;
+  
   constructor() { }
 
-private _data: SetGetServiceService;
-
-  getData(): SetGetServiceService {
+  getData() {
     return this._data;
   }
 
-  setData(data:SetGetServiceService) {
+  setData(data) {
     this._data = data;
   }
 }

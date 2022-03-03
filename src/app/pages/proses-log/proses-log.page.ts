@@ -133,12 +133,21 @@ export class ProsesLogPage implements OnInit {
     this.navCtrl.back();
   }
 
-  laporan(get_id, get_nama_kegiatan){
+  laporan(){
+    let a = this.persen_tertinggi;
+
+    if (a != null) {
+      a = this.persen_tertinggi;
+    } else {
+      a = 0;
+    }
+
+
     let navigationExtras: NavigationExtras = {
       queryParams: {
-          data_id: get_id,
-          data_nama_kegiatan: get_nama_kegiatan,
-          data_persen: this.persen_tertinggi
+          data_id: this.dataid,
+          data_nama_kegiatan: this.datanamakegiatan,
+          data_persen: a
       }
     };
 

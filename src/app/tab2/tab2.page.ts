@@ -55,7 +55,7 @@ export class Tab2Page {
     mediaType: this.camera.MediaType.PICTURE
   }
 
-  constructor(public navCtrl: NavController, private router: Router, private storage: Storage, private alertService: AlertServicesService, private alertCtrl: AlertController, private loadingService: LoadingServiceService, private apiService : ApiServicesService, private modalCtrl: ModalController, private http: HTTP, private transfer: FileTransfer, private camera: Camera, private datepipe: DatePipe) {
+  constructor(private navCtrl: NavController, private router: Router, private storage: Storage, private alertService: AlertServicesService, private alertCtrl: AlertController, private loadingService: LoadingServiceService, private apiService : ApiServicesService, private modalCtrl: ModalController, private http: HTTP, private transfer: FileTransfer, private camera: Camera, private datepipe: DatePipe) {
     
     // this.data_statik();
     this.tampilkan_data();
