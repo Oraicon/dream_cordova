@@ -22,7 +22,7 @@ const routes: Routes = [
   },
   {
     path: '',
-    // redirectTo: '/proses_log',
+    // redirectTo: '/tabs/tab1',
     redirectTo: '/login',
     pathMatch: 'full'
   },

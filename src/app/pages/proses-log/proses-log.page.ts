@@ -100,6 +100,7 @@ export class ProsesLogPage implements OnInit {
       const data_status = JSON.parse(data_json.status);
       
       if (data_status == 1) {
+        this.array_detail= data_json.data
         this.array_detail.sort(this.compare);
         this.array_detail.reverse();
         this.persen_tertinggi = this.array_detail[0].progress_pengerjaan;
