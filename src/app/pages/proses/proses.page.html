@@ -58,7 +58,7 @@
 
         <ng-template #data_kegiatan_ada>
           
-          <ion-row  *ngFor='let data of array_progress;'>
+          <ion-row  *ngFor='let data of array_progress; let i = index'>
             <ion-col size="12" class="card_konten_info">
               <div>
                 <ion-card class="i_card_margin card_border" (click)="card_klik(data.id, data.nama_kegiatan)">
@@ -92,9 +92,18 @@
                       <ion-row>
                         <ion-label>Alamat</ion-label>
                         <ion-col size="12" class="padding_col">{{ data.alamat_pengerjaan }}</ion-col>
-                        <!-- <div class="hr2"></div> -->
                       </ion-row>
-  
+                      
+                      <div *ngIf="data_tanggal; else data_tanggal_ada" ></div>
+                      
+                      <ng-template #data_tanggal_ada>
+                        <ion-row>
+                          <div class="hr2"></div>
+                          <ion-label>Tanggal Selesai</ion-label>
+                          <ion-col size="12" class="padding_col">{{ tanggal_baru[i] }}</ion-col>
+                        </ion-row>
+                      </ng-template>
+          
                     </ion-grid>
                   </ion-card-content>
                 </ion-card>

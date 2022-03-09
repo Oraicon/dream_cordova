@@ -11,6 +11,8 @@ import { LoadingServiceService } from '../services/loading-service.service';
 import { AlertServicesService } from '../services/alert-services.service';
 import { NavigationExtras } from '@angular/router';
 import { Router } from '@angular/router';
+import { SetGetServiceService } from 'src/app/services/set-get-service.service';
+
 
 @Component({
   selector: 'app-tab2',
@@ -55,13 +57,13 @@ export class Tab2Page {
     mediaType: this.camera.MediaType.PICTURE
   }
 
-  constructor(private navCtrl: NavController, private router: Router, private storage: Storage, private alertService: AlertServicesService, private alertCtrl: AlertController, private loadingService: LoadingServiceService, private apiService : ApiServicesService, private modalCtrl: ModalController, private http: HTTP, private transfer: FileTransfer, private camera: Camera, private datepipe: DatePipe) {
+  constructor(private setget: SetGetServiceService, private navCtrl: NavController, private router: Router, private storage: Storage, private alertService: AlertServicesService, private alertCtrl: AlertController, private loadingService: LoadingServiceService, private apiService : ApiServicesService, private modalCtrl: ModalController, private http: HTTP, private transfer: FileTransfer, private camera: Camera, private datepipe: DatePipe) {
     
     // this.data_statik();
     this.tampilkan_data();
 
   }
-
+  
   data_statik(){
     this.informasi_proyek = false;
     this.dataArray = [
@@ -315,27 +317,19 @@ export class Tab2Page {
   }
 
   getid_progres(get_id, get_judul){
-    let navigationExtras: NavigationExtras = {
-      queryParams: {
-          data_id: get_id,
-          data_judul: get_judul,
-          data_page: 1
-      }
-  };
+  this.setget.setTab2(get_id, get_judul);
+  this.setget.set_Page(1);
 
-  this.navCtrl.navigateForward(['/proses'], navigationExtras);
+  this.navCtrl.navigateForward(['/proses']);
   
   }
 
   getid_complete(get_id, get_judul){
-    let navigationExtras: NavigationExtras = {
-      queryParams: {
-          data_id: get_id,
-          data_judul: get_judul,
-          data_page: 2
-      }
-  };
+    this.setget.setTab2(get_id, get_judul);
+    this.setget.set_Page(2);
 
-  this.navCtrl.navigateForward(['/proses'], navigationExtras);
+  this.navCtrl.navigateForward(['/proses']);
   }
 }
+
+//coba pake setter getter

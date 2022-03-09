@@ -13,4 +13,10 @@ export class MomentService {
 
     return ubah_format;
   }
+
+  ubah_format_tanggal_waktu(string_date){
+    const ubah_format = moment(string_date).format('hh:mm:ss DD-MM-YYYY');
+
+    return ubah_format;
+  }
 }

@@ -6,6 +6,7 @@ import { NavController } from '@ionic/angular';
 import { NavigationExtras } from '@angular/router';
 import { LoadingServiceService } from 'src/app/services/loading-service.service';
 import { Storage } from '@ionic/storage';
+import { MomentService } from 'src/app/services/moment.service';
 
 @Component({
   selector: 'app-proses',
@@ -17,12 +18,14 @@ export class ProsesPage implements OnInit {
   //variable
   judul_proses;
   array_progress = [];
+  tanggal_baru;
   dataid;
   datajudul;
   datapage;
   data_kegiatan = true;
+  data_tanggal = true;
 
-  constructor(private loadingService: LoadingServiceService, private navCtrl: NavController, private route: ActivatedRoute, private setget: SetGetServiceService, private http :HTTP, private strg: Storage) { }
+  constructor(private momentService: MomentService, private loadingService: LoadingServiceService, private navCtrl: NavController, private route: ActivatedRoute, private setget: SetGetServiceService, private http :HTTP, private strg: Storage) { }
 
   ngOnInit() {
   }
@@ -84,11 +87,18 @@ export class ProsesPage implements OnInit {
 
   tampilkan_data(){
     this.loadingService.tampil_loading_login();
-    this.route.queryParams.subscribe(params => {
-      this.dataid = params.data_id;
-      this.datajudul = params.data_judul;
-      this.datapage = params.data_page;
-    });
+    // this.route.queryParams.subscribe(params => {
+    //   console.log(params);
+    //   this.dataid = params.data_id;
+    //   this.datajudul = params.data_judul;
+    //   this.datapage = params.data_page;
+    // });
+    let a = this.setget.getTab2();
+    let b = this.setget.get_Page();
+
+    this.dataid = a[0];
+    this.datajudul = a[1];
+    this.datapage = b;
   
     
     if (this.datapage == 1) {
@@ -135,19 +145,29 @@ export class ProsesPage implements OnInit {
         
         const data_status = JSON.parse(data_json.status);
         const array_master = data_json.data;
-  
+        
+        let tanggal = [];
+
         if (data_status == 1) {
           for (let i = 0; i < array_master.length; i++) {
             if (array_master[i].status_pengerjaan == "COMPLETED") {
               this.array_progress.push(array_master[i]);
+              let a = this.array_progress[i].completed_date;
+              let b = this.momentService.ubah_format_tanggal_waktu(a);
+              tanggal.push(b);
             }
           }
+
+          this.tanggal_baru = tanggal;
+          this.data_tanggal = false;
 
           if (this.array_progress.length == 0) {
             this.data_kegiatan = true;
           } else {
             this.data_kegiatan = false;
           }
+
+
 
           this.loadingService.tutuploading();
         } else {
@@ -169,11 +189,14 @@ export class ProsesPage implements OnInit {
     let navigationExtras: NavigationExtras = {
       queryParams: {
           data_id: get_id,
+          data_judul: this.datajudul,
           data_nama_kegiatan: get_nama_kegiatan,
           data_page: this.datapage
       }
     };
 
+    this.setget.setProses(get_id, this.datajudul, get_nama_kegiatan);
+    this.setget.set_Page(this.datapage);
     this.navCtrl.navigateForward(['/proses_log'], navigationExtras);
   }
 

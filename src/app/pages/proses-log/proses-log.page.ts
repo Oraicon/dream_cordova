@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { HTTP } from '@awesome-cordova-plugins/http/ngx';
 import { ActivatedRoute, Router } from "@angular/router";
 import { NavigationExtras } from '@angular/router';
-import { NavController } from '@ionic/angular';
+import { AlertController, NavController } from '@ionic/angular';
 import { LoadingServiceService } from 'src/app/services/loading-service.service';
+import { SetGetServiceService } from 'src/app/services/set-get-service.service';
 
 
 @Component({
@@ -14,6 +15,7 @@ import { LoadingServiceService } from 'src/app/services/loading-service.service'
 export class ProsesLogPage implements OnInit {
 
   dataid;
+  proses_data_proyek
   datanamakegiatan;
   datapage;
   array_detail;
@@ -22,7 +24,7 @@ export class ProsesLogPage implements OnInit {
   new_arr = [];
   persen_tertinggi;
 
-  constructor(private navCtrl: NavController, private route: ActivatedRoute, private http: HTTP, private loadingService: LoadingServiceService) { 
+  constructor(private alertController: AlertController, private navCtrl: NavController, private route: ActivatedRoute, private http: HTTP, private loadingService: LoadingServiceService, private setget: SetGetServiceService) { 
   }
 
   ngOnInit() {
@@ -32,12 +34,18 @@ export class ProsesLogPage implements OnInit {
     this.data_laporan = true;
 
     // this.data_statik();
+
+    console.log("hey")
+
+    let a = Number(this.setget.getAlert);
+
     this.tampilkan_data();
   }
 
   errorHandler(event) {
     event.target.src = "assets/bi.png";
   }
+  
 
   data_statik(){
     this.data_laporan = false;
@@ -78,12 +86,21 @@ export class ProsesLogPage implements OnInit {
   tampilkan_data(){
     this.array_detail = [];
     this.loadingService.tampil_loading_login();
+    
+    // this.route.queryParams.subscribe(params => {
+      //   console.log(params)
+      //   this.dataid = params.data_id;
+      //   this.datanamakegiatan = params.data_nama_kegiatan;
+      //   this.datapage = params.data_page;
+      // });
+    let a = this.setget.getProses();
+    let b = this.setget.get_Page();
 
-    this.route.queryParams.subscribe(params => {
-      this.dataid = params.data_id;
-      this.datanamakegiatan = params.data_nama_kegiatan;
-      this.datapage = params.data_page;
-    });
+    this.dataid = a[0];
+    this.datanamakegiatan = a[2];
+    this.datapage = b;
+
+    console.log(this.dataid);
 
     if (this.datapage == 1) {
       this.footer_ = false;
@@ -112,6 +129,12 @@ export class ProsesLogPage implements OnInit {
         }
         
         this.loadingService.tutuploading();
+
+        let a = this.setget.getAlert();
+        if (a == 1) {
+          this.presentAlert();
+          this.setget.setAlert(0);
+        }
       } else {
         this.data_laporan = true;
         this.loadingService.tutuploading();
@@ -127,7 +150,26 @@ export class ProsesLogPage implements OnInit {
 
   }
 
+  async presentAlert() {
+    const alert = await this.alertController.create({
+      header: 'Alert',
+      subHeader: 'Subtitle',
+      message: 'This is an alert message.',
+      buttons: ['OK']
+    });
+  
+    await alert.present();
+  }
+
   kembali(){
+    let navigationExtras: NavigationExtras = {
+      queryParams: {
+          data_id: this.dataid,
+          data_nama_kegiatan: this.datanamakegiatan,
+          data_page: this.datapage
+      }
+    };
+
     this.navCtrl.back();
   }
 
@@ -141,15 +183,18 @@ export class ProsesLogPage implements OnInit {
     }
 
 
-    let navigationExtras: NavigationExtras = {
-      queryParams: {
-          data_id: this.dataid,
-          data_nama_kegiatan: this.datanamakegiatan,
-          data_persen: a
-      }
-    };
+    // let navigationExtras: NavigationExtras = {
+    //   queryParams: {
+    //       data_id: this.dataid,
+    //       data_nama_kegiatan: this.datanamakegiatan,
+    //       data_persen: a
+    //   }
+    // };
 
-    this.navCtrl.navigateForward(['/lapor'], navigationExtras);
+    this.setget.setLog(this.dataid, this.datanamakegiatan);
+    this.setget.set_persen(a);
+
+    this.navCtrl.navigateForward(['/lapor']);
   }
 
 }
