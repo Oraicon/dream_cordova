@@ -19,6 +19,15 @@ export class ApiServicesService {
     return this.http.post('https://dads-demo-1.000webhostapp.com/api/getProgressHeader', {"username" :api_name}, {'Accept': 'application/json', 'Content-Type':'application/x-www-form-urlencoded'})
   }
 
+  panggil_api_get_progres_detail(api_id){
+
+    return this.http.post('https://dads-demo-1.000webhostapp.com/api/getProgressDetail', {'progress_id' : api_id}, {'Accept': 'application/json', 'Content-Type':'application/x-www-form-urlencoded'})
+  }
+
+  panggil_api_progres_milestone(api_id){
+    return this.http.post('https://dads-demo-1.000webhostapp.com/api/getProgressMilestone', {'progress_detail_id' : api_id}, {'Accept': 'application/json', 'Content-Type':'application/x-www-form-urlencoded'})
+  }
+
   panggil_api_upload_teknisi(api_keterangan, api_file_img){
     // this.http.useBasicAuth('dream_1.0', 'dream_1.0');
     return this.http.post('https://dads-demo-1.000webhostapp.com/api/uploadProgressTeknisi', {"keterangan" :api_keterangan, "url_image" :api_file_img}, {'Accept': 'application/json', 'Content-Type':'application/x-www-form-urlencoded'})

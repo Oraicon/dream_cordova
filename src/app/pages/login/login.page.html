@@ -1,52 +1,64 @@
-<ion-content [fullscreen]="true">
+<ion-content>
 
-  <div class="header">
-    <div class="gambar ion-text-center">
-      <img class="gambar_skala" src="assets/ss.png">
-      <p class="josefinr ion-text-center">dream 1.0</p>
-    </div> 
-  </div>
+  <ion-grid fixed class="margin_grid">
+    
+    <ion-row>
+      <ion-col size="12" class="ion-text-center">
+        <img class="size_img" src="assets/ss.png">
+        <p class="margin_text_logo">dream 1.0</p>
+      </ion-col>
+    </ion-row>
+    
+    <ion-row>
+      <ion-col class="padding_col_card" size="12">
+        <ion-card class="merah bayangan">
+          <ion-card-content>
+            <ion-grid fixed>
+              <ion-row>
 
-  <div class="bg_card">
-    <ion-card class="padding_card">
-      <ion-card-content>
-        <ion-grid fixed>
-          <ion-row>
-            <ion-col size="12" class="padding_col">
-              <ion-text>
-                <h1 class="text_login font_jsr">Login</h1>
-              </ion-text>
-            </ion-col>
-  
-            <ion-col size="12" class="padding_col">
-              <ion-item class="item_border" lines="none">
-                <ion-icon name="person-outline" size="large" class="padding_icon warna_abu"></ion-icon>
-                <ion-input placeholder="Nama" type="text" [(ngModel)]="data_nama_f"></ion-input>
-              </ion-item>
-            </ion-col>
-  
-            <ion-col size="12" class="padding_col">
-              <ion-item class="item_border" lines="none">
-                <ion-icon name="key-outline" size="large" class="padding_icon warna_abu"></ion-icon>
-                <ion-input placeholder="Sandi" [type]="showPassword ? 'text' : 'password'" [(ngModel)]="data_sandi_f"></ion-input>
-                <ion-icon [name]="passwordToggleIcon" (click)="lihat_sandi()" size="large"></ion-icon>
-              </ion-item>
-            </ion-col>
-  
-            <ion-col size="12" class="padding_col">
-                <ion-button (click)="login()" color="primary" expand="block" class="border_text">Masuk</ion-button>
-            </ion-col>
+                <ion-col size="12" class="ion-text-start margin_bawah">
+                  <h1 class="putih text_login bold">Login</h1>
+                </ion-col>
 
-            <ion-col size="12" class="padding_col">
-              <ion-button (click)="lupasandi()" expand="block" fill="clear">
-                <ion-text color="dark" class="ion-text-center">
-                  <h5>Lupa Sandi ?</h5>
-                </ion-text>
-              </ion-button>
-          </ion-col>
-          </ion-row>
-        </ion-grid>
-      </ion-card-content>
-    </ion-card>
-  </div>
+                <ion-col size="12" class="ion-text-center margin_bawah">
+                  <ion-item class="input_border" lines="none">
+                    <ion-icon name="person-outline" size="large" class="padding_ikon_kanan"></ion-icon>
+                    <ion-input class="" placeholder="Nama" type="text" [(ngModel)]="data_nama_f"></ion-input>
+                  </ion-item>
+                </ion-col>
+
+                <ion-col size="12" class="ion-text-center margin_bawah">
+                  <ion-item class="input_border" lines="none">
+                    <ion-icon name="key-outline" size="large" class="padding_ikon_kanan"></ion-icon>
+                    <ion-input placeholder="Sandi" [type]="showPassword ? 'text' : 'password'" [(ngModel)]="data_sandi_f" (keyup.enter)="login()"></ion-input>
+                    <ion-icon [name]="passwordToggleIcon" (click)="lihat_sandi()" size="large"></ion-icon>
+                  </ion-item>
+                </ion-col>
+
+                <ion-col size="12" class="padding_button">
+                  <ion-button (click)="login()" class="putih_button bold biru_gelap" expand="block" shape="round">Masuk</ion-button>
+                </ion-col>
+    
+                <ion-col size="12" class="">
+                  <ion-button (click)="lupasandi()" expand="block" fill="clear">
+                    <ion-text color="dark" class="ion-text-center">
+                      <h5 class="putih">Lupa Sandi ?</h5>
+                    </ion-text>
+                  </ion-button>
+              </ion-col>
+
+              </ion-row>
+            </ion-grid>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="ion-text-center margin_atas_copyright">
+      <ion-col size="12">2022 © DADS</ion-col>
+      <ion-col size="12">Powered by TECHNO SOLUSITAMA</ion-col>
+    </ion-row>
+  </ion-grid>
+
 </ion-content>
+

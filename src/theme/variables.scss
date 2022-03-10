@@ -7,8 +7,7 @@
   --ion-font-family: JosefinSansRegular;
 
   /** primary **/
-  // --ion-color-primary: #3880ff;
-  --ion-color-primary: #FF0300;
+  --ion-color-primary: #3880ff;
   --ion-color-primary-rgb: 56, 128, 255;
   --ion-color-primary-contrast: #ffffff;
   --ion-color-primary-contrast-rgb: 255, 255, 255;
@@ -81,10 +80,9 @@
 }
 
 //css sendiri
-ion-content {
-  --background: #E5E5E5;
-  position: relative;
-}
+// ion-content {
+//   // --background: #E5E5E5;
+// }
 
 .warna_putih{
   color: white;
@@ -111,8 +109,50 @@ ion-content {
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 
+//
+
+.background_color{
+  --background: #1B2338;
+}
+
 .title_text{
   font-size: 136%;
+}
+
+//warna
+
+.putih {
+  color: white;
+}
+
+.biru_gelap {
+  color: #1B2338;
+}
+
+.hitam {
+  color: #1F2D3D;
+}
+
+.kuning {
+  background: #FFC107;
+}
+
+.hijau {
+  background: #28A745;
+}
+
+.background_konten{
+  --background: #F2F4F3;
+}
+
+.bayangan{
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+//
+
+.bold{
+  font-weight: bold;
 }
 
 .item-interactive.item-has-focus {

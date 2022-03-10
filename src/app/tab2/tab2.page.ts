@@ -21,7 +21,8 @@ import { SetGetServiceService } from 'src/app/services/set-get-service.service';
 })
 export class Tab2Page {
 
-  //variable frontend
+  warna_segment = 1;
+  //variable frontenddulu
   informasi_proyek = true;
   text_ = true;
   imgURL:any = 'assets/ss_.png';
@@ -60,7 +61,7 @@ export class Tab2Page {
   constructor(private setget: SetGetServiceService, private navCtrl: NavController, private router: Router, private storage: Storage, private alertService: AlertServicesService, private alertCtrl: AlertController, private loadingService: LoadingServiceService, private apiService : ApiServicesService, private modalCtrl: ModalController, private http: HTTP, private transfer: FileTransfer, private camera: Camera, private datepipe: DatePipe) {
     
     // this.data_statik();
-    this.tampilkan_data();
+    // this.tampilkan_data();
 
   }
   
@@ -329,6 +330,35 @@ export class Tab2Page {
     this.setget.set_Page(2);
 
   this.navCtrl.navigateForward(['/proses']);
+  }
+
+  //baru
+  segmentChanged(e){
+    this.warna_segment = e.detail.value;
+  }
+
+  keluar(){
+    this.alertCtrl.create({
+      header: 'Kembali ke login ?',
+      message: 'Anda akan kembali ke halaman login anda yakin ?',
+      cssClass:'my-custom-class',
+      mode: "ios",
+      buttons: [
+        {
+          text: 'Tidak',
+        },
+        {
+          text: 'Ya',
+          handler: () =>{
+            this.storage.set('nama', null);
+            this.storage.set('sandi', null);
+            this.router.navigate(["/login"], { replaceUrl: true });
+          }
+        }
+      ]
+    }).then(res => {
+      res.present();
+    });
   }
 }
 

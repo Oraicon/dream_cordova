@@ -1,138 +1,207 @@
-<ion-content>
-  <div class="header">
-    <ion-grid >
-      <ion-row justify-content-start align-items-start>
-        <ion-col class="konten_header" size="10">
-          <ion-text>
-
-            <h1 *ngIf="data_pengguna; else data_pengguna_ada" class="warna_putih font_nama_pengguna bold">Nama Pengguna</h1>
-
-            <ng-template #data_pengguna_ada>
-            <h1 class="warna_putih font_nama_pengguna bold">{{ data_nama }}</h1>
-            </ng-template>
-
-          </ion-text>    
-        </ion-col>
-        <ion-col size="2" class="konten_header ikon_rotate">
-          <ion-icon (click)="keluar()" class="warna_putih" name="log-out-outline"></ion-icon>
+<ion-header class="ion-no-border">
+  <ion-toolbar class="background_color">
+    <ion-grid fixed>
+      <ion-row class="ion-align-items-center">
+        <ion-col size="6" class="ion-align-items-center text_header bold putih">Beranda</ion-col>
+        <ion-col size="6" class="ion-text-end">
+          <ion-button (click)="keluar()" fill="clear" class="padding_button">
+            <ion-icon name="exit-outline" size="large" class="putih"></ion-icon>
+          </ion-button>
         </ion-col>
       </ion-row>
     </ion-grid>
-  </div>
+  </ion-toolbar>
+</ion-header>
 
-  <div class="card">
-    <div class="images">
-      <ion-card class="card_border margin_bawah">
-        <ion-card-header class="card_header">
-          <ion-card-subtitle class="title_text">Lokasi Pengerjaan :</ion-card-subtitle>
-        </ion-card-header>
-        <ion-card-content class="konten_size_hedder">
-          <h1 class="ion-text-right text_konten font_konten_size bold">
-            Cirebon
-          </h1>
-        </ion-card-content>
-      </ion-card>
-    </div>
+<ion-content class="background_konten">
 
-    <div class="content">
-      <ion-grid>
-        <ion-row>
-          <ion-col size="12">
-            <div>
-              <ion-text>
-                <h1 class="text_oprasional">Rincian Oprasional</h1>
-              </ion-text>   
-            </div>
-          </ion-col>
-        </ion-row>
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
 
-        <ion-row>
-          <ion-col size="12" class="card_konten_info">
-            <div>
-              <ion-card class="i_card_margin card_border">
-                <ion-card-header class="card_header warna_merah">
-                  <ion-card-subtitle class="title_text warna_putih">Penarikan Kabel</ion-card-subtitle>
-                </ion-card-header>
-                <ion-card-content class="konten_size">
-                  <p class="ion-text-right font_konten_size_konten bold">
-                    2000/4000<small class="konten_satuan"> Meter</small>
-                  </p>
-                </ion-card-content>
-              </ion-card>
-            </div>
-          </ion-col>
-        </ion-row>
+  <ion-grid fixed class="ion-no-padding" *ngIf="data_beranda_loading_tidak_ada; else data_beranda_loading">
+    <ion-row class="background_color_biru_gelap ion-padding-top" *ngIf="data_beranda;else data_beranda_tidak_ada">
+      <ion-col size="12" class="" *ngFor="let data of data_header; let i = index">
+        <ion-card class="bayangan">
+          <ion-card-header>
+            <ion-card-title class="ion-text-center">{{  data.nama_proyek }}</ion-card-title>
+          </ion-card-header>
+          <ion-card-content class="ion-no-padding">
+            <ion-grid fixed class="ion-no-padding">
+              <ion-row>
+                <ion-col size="12">
+                  <ion-list>
+                    <ion-item>
+                      <ion-label>Regional :</ion-label>
+                      <ion-label class="ion-text-end">{{  data.nama_regional }}</ion-label>
+                    </ion-item>
+                    <ion-item>
+                      <ion-label>LOP :</ion-label>
+                      <ion-label class="ion-text-end">{{  data.lop }}</ion-label>
+                    </ion-item>
+                    <ion-item>
+                      <ion-label>Supervisi :</ion-label>
+                      <ion-label class="ion-text-end">{{  data.nama_supervisi }}</ion-label>
+                    </ion-item>
+                    <ion-item>
+                      <ion-label>Mandor :</ion-label>
+                      <ion-label class="ion-text-end">{{  data.nama_mandor }}</ion-label>
+                    </ion-item>
+                    <ion-item>
+                      <ion-label>Deadline Proyek :</ion-label>
+                      <ion-label class="ion-text-end">{{  tanggal_deadline[data.id] }}</ion-label>
+                    </ion-item>
+                  </ion-list>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col size="6">
+                  <ion-card class="kuning bayangan">
+                    <ion-card-content>
+                      <ion-grid fixed class="ion-no-padding">
+                        <ion-row class="ion-text-center">
+                          <ion-col size="12" class="hitam">
+                            <h2 class="bold">Masih Proses</h2>
+                              <h1 class="text_konten_banyak">{{ data_masih_proses[data.id] }}</h1>
+                              <h3>Kegiatan</h3>
+                          </ion-col>
+                        </ion-row>
+                      </ion-grid>
+                    </ion-card-content>
+                  </ion-card>
+                </ion-col>
+                <ion-col size="6">
+                  <ion-card class="hijau bayangan">
+                    <ion-card-content>
+                      <ion-grid fixed class="ion-no-padding">
+                        <ion-row class="ion-text-center">
+                          <ion-col size="12" class="putih">
+                            <h2 class="bold">Sudah Selesai</h2>
+                              <h1 class="text_konten_banyak">{{ data_sudah_komplit[data.id] }}</h1>
+                              <h3>Kegiatan</h3>
+                          </ion-col>
+                        </ion-row>
 
-        <ion-row>
-          <ion-col size="12" class="card_konten_info">
-            <div>
-              <ion-card class="i_card_margin card_border">
-                <ion-card-header class="card_header warna_merah">
-                  <ion-card-subtitle class="title_text warna_putih ">Pemasangan Fiber Optik</ion-card-subtitle>
-                </ion-card-header>
-                <ion-card-content class="konten_size">
-                  <p class="ion-text-right font_konten_size_konten bold ">
-                    2/5<small class="konten_satuan "> Meter</small>
-                  </p>
-                </ion-card-content>
-              </ion-card>
-            </div>
-          </ion-col>
-        </ion-row>
+                      </ion-grid>
+                    </ion-card-content>
+                  </ion-card>
+                </ion-col>
+              </ion-row>
+              
+            </ion-grid>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
 
-        <ion-row>
-          <ion-col size="12" class="card_konten_info">
-            <div>
-              <ion-card class="i_card_margin card_border">
-                <ion-card-header class="card_header warna_merah">
-                  <ion-card-subtitle class="title_text warna_putih ">Pemasangan Material Jasa</ion-card-subtitle>
-                </ion-card-header>
-                <ion-card-content class="konten_size">
-                  <p class="ion-text-right font_konten_size_konten bold ">
-                    80/651<small class="konten_satuan "> Meter</small>
-                  </p>
-                </ion-card-content>
-              </ion-card>
-            </div>
-          </ion-col>
-        </ion-row>
+    </ion-row>
 
-        <ion-row>
-          <ion-col size="12" class="card_konten_info">
-            <div>
-              <ion-card class="i_card_margin card_border">
-                <ion-card-header class="card_header warna_merah">
-                  <ion-card-subtitle class="title_text warna_putih ">Penyambungan Kabel Optik</ion-card-subtitle>
-                </ion-card-header>
-                <ion-card-content class="konten_size">
-                  <p class="ion-text-right font_konten_size_konten bold ">
-                    561/1.064<small class="konten_satuan"> Unit</small>
-                  </p>
-                </ion-card-content>
-              </ion-card>
-            </div>
-          </ion-col>
-        </ion-row>
+    <ng-template #data_beranda_tidak_ada>
+      <ion-row class="background_color_biru_gelap ion-padding-top">
+        <ion-col size="12" class="">
+          <ion-card class="bayangan">
+            <ion-card-header class="ion-text-center">
+              <img class="image_size" src="assets/kosong.png" (error)="errorHandler($event)">
+            </ion-card-header>
+            <ion-card-content class="ion-no-padding">
+              <ion-grid fixed class="ion-no-padding">
+                <ion-row>
+                  <ion-col size="12">
+                    <ion-grid fixed>
+                      <ion-row class="ion-text-center">
+                        <ion-col size="12">
+                          <h1 >Tidak ada proyek !</h1>
+  
+                        </ion-col>
+                        <ion-col size="12">
+                          <h2>Maaf, belum ada proyek yang anda pegang !</h2>
+  
+                        </ion-col>
+                      </ion-row>
+                    </ion-grid>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ng-template>
 
-        <ion-row>
-          <ion-col size="12" class="card_konten_info">
-            <div>
-              <ion-card class="i_card_margin card_border">
-                <ion-card-header class="card_header warna_merah">
-                  <ion-card-subtitle class="title_text warna_putih">Pekerjaan Cut Over</ion-card-subtitle>
-                </ion-card-header>
-                <ion-card-content class="konten_size">
-                  <p class="ion-text-right font_konten_size_konten bold">
-                    51/168<small class="konten_satuan"> Unit</small>
-                  </p>
-                </ion-card-content>
-              </ion-card>
-            </div>
-          </ion-col>
-        </ion-row>
+  </ion-grid>
+
+  <ng-template #data_beranda_loading>
         
-      </ion-grid>
-    </div>
-  </div>
+    <ion-grid fixed>
+      <ion-row>
+        <ion-col size="12" class="">
+          <ion-card class="bayangan">
+            <ion-card-header class="ion-padding-horizontal">
+              <ion-skeleton-text animated style="width: 100%; height: 2rem;"></ion-skeleton-text>
+            </ion-card-header>
+            <ion-card-content class="ion-no-padding">
+              <ion-grid fixed class="ion-no-padding">
+                <ion-row>
+                  <ion-col size="12">
+                    <ion-list>
+                      <ion-item>
+                        <ion-skeleton-text animated style="width: 30%" ></ion-skeleton-text>
+                      </ion-item>
+                      <ion-item>
+                        <ion-skeleton-text animated style="width: 30%" ></ion-skeleton-text>
+                      </ion-item>
+                      <ion-item>
+                        <ion-skeleton-text animated style="width: 30%" ></ion-skeleton-text>
+                      </ion-item>
+                      <ion-item>
+                        <ion-skeleton-text animated style="width: 30%" ></ion-skeleton-text>
+                      </ion-item>
+                      <ion-item>
+                        <ion-skeleton-text animated style="width: 30%" ></ion-skeleton-text>
+                      </ion-item>
+                    </ion-list>
+                  </ion-col>
+                </ion-row>
+                <ion-row>
+                  <ion-col size="6" class="">
+                    <ion-card>
+                      <ion-card-content>
+                        <ion-grid fixed class="ion-no-padding">
+                          <ion-row class="ion-text-center">
+                            <ion-col size="12" class="putih">
+                              <ion-skeleton-text animated style="width: 100%" ></ion-skeleton-text>
+                              <ion-skeleton-text animated style="width: 100%; height: 1.5rem;"></ion-skeleton-text>
+                              <ion-skeleton-text animated style="width: 100%" ></ion-skeleton-text>
+                            </ion-col>
+                          </ion-row>
+                        </ion-grid>
+                      </ion-card-content>
+                    </ion-card>
+                  </ion-col>
+  
+                  <ion-col size="6" class="">
+                    <ion-card>
+                      <ion-card-content>
+                        <ion-grid fixed class="ion-no-padding">
+                          <ion-row class="ion-text-center">
+                            <ion-col size="12" class="putih">
+                              <ion-skeleton-text animated style="width: 100%" ></ion-skeleton-text>
+                              <ion-skeleton-text animated style="width: 100%; height: 1.5rem;"></ion-skeleton-text>
+                              <ion-skeleton-text animated style="width: 100%" ></ion-skeleton-text>
+                            </ion-col>
+                          </ion-row>
+                        </ion-grid>
+                      </ion-card-content>
+                    </ion-card>
+                  </ion-col>
+                </ion-row>
+                
+              </ion-grid>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+  </ng-template>
 
 </ion-content>

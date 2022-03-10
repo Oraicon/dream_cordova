@@ -9,6 +9,7 @@ import { Network } from '@awesome-cordova-plugins/network/ngx';
 import { LoadingServiceService } from 'src/app/services/loading-service.service';
 import { SetGetServiceService } from 'src/app/services/set-get-service.service';
 import { ToastService } from 'src/app/services/toast.service';
+import { SwalServiceService } from 'src/app/services/swal-service.service';
 
 
 
@@ -31,13 +32,10 @@ export class LoginPage implements OnInit {
     private loadingService:LoadingServiceService,
     private apiService:ApiServicesService,
     private alertService:AlertServicesService, 
-    private modalCtrl: ModalController) { 
+    private modalCtrl: ModalController,
+    private swal: SwalServiceService) { 
 
     this.ngOnInit();
-
-    // this.platform.ready().then(()=>{
-      // this.hardbutton();
-    // });
   }
 
   //variable
@@ -78,11 +76,12 @@ export class LoginPage implements OnInit {
   
       //logika login
       if (this.data_nama_f == null) {
-        this.alertService.alert_nama_kosong();
+        this.swal.swal_input_tidak_diisi("Nama", "nama pengguna");
       } else {
         var_nama = this.data_nama_f;
         if (this.data_sandi_f == null) {
-          this.alertService.alert_sandi_kosong();
+          this.swal.swal_input_tidak_diisi("Sandi", "sandi pengguna");
+
         } else {
           var_sandi = this.data_sandi_f;
           

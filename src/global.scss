@@ -41,10 +41,11 @@
     --backdrop-opacity: var(--ion-backdrop-opacity, 2)
 }
 
+//small modal login
 .small-modal{
     &::part(content){
         width: 80%;
-        height: 255px;
+        height: 17rem;
         border-radius: 10px;
         position: absolute; 
         display: block; 

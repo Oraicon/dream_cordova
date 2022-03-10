@@ -12,7 +12,6 @@ export class LoadingServiceService {
   async tampil_loading_login(){
     const loading = await this.loadingCtrl.create({
       message: 'Sedang memproses . . .',
-      spinner: 'bubbles'
     });
     await loading.present().then(() => {
       this.setget.setData(1);
