@@ -164,7 +164,7 @@
   .background_color_biru_gelap{
     background: #1B2338;
     height: 5rem;
-    border-radius: 0 0 50% 50%;
+    // border-radius: 0 0 50% 50%;
   }
   
   .kuning {
@@ -184,4 +184,10 @@
   .text_konten_banyak{
     font-size: 2rem;
     font-weight: 800;
+  }
+
+  ion-segment-button {
+    // --background-checked: var(--ion-color-success);
+    --color-checked: var(--ion-color-success-contrast);
+    --color: var(--ion-color-success-contrast)
   }

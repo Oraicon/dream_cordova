@@ -33,7 +33,7 @@ export class Tab1Page {
     private router: Router, 
     private apiService:ApiServicesService) {
 
-    // this.tampilkan_data();
+    this.tampilkan_data();
   }
 
   async tampilkan_data(){
@@ -52,25 +52,7 @@ export class Tab1Page {
     })
     .catch(err => {
       console.log(err);
-      this.loadingCtrl.tutuploading();
-      
-      this.alertCtrl.create({
-        header: 'Terjadi kesalahan !',
-        message: 'Data tidak terbaca, silahkan tekan OK untuk mencoba lagi !',
-        cssClass:'my-custom-class',
-        backdropDismiss: false,
-        mode: "ios",
-        buttons: [{
-          text: 'OK !',
-          handler: () => {
-            this.tampilkan_data();
-          }
-        }]
-      }).then(res => {
-  
-        res.present();
-  
-      });
+      this.tutuploading_retry();
     });
   }
 
@@ -83,7 +65,7 @@ export class Tab1Page {
     }
   }
 
-  tampilkan_data2(arr){
+  async tampilkan_data2(arr){
 
     for (let index = 0; index < arr.length; index++) {
       let element = arr[index].id;
@@ -101,38 +83,49 @@ export class Tab1Page {
       })
       .catch(error => {
     
-        console.log(error.status);
-        console.log(error.error); // error message as string
-        console.log(error.headers);
+        console.log(error);
+        this.tutuploading_retry();
     
       });
     }
   }
 
-  tampilkan_data3(arr, id){
-    let a = [];
-    let b = [];
+  async tampilkan_data3(arr, id){
 
-    for (let i = 0; i < arr.length; i++) {
+    if(arr == null){
+      
+      this.data_masih_proses[id] = [];
+      this.data_sudah_komplit[id] = [];
 
-      if (arr[i].status_pengerjaan == "IN PROGRESS") {
-        a.push(arr[i]);
-      }else{
-        b.push(arr[i]);
+    } else {
+      
+      let a = [];
+      let b = [];
+  
+      for (let i = 0; i < arr.length; i++) {
+  
+        if (arr[i].status_pengerjaan == "IN PROGRESS") {
+          a.push(arr[i]);
+        }else{
+          b.push(arr[i]);
+        }
+      }
+      
+      this.data_masih_proses[id] = a.length;
+      this.data_sudah_komplit[id] = b.length;
+      a = [];
+      b = [];
+  
+      this.data_beranda = true;
+      this.data_beranda_loading_tidak_ada = true;
+      
+      if(this.setget.getData() != 0){
+        this.loadingCtrl.tutuploading();
       }
     }
-    
-    this.data_masih_proses[id] = a.length;
-    this.data_sudah_komplit[id] = b.length;
-    a = [];
-    b = [];
 
-    this.data_beranda = true;
-    this.data_beranda_loading_tidak_ada = true;
-    
-    if(this.setget.getData() != 0){
-      this.loadingCtrl.tutuploading();
-    }
+    console.log(this.data_masih_proses);
+
   }
 
   keluar(){
@@ -169,6 +162,28 @@ export class Tab1Page {
 
     this.data_beranda_loading_tidak_ada = false;
     this.tampilkan_data();
+  }
+
+  tutuploading_retry(){
+    this.loadingCtrl.tutuploading();
+      
+    this.alertCtrl.create({
+      header: 'Terjadi kesalahan !',
+      message: 'Data tidak terbaca, silahkan tekan OK untuk mencoba lagi !',
+      cssClass:'my-custom-class',
+      backdropDismiss: false,
+      mode: "ios",
+      buttons: [{
+        text: 'OK !',
+        handler: () => {
+          this.tampilkan_data();
+        }
+      }]
+    }).then(res => {
+
+      res.present();
+
+    });
   }
 
 }

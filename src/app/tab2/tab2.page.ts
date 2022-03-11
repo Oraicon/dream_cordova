@@ -22,6 +22,9 @@ import { SetGetServiceService } from 'src/app/services/set-get-service.service';
 export class Tab2Page {
 
   warna_segment = 1;
+  arr_data_header = [];
+  data_masih_proses = {};
+  data_sudah_komplit = {};
   //variable frontenddulu
   informasi_proyek = true;
   text_ = true;
@@ -58,10 +61,22 @@ export class Tab2Page {
     mediaType: this.camera.MediaType.PICTURE
   }
 
-  constructor(private setget: SetGetServiceService, private navCtrl: NavController, private router: Router, private storage: Storage, private alertService: AlertServicesService, private alertCtrl: AlertController, private loadingService: LoadingServiceService, private apiService : ApiServicesService, private modalCtrl: ModalController, private http: HTTP, private transfer: FileTransfer, private camera: Camera, private datepipe: DatePipe) {
+  constructor(private setget: SetGetServiceService, 
+    private navCtrl: NavController, 
+    private router: Router, 
+    private storage: Storage, 
+    private alertService: AlertServicesService, 
+    private alertCtrl: AlertController, 
+    private loadingService: LoadingServiceService, 
+    private apiService : ApiServicesService, 
+    private modalCtrl: ModalController, 
+    private http: HTTP, 
+    private transfer: FileTransfer, 
+    private camera: Camera,
+    private datepipe: DatePipe) {
     
     // this.data_statik();
-    // this.tampilkan_data();
+    this.tampilkan_data();
 
   }
   
@@ -91,67 +106,67 @@ export class Tab2Page {
     ];
   }
 
-  async tampilkan_data(){
-    this.loadingService.tampil_loading_login();
+  // async tampilkan_data(){
+  //   this.loadingService.tampil_loading_login();
 
 
-    const data_l_nama = await this.storage.get('nama');
+  //   const data_l_nama = await this.storage.get('nama');
 
     
-    this.apiService.panggil_api_progres_header(data_l_nama)
-    .then(res => {
+  //   this.apiService.panggil_api_progres_header(data_l_nama)
+  //   .then(res => {
       
-      const data_json = JSON.parse(res.data);
-      const data_status = JSON.parse(data_json.status);
+  //     const data_json = JSON.parse(res.data);
+  //     const data_status = JSON.parse(data_json.status);
       
-      if (data_status == 1) {
-        this.dataArray = data_json.data;
+  //     if (data_status == 1) {
+  //       this.dataArray = data_json.data;
 
-        if (this.dataArray.length == 0) {
-          this.informasi_proyek = true;
-        }else{
-          this.informasi_proyek = false;
-        }
+  //       if (this.dataArray.length == 0) {
+  //         this.informasi_proyek = true;
+  //       }else{
+  //         this.informasi_proyek = false;
+  //       }
 
-        this.loadingService.tutuploading();
-      } else if (data_status == 2) {
-        this.judul_progress = "Data Tidak Di Temukan";
-        this.text_ = false;
+  //       this.loadingService.tutuploading();
+  //     } else if (data_status == 2) {
+  //       this.judul_progress = "Data Tidak Di Temukan";
+  //       this.text_ = false;
         
-        this.loadingService.tutuploading();
-      } else if (data_status == 0) {
+  //       this.loadingService.tutuploading();
+  //     } else if (data_status == 0) {
 
-        this.loadingService.tutuploading();
-      }else{
+  //       this.loadingService.tutuploading();
+  //     }else{
 
-        this.loadingService.tutuploading();
-      }
+  //       this.loadingService.tutuploading();
+  //     }
       
-      this.loadingService.tutuploading();
+  //     this.loadingService.tutuploading();
       
-    })
-    .catch(err => {
-      this.loadingService.tutuploading();
+  //   })
+  //   .catch(err => {
+  //     this.loadingService.tutuploading();
       
-      this.alertCtrl.create({
-        header: 'Terjadi kesalahan !',
-        message: 'Data tidak terbaca, silahkan tekan OK untuk mencoba lagi !',
-        cssClass:'my-custom-class',
-        backdropDismiss: false,
-        mode: "ios",
-        buttons: [{
-          text: 'OK !',
-          handler: () => {
-            this.tampilkan_data();
-          }
-        }]
-      }).then(res => {
+  //     this.alertCtrl.create({
+  //       header: 'Terjadi kesalahan !',
+  //       message: 'Data tidak terbaca, silahkan tekan OK untuk mencoba lagi !',
+  //       cssClass:'my-custom-class',
+  //       backdropDismiss: false,
+  //       mode: "ios",
+  //       buttons: [{
+  //         text: 'OK !',
+  //         handler: () => {
+  //           this.tampilkan_data();
+  //         }
+  //       }]
+  //     }).then(res => {
   
-        res.present();
+  //       res.present();
   
-      });
-    });
-  }
+  //     });
+  //   });
+  // }
 
   //dapatkan gambar dari kamera
   kamera(){
@@ -360,6 +375,132 @@ export class Tab2Page {
       res.present();
     });
   }
+
+  async tampilkan_data(){
+    const data_l_nama = await this.storage.get('nama');
+
+    this.apiService.panggil_api_progres_header(data_l_nama).then(data => {
+
+      const data_json = JSON.parse(data.data);
+      this.arr_data_header = data_json.data;
+
+      this.get_id(this.arr_data_header);
+  
+    })
+    .catch(error => {
+  
+      console.log(error.status);
+      console.log(error.error); // error message as string
+      console.log(error.headers);
+  
+    });
+  }
+
+  async get_id(arr){
+    // 3x
+    for (let index = 0; index < arr.length; index++) {
+      let id_header = arr[index].id;
+
+      this.apiService.panggil_api_get_progres_detail(id_header)
+      .then(data => {
+
+        const data_json = JSON.parse(data.data);
+        const arr_data_progres = data_json.data;
+
+        this.get_id_detail(arr_data_progres, id_header);
+    
+      })
+      .catch(error => {
+    
+        console.log(error);
+        this.tutuploading_retry();
+    
+      });
+      
+    }
+  }
+
+  async get_id_detail(arr, id){
+    // 3x
+    let panjang_arr;
+    let id_header = id;
+
+    if(arr == null){
+
+      this.data_masih_proses[id_header] = [];
+      this.data_sudah_komplit[id_header] = [];
+    }else{
+      panjang_arr = arr.length;
+
+      let a = [];
+      let b = [];
+  
+      for (let i = 0; i < panjang_arr; i++) {
+  
+        if (arr[i].status_pengerjaan == "IN PROGRESS") {
+          a.push(arr[i]);
+        }else{
+          b.push(arr[i]);
+        }
+      }
+      
+      this.data_masih_proses[id_header] = a;
+      this.data_sudah_komplit[id_header] = b;
+      a = [];
+      b = [];
+
+      console.log(this.data_masih_proses);
+    }
+  }
+
+  compare( a, b ) {
+    return a.progress_pengerjaan - b.progress_pengerjaan;
+  }
+
+  proyek_kegiatan(e){
+    console.log(e);
+  }
+
+  tutuploading_retry(){
+    // this.loadingCtrl.tutuploading();
+      
+    this.alertCtrl.create({
+      header: 'Terjadi kesalahan !',
+      message: 'Data tidak terbaca, silahkan tekan OK untuk mencoba lagi !',
+      cssClass:'my-custom-class',
+      backdropDismiss: false,
+      mode: "ios",
+      buttons: [{
+        text: 'OK !',
+        handler: () => {
+          this.tampilkan_data();
+        }
+      }]
+    }).then(res => {
+
+      res.present();
+
+    });
+  }
 }
 
-//coba pake setter getter
+// logika
+// progres header
+// id
+// judul proyek
+// 3 loop 3
+
+// progresdetail
+// id
+// nama_kegiatan
+// 3 loop 3
+
+// progres milsetoon
+// persen
+
+// unknown
+
+
+// judul proyek 1
+// pilih id kegiatan id 1
+// pilih persen sesuai id kegiatan 1

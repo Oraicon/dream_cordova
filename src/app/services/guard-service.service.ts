@@ -13,7 +13,6 @@ export class GuardServiceService {
 
   init() {
     this.strg.create();
-    this.strg.set('auth', false);
   }
 
   async canActivate(){

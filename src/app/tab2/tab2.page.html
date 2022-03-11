@@ -9,6 +9,18 @@
           </ion-button>
         </ion-col>
       </ion-row>
+      <ion-row>
+        <ion-col size="12" class="ion-no-padding">
+          <ion-segment (ionChange)="segmentChanged($event)" value="1">
+            <ion-segment-button value="1">
+              <ion-label>Masih Proses</ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="2">
+              <ion-label>Sudah Selesai</ion-label>
+            </ion-segment-button>
+          </ion-segment>
+        </ion-col>
+      </ion-row>
     </ion-grid>
   </ion-toolbar>
 </ion-header>
@@ -20,24 +32,18 @@
   </ion-refresher>
 
   <ion-grid fixed class="ion-no-padding">
-    <ion-row class="background_color_biru_gelap ion-padding-top">
-      <ion-col size="12" class="">
+    <ion-row class="ion-padding-top">
+    
+      <ion-col size="12" class="" *ngFor="let data of arr_data_header; let i = index">
         <ion-card class="bayangan">
           <ion-card-header>
             <ion-grid fixed class="ion-no-padding">
               <ion-row>
-                <ion-col size="12">
-                  <ion-card-title class="ion-text-center ion-padding-bottom">judul proyek</ion-card-title>
+                <ion-col size="12" >
+                  <ion-card-title class="ion-text-center">{{ data.nama_proyek }}</ion-card-title>
                 </ion-col>
                 <ion-col size="12">
-                  <ion-segment (ionChange)="segmentChanged($event)" value="1" [color]="warna_segment == 1 ? 'warning' : 'success'">
-                    <ion-segment-button value="1">
-                      <ion-label>Masih Proses</ion-label>
-                    </ion-segment-button>
-                    <ion-segment-button value="2">
-                      <ion-label>Sudah Selesai</ion-label>
-                    </ion-segment-button>
-                  </ion-segment>
+
                 </ion-col>
               </ion-row>
             </ion-grid>
@@ -47,26 +53,14 @@
 
           <ng-template #masih_proses>
             
-            <ion-card-content class="ion-no-padding" >
+            <ion-card-content class="ion-no-padding" *ngIf="data_masih_proses[data.id] !=0; else kosong">
               <ion-grid fixed class="ion-no-padding">
                 <ion-row>
                   <ion-col size="12">
                     <ion-list>
-                      <ion-item button>
-                        <ion-label>Click me</ion-label>
-                      </ion-item>
-                      <ion-item>
-                        <ion-label>Mega Man X</ion-label>
-                        <ion-label class="ion-text-end">20%</ion-label>
-                      </ion-item>
-                      <ion-item>
-                        <ion-label>The Legend of Zelda</ion-label>
-                      </ion-item>
-                      <ion-item>
-                        <ion-label>Pac-Man</ion-label>
-                      </ion-item>
-                      <ion-item lines="none">
-                        <ion-label>Super Mario World</ion-label>
+                      <ion-item button *ngFor="let data_proses of data_masih_proses[data.id]; let i = index" (click)="proyek_kegiatan(data_proses.id)">
+                        <ion-label>{{ data_proses.nama_kegiatan }}</ion-label>
+                        <ion-icon name="chevron-forward-outline" class="ion-text-end"></ion-icon>
                       </ion-item>
                     </ion-list>
                   </ion-col>
@@ -97,34 +91,71 @@
 
           </ng-template>
 
+          <ng-template #kosong>
+            <ion-card-content class="ion-no-padding">
+              <ion-grid fixed class="ion-no-padding">
+                <ion-row>
+
+                  <ion-col size="12" class="ion-text-center">
+                    <img class="image_size" src="assets/kosong.png" (error)="errorHandler($event)">
+                  </ion-col>
+
+                  <ion-col size="12">
+                    <ion-grid fixed>
+                      <ion-row class="ion-text-center">
+                        <ion-col size="12">
+                          <h1 >Tidak ada kegiatan !</h1>
+  
+                        </ion-col>
+                      </ion-row>
+                    </ion-grid>
+                  </ion-col>
+
+                </ion-row>
+              </ion-grid>
+            </ion-card-content>
+          </ng-template>
+
         </ion-card>
       </ion-col>
 
+
       <ion-col size="12" class="">
         <ion-card class="bayangan">
-          <ion-card-header class="ion-text-center">
-            <img class="image_size" src="assets/kosong.png" (error)="errorHandler($event)">
-          </ion-card-header>
-          <ion-card-content class="ion-no-padding">
+          <ion-card-header>
             <ion-grid fixed class="ion-no-padding">
               <ion-row>
                 <ion-col size="12">
-                  <ion-grid fixed>
-                    <ion-row class="ion-text-center">
-                      <ion-col size="12">
-                        <h1 >Tidak ada proyek !</h1>
-
-                      </ion-col>
-                      <ion-col size="12">
-                        <h2>Maaf, belum ada proyek yang anda pegang !</h2>
-
-                      </ion-col>
-                    </ion-row>
-                  </ion-grid>
+                  <ion-card-title class="ion-text-center ion-padding-bottom">judul proyek</ion-card-title>
+                </ion-col>
+                <ion-col size="12" class="ion-text-center">
+                  <img class="image_size" src="assets/kosong.png" (error)="errorHandler($event)">
                 </ion-col>
               </ion-row>
             </ion-grid>
-          </ion-card-content>
+          </ion-card-header>
+            
+            <ion-card-content class="ion-no-padding" >
+              <ion-grid fixed class="ion-no-padding">
+                <ion-row>
+                  <ion-col size="12">
+                    <ion-grid fixed>
+                      <ion-row class="ion-text-center">
+                        <ion-col size="12">
+                          <h1 >Tidak ada Kegiatan !</h1>
+  
+                        </ion-col>
+                        <ion-col size="12">
+                          <h2>Maaf, belum ada kegiatan di proyek ini !</h2>
+  
+                        </ion-col>
+                      </ion-row>
+                    </ion-grid>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ion-card-content>
+
         </ion-card>
       </ion-col>
 
