@@ -21,10 +21,12 @@ import { SetGetServiceService } from 'src/app/services/set-get-service.service';
 })
 export class Tab2Page {
 
-  warna_segment = 1;
   arr_data_header = [];
   data_masih_proses = {};
   data_sudah_komplit = {};
+  data_proyek = false;
+  data_proyek_loading_tidak_ada = true;
+  warna_segment = 1;
   //variable frontenddulu
   informasi_proyek = true;
   text_ = true;
@@ -377,6 +379,7 @@ export class Tab2Page {
   }
 
   async tampilkan_data(){
+    this.loadingService.tampil_loading_login();
     const data_l_nama = await this.storage.get('nama');
 
     this.apiService.panggil_api_progres_header(data_l_nama).then(data => {
@@ -389,15 +392,13 @@ export class Tab2Page {
     })
     .catch(error => {
   
-      console.log(error.status);
-      console.log(error.error); // error message as string
-      console.log(error.headers);
+      console.log(error);
+      this.tutuploading_retry();
   
     });
   }
 
   async get_id(arr){
-    // 3x
     for (let index = 0; index < arr.length; index++) {
       let id_header = arr[index].id;
 
@@ -421,7 +422,6 @@ export class Tab2Page {
   }
 
   async get_id_detail(arr, id){
-    // 3x
     let panjang_arr;
     let id_header = id;
 
@@ -448,21 +448,27 @@ export class Tab2Page {
       this.data_sudah_komplit[id_header] = b;
       a = [];
       b = [];
-
-      console.log(this.data_masih_proses);
     }
+    this.data_proyek = true;
+    this.data_proyek_loading_tidak_ada = true;
+    
+    if(this.setget.getData() != 0){
+      this.loadingService.tutuploading();
+    }   
   }
 
-  compare( a, b ) {
-    return a.progress_pengerjaan - b.progress_pengerjaan;
-  }
+  proyek_kegiatan(id_header, id_detail, page_type){
+    console.log(id_header);
+    console.log(id_detail);
+    console.log(page_type);
 
-  proyek_kegiatan(e){
-    console.log(e);
+    this.setget.setProses(id_header, id_detail);
+    this.setget.set_Page(page_type);
+    this.navCtrl.navigateForward(['/proses']);
   }
 
   tutuploading_retry(){
-    // this.loadingCtrl.tutuploading();
+    this.loadingService.tutuploading();
       
     this.alertCtrl.create({
       header: 'Terjadi kesalahan !',
@@ -482,25 +488,14 @@ export class Tab2Page {
 
     });
   }
+
+  doRefresh(event){
+    event.target.complete();
+    this.arr_data_header = [];
+    this.data_masih_proses = {};
+    this.data_sudah_komplit = {};
+
+    this.data_proyek_loading_tidak_ada = false;
+    this.tampilkan_data();
+  }
 }
-
-// logika
-// progres header
-// id
-// judul proyek
-// 3 loop 3
-
-// progresdetail
-// id
-// nama_kegiatan
-// 3 loop 3
-
-// progres milsetoon
-// persen
-
-// unknown
-
-
-// judul proyek 1
-// pilih id kegiatan id 1
-// pilih persen sesuai id kegiatan 1

@@ -39,7 +39,8 @@ export class ProsesLogPage implements OnInit {
 
     let a = Number(this.setget.getAlert);
 
-    this.tampilkan_data();
+    // this.tampilkan_data();
+    this.data_statik();
   }
 
   errorHandler(event) {

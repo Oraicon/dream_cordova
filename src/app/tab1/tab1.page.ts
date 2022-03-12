@@ -114,17 +114,15 @@ export class Tab1Page {
       this.data_masih_proses[id] = a.length;
       this.data_sudah_komplit[id] = b.length;
       a = [];
-      b = [];
-  
-      this.data_beranda = true;
-      this.data_beranda_loading_tidak_ada = true;
-      
-      if(this.setget.getData() != 0){
-        this.loadingCtrl.tutuploading();
-      }
+      b = [];      
     }
 
-    console.log(this.data_masih_proses);
+    this.data_beranda = true;
+    this.data_beranda_loading_tidak_ada = true;
+    
+    if(this.setget.getData() != 0){
+      this.loadingCtrl.tutuploading();
+    }   
 
   }
 

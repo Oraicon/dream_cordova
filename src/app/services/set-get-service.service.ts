@@ -9,9 +9,8 @@ export class SetGetServiceService {
   private alert_data;
   private tab2_id;
   private tab2_judul;
-  private proses_id;
-  private proses_judul;
-  private proses_nama_kegiatan;
+  private proses_id_header;
+  private proses_id_detail;
   private log_id;
   private log_nama_kegiatan;
   private lapor_id;
@@ -48,15 +47,14 @@ export class SetGetServiceService {
     return a = [this.tab2_id, this.tab2_judul];
   }
 
-  setProses(id, judul, nama_kegiatan){
-    this.proses_id = id;
-    this.proses_judul = judul;
-    this.proses_nama_kegiatan = nama_kegiatan;
+  setProses(id_header, id_detail){
+    this.proses_id_header = id_header;
+    this.proses_id_detail = id_detail;
   }
 
   getProses(){
     let a = [];
-    return a = [this.proses_id, this.proses_judul, this.proses_nama_kegiatan];
+    return a = [this.proses_id_header, this.proses_id_detail];
   }
 
   setLog(id, nama_kegiatan){

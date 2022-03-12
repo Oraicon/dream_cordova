@@ -20,7 +20,7 @@
   </ion-refresher>
 
   <ion-grid fixed class="ion-no-padding" *ngIf="data_beranda_loading_tidak_ada; else data_beranda_loading">
-    <ion-row class="ion-padding-top" *ngIf="data_beranda;else data_beranda_tidak_ada">
+    <ion-row class="ion-padding-top background_color_biru_gelap" *ngIf="data_beranda;else data_beranda_tidak_ada">
       <ion-col size="12" class="" *ngFor="let data of data_header; let i = index">
         <ion-card class="bayangan">
           <ion-card-header>
@@ -102,7 +102,7 @@
     </ion-row>
 
     <ng-template #data_beranda_tidak_ada>
-      <ion-row class="ion-padding-top">
+      <ion-row class="ion-padding-top background_color_biru_gelap">
         <ion-col size="12" class="">
           <ion-card class="bayangan">
             <ion-card-header class="ion-text-center">
@@ -137,8 +137,8 @@
 
   <ng-template #data_beranda_loading>
         
-    <ion-grid fixed>
-      <ion-row>
+    <ion-grid fixed class="ion-no-padding"fixed>
+      <ion-row class="ion-padding-top background_color_biru_gelap">
         <ion-col size="12" class="">
           <ion-card class="bayangan">
             <ion-card-header class="ion-padding-horizontal">
