@@ -26,6 +26,7 @@ export class ProsesPage implements OnInit {
   tanggal_pm = {};
   tanggal_detail;
 
+  tipe_page = true;
   riwayat_laporan = false;
   riwayat_loading = true;
   //variable
@@ -235,6 +236,12 @@ export class ProsesPage implements OnInit {
     this.data_id_kegiatan = a[1];
 
     this.data_type_page = b;
+
+    if (this.data_type_page == 1) {
+      this.tipe_page = false;
+    } else {
+      this.tipe_page = true; 
+    }
 
     this.apiService.panggil_api_get_progres_detail(this.data_id_header)
     .then(data => {

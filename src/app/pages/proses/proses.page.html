@@ -2,7 +2,7 @@
   <ion-toolbar class="background_color">
     <ion-grid fixed>
       <ion-row class="ion-align-items-center">
-        <ion-col size="10" class="ion-align-items-center text_header bold putih">Riwayat Laporan</ion-col>
+        <ion-col size="10" class="ion-align-items-center text_header bold putih">Detail Kegiatan</ion-col>
         <ion-col size="2" class="ion-text-end">
           <ion-button (click)="kembali()" fill="clear" class="padding_button">
             <ion-icon name="arrow-back-outline" size="large" class="putih"></ion-icon>
@@ -250,18 +250,18 @@
 
       </ng-template>
 
-
-
-
-
     </ion-row>
   </ion-grid>
 
-  <ion-fab horizontal="end" vertical="bottom" slot="fixed">
-    <ion-fab-button color="primary">
-      <ion-icon size="large" name="add-outline"></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
+  <div *ngIf="tipe_page;else fab_ada"></div>
+
+  <ng-template #fab_ada>
+    <ion-fab horizontal="end" vertical="bottom" slot="fixed">
+      <ion-fab-button color="primary">
+        <ion-icon size="large" name="add-outline"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+  </ng-template>
 
   
 </ion-content>

@@ -22,6 +22,10 @@ export class LoadingServiceService {
   }
 
   tutuploading(){
-    this.loadingCtrl.dismiss();
+    let a = this.setget.getData();
+
+    if (a == 1) {
+      this.loadingCtrl.dismiss();
+    }
   }
 }
