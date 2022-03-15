@@ -18,6 +18,9 @@ import { SetGetServiceService } from 'src/app/services/set-get-service.service';
 })
 export class LaporPage implements OnInit {
 
+    pilih_gambar = true;
+    gambar_kosong = true;
+    
     //variable
     imgURL:any = 'assets/ss_.png';
     nama_kegiatan:any = "Nama Kegiatan";
@@ -46,6 +49,7 @@ export class LaporPage implements OnInit {
   
     galeriOptions: CameraOptions = {
       quality: 50,
+      correctOrientation: true,
       sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
       destinationType: this.camera.DestinationType.DATA_URL,
       encodingType: this.camera.EncodingType.JPEG,
@@ -90,6 +94,7 @@ export class LaporPage implements OnInit {
 
   logik_array(nilai){
     let a = Number(nilai);
+
     for (let index = 1; index <= 100/10; index++) {
       let j = index * 10;
       if (j > a) {
@@ -104,6 +109,8 @@ export class LaporPage implements OnInit {
       this.imgURL = 'data:image/jpeg;base64,' + res;
       this.data_gambar = false;
       this.base64_img = this.imgURL;
+      this.pilih_gambar = false;
+      this.gambar_kosong = false;
     });
   }
 
@@ -113,97 +120,86 @@ export class LaporPage implements OnInit {
       this.imgURL = 'data:image/jpeg;base64,' + res;
       this.data_gambar = false;
       this.base64_img = this.imgURL;
+      this.pilih_gambar = false;
+      this.gambar_kosong = false;
     });
   }
 
   validasi(){
-    // this.strg.set('auth', true);
-    // this.setget.setAlert(1);
-    // this.navCtrl.navigateBack(['/proses']);
-    //cobacobi
-    let a;
+    this.loadingService.tampil_loading_login();
 
+    let a;
     
     if (this.place == 100){
       a = 2
     } else {
       a = 1
     }
-    console.log(a);
-
-    // let navigationExtras: NavigationExtras = {
-    //   queryParams: {
-    //       data_id: this.lapor_id,
-    //       data_nama_kegiatan: this.lapor_namakegiatan,
-    //       data_page: a
-    //   }
-    // };
-
-    this.setget.setLog(this.lapor_id, this.nama_kegiatan);
-    this.setget.set_Page(a);
-
-    this.setget.setAlert(1);
-
-    this.navCtrl.back();
     
-    //asli
-    // const fileTransfer: FileTransferObject = this.transfer.create();
+    // asli
+    const fileTransfer: FileTransferObject = this.transfer.create();
 
-    // let URL="https://oraicon.000webhostapp.com/upload.php";
-    // this.name_img = this.datepipe.transform((new Date), 'MMddyyyyhmmss.')+ this.format_img;
-    // let nama_file = this.name_img.toString();
+    let URL="https://oraicon.000webhostapp.com/upload.php";
+    this.name_img = this.datepipe.transform((new Date), 'MMddyyyyhmmss.') + this.format_img;
+    let nama_file = this.name_img.toString();
 
-    // //mengisi data option
-    // let options: FileUploadOptions = {
-    //   fileKey: 'filekey',
-    //   fileName: nama_file,
-    //   chunkedMode: false,
-    //   mimeType: "image/JPEG",
-    //   headers: {}
-    // }
+    //mengisi data option
+    let options: FileUploadOptions = {
+      fileKey: 'filekey',
+      fileName: nama_file,
+      chunkedMode: false,
+      mimeType: "image/JPEG",
+      headers: {}
+    }
 
-    // fileTransfer.upload(this.base64_img, URL, options)
-    // .then(data => {
+    fileTransfer.upload(this.base64_img, URL, options)
+    .then(data => {
 
-    //   const responecode = data.responseCode;
+      const responecode = data.responseCode;
 
-    //   if (responecode === 200) {
-    //     this.apiService.kirim_api_progres(this.lapor_id, "https://oraicon.000webhostapp.com/upload/" + this.name_img, this.data_keterangan_f, this.place)
-    //     .then(data => {
+      if (responecode == 200) {
+        this.apiService.kirim_api_progres(this.lapor_id, "https://oraicon.000webhostapp.com/upload/" + this.name_img, this.data_keterangan_f, this.place)
+        .then(data => {
           
-    //       const data_json = JSON.parse(data.data);
-    //       const data_status = data_json.status;
+          const data_json = JSON.parse(data.data);
+          const data_status = data_json.status;
 
-    //       if (data_status == 0) {
-
-    //       } else {
-            
-    //       }
-
-    //       console.log(data.status);
-    //       console.log(data.data); // data received by server
-    //       console.log(data.headers);
-      
-    //     })
-    //     .catch(error => {
-      
-    //       console.log(error.status);
-    //       console.log(error.error); // error message as string
-    //       console.log(error.headers);
-      
-    //     });
-    //   } else {
-    //     console.log("error");
+          if (data_status == 0) {
+            this.setget.setLog(this.lapor_id, this.nama_kegiatan);
+            this.setget.set_Page(a);
         
-    //   }
+            this.setget.setAlert(1);
+            this.loadingService.tutuploading();
+        
+            this.navCtrl.back();
+          } else {
+            
+          }
+
+          console.log(data.status);
+          console.log(data.data); // data received by server
+          console.log(data.headers);
+      
+        })
+        .catch(error => {
+      
+          console.log(error.status);
+          console.log(error.error); // error message as string
+          console.log(error.headers);
+      
+        });
+      } else {
+        console.log("error");
+        
+      }
 
 
-    // })
-    // .catch(error => {
+    })
+    .catch(error => {
   
-    //   console.log(error);
+      console.log(error);
   
-    // });
+    });
   }
 
   kembali(){
@@ -250,7 +246,8 @@ export class LaporPage implements OnInit {
 
   batal_gambar(){
     this.imgURL = 'assets/ss_.png';
-    this.data_gambar = true;
+    this.pilih_gambar = true;
+    this.gambar_kosong = true;
   }
 
 }

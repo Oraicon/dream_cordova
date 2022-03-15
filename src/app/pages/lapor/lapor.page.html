@@ -1,116 +1,110 @@
-<ion-content>
-  <div class="header">
-    <ion-grid >
-      <ion-row justify-content-start align-items-start>
-        <ion-col class="konten_header" size="10">
-          <ion-text>
-
-            <h1 class="warna_putih font_nama_pengguna bold">{{ lapor_namakegiatan }}</h1>
-
-          </ion-text>    
-        </ion-col>
-        <ion-col size="2" class="konten_header ikon_rotate">
-          <ion-icon (click)="kembali()" class="warna_putih" size="large" name="arrow-forward-outline"></ion-icon>
+<ion-header class="ion-no-border">
+  <ion-toolbar class="background_color">
+    <ion-grid fixed>
+      <ion-row class="ion-align-items-center">
+        <ion-col size="8" class="ion-align-items-center text_header bold putih">Formulir Laporan</ion-col>
+        <ion-col size="4" class="ion-text-end">
+          <ion-button (click)="kembali()" fill="clear" class="padding_button">
+            <ion-icon name="arrow-back-outline" size="large" class="putih"></ion-icon>
+          </ion-button>
         </ion-col>
       </ion-row>
     </ion-grid>
-  </div>
+  </ion-toolbar>
+</ion-header>
 
-  <div class="card">
-    <div class="content">
-      <ion-grid>
-        <ion-row>
-          <ion-col size="12">
-            <div>
-              <ion-text>
-                <h1 class="text_oprasional">Formulir Laporan</h1>
-              </ion-text>   
-            </div>
-          </ion-col>
-        </ion-row>
+<ion-content class="background_konten">
 
-          <ion-grid>
-            <ion-row>
-              <ion-col size="12" class="card_konten_padding">
-                <div>
-                  <ion-card class="i_card_margin card_border">
-    
-                    <ion-card-content class="">
-                      <ion-grid fixed>
-            
+  <ion-grid fixed class="ion-no-padding">
+    <ion-row class="background_color_biru_gelap ion-padding-top">
+      <ion-col size="12" class="">
+        <ion-card class="bayangan">
+          <ion-card-header class="no_padding_bottom">
+            <ion-card-title class="ion-text-start">Kegiatan {{ lapor_namakegiatan }}</ion-card-title>
+          </ion-card-header>
+          <ion-card-content class="ion-no-padding">
+            <ion-grid fixed class="ion-no-padding">
+              <ion-row>
+                <ion-col size="12">
+                  <ion-list>
+                    <ion-item>
+                      <ion-label position="floating">Keterangan Kegiatan</ion-label>
+                      <ion-textarea [(ngModel)]="data_keterangan_f" maxlength="255" placeholder="Keterangan dari foto . . "></ion-textarea>
+                    </ion-item>
+                    <ion-item>
+                      <ion-label>Persen Pengerjaan</ion-label>
+                      <ion-select [interfaceOptions]="customAlertOptions" interface="alert" placeholder="0%" (ionChange)="diklik();" [(ngModel)]="place">
+                        <ion-select-option *ngFor="let data of array_persen" value="{{ data }}">{{ data }}%</ion-select-option>
+                      </ion-select>
+                    </ion-item>
+                    <ion-item>
+                      <ion-grid fixed class="ion-no-padding ion-padding-top">
                         <ion-row>
-                          <ion-col size="12">                        
-                            <ion-item>
-                              <ion-label>Persen Pengerjaan</ion-label>
-                              <ion-select [interfaceOptions]="customAlertOptions" interface="alert" placeholder="0%" (ionChange)="diklik();" [(ngModel)]="place">
-                                <ion-select-option *ngFor="let data of array_persen" value="{{ data }}">{{ data }}%</ion-select-option>
-                              </ion-select>
-                            </ion-item>
-                          </ion-col>
-                        </ion-row>
-            
-                        <ion-row>
+
                           <ion-col size="12">
-                            <ion-item>
-                              <ion-label position="floating" class="">Keterangan</ion-label>
-                              <ion-textarea [(ngModel)]="data_keterangan_f" maxlength="255" placeholder="Keterangan dari foto . . "></ion-textarea>
-                            </ion-item>
+                            <ion-card-title class="ion-text-start">Foto Kegiatan</ion-card-title>
                           </ion-col>
-            
-                          <ion-row>
-                            <ion-col size="12">                        
-                              <ion-text color="dark" class="">
-                                <p class=" font_kegiatan">
-                                  Foto Laporan
-                                </p>
-                              </ion-text> 
+
+                          <ion-col size="12" class="ion-padding-top" *ngIf="pilih_gambar; else gambar_ada">
+                            <ion-button (click)="presentActionSheet()" expand="block" class="ion-no-margin" class="button_height">
+                              <h2>
+                                Pilih Gambar
+                              </h2>
+                            </ion-button>
+                          </ion-col>
+                          
+                          <ng-template #gambar_ada></ng-template>
+
+                          <div *ngIf="gambar_kosong; else gambar_tidak_kosong"></div>
+
+                          <ng-template #gambar_tidak_kosong>
+                            <ion-col size="12" class="ion-padding-top ion-text-center">
+  
+                              <div>
+                                <img class="ngatur_gambar bayangan" src="{{ imgURL }}" (error)="errorHandler($event)">
+  
+                                <ion-fab vertical="top" horizontal="end" slot="fixed" class="fab_position" (click)="batal_gambar()">
+                                  <ion-fab-button color="danger" id="moda_pilih-gammbar_tabs3">
+                                    <ion-icon name="close-outline" size="large"></ion-icon>
+                                  </ion-fab-button>
+                                </ion-fab>
+                              </div>
+                              
                             </ion-col>
-                          </ion-row>
-            
-                        </ion-row>
-                        
-                        <ion-row>
-                          <ion-col size="12" class="ion-text-center">
-                            
-                            <div *ngIf="data_gambar; else data_gambar_ada"></div>
-                
-                            <ng-template #data_gambar_ada>
-                              <ion-fab vertical="top" horizontal="end" class="fab_position">
-                                <ion-fab-button>
-                                  <ion-icon (click)="batal_gambar()" name="add" size="large" class="rotate_icon" ></ion-icon>
-                                </ion-fab-button>
-                              </ion-fab>
-                            </ng-template>
-            
-                            <img class="card_border image_hw" src="{{ imgURL }}" (error)="errorHandler($event)">
-                          </ion-col>
-                        </ion-row>
-            
-                        <ion-row class="ion-text-center">
-                          <ion-col size="12">
-                            <ion-button expand="block" color="primary" (click)="presentActionSheet()" class="button_margin">Pilih Gambar</ion-button>
-                          </ion-col>
+                          </ng-template>
+
                         </ion-row>
 
-                        <ion-row class="ion-text-center">
-                          <ion-col size="6">
-                            <ion-button (click)="batal_laporan()" expand="block" fill="outline" color="primary" class="">Batal</ion-button>
-                          </ion-col>
-                          <ion-col size="6">
-                            <ion-button (click)="validasi()" expand="block" color="primary" class="">Kirim</ion-button>
-                          </ion-col>
-                        </ion-row>
-            
                       </ion-grid>
-                    </ion-card-content>
-                  </ion-card>
-                </div>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
-
-      </ion-grid>
-    </div>
-  </div>
-
+                    </ion-item>
+                    <ion-item lines="none">
+                      <ion-grid fixed class="ion-no-padding ion-padding-top">
+                        <ion-row>
+                          <ion-col size="6">
+                            <ion-button (click)="batal_laporan()" expand="block" color="danger" class="ion-margin-end button_height">
+                              <h2>
+                                Batal
+                              </h2>
+                            </ion-button>
+                          </ion-col>
+                          <ion-col size="6">
+                            <ion-button (click)="validasi()" expand="block" color="primary" class="ion-margin-start button_height">
+                              <h2>
+                                Kirim
+                              </h2>
+                            </ion-button>
+                          </ion-col>
+                        </ion-row>
+                      </ion-grid>
+                    </ion-item>
+                  </ion-list>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  
 </ion-content>

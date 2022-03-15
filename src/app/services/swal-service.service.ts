@@ -31,7 +31,7 @@ export class SwalServiceService {
   swal_aksi_berhasil(text1, text2){
     Swal.fire({
       icon: 'success',
-      title: '' + text1 + 'berhasil !',
+      title: '' + text1,
       text: ''+text2,
       backdrop: false,
     })

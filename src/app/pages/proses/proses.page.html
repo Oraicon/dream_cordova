@@ -256,7 +256,7 @@
   <div *ngIf="tipe_page;else fab_ada"></div>
 
   <ng-template #fab_ada>
-    <ion-fab horizontal="end" vertical="bottom" slot="fixed">
+    <ion-fab horizontal="end" vertical="bottom" slot="fixed" (click)="formulir()">
       <ion-fab-button color="primary">
         <ion-icon size="large" name="add-outline"></ion-icon>
       </ion-fab-button>

@@ -8,6 +8,8 @@ import { LoadingServiceService } from 'src/app/services/loading-service.service'
 import { Storage } from '@ionic/storage';
 import { MomentService } from 'src/app/services/moment.service';
 import { ApiServicesService } from 'src/app/services/api-services.service';
+import { SwalServiceService } from 'src/app/services/swal-service.service';
+
 
 @Component({
   selector: 'app-proses',
@@ -19,6 +21,7 @@ export class ProsesPage implements OnInit {
   data_type_page;
   data_id_header;
   data_id_kegiatan;
+  data_judul_kegiatan;
   data_obj_kegiatan = {};
   data_obj_kegiatan_tanggal = {};
   data_arr_progressmilsetone;
@@ -40,6 +43,7 @@ export class ProsesPage implements OnInit {
   data_tanggal = true;
 
   constructor(private momentService: MomentService,
+    private swal: SwalServiceService,
     private apiService: ApiServicesService, 
     private loadingService: LoadingServiceService, 
     private navCtrl: NavController, private route: ActivatedRoute, 
@@ -51,7 +55,7 @@ export class ProsesPage implements OnInit {
   ngOnInit() {
   }
 
-  ionViewWillEnter(){
+  async ionViewWillEnter(){
     // this.data_kegiatan = true;
     // this.array_progress = [];
 
@@ -257,6 +261,7 @@ export class ProsesPage implements OnInit {
         for (let index = 0; index < arr.length; index++) {
           if (arr[index].id == this.data_id_kegiatan) {
             this.data_obj_kegiatan = arr[index];
+            this.data_judul_kegiatan = arr[index].nama_kegiatan;
             if (arr[index].completed_date != null) {
               this.tanggal_detail = this.momentService.ubah_format_tanggal(arr[index].completed_date);
             } else {
@@ -342,6 +347,7 @@ export class ProsesPage implements OnInit {
     this.riwayat_laporan = true;
     this.riwayat_loading = false;
     this.loadingService.tutuploading();
+    this.back_with_success();
     console.log(this.tanggal_pm);
   }
 
@@ -375,7 +381,32 @@ export class ProsesPage implements OnInit {
     });
   }
 
-  back_with_success(){
+  formulir(){
+    let a = this.persen_tertinggi;
+    
+    if(a == undefined){
+      a = 0;
+    }else{
+      a = this.persen_tertinggi;
+    }
 
+    console.log("data persen = " + a)
+
+    this.setget.setLog(this.data_id_kegiatan, this.data_judul_kegiatan);
+    this.setget.set_persen(a);
+
+    this.navCtrl.navigateForward(['/lapor']);
+  }
+
+  async back_with_success(){
+    await this.setget.getAlert();
+    
+    if (this.setget.getAlert() == 1) {
+      this.swal.swal_aksi_berhasil("Laporan Terkirim !", "Data laporan telah terkirim !");
+      console.log(1);
+      this.setget.setAlert(0);
+    } else {
+      console.log(2);
+    }
   }
 }
