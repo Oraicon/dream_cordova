@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import Swal from 'sweetalert2';
+import { LoadingServiceService } from './loading-service.service';
 
 
 @Injectable({
@@ -7,14 +8,16 @@ import Swal from 'sweetalert2';
 })
 export class SwalServiceService {
 
-  constructor() { }
+  constructor(
+    private loading: LoadingServiceService
+  ) { }
 
   //info
-  swal_info(text1){
+  swal_info(text1, text2){
     Swal.fire({
       icon: 'warning',
-      title: 'Terjadi kesalahan !',
-      text: 'code error'+ text1 +' !',
+      title: '' + text1,
+      text: ''+ text2 ,
       backdrop: false,
     })
   }
@@ -29,6 +32,7 @@ export class SwalServiceService {
   }
 
   swal_aksi_berhasil(text1, text2){
+    // this.loading.tutuploading();
     Swal.fire({
       icon: 'success',
       title: '' + text1,

@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
-import { AlertController, ModalController } from '@ionic/angular';
+import { ActionSheetController, AlertController, ModalController } from '@ionic/angular';
 import { Storage } from '@ionic/storage-angular';
 import { ApiServicesService } from '../services/api-services.service';
 import { LoadingServiceService } from '../services/loading-service.service';
@@ -10,6 +9,9 @@ import { DatePipe } from '@angular/common';
 import { PasswordServiceService } from '../services/password-service.service';
 import { AlertServicesService } from '../services/alert-services.service';
 import { MomentService } from '../services/moment.service';
+import { ModalGantisandiPage } from '../modal/modal-gantisandi/modal-gantisandi.page';
+import { ModalGantinamaPage } from '../modal/modal-gantinama/modal-gantinama.page';
+import { SwalServiceService } from '../services/swal-service.service';
 
 
 @Component({
@@ -18,6 +20,9 @@ import { MomentService } from '../services/moment.service';
   styleUrls: ['tab3.page.scss']
 })
 export class Tab3Page {
+
+  nama_ls;
+  pasword_ls;
 
   //persiapan variable
   imgURL:any = 'assets/pp.jpg';
@@ -60,6 +65,7 @@ export class Tab3Page {
 
   galeriOptions: CameraOptions = {
     quality: 50,
+    correctOrientation: true,
     sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
     destinationType: this.camera.DestinationType.DATA_URL,
     encodingType: this.camera.EncodingType.JPEG,
@@ -67,9 +73,26 @@ export class Tab3Page {
   }
 
 
-  constructor(private momentService: MomentService, private alertService: AlertServicesService, private passwordService: PasswordServiceService, private datepipe: DatePipe, private transfer: FileTransfer, private camera: Camera,private modalCtrl: ModalController,private loadingCtrl:LoadingServiceService, private alertCtrl: AlertController, private storage:Storage, private router: Router, private apiService:ApiServicesService) {
+  constructor(private momentService: MomentService,
+    private swalService: SwalServiceService,
+    private actionSheetController: ActionSheetController,
+    private alertService: AlertServicesService, 
+    private passwordService: PasswordServiceService, 
+    private datepipe: DatePipe, 
+    private transfer: FileTransfer, 
+    private camera: Camera,
+    private modalCtrl: ModalController,
+    private loadingCtrl:LoadingServiceService, 
+    private alertCtrl: AlertController, 
+    private storage:Storage, 
+    private apiService:ApiServicesService) {
     this.tampilkandata();
   }
+
+  async get_data_lokal(){
+    this.nama_ls = await this.storage.get('nama');
+  }
+
 
   async tampilkandata(){
     this.loadingCtrl.tampil_loading_login();
@@ -105,25 +128,7 @@ export class Tab3Page {
       this.loadingCtrl.tutuploading();
     })
     .catch(err => {
-      this.loadingCtrl.tutuploading();
-
-      this.alertCtrl.create({
-        header: 'Terjadi kesalahan !',
-        message: 'Data tidak terbaca, silahkan tekan OK untuk mencoba lagi !',
-        cssClass:'my-custom-class',
-        backdropDismiss: false,
-        mode: "ios",
-        buttons: [{
-          text: 'OK !',
-          handler: () => {
-            this.tampilkandata();
-          }
-        }]
-      }).then(res => {
-  
-        res.present();
-  
-      });
+      this,this.tutuploading_retry();
     });
   }
 
@@ -131,130 +136,130 @@ export class Tab3Page {
     event.target.src = "assets/bi.png";
   }
 
-  async ubahusername(){
+  // async ubahusername(){
 
-    const l_storage_data_nama = await this.storage.get('nama');
+  //   const l_storage_data_nama = await this.storage.get('nama');
 
-    this.alertCtrl.create({
-      header: 'Perubahan nama pengguna',
-      message: 'Silahkan untuk mengisi nama pengguna baru anda',
-      cssClass:'my-custom-class',
-      mode: "ios",
-      inputs: [
-        {
-          name: 'username',
-          placeholder: 'Nama Pengguna',
-          type: 'text'
-        },
-      ],
-      buttons: [
-        {
-          text: 'Batal',
-        },
-        {
-          text: 'Simpan',
-            handler: (alertData) =>{
-              this.loadingCtrl.tampil_loading_login();
+  //   this.alertCtrl.create({
+  //     header: 'Perubahan nama pengguna',
+  //     message: 'Silahkan untuk mengisi nama pengguna baru anda',
+  //     cssClass:'my-custom-class',
+  //     mode: "ios",
+  //     inputs: [
+  //       {
+  //         name: 'username',
+  //         placeholder: 'Nama Pengguna',
+  //         type: 'text'
+  //       },
+  //     ],
+  //     buttons: [
+  //       {
+  //         text: 'Batal',
+  //       },
+  //       {
+  //         text: 'Simpan',
+  //           handler: (alertData) =>{
+  //             this.loadingCtrl.tampil_loading_login();
 
-              //persiapan variable
-              const nama_data = alertData.username;
+  //             //persiapan variable
+  //             const nama_data = alertData.username;
               
-              //proses update
-              this.apiService.panggil_api_update_data_karyawan(this.type_update_akun, l_storage_data_nama, nama_data, "", "")
-              .then(res => {
-                //mendapatkan data
-                const data_json = JSON.parse(res.data);
-                const data_status = data_json.status;
+  //             //proses update
+  //             this.apiService.panggil_api_update_data_karyawan(this.type_update_akun, l_storage_data_nama, nama_data, "", "")
+  //             .then(res => {
+  //               //mendapatkan data
+  //               const data_json = JSON.parse(res.data);
+  //               const data_status = data_json.status;
 
-                //validasi data
-                if (data_status == 1) {
-                  this.storage.set('nama', nama_data);
-                  this.username_pengguna = nama_data;
-                  this.loadingCtrl.tutuploading();
+  //               //validasi data
+  //               if (data_status == 1) {
+  //                 this.storage.set('nama', nama_data);
+  //                 this.username_pengguna = nama_data;
+  //                 this.loadingCtrl.tutuploading();
 
-                  this.alertService.alert_berhasil_mengubah("nama pengguna", nama_data);
+  //                 this.alertService.alert_berhasil_mengubah("nama pengguna", nama_data);
                 
-                } else {
-                  //jika status != 1
-                  this.loadingCtrl.tutuploading();
-                  this.alertService.alert_gagal_mengubah("nama pengguna");
-                }
+  //               } else {
+  //                 //jika status != 1
+  //                 this.loadingCtrl.tutuploading();
+  //                 this.alertService.alert_gagal_mengubah("nama pengguna");
+  //               }
                 
-              })
-              .catch(err => {
-                //error
-                this.alertService.alert_error_update_tab3("nama", "9");
-                this.loadingCtrl.tutuploading();
-              });
+  //             })
+  //             .catch(err => {
+  //               //error
+  //               this.alertService.alert_error_update_tab3("nama", "9");
+  //               this.loadingCtrl.tutuploading();
+  //             });
             
-          }
-        }
-      ]
-    }).then(res => {
-      res.present();
-    });
-  }
+  //         }
+  //       }
+  //     ]
+  //   }).then(res => {
+  //     res.present();
+  //   });
+  // }
 
-  async  ubahpassword(){
+  // async  ubahpassword(){
 
-    const l_storage_data_nama = await this.storage.get('nama');
+  //   const l_storage_data_nama = await this.storage.get('nama');
     
-    this.alertCtrl.create({
-      header: 'Perubahan sandi pengguna',
-      message: 'Silahkan untuk mengisi sandi pengguna baru anda',
-      cssClass:'my-custom-class',
-      mode: "ios",
-      inputs: [
-        {
-          name: 'password',
-          placeholder: 'Sandi Pengguna',
-          type: 'password'
-        },
-      ],
-      buttons: [
-        {
-          text: 'Batal',
-        },
-        {
-          text: 'Simpan',
-          handler: (alertData) =>{
-            this.loadingCtrl.tampil_loading_login();
-            //persiapan variable
-            const sandi_data = alertData.password;
+  //   this.alertCtrl.create({
+  //     header: 'Perubahan sandi pengguna',
+  //     message: 'Silahkan untuk mengisi sandi pengguna baru anda',
+  //     cssClass:'my-custom-class',
+  //     mode: "ios",
+  //     inputs: [
+  //       {
+  //         name: 'password',
+  //         placeholder: 'Sandi Pengguna',
+  //         type: 'password'
+  //       },
+  //     ],
+  //     buttons: [
+  //       {
+  //         text: 'Batal',
+  //       },
+  //       {
+  //         text: 'Simpan',
+  //         handler: (alertData) =>{
+  //           this.loadingCtrl.tampil_loading_login();
+  //           //persiapan variable
+  //           const sandi_data = alertData.password;
             
-            //proses update
-            this.apiService.panggil_api_update_data_karyawan(this.type_update_akun, l_storage_data_nama, "", sandi_data, "")
-            .then(res => {
-              const data_json = JSON.parse(res.data);
-              const data_status = data_json.status;
+  //           //proses update
+  //           this.apiService.panggil_api_update_data_karyawan(this.type_update_akun, l_storage_data_nama, "", sandi_data, "")
+  //           .then(res => {
+  //             const data_json = JSON.parse(res.data);
+  //             const data_status = data_json.status;
 
-              //validasi data
-              if (data_status == 1) {
-                //mendapatkan data
-                this.storage.set('sandi', sandi_data);
-                this.sandi_pengguna = sandi_data;
-                this.loadingCtrl.tutuploading();
-                this.alertService.alert_berhasil_mengubah("sandi pengguna", sandi_data);
+  //             //validasi data
+  //             if (data_status == 1) {
+  //               //mendapatkan data
+  //               this.storage.set('sandi', sandi_data);
+  //               this.sandi_pengguna = sandi_data;
+  //               this.loadingCtrl.tutuploading();
+  //               this.alertService.alert_berhasil_mengubah("sandi pengguna", sandi_data);
               
-              } else {
-                //jika status != 1
-                this.loadingCtrl.tutuploading();
-                this.alertService.alert_gagal_mengubah("sandi pengguna");
-              }
+  //             } else {
+  //               //jika status != 1
+  //               this.loadingCtrl.tutuploading();
+  //               this.alertService.alert_gagal_mengubah("sandi pengguna");
+  //             }
               
-            })
-            .catch(err => {
-              //error
-              this.loadingCtrl.tutuploading();
-              this.alertService.alert_error_update_tab3("sandi", "10");
-            });
-          }
-        }
-      ]
-    }).then(res => {
-      res.present();
-    });
-  }
+  //           })
+  //           .catch(err => {
+  //             //error
+  //             this.loadingCtrl.tutuploading();
+  //             this.alertService.alert_error_update_tab3("sandi", "10");
+  //           });
+  //         }
+  //       }
+  //     ]
+  //   }).then(res => {
+  //     res.present();
+  //   });
+  // }
 
   lihat_password(){
 
@@ -267,7 +272,6 @@ export class Tab3Page {
   }
 
   kamera(){
-    this.modalCtrl.dismiss();
     this.camera.getPicture(this.cameraOptions).then(res=>{
       this.loadingCtrl.tampil_loading_login();
 
@@ -278,7 +282,6 @@ export class Tab3Page {
   }
 
   galeri(){
-    this.modalCtrl.dismiss();
     this.camera.getPicture(this.galeriOptions).then(res=>{
       this.loadingCtrl.tampil_loading_login();
 
@@ -345,7 +348,140 @@ export class Tab3Page {
     });
   }
 
-  tutup(){
-    this.modalCtrl.dismiss();
+  async presentActionSheet() {
+    const actionSheet = await this.actionSheetController.create({
+      header: 'Pilih Gambar',
+      cssClass: 'my-custom-class',
+      buttons: [{
+        text: 'Kamera',
+        icon: 'camera-outline',
+        handler: () => {
+          this.kamera();
+        }
+      }, {
+        text: 'Galeri',
+        icon: 'image-outline',
+        handler: () => {
+          this.galeri();
+        }
+      }, {
+        text: 'Batal',
+        icon: 'close',
+        role: 'cancel',
+      }]
+    });
+    await actionSheet.present();
+  }
+
+  async ubahnama(){
+    const modal = await this.modalCtrl.create({
+      component: ModalGantinamaPage,
+      cssClass: 'small-modal-ganti-nama',
+      backdropDismiss:false
+    });
+    modal.onDidDismiss().then(data => {
+      if (data.data.data == null) {
+        
+      } else {
+        let nama_baru = data.data.data;
+
+        this.loadingCtrl.tampil_loading_login();
+
+        this.apiService.panggil_api_update_data_karyawan(this.type_update_akun, this.nama_ls, nama_baru, "", "")
+        .then(res => {
+          const data_json = JSON.parse(res.data);
+          const data_status = data_json.status;
+
+          //validasi data
+          if (data_status == 1) {
+            //mendapatkan data
+            this.storage.set('nama', nama_baru);
+            this.nama_pengguna = nama_baru;
+            this.loadingCtrl.tutuploading();
+            this.swalService.swal_aksi_berhasil("Berhasil !", "Nama pengguna anda telah diganti dengan " + nama_baru);
+          } else {
+            //jika status != 1
+            this.loadingCtrl.tutuploading();
+            this.alertService.alert_gagal_mengubah("sandi pengguna");
+          }
+          
+        })
+        .catch(err => {
+          //error
+          this.loadingCtrl.tutuploading();
+          this.alertService.alert_error_update_tab3("sandi", "10");
+        });
+      }
+    }).catch(err => {
+      // console.log(err);
+    });
+    await modal.present();
+  }
+
+  async ubahpassword(){
+    const modal = await this.modalCtrl.create({
+      component: ModalGantisandiPage,
+      cssClass: 'small-modal-ganti-sandi',
+      backdropDismiss:false
+    });
+    modal.onDidDismiss().then(data => {
+      if (data.data.data == null) {
+        
+      } else {
+        let sandi_baru = data.data.data;
+
+        this.loadingCtrl.tampil_loading_login();
+
+        this.apiService.panggil_api_update_data_karyawan(this.type_update_akun, this.nama_ls, "", sandi_baru, "")
+        .then(res => {
+          const data_json = JSON.parse(res.data);
+          const data_status = data_json.status;
+
+          //validasi data
+          if (data_status == 1) {
+            //mendapatkan data
+            this.storage.set('sandi', sandi_baru);
+            this.sandi_pengguna = sandi_baru;
+            this.loadingCtrl.tutuploading();
+          } else {
+            //jika status != 1
+            this.loadingCtrl.tutuploading();
+            this.alertService.alert_gagal_mengubah("sandi pengguna");
+            this.swalService.swal_aksi_berhasil("Berhasil !", "Sandi pengguna anda telah diubah !");
+          }
+          
+        })
+        .catch(err => {
+          //error
+          this.loadingCtrl.tutuploading();
+          this.alertService.alert_error_update_tab3("sandi", "10");
+        });
+      }
+    }).catch(err => {
+      // console.log(err);
+    });
+    await modal.present();
+  }
+  
+  async tutuploading_retry(){
+    this.loadingCtrl.tutuploading();
+
+      this.alertCtrl.create({
+        header: 'Terjadi kesalahan !',
+        message: 'Data tidak terbaca, silahkan tekan OK untuk mencoba lagi !',
+        cssClass:'my-custom-class',
+        backdropDismiss: false,
+        mode: "ios",
+        buttons: [{
+          text: 'OK !',
+          handler: () => {
+            this.tampilkandata();
+          }
+        }]
+      }).then(res => {
+  
+        res.present();
+  
+      });
   }
 }

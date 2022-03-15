@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 
+
 import { IonicModule } from '@ionic/angular';
 
-import { ModalGantisandiPageRoutingModule } from './modal-gantisandi-routing.module';
+import { ModalGantinamaPageRoutingModule } from './modal-gantinama-routing.module';
 
-import { ModalGantisandiPage } from './modal-gantisandi.page';
+import { ModalGantinamaPage } from './modal-gantinama.page';
 
 @NgModule({
   imports: [
@@ -15,8 +16,8 @@ import { ModalGantisandiPage } from './modal-gantisandi.page';
     ReactiveFormsModule,
     FormsModule,
     IonicModule,
-    ModalGantisandiPageRoutingModule
+    ModalGantinamaPageRoutingModule
   ],
-  declarations: [ModalGantisandiPage]
+  declarations: [ModalGantinamaPage]
 })
-export class ModalGantisandiPageModule {}
+export class ModalGantinamaPageModule {}

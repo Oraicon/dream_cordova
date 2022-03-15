@@ -14,7 +14,10 @@ export class ModalLupasandiPage implements OnInit {
   //variable frontend
   data_nama_f;
 
-  constructor(private alertService: AlertServicesService, private loadingService: LoadingServiceService, private modalCtrl: ModalController, private apiService: ApiServicesService) { }
+  constructor(private alertService: AlertServicesService, 
+    private loadingService: LoadingServiceService, 
+    private modalCtrl: ModalController,
+    private apiService: ApiServicesService) { }
 
   ngOnInit() {
   }

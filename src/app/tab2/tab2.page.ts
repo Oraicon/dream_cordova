@@ -467,7 +467,7 @@ export class Tab2Page {
     this.navCtrl.navigateForward(['/proses']);
   }
 
-  tutuploading_retry(){
+  async tutuploading_retry(){
     this.loadingService.tutuploading();
       
     this.alertCtrl.create({

@@ -1,374 +1,149 @@
-<ion-content>
-  <div class="header">
-    <ion-grid >
-      <ion-row isi_konten-content-start align-items-start>
-        <ion-col class="konten_header" size="10">
-          <ion-text>
-            <h1 class="warna_putih font_nama_pengguna bold ">Profil</h1>
-          </ion-text>    
+<ion-header class="ion-no-border">
+  <ion-toolbar class="background_color">
+    <ion-grid fixed>
+      <ion-row class="ion-align-items-center">
+        <ion-col size="6" class="ion-align-items-center text_header bold putih">Profil</ion-col>
+        <ion-col size="6" class="ion-text-end">
+          <ion-button (click)="onClick()" fill="clear" class="padding_button">
+            <ion-icon name="exit-outline" size="large" class="putih"></ion-icon>
+          </ion-button>
         </ion-col>
       </ion-row>
     </ion-grid>
-  </div>
+  </ion-toolbar>
+</ion-header>
 
-  <div class="card">
-    <div class="images">
-      <!-- <img class="ikut_parent ion-text-center" src="assets/test.jpg"> -->
-      <img class="ikut_parent ion-text-center" src="{{ imgURL }}" (error)="errorHandler($event)">
-      <ion-fab vertical="bottom" horizontal="end" slot="fixed" class="fab_position">
-        <ion-fab-button color="secondary" id="moda_pilih-gammbar_tabs3">
-          <ion-icon name="add" size="large"></ion-icon>
-        </ion-fab-button>
-      </ion-fab>
-    </div>
-
-    <div class="content">
-      <ion-grid>
-        <ion-row>
-          <ion-col size="12">
-            <div>
-              <ion-text>
-                <h1 class="text_oprasional ">Data Akun</h1>
-              </ion-text>   
-            </div>
-          </ion-col>
-        </ion-row>
-
-        <ion-row>
-          <ion-col size="12" class="card_konten_info">
-            <div>
-              <ion-card class="i_card_margin card_border">
-                <ion-card-content class="">
-                  <ion-grid>
-                    <ion-row class="row_konten">
-                      <ion-col size="3">
-                        <ion-text color="dark">
-                          <p class="isi_konten">Nama</p>
-                        </ion-text>                      
-                      </ion-col>
-                      <ion-col size="6">
-                        <ion-text color="dark">
-                          <p class="isi_konten ">
-                            {{ username_pengguna }}
-                          </p>
-                        </ion-text>                      
-                      </ion-col>
-                      <ion-col size="3">
-                        <ion-button (click)="ubahusername()" expand="block" fill="outline" shape="block">Ubah</ion-button>
-                      </ion-col>
-                    </ion-row>
-                    <div class="hr">
-                    </div>
-                    <ion-row class="row_konten">
-                      <ion-col size="3">
-                        <ion-text color="dark">
-                          <p class="isi_konten">Sandi</p>
-                        </ion-text>                      
-                      </ion-col>
-                      <ion-col size="6" (click)="lihat_password()">
-                        <ion-text color="dark">
-                          <p *ngIf="lihatsandi; else tidakterlihat" class="isi_konten">
-                            {{ sandi_pengguna }}
-                          </p>
-
-                          <ng-template #tidakterlihat>
-                            <p class="isi_konten">
-                              {{ sandi_pengguna_tidak_terlihat }}
-                            </p>
-                          </ng-template>
-
-                        </ion-text>                      
-                      </ion-col>
-                      <ion-col size="3">
-                        <ion-button (click)="ubahpassword()" class="" expand="block" fill="outline" shape="block">Ubah</ion-button>
-                      </ion-col>
-                    </ion-row>
-                  </ion-grid>
-                </ion-card-content>
-              </ion-card>
-            </div>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-    </div>
-
-    <div class="content">
-      <ion-grid>
-        <ion-row>
-          <ion-col size="12">
-            <div>
-              <ion-text>
-                <h1 class="text_oprasional ">Informasi Pengguna</h1>
-              </ion-text>   
-            </div>
-          </ion-col>
-        </ion-row>
-
-        <ion-row>
-          <ion-col size="12" class="card_konten_info">
-            <div>
-              <ion-card class="i_card_margin card_border">
-                <ion-card-content class="">
-                  <ion-grid>
-                    <ion-row class="row_konten">
-                      <ion-col size="6">
-                        <ion-text color="dark">
-                          <p class="isi_konten">NIK</p>
-                        </ion-text>                      
-                      </ion-col>
-                      <ion-col size="6">
-                        <ion-text color="dark">
-                          <p class="isi_konten ">
-                            7894561236547891
-                          </p>
-                        </ion-text>                      
-                      </ion-col>
-                    </ion-row>
-
-                    <ion-row class="row_konten">
-                      <ion-col size="6">
-                        <ion-text color="dark">
-                          <p class="isi_konten">Pengguna</p>
-                        </ion-text>                      
-                      </ion-col>
-                      <ion-col size="6">
-                        <ion-text color="dark">
-                          <p class="isi_konten">
-                            {{ nama_pengguna }}
-                          </p>
-                        </ion-text>                      
-                      </ion-col>
-                    </ion-row>
-
-                    <ion-row class="row_konten">
-                      <ion-col size="6">
-                        <ion-text color="dark">
-                          <p class="isi_konten">Email</p>
-                        </ion-text>                      
-                      </ion-col>
-                      <ion-col size="6">
-                        <ion-text color="dark">
-                          <p class="isi_konten ">
-                            {{ email_pengguna }}
-                          </p>
-                        </ion-text>                      
-                      </ion-col>
-                    </ion-row>
-
-                    <ion-row class="row_konten">
-                      <ion-col size="6">
-                        <ion-text color="dark">
-                          <p class="isi_konten">No.HP</p>
-                        </ion-text>                      
-                      </ion-col>
-                      <ion-col size="6">
-                        <ion-text color="dark">
-                          <p class="isi_konten ">
-                            {{ nohp_pengguna }}
-                          </p>
-                        </ion-text>                      
-                      </ion-col>
-                    </ion-row>
-
-                    <ion-row class="row_konten">
-                      <ion-col size="6">
-                        <ion-text color="dark">
-                          <p class="isi_konten">Tempat Lahir</p>
-                        </ion-text>                      
-                      </ion-col>
-                      <ion-col size="6">
-                        <ion-text color="dark">
-                          <p class="isi_konten ">
-                            {{ tempatlahir_pengguna }}
-                          </p>
-                        </ion-text>                      
-                      </ion-col>
-                    </ion-row>
-
-                    <ion-row class="row_konten">
-                      <ion-col size="6">
-                        <ion-text color="dark">
-                          <p class="isi_konten">Tanggal Lahir</p>
-                        </ion-text>                      
-                      </ion-col>
-                      <ion-col size="6">
-                        <ion-text color="dark">
-                          <p class="isi_konten ">
-                            {{ tanggallahir_pengguna }}
-                          </p>
-                        </ion-text>                      
-                      </ion-col>
-                    </ion-row>
-
-                    <ion-row class="row_konten">
-                      <ion-col size="6">
-                        <ion-text color="dark">
-                          <p class="isi_konten">Jenis Kelamin</p>
-                        </ion-text>                      
-                      </ion-col>
-                      <ion-col size="6">
-                        <ion-text color="dark">
-                          <p class="isi_konten ">
-                            {{ kelamin_pengguna }}
-                          </p>
-                        </ion-text>                      
-                      </ion-col>
-                    </ion-row>
-
-                    <ion-row class="row_konten">
-                      <ion-col size="6">
-                        <ion-text color="dark">
-                          <p class="isi_konten">Alamat</p>
-                        </ion-text>                      
-                      </ion-col>
-                      <ion-col size="6">
-                        <ion-text color="dark">
-                          <p class="isi_konten ">
-                            {{ alamat_pengguna }}
-                          </p>
-                        </ion-text>                      
-                      </ion-col>
-                    </ion-row>
-
-                    <ion-row class="row_konten">
-                      <ion-col size="6">
-                        <ion-text color="dark">
-                          <p class="isi_konten ">Jabatan</p>
-                        </ion-text>                      
-                      </ion-col>
-                      <ion-col size="6">
-                        <ion-text color="dark">
-                          <p class="isi_konten ">
-                            {{ jabatan_pengguna }}
-                          </p>
-                        </ion-text>                      
-                      </ion-col>
-                    </ion-row>
-
-                    <ion-row class="row_konten">
-                      <ion-col size="6">
-                        <ion-text color="dark">
-                          <p class="isi_konten ">Posisi</p>
-                        </ion-text>                      
-                      </ion-col>
-                      <ion-col size="6">
-                        <ion-text color="dark">
-                          <p class="isi_konten ">
-                            {{ posisi_pengguna }}
-                          </p>
-                        </ion-text>                      
-                      </ion-col>
-                    </ion-row>
-
-                    <ion-row class="row_konten">
-                      <ion-col size="6">
-                        <ion-text color="dark">
-                          <p class="isi_konten ">Tanggal Bergabung</p>
-                        </ion-text>                      
-                      </ion-col>
-                      <ion-col size="6">
-                        <ion-text color="dark">
-                          <p class="isi_konten ">
-                            {{ tanggalbergabung_pengguna }}
-                          </p>
-                        </ion-text>                      
-                      </ion-col>
-                    </ion-row>
-
-                    
-                    <ion-row class="row_konten">
-                      <ion-col size="6">
-                        <ion-text color="dark">
-                          <p class="isi_konten ">Departemen</p>
-                        </ion-text>                      
-                      </ion-col>
-                      <ion-col size="6">
-                        <ion-text color="dark">
-                          <p class="isi_konten ">
-                            {{ departemen_pengguna }}
-                          </p>
-                        </ion-text>                      
-                      </ion-col>
-                    </ion-row>
-                    
-                    <ion-row class="row_konten">
-                      <ion-col size="6">
-                        <ion-text color="dark">
-                          <p class="isi_konten ">Bank Pengguna</p>
-                        </ion-text>                      
-                      </ion-col>
-                      <ion-col size="6">
-                        <ion-text color="dark">
-                          <p class="isi_konten ">
-                            {{ bank_pengguna }}
-                          </p>
-                        </ion-text>                      
-                      </ion-col>
-                    </ion-row>
-
-                    <ion-row class="row_konten">
-                      <ion-col size="6">
-                        <ion-text color="dark">
-                          <p class="isi_konten ">No Rekening</p>
-                        </ion-text>                      
-                      </ion-col>
-                      <ion-col size="6">
-                        <ion-text color="dark">
-                          <p class="isi_konten ">
-                            {{ rekening_pengguna }}
-                          </p>
-                        </ion-text>                      
-                      </ion-col>
-                    </ion-row>
-
-                  </ion-grid>
-                </ion-card-content>
-              </ion-card>
-            </div>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-    </div>
-
-  </div>
-
-</ion-content>
-
-<!-- modal pilih gambar -->
-<ion-modal trigger="moda_pilih-gammbar_tabs3" class="modal_tab3" [initialBreakpoint]="0.2">
-  <ng-template>
-    <ion-header>
-  
-      <ion-toolbar>
-        <ion-title>Pilih Gambar</ion-title>
-        <ion-button slot="end" (click)="tutup()" class="posisi">
-          <ion-icon class="rotate_icon" slot="icon-only" name="add-outline" size="large"></ion-icon>
-        </ion-button>
-      </ion-toolbar>
-    </ion-header>
-    
-    <ion-content>
-      
-      <ion-grid fixed>
-        <ion-row>
-          <ion-col size="6">
-            <ion-button expand="full" (click)="kamera()" class="ion-text-center" size="large" shape="round">
-              <!-- <ion-icon slot="start" name="camera-outline"> -->
-                Kamera
-              <!-- </ion-icon> -->
+<ion-content>
+  <ion-grid fixed class="ion-no-padding">
+    <ion-row class="background_color_biru_gelap ion-padding-top">
+      <ion-col size="12" class="ion-text-center">
+        <div>
+          <img class="gambar_profil bayangan"  src="{{ imgURL }}" (error)="errorHandler($event)">
+          <ion-fab vertical="bottom" horizontal="center" slot="fixed" class="fab_position" (click)="presentActionSheet()">
+            <ion-fab-button color="secondary">
+              <ion-icon name="camera-outline" size="large"></ion-icon>
+            </ion-fab-button>
+          </ion-fab>
+        </div>
+      </ion-col>
+      <ion-col size="12" class="ion-text-center ion-no-margin">
+        <h1>{{ nama_pengguna }}</h1>
+      </ion-col>
+      <ion-col size="12">
+        <p class="ion-padding-start text_header_konten ion-no-margin ion-padding-top">Data Akun</p>
+        <ion-list>
+          <ion-item>
+            <ion-label>
+              <h2>Nama Pengguna</h2>
+              <h3>{{ username_pengguna }}</h3>
+            </ion-label>
+            <ion-button expand="block" fill="outline" (click)="ubahnama()">
+              Ubah
             </ion-button>
-          </ion-col>
-          <ion-col size="6">
-            <ion-button expand="full" (click)="galeri()" class="ion-text-center" size="large" shape="round">
-              <!-- <ion-icon slot="start" name="image-outline"> -->
-                Galeri
-              <!-- </ion-icon> -->
-            </ion-button>  
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-    
-    </ion-content>
-    
-  </ng-template>
-</ion-modal>
+          </ion-item>
+          
+          <ion-item (click)="lihat_password()">
+            <ion-label>
+              <h2>Sandi Pengguna</h2>
+              <h3 *ngIf="lihatsandi; else tidakterlihat" >{{ sandi_pengguna }}</h3>
+
+              <ng-template #tidakterlihat>
+                <h3>
+                  {{ sandi_pengguna_tidak_terlihat }}
+                </h3>
+              </ng-template>
+            </ion-label>
+            <ion-button expand="block" fill="outline" (click)="ubahpassword()">
+              Ubah
+            </ion-button>
+          </ion-item>
+
+        </ion-list>
+      </ion-col>
+      
+      <ion-col size="12">
+        <p class="ion-padding-start text_header_konten ion-no-margin ion-padding-top">Informasi Pengguna</p>
+        <ion-list>
+          <ion-item>
+            <ion-label>
+              <h2>NIK</h2>
+              <h3></h3>
+            </ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-label>
+              <h2>Email</h2>
+              <h3>{{ email_pengguna }}</h3>
+            </ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-label>
+              <h2>Nomor Telepon</h2>
+              <h3>{{ nohp_pengguna }}</h3>
+            </ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-label>
+              <h2>Tempat Lahir</h2>
+              <h3>{{ tempatlahir_pengguna }}</h3>
+            </ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-label>
+              <h2>Tanggal Lahir</h2>
+              <h3>{{ tanggallahir_pengguna }}</h3>
+            </ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-label>
+              <h2>Jenis Kelamin</h2>
+              <h3>{{ kelamin_pengguna }}</h3>
+            </ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-label>
+              <h2>Alamat</h2>
+              <h3>{{ alamat_pengguna }}</h3>
+            </ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-label>
+              <h2>Jabatan</h2>
+              <h3>{{ jabatan_pengguna }}</h3>
+            </ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-label>
+              <h2>Posisi</h2>
+              <h3>{{ posisi_pengguna }}</h3>
+            </ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-label>
+              <h2>Tanggal Bergabung</h2>
+              <h3>{{ tanggalbergabung_pengguna }}</h3>
+            </ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-label>
+              <h2>Departemen</h2>
+              <h3>{{ departemen_pengguna }}</h3>
+            </ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-label>
+              <h2>Bank Pengguna</h2>
+              <h3>{{ bank_pengguna }}</h3>
+            </ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-label>
+              <h2>No Rekening</h2>
+              <h3>{{ rekening_pengguna }}</h3>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

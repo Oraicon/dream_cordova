@@ -22,8 +22,8 @@ const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: '/tabs/tab2',
-    // redirectTo: '/login',
+    // redirectTo: '/tabs/tab3',
+    redirectTo: '/login',
     pathMatch: 'full'
   },
   {
@@ -41,7 +41,12 @@ const routes: Routes = [
   {
     path: 'lapor',
     loadChildren: () => import('./pages/lapor/lapor.module').then( m => m.LaporPageModule)
+  },
+  {
+    path: 'modal-gantinama',
+    loadChildren: () => import('./modal/modal-gantinama/modal-gantinama.module').then( m => m.ModalGantinamaPageModule)
   }
+
 
 
 

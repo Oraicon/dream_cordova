@@ -162,7 +162,7 @@ export class Tab1Page {
     this.tampilkan_data();
   }
 
-  tutuploading_retry(){
+  async tutuploading_retry(){
     this.loadingCtrl.tutuploading();
       
     this.alertCtrl.create({

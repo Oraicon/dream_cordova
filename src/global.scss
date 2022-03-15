@@ -52,6 +52,28 @@
     }
 }
 
+//modal ganti nama
+.small-modal-ganti-nama{
+    &::part(content){
+        width: 80%;
+        height: 15rem;
+        border-radius: 10px;
+        position: absolute; 
+        display: block; 
+    }
+}
+
+//modal ganti sandi
+.small-modal-ganti-sandi{
+    &::part(content){
+        width: 80%;
+        height: 27rem;
+        border-radius: 10px;
+        position: absolute; 
+        display: block; 
+    }
+}
+
 .my-custom-class .alert-wrapper {
     border-radius: 20px;
 }
