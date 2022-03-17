@@ -4,7 +4,7 @@
       <ion-row class="ion-align-items-center">
         <ion-col size="6" class="ion-align-items-center text_header bold putih">Profil</ion-col>
         <ion-col size="6" class="ion-text-end">
-          <ion-button (click)="onClick()" fill="clear" class="padding_button">
+          <ion-button (click)="keluar()" fill="clear" class="padding_button">
             <ion-icon name="exit-outline" size="large" class="putih"></ion-icon>
           </ion-button>
         </ion-col>
@@ -64,7 +64,7 @@
       <ion-col size="12">
         <p class="ion-padding-start text_header_konten ion-no-margin ion-padding-top">Informasi Pengguna</p>
         <ion-list>
-          <ion-item>
+          <ion-item (click)="coba_swal()">
             <ion-label>
               <h2>NIK</h2>
               <h3></h3>

@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { AlertServicesService } from 'src/app/services/alert-services.service';
-import { ApiServicesService } from 'src/app/services/api-services.service';
-import { LoadingServiceService } from 'src/app/services/loading-service.service';
+import { FormGroup, FormBuilder, Validators } from "@angular/forms";
+
 
 @Component({
   selector: 'app-modal-lupasandi',
@@ -12,52 +11,31 @@ import { LoadingServiceService } from 'src/app/services/loading-service.service'
 export class ModalLupasandiPage implements OnInit {
 
   //variable frontend
-  data_nama_f;
+  myGroup: FormGroup;
+  isSubmitted = false;
 
-  constructor(private alertService: AlertServicesService, 
-    private loadingService: LoadingServiceService, 
-    private modalCtrl: ModalController,
-    private apiService: ApiServicesService) { }
+  constructor(
+    private formBuilder: FormBuilder,
+    private modalCtrl: ModalController) { }
 
   ngOnInit() {
+    this.myGroup = this.formBuilder.group({
+      nama_pengguna: ['', [Validators.required]]
+    })
   }
 
-  kirim(){
-    const var_nama = this.data_nama_f;
-    if (var_nama == null || var_nama == "") {
-      this.alertService.alert_nama_kosong();
-    }else{
-      this.loadingService.tampil_loading_login();
-      this.modalCtrl.dismiss();
-      this.apiService.panggil_api_reset_password(var_nama)
-      .then(res => {
+  get errorControl() {
+    return this.myGroup.controls;
+  }
 
-        const data_json = JSON.parse(res.data);
-        const data_status = data_json.status;        
-        
-        if (data_status == 1) {
-          const data_email = data_json.data[0].email;
-          this.loadingService.tutuploading();
-          this.alertService.alert_berhasil_lupa_password(data_email);
-          
-        } else if (data_status == 0){
-          this.loadingService.tutuploading();
-          this.alertService.alert_gagal_lupa_password();
+  onSubmit(){
+    this.isSubmitted = true;
 
-        } else {
-          this.loadingService.tutuploading();
-          this.alertService.alert_error_lupapassword();
-          
-        }
-        
-      })
-      .catch(err => {    
-        
-        this.loadingService.tutuploading();
-        this.alertService.alert_lupa_password_tidak_ditemukan();
-      });
+    if (!this.myGroup.valid) {
+      return false;
+    } else {
+      this.modalCtrl.dismiss({data: this.myGroup.value.nama_pengguna});
     }
-
   }
 
   tutup(){

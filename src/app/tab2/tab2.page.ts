@@ -5,11 +5,9 @@ import { FileTransfer, FileUploadOptions, FileTransferObject } from '@awesome-co
 import { Camera, CameraOptions } from '@awesome-cordova-plugins/camera/ngx';
 import { DatePipe } from '@angular/common';
 import { Storage } from '@ionic/storage-angular';
-import { HTTP } from '@awesome-cordova-plugins/http/ngx';
 import { ApiServicesService } from '../services/api-services.service';
 import { LoadingServiceService } from '../services/loading-service.service';
 import { AlertServicesService } from '../services/alert-services.service';
-import { NavigationExtras } from '@angular/router';
 import { Router } from '@angular/router';
 import { SetGetServiceService } from 'src/app/services/set-get-service.service';
 
@@ -72,7 +70,6 @@ export class Tab2Page {
     private loadingService: LoadingServiceService, 
     private apiService : ApiServicesService, 
     private modalCtrl: ModalController, 
-    private http: HTTP, 
     private transfer: FileTransfer, 
     private camera: Camera,
     private datepipe: DatePipe) {
@@ -80,6 +77,10 @@ export class Tab2Page {
     // this.data_statik();
     this.tampilkan_data();
 
+  }
+
+  ionViewDidEnter(){
+    console.log(45682);
   }
   
   data_statik(){
@@ -385,9 +386,20 @@ export class Tab2Page {
     this.apiService.panggil_api_progres_header(data_l_nama).then(data => {
 
       const data_json = JSON.parse(data.data);
-      this.arr_data_header = data_json.data;
+      const status_data = data_json.status;
 
-      this.get_id(this.arr_data_header);
+      if (status_data == 1) {
+        this.arr_data_header = data_json.data;
+
+        this.get_id(this.arr_data_header);
+  
+      } else {
+        this.loadingService.tutuploading();
+        this.data_proyek = false;
+        this.data_proyek_loading_tidak_ada = true;
+      }
+
+
   
     })
     .catch(error => {

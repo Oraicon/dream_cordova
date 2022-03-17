@@ -15,28 +15,40 @@
           <ion-card-content>
             <ion-grid fixed>
               <ion-row>
-
                 <ion-col size="12" class="ion-text-start margin_bawah">
                   <h1 class="putih text_login bold">Login</h1>
                 </ion-col>
 
-                <ion-col size="12" class="ion-text-center margin_bawah">
-                  <ion-item class="input_border" lines="none">
-                    <ion-icon name="person-outline" size="large" class="padding_ikon_kanan"></ion-icon>
-                    <ion-input class="" placeholder="Nama" type="text" [(ngModel)]="data_nama_f"></ion-input>
-                  </ion-item>
-                </ion-col>
+                <ion-col size="12">
+                  <form (ngSubmit)="onSubmit()" [formGroup]="myGroup" novalidate>
+                    <ion-col size="12" class="ion-text-center margin_bawah">
+    
+                      <ion-item class="input_border">
+                        <ion-icon name="person-outline" size="large" class="padding_ikon_kanan"></ion-icon>
+                        <ion-input class="" placeholder="Nama" type="text" formControlName="nama_pengguna" required></ion-input>
+                      </ion-item>
+                      <ion-label class="error" *ngIf="isSubmitted && errorControl.nama_pengguna.errors?.required">
+                        *Nama pengguna harus diisi.
+                      </ion-label>
 
-                <ion-col size="12" class="ion-text-center margin_bawah">
-                  <ion-item class="input_border" lines="none">
-                    <ion-icon name="key-outline" size="large" class="padding_ikon_kanan"></ion-icon>
-                    <ion-input placeholder="Sandi" [type]="showPassword ? 'text' : 'password'" [(ngModel)]="data_sandi_f" (keyup.enter)="login()"></ion-input>
-                    <ion-icon [name]="passwordToggleIcon" (click)="lihat_sandi()" size="large"></ion-icon>
-                  </ion-item>
-                </ion-col>
+                    </ion-col>
+    
+                    <ion-col size="12" class="ion-text-center margin_bawah">
+                      <ion-item class="input_border">
+                        <ion-icon name="key-outline" size="large" class="padding_ikon_kanan"></ion-icon>
+                        <ion-input placeholder="Sandi" [type]="showPassword ? 'text' : 'password'" formControlName="sandi_pengguna" required (keyup.enter)="onSubmit()"></ion-input>
+                        <ion-icon [name]="passwordToggleIcon" (click)="lihat_sandi()" size="large"></ion-icon>
+                      </ion-item>
+                      <ion-label class="error" *ngIf="isSubmitted && errorControl.sandi_pengguna.errors?.required">
+                        *Sandi pengguna harus diisi.
+                      </ion-label>
+                    </ion-col>
+    
+                    <ion-col size="12" class="padding_button">
+                      <ion-button type="submit" class="putih_button bold biru_gelap" expand="block" shape="round">Masuk</ion-button>
+                    </ion-col>
 
-                <ion-col size="12" class="padding_button">
-                  <ion-button (click)="login()" class="putih_button bold biru_gelap" expand="block" shape="round">Masuk</ion-button>
+                  </form>
                 </ion-col>
     
                 <ion-col size="12" class="">
@@ -54,7 +66,7 @@
       </ion-col>
     </ion-row>
 
-    <ion-row class="ion-text-center margin_atas_copyright">
+    <ion-row class="ion-text-center margin_atas_copyright" (click)="coba_swal()">
       <ion-col size="12">2022 © DADS</ion-col>
       <ion-col size="12">Powered by TECHNO SOLUSITAMA</ion-col>
     </ion-row>

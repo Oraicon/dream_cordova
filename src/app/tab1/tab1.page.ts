@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { AlertController } from '@ionic/angular';
 import { Storage } from '@ionic/storage-angular';
 import { ApiServicesService } from '../services/api-services.service';
 import { LoadingServiceService } from '../services/loading-service.service';
 import { MomentService } from '../services/moment.service';
 import { SetGetServiceService } from '../services/set-get-service.service';
+import Swal from 'sweetalert2';
+
 
 
 @Component({
@@ -28,7 +29,6 @@ export class Tab1Page {
     private setget: SetGetServiceService,
     private loadingCtrl: LoadingServiceService, 
     private momentService: MomentService,
-    private alertCtrl: AlertController, 
     private storage:Storage, 
     private router: Router, 
     private apiService:ApiServicesService) {
@@ -45,9 +45,17 @@ export class Tab1Page {
     .then(res => {
       
       const data_json = JSON.parse(res.data);
-      const arr_data_status_data = data_json.data;
+      const status_data = data_json.status;
+      if (status_data == 1) {
+        const arr_data_status_data = data_json.data;
 
-      this.tampilkan_data1(arr_data_status_data);
+        this.tampilkan_data1(arr_data_status_data);
+  
+      } else {
+        this.data_beranda = false;
+        this.data_beranda_loading_tidak_ada = true;
+        this.loadingCtrl.tutuploading();
+      }
 
     })
     .catch(err => {
@@ -127,27 +135,25 @@ export class Tab1Page {
   }
 
   keluar(){
-    this.alertCtrl.create({
-      header: 'Kembali ke login ?',
-      message: 'Anda akan kembali ke halaman login anda yakin ?',
-      cssClass:'my-custom-class',
-      mode: "ios",
-      buttons: [
-        {
-          text: 'Tidak',
-        },
-        {
-          text: 'Ya',
-          handler: () =>{
-            this.storage.set('nama', null);
-            this.storage.set('sandi', null);
-            this.router.navigate(["/login"], { replaceUrl: true });
-          }
+      this.loadingCtrl.tampil_loading_login();
+      Swal.fire({
+        icon: 'warning',
+        title: 'Keluar dari aplikasi ?',
+        text: 'Anda akan keluar dari aplikasi anda yakin ?',
+        backdrop: false,
+        showDenyButton: true,
+        confirmButtonText: 'Ya',
+        denyButtonText: `Tidak`,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.storage.set('nama', null);
+          this.storage.set('sandi', null);
+          this.loadingCtrl.tutuploading();
+          this.router.navigate(["/login"], { replaceUrl: true });
+        }else {
+          this.loadingCtrl.tutuploading();
         }
-      ]
-    }).then(res => {
-      res.present();
-    });
+      });
   }
 
   doRefresh(event){
@@ -164,24 +170,24 @@ export class Tab1Page {
 
   async tutuploading_retry(){
     this.loadingCtrl.tutuploading();
-      
-    this.alertCtrl.create({
-      header: 'Terjadi kesalahan !',
-      message: 'Data tidak terbaca, silahkan tekan OK untuk mencoba lagi !',
-      cssClass:'my-custom-class',
-      backdropDismiss: false,
-      mode: "ios",
-      buttons: [{
-        text: 'OK !',
-        handler: () => {
-          this.tampilkan_data();
-        }
-      }]
-    }).then(res => {
-
-      res.present();
-
+    this.loadingCtrl.tampil_loading_login();
+    Swal.fire({
+      icon: 'warning',
+      title: 'Terjadi kesalahan !',
+      text: 'Data tidak terbaca, silahkan tekan OK untuk mencoba lagi !',
+      backdrop: false,
+      confirmButtonText: 'OK !',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.loadingCtrl.tutuploading();
+        this.tampilkan_data();
+      }
     });
   }
 
+  kegiatan(e, f){
+    console.log(e);
+    this.setget.setDatakegiatan(e, f);
+    this.router.navigateByUrl("/kegiatan")
+  }
 }

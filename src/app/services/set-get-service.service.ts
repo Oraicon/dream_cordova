@@ -17,7 +17,10 @@ export class SetGetServiceService {
   private lapor_nama_kegiatan;
   private _page;
   private _persen;
-  private arr;
+  private _tab3;
+
+  private _id_kegiatan;
+  private _nama_proyek_header;
   
   constructor() { }
 
@@ -27,6 +30,24 @@ export class SetGetServiceService {
 
   setData(data) {
     this._data = data;
+  }
+  
+  getDatakegiatan() {
+    let a = [];
+    return a = [this._id_kegiatan, this._nama_proyek_header];
+  }
+
+  setDatakegiatan(data, data2) {
+    this._id_kegiatan = data;
+    this._nama_proyek_header = data2;
+  }
+
+  getDatatab3() {
+    return this._tab3;
+  }
+
+  setDatatab3(data) {
+    this._tab3 = data;
   }
 
   setAlert(data){

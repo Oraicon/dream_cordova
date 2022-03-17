@@ -9,6 +9,7 @@ import { Storage } from '@ionic/storage';
 import { MomentService } from 'src/app/services/moment.service';
 import { ApiServicesService } from 'src/app/services/api-services.service';
 import { SwalServiceService } from 'src/app/services/swal-service.service';
+import { Location } from "@angular/common";
 
 
 @Component({
@@ -43,6 +44,8 @@ export class ProsesPage implements OnInit {
   data_tanggal = true;
 
   constructor(private momentService: MomentService,
+    private rtr: Router,
+    private location: Location,
     private swal: SwalServiceService,
     private apiService: ApiServicesService, 
     private loadingService: LoadingServiceService, 
@@ -229,6 +232,8 @@ export class ProsesPage implements OnInit {
   kembali(){
     // this.strg.set('auth', true);
     this.navCtrl.back();
+    // this.location.back();
+    // this.rtr.navigateByUrl('/tabs/tab2');
   }
 
   async tampilkan_data(){

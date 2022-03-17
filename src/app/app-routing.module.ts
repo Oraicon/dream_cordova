@@ -45,7 +45,11 @@ const routes: Routes = [
   {
     path: 'modal-gantinama',
     loadChildren: () => import('./modal/modal-gantinama/modal-gantinama.module').then( m => m.ModalGantinamaPageModule)
+  },  {
+    path: 'kegiatan',
+    loadChildren: () => import('./pages/kegiatan/kegiatan.module').then( m => m.KegiatanPageModule)
   }
+
 
 
 

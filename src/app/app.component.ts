@@ -22,23 +22,6 @@ export class AppComponent {
     });
   }
   
-  // b = 0;
-
-  // hardbackbutton(){
-  //   this.platform.backButton.subscribeWithPriority(11, ()=>{
-  //     this.a++;
-
-  //     setTimeout( () => {
-  //       this.a = 0;
-  //     }, 250);
-
-  //     if (this.a == 2) { // logic for double tap
-  //       this.validasi();
-  //       this.a = 0;
-  //     }
-  //   });
-  // }
-
   async hardbackbutton(){
     this.platform.backButton.subscribeWithPriority(10, () => {
       let a = this.setget.getData();
@@ -57,8 +40,6 @@ export class AppComponent {
   }
 
   async exitapp() {
-    console.log("hii");
-
       const alert = await this.alertCtrl.create({
         header: 'Keluar dari aplikasi ?',
         message: 'Anda akan keluar dari aplikasi anda yakin ?',

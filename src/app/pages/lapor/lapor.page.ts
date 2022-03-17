@@ -250,4 +250,8 @@ export class LaporPage implements OnInit {
     this.gambar_kosong = true;
   }
 
+  cobaan(){
+    this.navCtrl.navigateRoot(['/tabs/tab2']);
+  }
+
 }

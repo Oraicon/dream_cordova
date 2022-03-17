@@ -32,22 +32,46 @@ export class SwalServiceService {
   }
 
   swal_aksi_berhasil(text1, text2){
-    // this.loading.tutuploading();
+    this.loading.tampil_loading_login();
     Swal.fire({
       icon: 'success',
       title: '' + text1,
       text: ''+text2,
       backdrop: false,
-    })
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.loading.tutuploading();
+      }
+    });
   }
 
   swal_aksi_gagal(text1, text2){
+    this.loading.tampil_loading_login();
     Swal.fire({
       icon: 'error',
-      title: '' + text1 + 'gagal !',
+      title: '' + text1,
       text: ''+text2,
       backdrop: false,
-    })
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.loading.tutuploading();
+      }
+    });
+  }
+
+  swal(){
+    this.loading.tampil_loading_login();
+    Swal.fire({
+      icon: 'success',
+      title: 'Password terkirim !',
+      text: 'Password baru sudah dikirim ke email',
+      backdrop: false,
+      confirmButtonText: 'OK !',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.loading.tutuploading();
+        }
+      });
   }
 
 }
