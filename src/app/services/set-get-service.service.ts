@@ -17,7 +17,8 @@ export class SetGetServiceService {
   private lapor_nama_kegiatan;
   private _page;
   private _persen;
-  private _tab3;
+
+  private sut;
 
   private _id_kegiatan;
   private _nama_proyek_header;
@@ -42,12 +43,12 @@ export class SetGetServiceService {
     this._nama_proyek_header = data2;
   }
 
-  getDatatab3() {
-    return this._tab3;
+  sat() {
+    return this.sut;
   }
 
-  setDatatab3(data) {
-    this._tab3 = data;
+  set(data) {
+    this.sut = data;
   }
 
   setAlert(data){

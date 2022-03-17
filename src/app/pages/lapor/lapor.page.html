@@ -26,78 +26,88 @@
             <ion-grid fixed class="ion-no-padding">
               <ion-row>
                 <ion-col size="12">
-                  <ion-list>
-                    <ion-item>
-                      <ion-label position="floating">Keterangan Kegiatan</ion-label>
-                      <ion-textarea [(ngModel)]="data_keterangan_f" maxlength="255" placeholder="Keterangan dari foto . . "></ion-textarea>
-                    </ion-item>
-                    <ion-item>
-                      <ion-label>Persen Pengerjaan</ion-label>
-                      <ion-select [interfaceOptions]="customAlertOptions" interface="alert" placeholder="0%" (ionChange)="diklik();" [(ngModel)]="place">
-                        <ion-select-option *ngFor="let data of array_persen" value="{{ data }}">{{ data }}%</ion-select-option>
-                      </ion-select>
-                    </ion-item>
-                    <ion-item>
-                      <ion-grid fixed class="ion-no-padding ion-padding-top">
-                        <ion-row>
+                  <form (ngSubmit)="onSubmit()" [formGroup]="myGroup" novalidate>
 
-                          <ion-col size="12">
-                            <ion-card-title class="ion-text-start">Foto Kegiatan</ion-card-title>
-                          </ion-col>
+                    <ion-list>
+                      <ion-item>
+                        <ion-label position="floating">Keterangan Kegiatan</ion-label>
+                        <ion-textarea  formControlName="data_keterangan" required maxlength="255" placeholder="Keterangan dari foto . . "></ion-textarea>
+                      </ion-item>
+                      <ion-label class="error ion-padding-start" *ngIf="isSubmitted && errorControl.data_keterangan.errors?.required">
+                        *Keterangan harus diisi.
+                      </ion-label>
+                      <ion-item>
+                        <ion-label>Persen Pengerjaan</ion-label>
+                        <ion-select okText="Pilih" cancelText="Batal" [interfaceOptions]="customAlertOptions" interface="alert" placeholder="0%" formControlName="data_persen" required>
+                          <ion-select-option *ngFor="let data of array_persen" value="{{ data }}">{{ data }}%</ion-select-option>
+                        </ion-select>
+                      </ion-item>
+                      <ion-label class="error ion-padding-start" *ngIf="isSubmitted && errorControl.data_persen.errors?.required">
+                        *Persen pengerjaan harus diisi.
+                      </ion-label>
+                      <ion-item>
+                        <ion-grid fixed class="ion-no-padding ion-padding-top">
+                          <ion-row>
 
-                          <ion-col size="12" class="ion-padding-top" *ngIf="pilih_gambar; else gambar_ada">
-                            <ion-button (click)="presentActionSheet()" expand="block" class="ion-no-margin" class="button_height">
-                              <h2>
-                                Pilih Gambar
-                              </h2>
-                            </ion-button>
-                          </ion-col>
-                          
-                          <ng-template #gambar_ada></ng-template>
-
-                          <div *ngIf="gambar_kosong; else gambar_tidak_kosong"></div>
-
-                          <ng-template #gambar_tidak_kosong>
-                            <ion-col size="12" class="ion-padding-top ion-text-center">
-  
-                              <div>
-                                <img class="ngatur_gambar bayangan" src="{{ imgURL }}" (error)="errorHandler($event)">
-  
-                                <ion-fab vertical="top" horizontal="end" slot="fixed" class="fab_position" (click)="batal_gambar()">
-                                  <ion-fab-button color="danger" id="moda_pilih-gammbar_tabs3">
-                                    <ion-icon name="close-outline" size="large"></ion-icon>
-                                  </ion-fab-button>
-                                </ion-fab>
-                              </div>
-                              
+                            <ion-col size="12">
+                              <ion-card-title class="ion-text-start">Foto Kegiatan</ion-card-title>
                             </ion-col>
-                          </ng-template>
 
-                        </ion-row>
+                            <ion-col size="12" class="ion-padding-top" *ngIf="pilih_gambar; else gambar_ada">
+                              <ion-button (click)="presentActionSheet()" expand="block" class="ion-no-margin" class="button_height">
+                                <h2>
+                                  Pilih Gambar
+                                </h2>
+                              </ion-button>
+                            </ion-col>
+                            
+                            <ng-template #gambar_ada></ng-template>
 
-                      </ion-grid>
-                    </ion-item>
-                    <ion-item lines="none">
-                      <ion-grid fixed class="ion-no-padding ion-padding-top">
-                        <ion-row>
-                          <ion-col size="6">
-                            <ion-button (click)="batal_laporan()" expand="block" color="danger" class="ion-margin-end button_height">
-                              <h2>
-                                Batal
-                              </h2>
-                            </ion-button>
-                          </ion-col>
-                          <ion-col size="6">
-                            <ion-button (click)="validasi()" expand="block" color="primary" class="ion-margin-start button_height">
-                              <h2>
-                                Kirim
-                              </h2>
-                            </ion-button>
-                          </ion-col>
-                        </ion-row>
-                      </ion-grid>
-                    </ion-item>
-                  </ion-list>
+                            <div *ngIf="gambar_kosong; else gambar_tidak_kosong"></div>
+
+                            <ng-template #gambar_tidak_kosong>
+                              <ion-col size="12" class="ion-padding-top ion-text-center">
+    
+                                <div>
+                                  <img class="ngatur_gambar bayangan" src="{{ imgURL }}" (error)="errorHandler($event)">
+    
+                                  <ion-fab vertical="top" horizontal="end" slot="fixed" class="fab_position" (click)="batal_gambar()">
+                                    <ion-fab-button color="danger" id="moda_pilih-gammbar_tabs3">
+                                      <ion-icon name="close-outline" size="large"></ion-icon>
+                                    </ion-fab-button>
+                                  </ion-fab>
+                                </div>
+                                
+                              </ion-col>
+                            </ng-template>
+
+                          </ion-row>
+
+                        </ion-grid>
+                      </ion-item>
+                      <ion-item lines="none">
+                        <ion-grid fixed class="ion-no-padding ion-padding-top">
+                          <ion-row>
+                            <ion-col size="6">
+                              <!-- <ion-button (click)="batal_laporan()" expand="block" color="danger" class="ion-margin-end button_height">
+                                <h2>
+                                  Batal
+                                </h2>
+                              </ion-button> -->
+                            </ion-col>
+                            <ion-col size="6">
+                              <ion-button type="submit" expand="block" color="primary" class="ion-margin-start button_height">
+                                <h2>
+                                  Kirim
+                                </h2>
+                              </ion-button>
+                            </ion-col>
+                          </ion-row>
+                        </ion-grid>
+                      </ion-item>
+                    </ion-list>
+
+                  </form>
                 </ion-col>
               </ion-row>
             </ion-grid>

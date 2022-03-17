@@ -12,8 +12,10 @@ export class ModalGantisandiPage implements OnInit {
 
   showPassword1 = false;
   showPassword2 = false;
+  showPassword3 = false;
   passwordToggleIcon1 = 'eye-outline';
   passwordToggleIcon2 = 'eye-outline';
+  passwordToggleIcon3 = 'eye-outline';
   pasword_ls;
 
   myGroup: FormGroup;
@@ -63,6 +65,16 @@ export class ModalGantisandiPage implements OnInit {
       this.passwordToggleIcon2 = 'eye-off-outline';
     } else {
       this.passwordToggleIcon2 = 'eye-outline';
+    }
+  }
+
+  lihat_sandi3(){
+    this.showPassword3 = !this.showPassword3;
+
+    if (this.passwordToggleIcon3 == 'eye-outline') {
+      this.passwordToggleIcon3 = 'eye-off-outline';
+    } else {
+      this.passwordToggleIcon3 = 'eye-outline';
     }
   }
 

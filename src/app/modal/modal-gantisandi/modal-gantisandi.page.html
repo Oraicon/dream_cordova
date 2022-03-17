@@ -21,7 +21,8 @@
         <ion-col size="12" class="ion-padding-top">
           <ion-label>Sandi lama</ion-label>
           <ion-item class="ion-no-padding" > 
-            <ion-input placeholder="********" [type]="showPassword ? 'text' : 'password'" formControlName="sandi_lama" required></ion-input>
+            <ion-input placeholder="********" [type]="showPassword1 ? 'text' : 'password'" formControlName="sandi_lama" required></ion-input>
+            <ion-icon [name]="passwordToggleIcon1" (click)="lihat_sandi1()" size="large"></ion-icon>
           </ion-item>
           <ion-label class="error" *ngIf="isSubmitted && errorControl.sandi_lama.errors?.required">
             *Sandi lama harus diisi.
@@ -34,8 +35,8 @@
         <ion-col size="12" class="">
           <ion-label>Sandi baru</ion-label>
           <ion-item class="ion-no-padding" > 
-            <ion-input placeholder="********" [type]="showPassword1 ? 'text' : 'password'" formControlName="sandi_baru" required></ion-input>
-            <ion-icon [name]="passwordToggleIcon1" (click)="lihat_sandi1()" size="large"></ion-icon>
+            <ion-input placeholder="********" [type]="showPassword2 ? 'text' : 'password'" formControlName="sandi_baru" required></ion-input>
+            <ion-icon [name]="passwordToggleIcon1" (click)="lihat_sandi2()" size="large"></ion-icon>
           </ion-item>
           <ion-label class="error" *ngIf="isSubmitted && errorControl.sandi_baru.errors?.required">
             *Sandi baru harus diisi.
@@ -48,8 +49,8 @@
         <ion-col size="12" class="">
           <ion-label>Konfirmasi sandi baru</ion-label>
           <ion-item class="ion-no-padding" > 
-            <ion-input placeholder="********" [type]="showPassword2 ? 'text' : 'password'" formControlName="sandi_baru2" required></ion-input>
-            <ion-icon [name]="passwordToggleIcon2" (click)="lihat_sandi2()" size="large"></ion-icon>
+            <ion-input placeholder="********" [type]="showPassword3 ? 'text' : 'password'" formControlName="sandi_baru2" required></ion-input>
+            <ion-icon [name]="passwordToggleIcon2" (click)="lihat_sandi3()" size="large"></ion-icon>
           </ion-item>
           <ion-label class="error" *ngIf="isSubmitted && errorControl.sandi_baru2.errors?.required">
             *Konfirmasi sandi baru harus diisi.

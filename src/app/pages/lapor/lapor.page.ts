@@ -10,6 +10,9 @@ import { NavigationExtras } from '@angular/router';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@awesome-cordova-plugins/file-transfer/ngx';
 import { Storage } from '@ionic/storage';
 import { SetGetServiceService } from 'src/app/services/set-get-service.service';
+import { FormGroup, FormBuilder, Validators } from "@angular/forms";
+import { SwalServiceService } from 'src/app/services/swal-service.service';
+
 
 @Component({
   selector: 'app-lapor',
@@ -20,6 +23,7 @@ export class LaporPage implements OnInit {
 
     pilih_gambar = true;
     gambar_kosong = true;
+    isSubmitted = false;
     
     //variable
     imgURL:any = 'assets/ss_.png';
@@ -62,7 +66,25 @@ export class LaporPage implements OnInit {
       translucent: true
     };
 
-  constructor(private setget: SetGetServiceService, private strg: Storage, private datepipe: DatePipe, private transfer: FileTransfer, private apiService: ApiServicesService, private route: ActivatedRoute, private actionSheetController: ActionSheetController, private navCtrl:NavController, private camera: Camera, private loadingService: LoadingServiceService) {
+    myGroup: FormGroup;
+
+  constructor(private setget: SetGetServiceService, 
+    private swal: SwalServiceService,
+    private strg: Storage, 
+    public formBuilder: FormBuilder,
+    private datepipe: DatePipe, 
+    private transfer: FileTransfer, 
+    private apiService: ApiServicesService, 
+    private route: ActivatedRoute, 
+    private actionSheetController: ActionSheetController, 
+    private navCtrl:NavController, 
+    private camera: Camera, 
+    private loadingService: LoadingServiceService) {
+
+    this.myGroup = this.formBuilder.group({
+      data_keterangan: ['', [Validators.required]],
+      data_persen: ['', [Validators.required]]
+    })
   }
   
   ngOnInit() {
@@ -125,7 +147,7 @@ export class LaporPage implements OnInit {
     });
   }
 
-  validasi(){
+  validasi(keterangan, persen){
     this.loadingService.tampil_loading_login();
 
     let a;
@@ -158,7 +180,7 @@ export class LaporPage implements OnInit {
       const responecode = data.responseCode;
 
       if (responecode == 200) {
-        this.apiService.kirim_api_progres(this.lapor_id, "https://oraicon.000webhostapp.com/upload/" + this.name_img, this.data_keterangan_f, this.place)
+        this.apiService.kirim_api_progres(this.lapor_id, "https://oraicon.000webhostapp.com/upload/" + this.name_img, keterangan, persen)
         .then(data => {
           
           const data_json = JSON.parse(data.data);
@@ -252,6 +274,25 @@ export class LaporPage implements OnInit {
 
   cobaan(){
     this.navCtrl.navigateRoot(['/tabs/tab2']);
+  }
+
+  get errorControl() {
+    return this.myGroup.controls;
+  }
+
+  onSubmit(){
+    this.isSubmitted = true;
+    if (!this.myGroup.valid) {
+      return false;
+    } else {
+      if(this.imgURL != 'assets/ss_.png'){
+        const keterangan = this.myGroup.value.data_keterangan;
+        const persen = this.myGroup.value.data_persen;
+        this.validasi(keterangan, persen);
+      }else{
+        this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Gambar tidak boleh kosong !");
+      }
+    }
   }
 
 }

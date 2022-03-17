@@ -3,6 +3,7 @@ import { ApiServicesService } from 'src/app/services/api-services.service';
 import { LoadingServiceService } from 'src/app/services/loading-service.service';
 import { SetGetServiceService } from 'src/app/services/set-get-service.service';
 import { NavController } from '@ionic/angular';
+import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 
 
@@ -23,6 +24,7 @@ export class KegiatanPage implements OnInit {
 
   constructor(
     private navCtrl: NavController, 
+    private router: Router, 
     private setget: SetGetServiceService,
     private apiService: ApiServicesService,
     private loadingService: LoadingServiceService
@@ -94,7 +96,11 @@ export class KegiatanPage implements OnInit {
     console.log(this.data_masih_proses);
     console.log(this.data_sudah_komplit);
 
-    this.loading = true; 
+    this.tutuploading();
+  }
+
+  async tutuploading(){
+    this.loading = false; 
     this.loadingService.tutuploading();
   }
 
@@ -130,9 +136,11 @@ export class KegiatanPage implements OnInit {
 
   kembali(){
     // this.strg.set('auth', true);
-    this.navCtrl.back();
+    // this.navCtrl.back();
     // this.location.back();
     // this.rtr.navigateByUrl('/tabs/tab2');
+    this.router.navigate(["/tabs/tab1"], { replaceUrl: true });
+
   }
 
 }

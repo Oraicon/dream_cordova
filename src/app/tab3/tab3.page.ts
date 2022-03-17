@@ -12,7 +12,6 @@ import { MomentService } from '../services/moment.service';
 import { ModalGantisandiPage } from '../modal/modal-gantisandi/modal-gantisandi.page';
 import { ModalGantinamaPage } from '../modal/modal-gantinama/modal-gantinama.page';
 import { SwalServiceService } from '../services/swal-service.service';
-import { SetGetServiceService } from 'src/app/services/set-get-service.service';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 
@@ -77,7 +76,6 @@ export class Tab3Page {
 
 
   constructor(private momentService: MomentService,
-    private setget: SetGetServiceService,
     private swalService: SwalServiceService,
     private actionSheetController: ActionSheetController,
     private router: Router, 
@@ -92,17 +90,7 @@ export class Tab3Page {
     private storage:Storage, 
     private apiService:ApiServicesService) {
     
-    this.teslogik();
-  }
-
-  teslogik(){
-    let a = this.setget.getDatatab3();
-    console.log(a);
-    if (a != 1) {
-      this.tampilkandata();
-    }else{
-      console.log(a);
-    }
+    this.tampilkandata();
   }
 
   async get_data_lokal(){
@@ -139,8 +127,6 @@ export class Tab3Page {
       this.rekening_pengguna = data_status_data.no_rek;
 
       this.imgURL = data_status_data.image;
-
-      this.setget.setDatatab3(1);
 
       this.loadingCtrl.tutuploading();
     })
@@ -363,6 +349,7 @@ export class Tab3Page {
       title: 'Terjadi kesalahan !',
       text: 'Data tidak terbaca, silahkan tekan OK untuk mencoba lagi !',
       backdrop: false,
+      confirmButtonColor: '#1B2338',
       confirmButtonText: 'OK !',
     }).then((result) => {
       if (result.isConfirmed) {
@@ -380,6 +367,7 @@ export class Tab3Page {
       text: 'Anda akan keluar dari aplikasi anda yakin ?',
       backdrop: false,
       showDenyButton: true,
+      confirmButtonColor: '#1B2338',
       confirmButtonText: 'Ya',
       denyButtonText: `Tidak`,
     }).then((result) => {

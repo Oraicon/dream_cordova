@@ -32,26 +32,27 @@ const routes: Routes = [
   },
   {
     path: 'proses',
-    loadChildren: () => import('./pages/proses/proses.module').then( m => m.ProsesPageModule)
+    loadChildren: () => import('./pages/proses/proses.module').then( m => m.ProsesPageModule),
+    canActivate: [GuardServiceService]
   },
-  {
-    path: 'proses_log',
-    loadChildren: () => import('./pages/proses-log/proses-log.module').then( m => m.ProsesLogPageModule)
-  },
+  // {
+  //   path: 'proses_log',
+  //   loadChildren: () => import('./pages/proses-log/proses-log.module').then( m => m.ProsesLogPageModule)
+  // },
   {
     path: 'lapor',
-    loadChildren: () => import('./pages/lapor/lapor.module').then( m => m.LaporPageModule)
+    loadChildren: () => import('./pages/lapor/lapor.module').then( m => m.LaporPageModule),
+    canActivate: [GuardServiceService]
   },
   {
     path: 'modal-gantinama',
     loadChildren: () => import('./modal/modal-gantinama/modal-gantinama.module').then( m => m.ModalGantinamaPageModule)
-  },  {
+  },
+  {
     path: 'kegiatan',
-    loadChildren: () => import('./pages/kegiatan/kegiatan.module').then( m => m.KegiatanPageModule)
+    loadChildren: () => import('./pages/kegiatan/kegiatan.module').then( m => m.KegiatanPageModule),
+    canActivate: [GuardServiceService]
   }
-
-
-
 
 
 ];

@@ -27,7 +27,10 @@
         </div>
       </ion-col>
       <ion-col size="12" class="ion-text-center ion-no-margin">
-        <h1>{{ nama_pengguna }}</h1>
+        <h1 *ngIf="nama_pengguna; else templateName">{{ nama_pengguna }}</h1>
+        <ng-template #templateName>
+          <ion-skeleton-text animated style="width: 100%; height: 2rem;"></ion-skeleton-text>
+        </ng-template>
       </ion-col>
       <ion-col size="12">
         <p class="ion-padding-start text_header_konten ion-no-margin ion-padding-top">Data Akun</p>
@@ -42,8 +45,8 @@
             </ion-button>
           </ion-item>
           
-          <ion-item (click)="lihat_password()">
-            <ion-label>
+          <ion-item>
+            <ion-label (click)="lihat_password()">
               <h2>Sandi Pengguna</h2>
               <h3 *ngIf="lihatsandi; else tidakterlihat" >{{ sandi_pengguna }}</h3>
 

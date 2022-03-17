@@ -23,7 +23,7 @@ export class Tab1Page {
   data_header = [];
   tanggal_deadline = {};
   data_beranda = false;
-  data_beranda_loading_tidak_ada = true;
+  data_beranda_loading_tidak_ada = false;
 
   constructor(
     private setget: SetGetServiceService,
@@ -38,6 +38,7 @@ export class Tab1Page {
 
   async tampilkan_data(){
     this.loadingCtrl.tampil_loading_login();
+    this.setget.set(0);
 
     const data_l_nama = await this.storage.get('nama');
     
@@ -142,6 +143,7 @@ export class Tab1Page {
         text: 'Anda akan keluar dari aplikasi anda yakin ?',
         backdrop: false,
         showDenyButton: true,
+        confirmButtonColor: '#1B2338',
         confirmButtonText: 'Ya',
         denyButtonText: `Tidak`,
       }).then((result) => {
@@ -176,6 +178,7 @@ export class Tab1Page {
       title: 'Terjadi kesalahan !',
       text: 'Data tidak terbaca, silahkan tekan OK untuk mencoba lagi !',
       backdrop: false,
+      confirmButtonColor: '#1B2338',
       confirmButtonText: 'OK !',
     }).then((result) => {
       if (result.isConfirmed) {
@@ -188,6 +191,8 @@ export class Tab1Page {
   kegiatan(e, f){
     console.log(e);
     this.setget.setDatakegiatan(e, f);
-    this.router.navigateByUrl("/kegiatan")
+    // this.router.navigateByUrl("/kegiatan")
+    this.setget.set(1);
+    this.router.navigate(["/kegiatan"], { replaceUrl: true });
   }
 }

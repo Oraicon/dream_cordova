@@ -19,6 +19,8 @@ export class SwalServiceService {
       title: '' + text1,
       text: ''+ text2 ,
       backdrop: false,
+      confirmButtonColor: '#1B2338',
+      confirmButtonText: 'OK !',
     })
   }
 
@@ -38,6 +40,8 @@ export class SwalServiceService {
       title: '' + text1,
       text: ''+text2,
       backdrop: false,
+      confirmButtonColor: '#1B2338',
+      confirmButtonText: 'OK !',
     }).then((result) => {
       if (result.isConfirmed) {
         this.loading.tutuploading();
@@ -52,6 +56,8 @@ export class SwalServiceService {
       title: '' + text1,
       text: ''+text2,
       backdrop: false,
+      confirmButtonColor: '#1B2338',
+      confirmButtonText: 'OK !',
     }).then((result) => {
       if (result.isConfirmed) {
         this.loading.tutuploading();
@@ -66,6 +72,7 @@ export class SwalServiceService {
       title: 'Password terkirim !',
       text: 'Password baru sudah dikirim ke email',
       backdrop: false,
+      confirmButtonColor: '#1B2338',
       confirmButtonText: 'OK !',
       }).then((result) => {
         if (result.isConfirmed) {
