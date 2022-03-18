@@ -361,8 +361,8 @@ export class Tab3Page {
     this.loadingCtrl.tampil_loading_login();
     Swal.fire({
       icon: 'warning',
-      title: 'Keluar aplikasi ?',
-      text: 'Anda akan keluar dari aplikasi anda yakin ?',
+      title: 'Keluar akun ?',
+      text: 'Anda akan kembali ke login anda yakin ?',
       backdrop: false,
       showDenyButton: true,
       confirmButtonColor: '#3880ff',
