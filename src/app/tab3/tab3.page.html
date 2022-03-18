@@ -20,7 +20,7 @@
         <div>
           <img class="gambar_profil bayangan"  src="{{ imgURL }}" (error)="errorHandler($event)">
           <ion-fab vertical="bottom" horizontal="center" slot="fixed" class="fab_position" (click)="presentActionSheet()">
-            <ion-fab-button color="secondary">
+            <ion-fab-button color="primary">
               <ion-icon name="camera-outline" size="large"></ion-icon>
             </ion-fab-button>
           </ion-fab>
@@ -45,7 +45,7 @@
                 <ion-skeleton-text class="" animated style="width: 30%; height: 1rem;"></ion-skeleton-text>
               </ng-template>
             </ion-label>
-            <ion-button expand="block" fill="outline" (click)="ubahnama()">
+            <ion-button color="primary2" expand="block" fill="outline" (click)="ubahnama()">
               Ubah
             </ion-button>
           </ion-item>
@@ -69,7 +69,7 @@
                 <ion-skeleton-text class="" animated style="width: 30%; height: 1rem;"></ion-skeleton-text>
               </ng-template>
             </ion-label>
-            <ion-button expand="block" fill="outline" (click)="ubahpassword()">
+            <ion-button color="primary2" expand="block" fill="outline" (click)="ubahpassword()">
               Ubah
             </ion-button>
           </ion-item>
@@ -83,7 +83,10 @@
           <ion-item (click)="coba_swal()">
             <ion-label>
               <h2>NIK</h2>
-              <h3></h3>
+              <h3 *ngIf="nik_pengguna; else nik">{{ nik_pengguna }}</h3>
+              <ng-template #nik>
+                <ion-skeleton-text class="" animated style="width: 40%; height: 1rem;"></ion-skeleton-text>
+              </ng-template> 
             </ion-label>
           </ion-item>
           <ion-item>
@@ -134,7 +137,7 @@
           <ion-item>
             <ion-label>
               <h2>Alamat</h2>
-              <h3 *ngIf="alamat_pengguna; else alamat">{{ alamat_pengguna }}</h3>
+              <h3 class="ion-text-wrap" *ngIf="alamat_pengguna; else alamat">{{ alamat_pengguna }}</h3>
               <ng-template #alamat>
                 <ion-skeleton-text class="" animated style="width: 40%; height: 1rem;"></ion-skeleton-text>
               </ng-template> 
@@ -179,7 +182,7 @@
           <ion-item>
             <ion-label>
               <h2>Bank Pengguna</h2>
-              <h3 *ngIf="bank_pengguna; else bank">{{ bank_pengguna }}</h3>
+              <h3 class="ion-text-wrap" *ngIf="bank_pengguna; else bank">{{ bank_pengguna }}</h3>
               <ng-template #bank>
                 <ion-skeleton-text class="" animated style="width: 40%; height: 1rem;"></ion-skeleton-text>
               </ng-template> 

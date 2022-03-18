@@ -135,10 +135,6 @@ export class KegiatanPage implements OnInit {
   }
 
   kembali(){
-    // this.strg.set('auth', true);
-    // this.navCtrl.back();
-    // this.location.back();
-    // this.rtr.navigateByUrl('/tabs/tab2');
     this.router.navigate(["/tabs/tab1"], { replaceUrl: true });
 
   }

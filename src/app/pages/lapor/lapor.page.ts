@@ -2,13 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { NavController } from '@ionic/angular';
 import { Camera, CameraOptions } from '@awesome-cordova-plugins/camera/ngx';
 import { ActionSheetController } from '@ionic/angular';
-import { ActivatedRoute } from '@angular/router';
 import { LoadingServiceService } from 'src/app/services/loading-service.service';
 import { ApiServicesService } from 'src/app/services/api-services.service';
 import { DatePipe } from '@angular/common';
-import { NavigationExtras } from '@angular/router';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@awesome-cordova-plugins/file-transfer/ngx';
-import { Storage } from '@ionic/storage';
 import { SetGetServiceService } from 'src/app/services/set-get-service.service';
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { SwalServiceService } from 'src/app/services/swal-service.service';
@@ -70,12 +67,10 @@ export class LaporPage implements OnInit {
 
   constructor(private setget: SetGetServiceService, 
     private swal: SwalServiceService,
-    private strg: Storage, 
     public formBuilder: FormBuilder,
     private datepipe: DatePipe, 
     private transfer: FileTransfer, 
     private apiService: ApiServicesService, 
-    private route: ActivatedRoute, 
     private actionSheetController: ActionSheetController, 
     private navCtrl:NavController, 
     private camera: Camera, 
@@ -95,12 +90,6 @@ export class LaporPage implements OnInit {
   }
 
   tampilkan_data(){
-    // this.route.queryParams.subscribe(params => {
-    //   console.log(params);
-    //   this.lapor_id = params.data_id;
-    //   this.lapor_namakegiatan = params.data_nama_kegiatan;
-    //   this.datapersen = params.data_persen;
-    // });
 
     let a = this.setget.getLog();
     let b = this.setget.get_persen();
@@ -158,7 +147,6 @@ export class LaporPage implements OnInit {
       a = 1
     }
     
-    // asli
     const fileTransfer: FileTransferObject = this.transfer.create();
 
     let URL="https://oraicon.000webhostapp.com/upload.php";
@@ -195,23 +183,24 @@ export class LaporPage implements OnInit {
         
             this.navCtrl.back();
           } else {
-            
+            this.loadingService.tutuploading();
+            this.swal.swal_aksi_gagal("Terjadi kesalahan", "code error 9 !");
           }
-
-          console.log(data.status);
-          console.log(data.data); // data received by server
-          console.log(data.headers);
       
         })
         .catch(error => {
       
-          console.log(error.status);
-          console.log(error.error); // error message as string
-          console.log(error.headers);
+          console.log(error);
+          this.loadingService.tutuploading();
+          this.swal.swal_aksi_gagal("Terjadi kesalahan", "code error 10 !");
+
       
         });
       } else {
         console.log("error");
+
+        this.loadingService.tutuploading();
+        this.swal.swal_aksi_gagal("Terjadi kesalahan", "code error 11 !");
         
       }
 
@@ -220,6 +209,9 @@ export class LaporPage implements OnInit {
     .catch(error => {
   
       console.log(error);
+
+      this.loadingService.tutuploading();
+      this.swal.swal_aksi_gagal("Terjadi kesalahan", "code error 12 !");
   
     });
   }
@@ -253,10 +245,6 @@ export class LaporPage implements OnInit {
     await actionSheet.present();
   }
 
-  diklik(){
-    console.log(this.place);
-  }
-
   batal_laporan(){
     this.place = null;
     this.nama_kegiatan = "Nama Kegiatan";
@@ -270,10 +258,6 @@ export class LaporPage implements OnInit {
     this.imgURL = 'assets/ss_.png';
     this.pilih_gambar = true;
     this.gambar_kosong = true;
-  }
-
-  cobaan(){
-    this.navCtrl.navigateRoot(['/tabs/tab2']);
   }
 
   get errorControl() {

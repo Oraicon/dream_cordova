@@ -56,7 +56,7 @@ export class AppComponent {
     this.loadingService.tampil_loading_login();
     Swal.fire({
       icon: 'warning',
-      title: 'Keluar dari aplikasi ?',
+      title: 'Keluar aplikasi ?',
       text: 'Anda akan keluar dari aplikasi anda yakin ?',
       backdrop: false,
       showDenyButton: true,

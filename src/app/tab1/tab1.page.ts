@@ -139,11 +139,11 @@ export class Tab1Page {
       this.loadingCtrl.tampil_loading_login();
       Swal.fire({
         icon: 'warning',
-        title: 'Keluar dari aplikasi ?',
+        title: 'Keluar aplikasi ?',
         text: 'Anda akan keluar dari aplikasi anda yakin ?',
         backdrop: false,
         showDenyButton: true,
-        confirmButtonColor: '#1B2338',
+        confirmButtonColor: '#3880ff',
         confirmButtonText: 'Ya',
         denyButtonText: `Tidak`,
       }).then((result) => {
@@ -178,7 +178,7 @@ export class Tab1Page {
       title: 'Terjadi kesalahan !',
       text: 'Data tidak terbaca, silahkan tekan OK untuk mencoba lagi !',
       backdrop: false,
-      confirmButtonColor: '#1B2338',
+      confirmButtonColor: '#3880ff',
       confirmButtonText: 'OK !',
     }).then((result) => {
       if (result.isConfirmed) {
@@ -189,9 +189,7 @@ export class Tab1Page {
   }
 
   kegiatan(e, f){
-    console.log(e);
     this.setget.setDatakegiatan(e, f);
-    // this.router.navigateByUrl("/kegiatan")
     this.setget.set(1);
     this.router.navigate(["/kegiatan"], { replaceUrl: true });
   }

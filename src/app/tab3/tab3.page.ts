@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ActionSheetController, AlertController, ModalController } from '@ionic/angular';
+import { ActionSheetController, ModalController } from '@ionic/angular';
 import { Storage } from '@ionic/storage-angular';
 import { ApiServicesService } from '../services/api-services.service';
 import { LoadingServiceService } from '../services/loading-service.service';
@@ -7,7 +7,6 @@ import { Camera, CameraOptions } from '@awesome-cordova-plugins/camera/ngx';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@awesome-cordova-plugins/file-transfer/ngx';
 import { DatePipe } from '@angular/common';
 import { PasswordServiceService } from '../services/password-service.service';
-import { AlertServicesService } from '../services/alert-services.service';
 import { MomentService } from '../services/moment.service';
 import { ModalGantisandiPage } from '../modal/modal-gantisandi/modal-gantisandi.page';
 import { ModalGantinamaPage } from '../modal/modal-gantinama/modal-gantinama.page';
@@ -31,7 +30,7 @@ export class Tab3Page {
 
   //variable frontend
   lihatsandi = false;
-
+  nik_pengguna;
   username_pengguna;
   sandi_pengguna;
   sandi_pengguna_tidak_terlihat;
@@ -79,18 +78,17 @@ export class Tab3Page {
     private swalService: SwalServiceService,
     private actionSheetController: ActionSheetController,
     private router: Router, 
-    private alertService: AlertServicesService, 
     private passwordService: PasswordServiceService, 
     private datepipe: DatePipe, 
     private transfer: FileTransfer, 
     private camera: Camera,
     private modalCtrl: ModalController,
     private loadingCtrl:LoadingServiceService, 
-    private alertCtrl: AlertController, 
     private storage:Storage, 
     private apiService:ApiServicesService) {
     
-    this.tampilkandata();
+    // this.tampilkandata();
+    this.get_data_lokal();
   }
 
   async get_data_lokal(){
@@ -109,6 +107,7 @@ export class Tab3Page {
       const data_json = JSON.parse(res.data);
       const data_status_data = data_json.data[0];
       
+      this.nik_pengguna = data_status_data.nik;
       this.username_pengguna = data_l_nama;
       this.sandi_pengguna = data_l_sandi;
       this.sandi_pengguna_tidak_terlihat = this.passwordService.disable_password(this.sandi_pengguna);
@@ -140,13 +139,11 @@ export class Tab3Page {
   }
 
   lihat_password(){
-
     if (this.lihatsandi == false) {
       this.lihatsandi = true;
     }else{
       this.lihatsandi = false;
     }
-
   }
 
   kamera(){
@@ -201,21 +198,21 @@ export class Tab3Page {
 
           this.imgURL = this.base64_img;
           this.loadingCtrl.tutuploading();
-          this.alertService.alert_berhasil_mengubah_foto();
+          this.swalService.swal_aksi_berhasil("Ubah foto berhasil !", "Foto profil anda berhasil diubah !");
 
         })
         .catch(error => {
 
           //error upload ke database data profil
           this.loadingCtrl.tutuploading();
-          this.alertService.alert_gagal_mengubah_foto();
+          this.swalService.swal_aksi_gagal("Ubah foto gagal !", "Terjadi kesalahan pada saat mengubah foto !");
 
         });
       } else {
         console.log(res);
         //error response upload foto
         this.loadingCtrl.tutuploading();
-        this.alertService.alert_error_upload_gambar3_tab2();
+        this.swalService.swal_aksi_gagal("Terjadi kesalahan !", "code error 4 !");
       }
 
     }, (err) => {
@@ -280,14 +277,14 @@ export class Tab3Page {
           } else {
             //jika status != 1
             this.loadingCtrl.tutuploading();
-            this.alertService.alert_gagal_mengubah("sandi pengguna");
+            this.swalService.swal_aksi_gagal("Terjadi kesalahan !", "code error 5 !");
           }
           
         })
         .catch(err => {
           //error
           this.loadingCtrl.tutuploading();
-          this.alertService.alert_error_update_tab3("sandi", "10");
+          this.swalService.swal_aksi_gagal("Terjadi kesalahan !", "code error 6 !");
         });
       }
     }).catch(err => {
@@ -321,18 +318,19 @@ export class Tab3Page {
             this.storage.set('sandi', sandi_baru);
             this.sandi_pengguna = sandi_baru;
             this.loadingCtrl.tutuploading();
+            this.swalService.swal_aksi_berhasil("Berhasil !", "Sandi pengguna anda telah diubah !");
           } else {
             //jika status != 1
             this.loadingCtrl.tutuploading();
-            this.alertService.alert_gagal_mengubah("sandi pengguna");
-            this.swalService.swal_aksi_berhasil("Berhasil !", "Sandi pengguna anda telah diubah !");
+            this.swalService.swal_aksi_gagal("Terjadi kesalahan !", "code error 7 !");
+
           }
           
         })
         .catch(err => {
           //error
           this.loadingCtrl.tutuploading();
-          this.alertService.alert_error_update_tab3("sandi", "10");
+          this.swalService.swal_aksi_gagal("Terjadi kesalahan !", "code error 8 !");
         });
       }
     }).catch(err => {
@@ -349,7 +347,7 @@ export class Tab3Page {
       title: 'Terjadi kesalahan !',
       text: 'Data tidak terbaca, silahkan tekan OK untuk mencoba lagi !',
       backdrop: false,
-      confirmButtonColor: '#1B2338',
+      confirmButtonColor: '#3880ff',
       confirmButtonText: 'OK !',
     }).then((result) => {
       if (result.isConfirmed) {
@@ -363,11 +361,11 @@ export class Tab3Page {
     this.loadingCtrl.tampil_loading_login();
     Swal.fire({
       icon: 'warning',
-      title: 'Keluar dari aplikasi ?',
+      title: 'Keluar aplikasi ?',
       text: 'Anda akan keluar dari aplikasi anda yakin ?',
       backdrop: false,
       showDenyButton: true,
-      confirmButtonColor: '#1B2338',
+      confirmButtonColor: '#3880ff',
       confirmButtonText: 'Ya',
       denyButtonText: `Tidak`,
     }).then((result) => {
