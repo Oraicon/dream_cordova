@@ -52,7 +52,7 @@ export class KegiatanPage implements OnInit {
       const data_json = JSON.parse(data.data);
       const status_data = data_json.status;
 
-      console.log(data_json);
+      // console.log(data_json);
 
       if (status_data == 1) {
         this.pisahin_progres_komplit(data_json.data);
@@ -65,7 +65,7 @@ export class KegiatanPage implements OnInit {
   
     })
     .catch(error => {
-      console.log(error);
+      // console.log(error);
       this.tutuploading_retry();
     });
   
@@ -92,9 +92,6 @@ export class KegiatanPage implements OnInit {
     this.data_sudah_komplit = b;
     a = [];
     b = [];
-
-    console.log(this.data_masih_proses);
-    console.log(this.data_sudah_komplit);
 
     this.tutuploading();
   }
@@ -126,8 +123,6 @@ export class KegiatanPage implements OnInit {
   }
 
   proyek_kegiatan(id_detail, page_type){
-    console.log(id_detail);
-    console.log(page_type);
 
     this.setget.setProses(this.id_header, id_detail);
     this.setget.set_Page(page_type);

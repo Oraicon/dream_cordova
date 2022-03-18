@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { Storage } from '@ionic/storage-angular';
+import { SwalServiceService } from 'src/app/services/swal-service.service';
+
+
 
 @Component({
   selector: 'app-modal-gantisandi',
@@ -22,6 +25,7 @@ export class ModalGantisandiPage implements OnInit {
   isSubmitted = false;
 
   constructor(
+    private swal: SwalServiceService,
     private storage: Storage,
     private formBuilder: FormBuilder,
     private modalCtrl: ModalController) { }
@@ -83,16 +87,15 @@ export class ModalGantisandiPage implements OnInit {
     if (!this.myGroup.valid) {
       return false;
     } else {
-      console.log(this.myGroup.value.sandi_lama);
       const password_lama = this.myGroup.value.sandi_lama;
       const password_baru = this.myGroup.value.sandi_baru;
       const password_baru_2 = this.myGroup.value.sandi_baru2; 
 
       if (this.pasword_ls != password_lama) {
-        console.log("password lama tidak sama")
+        this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Sandi lama anda tidak sama !");
       } else {
         if (password_baru_2 != password_baru) {
-          console.log("password baru tidak sama")
+          this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Sandi baru anda tidak sama !");
         } else {
           this.modalCtrl.dismiss({data: password_baru});
         }

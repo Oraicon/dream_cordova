@@ -92,7 +92,7 @@ export class Tab1Page {
       })
       .catch(error => {
     
-        console.log(error);
+        // console.log(error);
         this.tutuploading_retry();
     
       });

@@ -148,7 +148,7 @@ export class ProsesPage implements OnInit {
     })
     .catch(error => {
   
-      console.log(error);
+      // console.log(error);
       this.tutuploading_retry();
   
     });
@@ -183,7 +183,7 @@ export class ProsesPage implements OnInit {
     })
     .catch(error => {
   
-      console.log(error);
+      // console.log(error);
 
       this.tutuploading_retry();
   

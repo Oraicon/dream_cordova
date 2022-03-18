@@ -102,7 +102,7 @@ export class LoginPage implements OnInit {
         this.manggil_api_lupa_nama(nama_baru);
       }
     }).catch(err => {
-      console.log(err);
+      // console.log(err);
     });
     await modal.present();
   }

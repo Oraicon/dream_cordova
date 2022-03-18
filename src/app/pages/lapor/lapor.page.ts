@@ -98,8 +98,6 @@ export class LaporPage implements OnInit {
     this.lapor_namakegiatan = a[1];
     this.datapersen = b;
     
-    console.log(this.lapor_id);
-    console.log(this.datapersen);
     this.logik_array(this.datapersen);
   }
 
@@ -190,14 +188,14 @@ export class LaporPage implements OnInit {
         })
         .catch(error => {
       
-          console.log(error);
+          // console.log(error);
           this.loadingService.tutuploading();
           this.swal.swal_aksi_gagal("Terjadi kesalahan", "code error 10 !");
 
       
         });
       } else {
-        console.log("error");
+        // console.log("error");
 
         this.loadingService.tutuploading();
         this.swal.swal_aksi_gagal("Terjadi kesalahan", "code error 11 !");
@@ -208,7 +206,7 @@ export class LaporPage implements OnInit {
     })
     .catch(error => {
   
-      console.log(error);
+      // console.log(error);
 
       this.loadingService.tutuploading();
       this.swal.swal_aksi_gagal("Terjadi kesalahan", "code error 12 !");

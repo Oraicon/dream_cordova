@@ -87,7 +87,7 @@ export class Tab3Page {
     private storage:Storage, 
     private apiService:ApiServicesService) {
     
-    // this.tampilkandata();
+    this.tampilkandata();
     this.get_data_lokal();
   }
 
@@ -219,7 +219,7 @@ export class Tab3Page {
       // error
       console.log(err)
       this.loadingCtrl.tutuploading();
-
+      this.swalService.swal_aksi_gagal("Terjadi kesalahan !", "code error 13 !");
     });
   }
 
