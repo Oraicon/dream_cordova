@@ -24,6 +24,7 @@ export class Tab3Page {
   // varibale loka storage
   nama_ls;
   pasword_ls;
+  z = 0;
 
   //persiapan variable
   imgURL:any = 'assets/pp.jpg';
@@ -107,35 +108,67 @@ export class Tab3Page {
       const data_json = JSON.parse(res.data);
       const data_status_data = data_json.data[0];
       
-      this.nik_pengguna = data_status_data.nik;
-      this.username_pengguna = data_l_nama;
+      this.nik_pengguna = this.pengecekan_var(data_status_data.nik);
+      this.username_pengguna = this.pengecekan_var(data_l_nama);
       this.sandi_pengguna = data_l_sandi;
       this.sandi_pengguna_tidak_terlihat = this.passwordService.disable_password(this.sandi_pengguna);
-      this.nama_pengguna = data_status_data.nama;
-      this.email_pengguna = data_status_data.email;
-      this.nohp_pengguna = data_status_data.no_hp;
-      this.tempatlahir_pengguna = data_status_data.tempat_lahir;
-      this.tanggallahir_pengguna = this.momentService.ubah_format_tanggal(data_status_data.tgl_lahir);
-      this.kelamin_pengguna = data_status_data.jenis_kelamin;
-      this.alamat_pengguna = data_status_data.alamat;
-      this.jabatan_pengguna = data_status_data.nama_jabatan;
-      this.posisi_pengguna = data_status_data.nama_posisi;
-      this.tanggalbergabung_pengguna = this.momentService.ubah_format_tanggal(data_status_data.tgl_bergabung);
-      this.departemen_pengguna = data_status_data.nama_departemen;
-      this.bank_pengguna = data_status_data.nama_bank;
-      this.rekening_pengguna = data_status_data.no_rek;
+      this.nama_pengguna = this.pengecekan_var(data_status_data.nama);
+      this.email_pengguna = this.pengecekan_var(data_status_data.email);
+      this.nohp_pengguna = this.pengecekan_var(data_status_data.no_hp);
+      this.tempatlahir_pengguna = this.pengecekan_var(data_status_data.tempat_lahir);
+      this.kelamin_pengguna = this.pengecekan_var(data_status_data.jenis_kelamin);
+      this.alamat_pengguna = this.pengecekan_var(data_status_data.alamat);
+      this.jabatan_pengguna = this.pengecekan_var(data_status_data.nama_jabatan);
+      this.posisi_pengguna = this.pengecekan_var(data_status_data.nama_posisi);
+      this.departemen_pengguna = this.pengecekan_var(data_status_data.nama_departemen);
+      this.bank_pengguna = this.pengecekan_var(data_status_data.nama_bank);
+      this.rekening_pengguna = this.pengecekan_var(data_status_data.no_rek);
+      
+      this.tanggalbergabung_pengguna = this.pengecekan_tanggal(data_status_data.tgl_bergabung);
+      this.tanggallahir_pengguna = this.pengecekan_tanggal(data_status_data.tgl_lahir);
 
-      this.imgURL = data_status_data.image;
+      this.imgURL = this.pengecekan_gambar(data_status_data.image);
 
       this.loadingCtrl.tutuploading();
+      this.z = 0;
     })
     .catch(err => {
-      this.tutuploading_retry();
+      this.validasi_keluar();
     });
   }
 
   errorHandler(event) {
     event.target.src = "assets/bi.png";
+  }
+
+  pengecekan_var(data_var){
+    let a; 
+    if(data_var == "" || data_var == null || data_var == undefined){
+      a = "Data tidak ada";
+    }else{
+      a = data_var;
+    }
+    return a;
+  }
+
+  pengecekan_tanggal(tanggal){
+    let a;
+    if (tanggal == "" || tanggal == null || tanggal == undefined) {
+      a = "Data tidak ada";
+    } else {
+      a = this.momentService.ubah_format_tanggal(tanggal);
+    }
+    return a;
+  }
+
+  pengecekan_gambar(gambar){
+    let a;
+    if (gambar == "" || gambar == null || gambar == undefined) {
+      a = "assets/bi.png";
+    } else {
+      a = gambar;
+    }
+    return a;
   }
 
   lihat_password(){
@@ -378,5 +411,29 @@ export class Tab3Page {
         this.loadingCtrl.tutuploading();
       }
     });
+  }
+
+  validasi_keluar(){
+    this.z++;
+    if (this.z == 3) {
+      this.loadingCtrl.tampil_loading_login();
+      Swal.fire({
+        icon: 'warning',
+        title: 'Terjadi kesalahan !',
+        text: 'Keluar dari aplikasi !',
+        backdrop: false,
+        confirmButtonColor: '#3880ff',
+        confirmButtonText: 'Ya !',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.storage.set('nama', null);
+          this.storage.set('sandi', null);
+          this.loadingCtrl.tutuploading();
+          navigator['app'].exitApp();
+        }
+      });
+    } else {
+      this.tutuploading_retry();
+    }
   }
 }

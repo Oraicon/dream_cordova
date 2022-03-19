@@ -1,7 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { IonRouterOutlet, Platform } from '@ionic/angular';
 import { Location } from '@angular/common';
-import { AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { Storage } from '@ionic/storage-angular';
 import { SetGetServiceService } from './services/set-get-service.service';
@@ -19,7 +18,6 @@ export class AppComponent {
   constructor(private platform: Platform, 
     private location: Location, 
     private loadingService: LoadingServiceService,
-    private alertCtrl : AlertController, 
     private storage:Storage, 
     private router: Router, 
     private setget: SetGetServiceService, 
@@ -60,7 +58,7 @@ export class AppComponent {
       text: 'Anda akan keluar dari aplikasi anda yakin ?',
       backdrop: false,
       showDenyButton: true,
-      confirmButtonColor: '#1B2338',
+      confirmButtonColor: '#3880ff',
       confirmButtonText: 'Ya',
       denyButtonText: `Tidak`,
     }).then((result) => {
@@ -68,7 +66,7 @@ export class AppComponent {
         this.storage.set('nama', null);
         this.storage.set('sandi', null);
         this.loadingService.tutuploading();
-        this.router.navigate(["/login"], { replaceUrl: true });
+        navigator['app'].exitApp();
       }else {
         this.loadingService.tutuploading();
       }

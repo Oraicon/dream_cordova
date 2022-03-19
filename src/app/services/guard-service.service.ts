@@ -18,8 +18,8 @@ export class GuardServiceService {
   async canActivate(){
     
     let authInfo;
-    const dataauth = await this.strg.get('auth');
-    // const dataauth = true;
+    // const dataauth = await this.strg.get('auth');
+    const dataauth = true;
     
     if(dataauth == true){
       authInfo= {
