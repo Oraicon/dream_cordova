@@ -9,6 +9,7 @@ import { FileTransfer, FileUploadOptions, FileTransferObject } from '@awesome-co
 import { SetGetServiceService } from 'src/app/services/set-get-service.service';
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { SwalServiceService } from 'src/app/services/swal-service.service';
+import { Network } from '@awesome-cordova-plugins/network/ngx';
 
 
 @Component({
@@ -18,54 +19,56 @@ import { SwalServiceService } from 'src/app/services/swal-service.service';
 })
 export class LaporPage implements OnInit {
 
-    pilih_gambar = true;
-    gambar_kosong = true;
-    isSubmitted = false;
-    
-    //variable
-    imgURL:any = 'assets/ss_.png';
-    nama_kegiatan:any = "Nama Kegiatan";
-    data_gambar = true;
-    data_keterangan_f;
-    img_default;
-    lapor_id;
-    lapor_namakegiatan;
-    datapersen;
-    array_persen = [];
-    place;
+  pilih_gambar = true;
+  gambar_kosong = true;
+  isSubmitted = false;
   
-    base64_img:string="";
-    name_img:string="";
-    format_img:string="JPEG";
-  
-    //persiapan kamera
-    cameraOptions: CameraOptions = {
-      quality: 50,
-      correctOrientation: true,
-      sourceType: this.camera.PictureSourceType.CAMERA,
-      destinationType: this.camera.DestinationType.DATA_URL,
-      encodingType: this.camera.EncodingType.JPEG,
-      mediaType: this.camera.MediaType.PICTURE
-    }
-  
-    galeriOptions: CameraOptions = {
-      quality: 50,
-      correctOrientation: true,
-      sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
-      destinationType: this.camera.DestinationType.DATA_URL,
-      encodingType: this.camera.EncodingType.JPEG,
-      mediaType: this.camera.MediaType.PICTURE
-    }
+  //variable
+  imgURL:any = 'assets/ss_.png';
+  nama_kegiatan:any = "Nama Kegiatan";
+  data_gambar = true;
+  data_keterangan_f;
+  img_default;
+  lapor_id;
+  lapor_namakegiatan;
+  datapersen;
+  array_persen = [];
+  place;
+  cek_koneksi = true;
 
-    customAlertOptions: any = {
-      header: 'Persen Pengerjaan',
-      mode: 'ios',
-      translucent: true
-    };
+  base64_img:string="";
+  name_img:string="";
+  format_img:string="JPEG";
 
-    myGroup: FormGroup;
+  //persiapan kamera
+  cameraOptions: CameraOptions = {
+    quality: 50,
+    correctOrientation: true,
+    sourceType: this.camera.PictureSourceType.CAMERA,
+    destinationType: this.camera.DestinationType.DATA_URL,
+    encodingType: this.camera.EncodingType.JPEG,
+    mediaType: this.camera.MediaType.PICTURE
+  }
+
+  galeriOptions: CameraOptions = {
+    quality: 50,
+    correctOrientation: true,
+    sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
+    destinationType: this.camera.DestinationType.DATA_URL,
+    encodingType: this.camera.EncodingType.JPEG,
+    mediaType: this.camera.MediaType.PICTURE
+  }
+
+  customAlertOptions: any = {
+    header: 'Persen Pengerjaan',
+    mode: 'ios',
+    translucent: true
+  };
+
+  myGroup: FormGroup;
 
   constructor(private setget: SetGetServiceService, 
+    private network: Network,
     private swal: SwalServiceService,
     public formBuilder: FormBuilder,
     private datepipe: DatePipe, 
@@ -79,7 +82,18 @@ export class LaporPage implements OnInit {
     this.myGroup = this.formBuilder.group({
       data_keterangan: ['', [Validators.required]],
       data_persen: ['', [Validators.required]]
-    })
+    });
+
+    //pengecekan koneksi
+    this.network.onDisconnect().subscribe(() => {
+      this.cek_koneksi = false;
+    });
+  
+    this.network.onConnect().subscribe(() => {
+      setTimeout(() => {
+        this.cek_koneksi = true;
+      }, );
+    });
   }
   
   ngOnInit() {
@@ -274,7 +288,13 @@ export class LaporPage implements OnInit {
       if(this.imgURL != 'assets/ss_.png'){
         const keterangan = this.myGroup.value.data_keterangan;
         const persen = this.myGroup.value.data_persen;
-        this.validasi(keterangan, persen);
+
+        if (this.cek_koneksi == true) {
+          this.validasi(keterangan, persen);
+        } else {
+          this.swal.swal_aksi_gagal("Terjadi kesalahan", "Tidak ada koneksi internet !");
+        }
+
       }else{
         this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Gambar tidak boleh kosong !");
       }

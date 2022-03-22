@@ -84,7 +84,7 @@ export class LoginPage implements OnInit {
       if (this.cek_koneksi == true) {
         this.manggil_api_login(this.local_nama, this.local_sandi);
       }else{
-        this.swal.swal_aksi_gagal("Tidak ada internet !", "Anda tidak terhubung dengan internet !");
+        this.swal.swal_aksi_gagal("Terjadi kesalahan", "Tidak ada koneksi internet !");
       }
     }
   }

@@ -76,7 +76,6 @@ export class KegiatanPage implements OnInit {
       } else {
         this.gagal_coba_lagi();
       }
-      // this.tutuploading_retry();
     });
   
   }
@@ -113,23 +112,6 @@ export class KegiatanPage implements OnInit {
     this.loadingService.tutuploading();
   }
 
-  tutuploading_retry(){
-    this.loadingService.tutuploading();
-    this.loadingService.tampil_loading_login();
-    Swal.fire({
-      icon: 'warning',
-      title: 'Terjadi kesalahan !',
-      text: 'Data tidak terbaca, silahkan tekan OK untuk mencoba lagi !',
-      backdrop: false,
-      confirmButtonText: 'OK !',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.loadingService.tutuploading();
-        this.tampilkan_data();
-      }
-    });
-  }
-
   segmentChanged(e){
     this.warna_segment = e.detail.value;
   }
@@ -146,10 +128,11 @@ export class KegiatanPage implements OnInit {
   }
 
   async tidak_ada_respon(){
+    this.loadingService.tampil_loading_login();
     Swal.fire({
       icon: 'warning',
       title: 'Terjadi kesalahan !',
-      text: 'Server tidak merespon, silahkan tekan iya untuk mencoba lagi !',
+      text: 'Server tidak merespon, tekan iya untuk mencoba lagi !',
       backdrop: false,
       confirmButtonColor: '#3880ff',
       confirmButtonText: 'Iya !',
@@ -162,10 +145,11 @@ export class KegiatanPage implements OnInit {
   }
 
   async gagal_coba_lagi(){
+    this.loadingService.tampil_loading_login();
     Swal.fire({
       icon: 'warning',
       title: 'Terjadi kesalahan !',
-      text: 'Server tidak merespon, silahkan tekan iya untuk mencoba lagi !',
+      text: 'Tekan iya untuk mencoba lagi !',
       backdrop: false,
       confirmButtonColor: '#3880ff',
       confirmButtonText: 'Iya !',
@@ -178,6 +162,7 @@ export class KegiatanPage implements OnInit {
   }
 
   async keluar_aplikasi(){
+    this.loadingService.tampil_loading_login();
     Swal.fire({
       icon: 'warning',
       title: 'Terjadi kesalahan !',

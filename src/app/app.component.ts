@@ -43,7 +43,6 @@ export class AppComponent {
             this.exitapp();
           }
         }else{
-          this.storage.set('auth', true);
           this.location.back();
         }
       }
@@ -55,7 +54,7 @@ export class AppComponent {
     Swal.fire({
       icon: 'warning',
       title: 'Keluar aplikasi ?',
-      text: 'Anda akan keluar dari aplikasi anda yakin ?',
+      text: 'Keluar dari aplikasi, anda yakin ?',
       backdrop: false,
       showDenyButton: true,
       confirmButtonColor: '#3880ff',
@@ -63,8 +62,6 @@ export class AppComponent {
       denyButtonText: `Tidak`,
     }).then((result) => {
       if (result.isConfirmed) {
-        this.storage.set('nama', null);
-        this.storage.set('sandi', null);
         this.loadingService.tutuploading();
         navigator['app'].exitApp();
       }else {

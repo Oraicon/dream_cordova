@@ -32,8 +32,6 @@ export class ProsesPage implements OnInit {
   riwayat_laporan = false;
   riwayat_loading = true;
   //variable
-  array_progress = [];
-  data_kegiatan = true;
 
   constructor(private momentService: MomentService,
     private swal: SwalServiceService,
@@ -47,53 +45,6 @@ export class ProsesPage implements OnInit {
 
   async ionViewWillEnter(){
     this.tampilkan_data();
-  }
-
-  data_statik(){
-        this.data_kegiatan = false;
-
-        this.array_progress = [
-          {
-              "id": "1",
-              "nama_kegiatan": "Gali Tanam",
-              "keterangan": "asik",
-              "alamat_pengerjaan": "Kec. Manokwari Bar. Kabupaten Manokwari Papua Bar.",
-              "lattitude": "-0.8425675",
-              "longitude": "134.0020447",
-              "status_pengerjaan": "COMPLETED",
-              "create_date": "2022-02-24"
-          },
-          {
-              "id": "2",
-              "nama_kegiatan": "Cor Pondasi Finishing",
-              "keterangan": null,
-              "alamat_pengerjaan": "Kec. Manokwari Bar. Kabupaten Manokwari Papua Bar.",
-              "lattitude": "-0.8425675",
-              "longitude": "134.0020447",
-              "status_pengerjaan": "IN PROGRESS",
-              "create_date": "2022-02-24"
-          },
-          {
-              "id": "3",
-              "nama_kegiatan": "Acc. Tiang",
-              "keterangan": null,
-              "alamat_pengerjaan": "Kec. Manokwari Bar. Kabupaten Manokwari Papua Bar.",
-              "lattitude": "-0.8425675",
-              "longitude": "134.0020447",
-              "status_pengerjaan": "IN PROGRESS",
-              "create_date": "2022-02-24"
-          },
-          {
-              "id": "4",
-              "nama_kegiatan": "Label Kabel Tiang",
-              "keterangan": null,
-              "alamat_pengerjaan": "Kec. Manokwari Bar. Kabupaten Manokwari Papua Bar.",
-              "lattitude": "-0.8425675",
-              "longitude": "134.0020447",
-              "status_pengerjaan": "IN PROGRESS",
-              "create_date": "2022-02-24"
-          }
-      ];
   }
 
   //baru
@@ -143,7 +94,7 @@ export class ProsesPage implements OnInit {
     })
     .catch(error => {
   
-      this.tutuploading_retry();
+      this.loadingService.tutuploading();
       // console.log(error);
       if (error.status == -4) {
         this.tidak_ada_respon();
@@ -185,8 +136,7 @@ export class ProsesPage implements OnInit {
     })
     .catch(error => {
       // console.log(error);
-
-      this.tutuploading_retry();
+      this.loadingService.tutuploading();
 
       if (error.status == -4) {
         this.tidak_ada_respon();
@@ -225,24 +175,6 @@ export class ProsesPage implements OnInit {
     return a.progress_pengerjaan - b.progress_pengerjaan;
   }
 
-  tutuploading_retry(){
-    this.loadingService.tutuploading();
-    this.loadingService.tampil_loading_login();
-    Swal.fire({
-      icon: 'warning',
-      title: 'Terjadi kesalahan !',
-      text: 'Data tidak terbaca, silahkan tekan OK untuk mencoba lagi !',
-      backdrop: false,
-      confirmButtonColor: '#3880ff',
-      confirmButtonText: 'OK !',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.loadingService.tutuploading();
-        this.tampilkan_data();
-      }
-    });
-  }
-
   formulir(){
     let a = this.persen_tertinggi;
     
@@ -273,7 +205,7 @@ export class ProsesPage implements OnInit {
     Swal.fire({
       icon: 'warning',
       title: 'Terjadi kesalahan !',
-      text: 'Server tidak merespon, silahkan tekan iya untuk mencoba lagi !',
+      text: 'Server tidak merespon, tekan iya untuk mencoba lagi !',
       backdrop: false,
       confirmButtonColor: '#3880ff',
       confirmButtonText: 'Iya !',
@@ -290,7 +222,7 @@ export class ProsesPage implements OnInit {
     Swal.fire({
       icon: 'warning',
       title: 'Terjadi kesalahan !',
-      text: 'Data tidak terbaca, silahkan tekan iya untuk mencoba lagi !',
+      text: 'Tekan iya untuk mencoba lagi !',
       backdrop: false,
       confirmButtonColor: '#3880ff',
       confirmButtonText: 'Iya !',

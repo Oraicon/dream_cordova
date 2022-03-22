@@ -142,13 +142,27 @@ export class Tab1Page {
 
   }
 
+    //refresh page
+    doRefresh(event){
+      event.target.complete();
+      this.data_header_id = [];
+      this.data_masih_proses = {};
+      this.data_sudah_komplit = {};
+      this.data_header = [];
+      this.tanggal_deadline = {};
+  
+      this.data_beranda_loading_tidak_ada = false;
+      this.tampilkan_data();
+    }
+  
+
   //logout
   keluar(){
       this.loadingCtrl.tampil_loading_login();
       Swal.fire({
         icon: 'warning',
         title: 'Keluar akun ?',
-        text: 'Anda akan kembali ke login anda yakin ?',
+        text: 'Kembali ke login, anda yakin ?',
         backdrop: false,
         showDenyButton: true,
         confirmButtonColor: '#3880ff',
@@ -156,27 +170,12 @@ export class Tab1Page {
         denyButtonText: `Tidak`,
       }).then((result) => {
         if (result.isConfirmed) {
-          this.storage.set('nama', null);
-          this.storage.set('sandi', null);
           this.loadingCtrl.tutuploading();
           this.router.navigate(["/login"], { replaceUrl: true });
         }else {
           this.loadingCtrl.tutuploading();
         }
       });
-  }
-
-  //refresh page
-  doRefresh(event){
-    event.target.complete();
-    this.data_header_id = [];
-    this.data_masih_proses = {};
-    this.data_sudah_komplit = {};
-    this.data_header = [];
-    this.tanggal_deadline = {};
-
-    this.data_beranda_loading_tidak_ada = false;
-    this.tampilkan_data();
   }
 
   //pindah aktiviti
@@ -187,10 +186,11 @@ export class Tab1Page {
   }
 
   async tidak_ada_respon(){
+    this.loadingCtrl.tampil_loading_login();
     Swal.fire({
       icon: 'warning',
       title: 'Terjadi kesalahan !',
-      text: 'Server tidak merespon, silahkan tekan iya untuk mencoba lagi !',
+      text: 'Server tidak merespon, tekan iya untuk mencoba lagi !',
       backdrop: false,
       confirmButtonColor: '#3880ff',
       confirmButtonText: 'Iya !',
@@ -203,10 +203,11 @@ export class Tab1Page {
   }
 
   async gagal_coba_lagi(){
+    this.loadingCtrl.tampil_loading_login();
     Swal.fire({
       icon: 'warning',
       title: 'Terjadi kesalahan !',
-      text: 'Server tidak merespon, silahkan tekan iya untuk mencoba lagi !',
+      text: 'Tekan iya untuk mencoba lagi !',
       backdrop: false,
       confirmButtonColor: '#3880ff',
       confirmButtonText: 'Iya !',
@@ -219,6 +220,7 @@ export class Tab1Page {
   }
 
   async keluar_aplikasi(){
+    this.loadingCtrl.tampil_loading_login();
     Swal.fire({
       icon: 'warning',
       title: 'Terjadi kesalahan !',
