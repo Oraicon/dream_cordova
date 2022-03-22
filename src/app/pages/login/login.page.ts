@@ -4,12 +4,10 @@ import { ModalController,  } from '@ionic/angular';
 import { ModalLupasandiPage } from 'src/app/modal/modal-lupasandi/modal-lupasandi.page';
 import { ApiServicesService } from 'src/app/services/api-services.service';
 import { Storage } from '@ionic/storage-angular';
-import { AlertServicesService } from '../../services/alert-services.service';
 import { Network } from '@awesome-cordova-plugins/network/ngx';
 import { LoadingServiceService } from 'src/app/services/loading-service.service';
 import { SwalServiceService } from 'src/app/services/swal-service.service';
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
-import Swal from 'sweetalert2';
 
 
 @Component({
@@ -18,6 +16,16 @@ import Swal from 'sweetalert2';
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
+  
+  //variable
+  myGroup: FormGroup;
+  isSubmitted = false;
+  cek_koneksi = true;
+  showPassword = false;
+  passwordToggleIcon = 'eye-outline';
+  local_nama;
+  local_sandi;
+  data_api_lupa_sandi_nama;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -26,28 +34,11 @@ export class LoginPage implements OnInit {
     private storage:Storage,
     private loadingService:LoadingServiceService,
     private apiService:ApiServicesService,
-    private alertService:AlertServicesService, 
     private modalCtrl: ModalController,
     private swal: SwalServiceService) { 
 
     this.ngOnInit();
   }
-
-  //variable
-  cobalogiktimeout = 0;
-  data_api_login;
-  data_api_login_error;
-  data_api_lupa_sandi;
-  data_api_lupa_sandi_error;
-  data_api_lupa_sandi_nama;
-  local_nama;
-  local_sandi;
-
-  myGroup: FormGroup;
-  isSubmitted = false;
-  cek_koneksi = true;
-  showPassword = false;
-  passwordToggleIcon = 'eye-outline';
 
   ngOnInit() {
     //persiapan storage
@@ -61,7 +52,7 @@ export class LoginPage implements OnInit {
     this.network.onConnect().subscribe(() => {
       setTimeout(() => {
         this.cek_koneksi = true;
-      }, 250);
+      }, );
     });
 
     //validasi
@@ -71,10 +62,12 @@ export class LoginPage implements OnInit {
     })
   }
 
+  //error form
   get errorControl() {
     return this.myGroup.controls;
   }
 
+  //button on click / enter
   onSubmit(){
     this.isSubmitted = true;
 
@@ -109,7 +102,6 @@ export class LoginPage implements OnInit {
       } else {
         this.data_api_lupa_sandi_nama = data.data.data;
         this.manggil_api_lupa_nama(this.data_api_lupa_sandi_nama);
-        this.waktu_lupa_sandi();
       }
     }).catch(err => {
       // console.log(err);
@@ -140,58 +132,47 @@ export class LoginPage implements OnInit {
         this.apiService.panggil_api_reset_password(nama_baru)
         .then(res => {
           console.log(res);
-          this.data_api_lupa_sandi = res;
-
-        //   const data_json = JSON.parse(res.data);
-        //   const data_status = data_json.status;
-
-        //   //validasi data
-        //   if (data_status == 1) {
-        //     //mendapatkan data
-        //     const data_email = data_json.data[0].email;
-        //     this.loadingService.tutuploading();
-        //     this.swal.swal_aksi_berhasil("Sandi terkirim !", "Sandi baru sudah dikirim ke email: "+data_email);
-
-        //   } else {
-        //     //jika status != 1
-        //     this.loadingService.tutuploading();
-        //     this.swal.swal_aksi_gagal("Sandi tidak terkirim !", "Sandi gagal dikirim ke email");
-        //   }
-          
+          const data_json = JSON.parse(res.data);
+          const data_status = data_json.status;
+      
+          //validasi data
+          if (data_status == 1) {
+            //mendapatkan data
+            const data_email = data_json.data[0].email;
+            this.loadingService.tutuploading();
+            this.swal.swal_aksi_berhasil("Sandi terkirim !", "Sandi baru sudah dikirim ke email: "+data_email);
+      
+          } else if (data_status == 0) {
+            //jika status != 1
+            this.loadingService.tutuploading();
+            this.swal.swal_aksi_gagal("Sandi tidak terkirim !", "Sandi gagal dikirim ke email");
+          } 
+          else if (data_status == 2) {
+            //jika status != 1
+            this.loadingService.tutuploading();
+            this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Nama tidak ditemukan !");
+          }         
         })
         .catch(err => {
           //error
-          this.data_api_lupa_sandi_error = 1;
           this.loadingService.tutuploading();
-          // this.swal.swal_aksi_gagal("Terjadi kesalahan !", "code error 3 !");
+          if (err.status == -4) {
+            this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Server tidak merespon !");
+          } else {
+            this.swal.swal_aksi_gagal("Terjadi kesalahan !", "code error 3 !");
+          }
         });
   }
 
   //memanggil api data karyawan
   manggil_api_login(var_nama, var_sandi){
     this.loadingService.tampil_loading_login();
-    console.log("sebelum");
     
 
     this.apiService.panggil_api_data_karyawan(var_nama, var_sandi)
     .then(res => {
-    console.log("sesudah");
 
-    this.data_api_login = res;
-
-    })
-    .catch(err => {
-
-      this.loadingService.tutuploading();
-
-      this.data_api_login_error = 1;
-      // this.swal.swal_aksi_gagal("Terjadi kesalahan !", "code error 2 !");
-    });
-  }
-
-  //mengolah data karyawan
-  olah_data_api(var_nama, var_sandi){
-    const data_json = JSON.parse(this.data_api_login.data);
+    const data_json = JSON.parse(res.data);
     const data_status = data_json.status;
 
     if (data_status == 1) {
@@ -221,232 +202,19 @@ export class LoginPage implements OnInit {
       this.loadingService.tutuploading();
 
       this.swal.swal_aksi_gagal("Terjadi kesalahan !", "code error 1 !");
-
     }
 
-    this.data_api_login = null;
-  }
-
-  //mengolah data api lupsa password
-  olah_data_lupa_sandi(){
-    const data_json = JSON.parse(this.data_api_lupa_sandi.data);
-    const data_status = data_json.status;
-
-    //validasi data
-    if (data_status == 1) {
-      //mendapatkan data
-      const data_email = data_json.data[0].email;
+    })
+    .catch(err => {
+      
       this.loadingService.tutuploading();
-      this.swal.swal_aksi_berhasil("Sandi terkirim !", "Sandi baru sudah dikirim ke email: "+data_email);
-
-    } else {
-      //jika status != 1
-      this.loadingService.tutuploading();
-      this.swal.swal_aksi_gagal("Sandi tidak terkirim !", "Sandi gagal dikirim ke email");
-    }
-  }
-
-  //delay waktu 0,5 detik
-  interval_counter() {
-    return new Promise(resolve => { setTimeout(() => resolve(""), 500);});
-  }
-
-  //logika set timeout api data karyawan
-  async waktu_login(){
-    for (let i = 0; i < 20; i++) {
-      await this.interval_counter();
-
-      if (this.data_api_login != null) {
-
-        this.olah_data_api(this.local_nama, this.local_sandi);
-        this.cobalogiktimeout = 0;
-        return;
-
-      } else if(this.data_api_login_error == 1) {
-
-        this.data_api_login_error = 0;
-        this.cobalogiktimeout++;
-        this.loadingService.tutuploading();
-
-        if (this.cobalogiktimeout == 2) {
-          Swal.fire({
-            icon: 'warning',
-            title: 'Terjadi kesalahan !',
-            text: 'Keluar dari aplikasi !',
-            backdrop: false,
-            confirmButtonColor: '#3880ff',
-            confirmButtonText: 'Iya !',
-            showDenyButton: true,
-            denyButtonText: `Tidak`,
-          }).then((result) => {
-            if (result.isConfirmed) {
-              this.cobalogiktimeout = 0;
-              this.storage.set('nama', null);
-              this.storage.set('sandi', null);
-              this.loadingService.tutuploading();
-              navigator['app'].exitApp();
-            }else {
-              this.loadingService.tutuploading();
-              return;
-            }
-          });
-
-          return;
-
-        } else {
-
-          this.loadingService.tampil_loading_login();
-          Swal.fire({
-            icon: 'warning',
-            title: 'Terjadi kesalahan !',
-            text: 'Data tidak terbaca, silahkan tekan OK untuk mencoba lagi !',
-            backdrop: false,
-            confirmButtonColor: '#3880ff',
-            confirmButtonText: 'Iya !',
-            showDenyButton: true,
-            denyButtonText: `Tidak`,
-          }).then((result) => {
-            if (result.isConfirmed) {
-              this.loadingService.tutuploading();
-              this.data_api_login = null;
-              this.waktu_login();
-              this.manggil_api_login(this.local_nama, this.local_sandi);
-            }else {
-              this.loadingService.tutuploading();
-              return;
-            }
-          });
-
-          return;
-
-        }
-      }else {
-
-        console.log("sedang coba lagi");
-        if (i == 19) {
-          Swal.fire({
-            icon: 'warning',
-            title: 'Terjadi kesalahan !',
-            text: 'Memuat data melebihi batas waktu, coba lagi !',
-            backdrop: false,
-            confirmButtonColor: '#3880ff',
-            confirmButtonText: 'Iya !',
-            showDenyButton: true,
-            denyButtonText: `Tidak`,
-          }).then((result) => {
-            if (result.isConfirmed) {
-              this.loadingService.tutuploading();
-              this.data_api_login = null;
-              this.waktu_login();
-              this.manggil_api_login(this.local_nama, this.local_sandi);
-            }else {
-              this.loadingService.tutuploading();
-              return;
-            }
-          });
-          return;
-        }
+      // console.log(err);
+      
+      if (err.status == -4 ) {
+        this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Server tidak merespon !");
+      } else {
+      this.swal.swal_aksi_gagal("Terjadi kesalahan !", "code error 2 !");
       }
-    }
+    });
   }
-
-    //logika set timeout api data karyawan
-    async waktu_lupa_sandi(){
-      for (let i = 0; i < 20; i++) {
-        await this.interval_counter();
-  
-        if (this.data_api_lupa_sandi != null) {
-  
-          this.olah_data_lupa_sandi();
-          this.cobalogiktimeout = 0;
-          return;
-  
-        } else if(this.data_api_lupa_sandi_error == 1) {
-  
-          this.data_api_lupa_sandi_error = 0;
-          this.loadingService.tutuploading();
-          this.cobalogiktimeout++;
-  
-          if (this.cobalogiktimeout == 2) {
-            Swal.fire({
-              icon: 'warning',
-              title: 'Terjadi kesalahan !',
-              text: 'Keluar dari aplikasi !',
-              backdrop: false,
-              confirmButtonColor: '#3880ff',
-              confirmButtonText: 'Iya !',
-              showDenyButton: true,
-              denyButtonText: `Tidak`,
-            }).then((result) => {
-              if (result.isConfirmed) {
-                this.cobalogiktimeout = 0;
-                this.storage.set('nama', null);
-                this.storage.set('sandi', null);
-                this.loadingService.tutuploading();
-                navigator['app'].exitApp();
-              }else {
-                this.loadingService.tutuploading();
-                return;
-              }
-            });
-  
-            return;
-  
-          } else {
-  
-            this.loadingService.tampil_loading_login();
-            Swal.fire({
-              icon: 'warning',
-              title: 'Terjadi kesalahan !',
-              text: 'Koneksi internet anda tidak stabil, coba lagi ?!',
-              backdrop: false,
-              confirmButtonColor: '#3880ff',
-              confirmButtonText: 'Iya !',
-              showDenyButton: true,
-              denyButtonText: `Tidak`,
-            }).then((result) => {
-              if (result.isConfirmed) {
-                this.loadingService.tutuploading();
-                this.data_api_login = null;
-                this.waktu_lupa_sandi();
-                this.manggil_api_lupa_nama(this.data_api_lupa_sandi_nama);
-              }else {
-                this.loadingService.tutuploading();
-                return;
-              }
-            });
-  
-            return;
-  
-          }
-        }else {
-  
-          console.log("sedang coba lagi");
-          if (i == 19) {
-            Swal.fire({
-              icon: 'warning',
-              title: 'Terjadi kesalahan !',
-              text: 'Mengirim data melebihi batas waktu, coba lagi ?!',
-              backdrop: false,
-              confirmButtonColor: '#3880ff',
-              confirmButtonText: 'Iya !',
-              showDenyButton: true,
-              denyButtonText: `Tidak`,
-            }).then((result) => {
-              if (result.isConfirmed) {
-                this.loadingService.tutuploading();
-                this.data_api_login = null;
-                this.waktu_lupa_sandi();
-                this.manggil_api_lupa_nama(this.data_api_lupa_sandi_nama);
-              }else {
-                this.loadingService.tutuploading();
-                return;
-              }
-            });
-            return;
-          }
-        }
-      }
-    }
-
 }

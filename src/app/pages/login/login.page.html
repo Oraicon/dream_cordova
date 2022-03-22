@@ -20,7 +20,7 @@
                 </ion-col>
 
                 <ion-col size="12">
-                  <form (ngSubmit)="onSubmit(); waktu_login()" [formGroup]="myGroup" novalidate>
+                  <form (ngSubmit)="onSubmit()" [formGroup]="myGroup" novalidate>
                     <ion-col size="12" class="ion-text-center margin_bawah">
     
                       <ion-item class="input_border">
@@ -36,7 +36,7 @@
                     <ion-col size="12" class="ion-text-center margin_bawah">
                       <ion-item class="input_border">
                         <ion-icon name="key-outline" size="large" class="padding_ikon_kanan"></ion-icon>
-                        <ion-input placeholder="Sandi" [type]="showPassword ? 'text' : 'password'" formControlName="sandi_pengguna" required (keyup.enter)="onSubmit(); waktu_login()"></ion-input>
+                        <ion-input placeholder="Sandi" [type]="showPassword ? 'text' : 'password'" formControlName="sandi_pengguna" required (keyup.enter)="onSubmit()"></ion-input>
                         <ion-icon [name]="passwordToggleIcon" (click)="lihat_sandi()" size="large"></ion-icon>
                       </ion-item>
                       <ion-label class="error" *ngIf="isSubmitted && errorControl.sandi_pengguna.errors?.required">

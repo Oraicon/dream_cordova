@@ -21,6 +21,7 @@ export class KegiatanPage implements OnInit {
   data_sudah_komplit;
   data_kegiatan;
   loading = true; 
+  timeout = 0;
 
   constructor(
     private navCtrl: NavController, 
@@ -33,10 +34,12 @@ export class KegiatanPage implements OnInit {
   ngOnInit() {
   }
 
+  //masuk_page
   ionViewWillEnter(){
     this.tampilkan_data();
   }
 
+  //get data kegiatan
   async tampilkan_data(){
     this.loadingService.tampil_loading_login();
 
@@ -52,8 +55,6 @@ export class KegiatanPage implements OnInit {
       const data_json = JSON.parse(data.data);
       const status_data = data_json.status;
 
-      // console.log(data_json);
-
       if (status_data == 1) {
         this.pisahin_progres_komplit(data_json.data);
         
@@ -65,12 +66,22 @@ export class KegiatanPage implements OnInit {
   
     })
     .catch(error => {
+      this.loadingService.tutuploading();
+      this.timeout++;
       // console.log(error);
-      this.tutuploading_retry();
+      if (error.status == -4) {
+        this.tidak_ada_respon();
+      } else if (this.timeout == 2){
+        this.keluar_aplikasi();
+      } else {
+        this.gagal_coba_lagi();
+      }
+      // this.tutuploading_retry();
     });
   
   }
 
+  //olah data kegiatan
   async pisahin_progres_komplit(arr){
     let panjang_arr;
 
@@ -94,6 +105,7 @@ export class KegiatanPage implements OnInit {
     b = [];
 
     this.tutuploading();
+    this.timeout = 0;
   }
 
   async tutuploading(){
@@ -131,7 +143,54 @@ export class KegiatanPage implements OnInit {
 
   kembali(){
     this.router.navigate(["/tabs/tab1"], { replaceUrl: true });
+  }
 
+  async tidak_ada_respon(){
+    Swal.fire({
+      icon: 'warning',
+      title: 'Terjadi kesalahan !',
+      text: 'Server tidak merespon, silahkan tekan iya untuk mencoba lagi !',
+      backdrop: false,
+      confirmButtonColor: '#3880ff',
+      confirmButtonText: 'Iya !',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.loadingService.tutuploading();
+        this.tampilkan_data();
+      }
+    });
+  }
+
+  async gagal_coba_lagi(){
+    Swal.fire({
+      icon: 'warning',
+      title: 'Terjadi kesalahan !',
+      text: 'Server tidak merespon, silahkan tekan iya untuk mencoba lagi !',
+      backdrop: false,
+      confirmButtonColor: '#3880ff',
+      confirmButtonText: 'Iya !',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.loadingService.tutuploading();
+        this.tampilkan_data();
+      }
+    });
+  }
+
+  async keluar_aplikasi(){
+    Swal.fire({
+      icon: 'warning',
+      title: 'Terjadi kesalahan !',
+      text: 'Keluar dari aplikasi !',
+      backdrop: false,
+      confirmButtonColor: '#3880ff',
+      confirmButtonText: 'Iya !',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.loadingService.tutuploading();
+        navigator['app'].exitApp();
+      }
+    });
   }
 
 }

@@ -190,7 +190,11 @@ export class LaporPage implements OnInit {
       
           // console.log(error);
           this.loadingService.tutuploading();
-          this.swal.swal_aksi_gagal("Terjadi kesalahan", "code error 10 !");
+          if (error.status == -4) {
+            this.swal.swal_aksi_gagal("Terjadi kesalahan", "Server tidak merespon !");
+          } else {
+            this.swal.swal_aksi_gagal("Terjadi kesalahan", "code error 10 !");
+          }
 
       
         });

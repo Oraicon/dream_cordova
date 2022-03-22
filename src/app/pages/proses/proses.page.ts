@@ -16,6 +16,7 @@ import Swal from 'sweetalert2';
 })
 export class ProsesPage implements OnInit {
 
+  timeout;
   data_type_page;
   data_id_header;
   data_id_kegiatan;
@@ -31,14 +32,8 @@ export class ProsesPage implements OnInit {
   riwayat_laporan = false;
   riwayat_loading = true;
   //variable
-  judul_proses;
   array_progress = [];
-  tanggal_baru;
-  dataid;
-  datajudul;
-  datapage;
   data_kegiatan = true;
-  data_tanggal = true;
 
   constructor(private momentService: MomentService,
     private swal: SwalServiceService,
@@ -142,19 +137,26 @@ export class ProsesPage implements OnInit {
             }
           }
         }
-        this.tampilkan_data3();
+        this.tampilkan_data2();
       }
       
     })
     .catch(error => {
   
-      // console.log(error);
       this.tutuploading_retry();
+      // console.log(error);
+      if (error.status == -4) {
+        this.tidak_ada_respon();
+      } else if (this.timeout == 2){
+        this.keluar_aplikasi();
+      } else {
+        this.gagal_coba_lagi();
+      }
   
     });
   }
 
-  async tampilkan_data3(){
+  async tampilkan_data2(){
     
     this.apiService.panggil_api_progres_milestone(this.data_id_kegiatan)
     .then(data => {
@@ -182,11 +184,17 @@ export class ProsesPage implements OnInit {
       }
     })
     .catch(error => {
-  
       // console.log(error);
 
       this.tutuploading_retry();
-  
+
+      if (error.status == -4) {
+        this.tidak_ada_respon();
+      } else if (this.timeout == 2){
+        this.keluar_aplikasi();
+      } else {
+        this.gagal_coba_lagi();
+      }
     });
 
   }
@@ -259,4 +267,56 @@ export class ProsesPage implements OnInit {
     } else {
     }
   }
+
+  async tidak_ada_respon(){
+    this.loadingService.tampil_loading_login();
+    Swal.fire({
+      icon: 'warning',
+      title: 'Terjadi kesalahan !',
+      text: 'Server tidak merespon, silahkan tekan iya untuk mencoba lagi !',
+      backdrop: false,
+      confirmButtonColor: '#3880ff',
+      confirmButtonText: 'Iya !',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.loadingService.tutuploading();
+        this.tampilkan_data();
+      }
+    });
+  }
+
+  async gagal_coba_lagi(){
+    this.loadingService.tampil_loading_login();
+    Swal.fire({
+      icon: 'warning',
+      title: 'Terjadi kesalahan !',
+      text: 'Data tidak terbaca, silahkan tekan iya untuk mencoba lagi !',
+      backdrop: false,
+      confirmButtonColor: '#3880ff',
+      confirmButtonText: 'Iya !',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.loadingService.tutuploading();
+        this.tampilkan_data();
+      }
+    });
+  }
+
+  async keluar_aplikasi(){
+    this.loadingService.tampil_loading_login();
+    Swal.fire({
+      icon: 'warning',
+      title: 'Terjadi kesalahan !',
+      text: 'Keluar dari aplikasi !',
+      backdrop: false,
+      confirmButtonColor: '#3880ff',
+      confirmButtonText: 'Iya !',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.loadingService.tutuploading();
+        navigator['app'].exitApp();
+      }
+    });
+  }
+
 }
