@@ -4,6 +4,7 @@ import { LoadingServiceService } from 'src/app/services/loading-service.service'
 import { SetGetServiceService } from 'src/app/services/set-get-service.service';
 import { NavController } from '@ionic/angular';
 import { Router } from '@angular/router';
+import { SwalServiceService } from 'src/app/services/swal-service.service';
 import Swal from 'sweetalert2';
 
 
@@ -25,6 +26,7 @@ export class KegiatanPage implements OnInit {
 
   constructor(
     private navCtrl: NavController, 
+    private swal: SwalServiceService,
     private router: Router, 
     private setget: SetGetServiceService,
     private apiService: ApiServicesService,
@@ -68,16 +70,17 @@ export class KegiatanPage implements OnInit {
     .catch(error => {
       this.loadingService.tutuploading();
       this.timeout++;
-      // console.log(error);
-      if (error.status == -4) {
-        this.tidak_ada_respon();
-      } else if (this.timeout == 2){
-        this.keluar_aplikasi();
+      
+      if (this.timeout == 2) {
+          this.keluar_aplikasi();
       } else {
-        this.gagal_coba_lagi();
+        if (error.status == -4) {
+          this.tidak_ada_respon();
+        } else {
+          this.swal.swal_aksi_gagal("Terjadi kesalahan !", "code error 18 !");
+        }
       }
     });
-  
   }
 
   //olah data kegiatan
@@ -133,23 +136,6 @@ export class KegiatanPage implements OnInit {
       icon: 'warning',
       title: 'Terjadi kesalahan !',
       text: 'Server tidak merespon, tekan iya untuk mencoba lagi !',
-      backdrop: false,
-      confirmButtonColor: '#3880ff',
-      confirmButtonText: 'Iya !',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.loadingService.tutuploading();
-        this.tampilkan_data();
-      }
-    });
-  }
-
-  async gagal_coba_lagi(){
-    this.loadingService.tampil_loading_login();
-    Swal.fire({
-      icon: 'warning',
-      title: 'Terjadi kesalahan !',
-      text: 'Tekan iya untuk mencoba lagi !',
       backdrop: false,
       confirmButtonColor: '#3880ff',
       confirmButtonText: 'Iya !',

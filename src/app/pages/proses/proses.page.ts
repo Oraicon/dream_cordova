@@ -16,7 +16,7 @@ import Swal from 'sweetalert2';
 })
 export class ProsesPage implements OnInit {
 
-  timeout;
+  timeout = 0;
   data_type_page;
   data_id_header;
   data_id_kegiatan;
@@ -93,16 +93,18 @@ export class ProsesPage implements OnInit {
       
     })
     .catch(error => {
-  
+      this.timeout++;
       this.loadingService.tutuploading();
       // console.log(error);
+      if (this.timeout == 2) {
+        this.keluar_aplikasi();
+    } else {
       if (error.status == -4) {
         this.tidak_ada_respon();
-      } else if (this.timeout == 2){
-        this.keluar_aplikasi();
       } else {
-        this.gagal_coba_lagi();
+        this.swal.swal_aksi_gagal("Terjadi kesalahan !", "code error 19 !");
       }
+    }
   
     });
   }
@@ -138,12 +140,14 @@ export class ProsesPage implements OnInit {
       // console.log(error);
       this.loadingService.tutuploading();
 
-      if (error.status == -4) {
-        this.tidak_ada_respon();
-      } else if (this.timeout == 2){
+      if (this.timeout == 2) {
         this.keluar_aplikasi();
       } else {
-        this.gagal_coba_lagi();
+        if (error.status == -4) {
+          this.tidak_ada_respon();
+        } else {
+          this.swal.swal_aksi_gagal("Terjadi kesalahan !", "code error 20 !");
+        }
       }
     });
 
@@ -196,7 +200,6 @@ export class ProsesPage implements OnInit {
     if (this.setget.getAlert() == 1) {
       this.swal.swal_aksi_berhasil("Laporan Terkirim !", "Data laporan telah terkirim !");
       this.setget.setAlert(0);
-    } else {
     }
   }
 
@@ -206,23 +209,6 @@ export class ProsesPage implements OnInit {
       icon: 'warning',
       title: 'Terjadi kesalahan !',
       text: 'Server tidak merespon, tekan iya untuk mencoba lagi !',
-      backdrop: false,
-      confirmButtonColor: '#3880ff',
-      confirmButtonText: 'Iya !',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.loadingService.tutuploading();
-        this.tampilkan_data();
-      }
-    });
-  }
-
-  async gagal_coba_lagi(){
-    this.loadingService.tampil_loading_login();
-    Swal.fire({
-      icon: 'warning',
-      title: 'Terjadi kesalahan !',
-      text: 'Tekan iya untuk mencoba lagi !',
       backdrop: false,
       confirmButtonColor: '#3880ff',
       confirmButtonText: 'Iya !',

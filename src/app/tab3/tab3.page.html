@@ -2,7 +2,7 @@
   <ion-toolbar class="background_color">
     <ion-grid fixed>
       <ion-row class="ion-align-items-center">
-        <ion-col size="6" class="ion-align-items-center text_header bold putih">Profil</ion-col>
+        <ion-col size="6" class="text_header bold putih">Profil</ion-col>
         <ion-col size="6" class="ion-text-end">
           <ion-button (click)="keluar()" fill="clear" class="padding_button">
             <ion-icon name="exit-outline" size="large" class="putih"></ion-icon>
@@ -35,7 +35,10 @@
         </ion-col>
       </ng-template>
       <ion-col size="12">
-        <p class="ion-padding-start text_header_konten ion-no-margin ion-padding-top">Data Akun</p>
+        <ion-item class="ion-align-items-center">
+          <ion-icon class="padding_icon" name="person-outline"></ion-icon>
+          <p class="">Data Akun</p>
+        </ion-item>
         <ion-list>
           <ion-item>
             <ion-label>
@@ -78,9 +81,12 @@
       </ion-col>
       
       <ion-col size="12">
-        <p class="ion-padding-start text_header_konten ion-no-margin ion-padding-top">Informasi Pengguna</p>
+        <ion-item>
+          <ion-icon class="padding_icon" name="documents-outline"></ion-icon>
+          <p class="">Informasi Pengguna</p>
+        </ion-item>
         <ion-list>
-          <ion-item (click)="coba_swal()">
+          <ion-item (click)="api_ubah_nama()">
             <ion-label>
               <h2>NIK</h2>
               <h3 *ngIf="nik_pengguna; else nik">{{ nik_pengguna }}</h3>

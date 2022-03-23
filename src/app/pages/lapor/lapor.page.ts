@@ -149,8 +149,6 @@ export class LaporPage implements OnInit {
   }
 
   validasi(keterangan, persen){
-    this.loadingService.tampil_loading_login();
-
     let a;
     
     if (this.place == 100){
@@ -290,7 +288,8 @@ export class LaporPage implements OnInit {
         const persen = this.myGroup.value.data_persen;
 
         if (this.cek_koneksi == true) {
-          this.validasi(keterangan, persen);
+          this.loadingService.tampil_loading_login();
+          this.test_koneksi(keterangan, persen);
         } else {
           this.swal.swal_aksi_gagal("Terjadi kesalahan", "Tidak ada koneksi internet !");
         }
@@ -299,6 +298,19 @@ export class LaporPage implements OnInit {
         this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Gambar tidak boleh kosong !");
       }
     }
+  }
+
+  test_koneksi(keterangan, persen){
+    this.apiService.cek_koneksi()
+    .then(data => {
+
+      this.validasi(keterangan, persen);
+
+    })
+    .catch(error => {
+      this.loadingService.tutuploading();
+      this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Server tidak merespon !");
+    });
   }
 
 }

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import Swal from 'sweetalert2';
 import { LoadingServiceService } from './loading-service.service';
+import { Router } from '@angular/router';
+import Swal from 'sweetalert2';
 
 
 @Injectable({
@@ -9,7 +10,8 @@ import { LoadingServiceService } from './loading-service.service';
 export class SwalServiceService {
 
   constructor(
-    private loading: LoadingServiceService
+    private loading: LoadingServiceService,
+    private router: Router
   ) { }
 
   //info
@@ -21,15 +23,6 @@ export class SwalServiceService {
       backdrop: false,
       confirmButtonColor: '#3880ff',
       confirmButtonText: 'OK !',
-    })
-  }
-
-  swal_input_tidak_diisi(text1, text2){
-    Swal.fire({
-      icon: 'warning',
-      title: '' + text1 + ' kosong !',
-      text: 'Harap mengisi '+ text2 +' !',
-      backdrop: false,
     })
   }
 
@@ -65,20 +58,21 @@ export class SwalServiceService {
     });
   }
 
-  swal(){
+  swal_code_error(text1, text2){
     this.loading.tampil_loading_login();
     Swal.fire({
-      icon: 'success',
-      title: 'Password terkirim !',
-      text: 'Password baru sudah dikirim ke email',
+      icon: 'error',
+      title: '' + text1,
+      text: ''+text2,
       backdrop: false,
       confirmButtonColor: '#3880ff',
       confirmButtonText: 'OK !',
-      }).then((result) => {
-        if (result.isConfirmed) {
-          this.loading.tutuploading();
-        }
-      });
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.loading.tutuploading();
+        this.router.navigate(["/login"], { replaceUrl: true });
+      }
+    });
   }
 
 }

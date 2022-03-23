@@ -67,7 +67,7 @@ export class LoginPage implements OnInit {
     return this.myGroup.controls;
   }
 
-  //button on click / enter
+  //button on click / enter di password
   onSubmit(){
     this.isSubmitted = true;
 
@@ -101,7 +101,14 @@ export class LoginPage implements OnInit {
         return;
       } else {
         this.data_api_lupa_sandi_nama = data.data.data;
-        this.manggil_api_lupa_nama(this.data_api_lupa_sandi_nama);
+        this.loadingService.tampil_loading_login();
+        if (this.cek_koneksi == true) {
+          this.test_koneksi(this.data_api_lupa_sandi_nama);
+        }else{
+          this.swal.swal_aksi_gagal("Terjadi kesalahan", "Tidak ada koneksi internet !");
+        }
+        
+        // this.manggil_api_lupa_nama(this.data_api_lupa_sandi_nama);
       }
     }).catch(err => {
       // console.log(err);
@@ -127,48 +134,44 @@ export class LoginPage implements OnInit {
 
   //memanggil api lupa nama
   manggil_api_lupa_nama(nama_baru){
-    this.loadingService.tampil_loading_login();
-
-        this.apiService.panggil_api_reset_password(nama_baru)
-        .then(res => {
-          console.log(res);
-          const data_json = JSON.parse(res.data);
-          const data_status = data_json.status;
-      
-          //validasi data
-          if (data_status == 1) {
-            //mendapatkan data
-            const data_email = data_json.data[0].email;
-            this.loadingService.tutuploading();
-            this.swal.swal_aksi_berhasil("Sandi terkirim !", "Sandi baru sudah dikirim ke email: "+data_email);
-      
-          } else if (data_status == 0) {
-            //jika status != 1
-            this.loadingService.tutuploading();
-            this.swal.swal_aksi_gagal("Sandi tidak terkirim !", "Sandi gagal dikirim ke email");
-          } 
-          else if (data_status == 2) {
-            //jika status != 1
-            this.loadingService.tutuploading();
-            this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Nama tidak ditemukan !");
-          }         
-        })
-        .catch(err => {
-          //error
-          this.loadingService.tutuploading();
-          if (err.status == -4) {
-            this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Server tidak merespon !");
-          } else {
-            this.swal.swal_aksi_gagal("Terjadi kesalahan !", "code error 3 !");
-          }
-        });
+    this.apiService.panggil_api_reset_password(nama_baru)
+    .then(res => {
+      const data_json = JSON.parse(res.data);
+      const data_status = data_json.status;
+  
+      //validasi data
+      if (data_status == 1) {
+        //mendapatkan data
+        const data_email = data_json.data[0].email;
+        this.loadingService.tutuploading();
+        this.swal.swal_aksi_berhasil("Sandi terkirim !", "Sandi baru sudah dikirim ke email: "+data_email);
+  
+      } else if (data_status == 0) {
+        //jika status != 1
+        this.loadingService.tutuploading();
+        this.swal.swal_aksi_gagal("Sandi tidak terkirim !", "Sandi gagal dikirim ke email");
+      } 
+      else if (data_status == 2) {
+        //jika status != 1
+        this.loadingService.tutuploading();
+        this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Nama tidak ditemukan !");
+      }         
+    })
+    .catch(err => {
+      //error
+      this.loadingService.tutuploading();
+      if (err.status == -4) {
+        this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Server tidak merespon !");
+      } else {
+        this.swal.swal_aksi_gagal("Terjadi kesalahan !", "code error 3 !");
+      }
+    });
   }
 
   //memanggil api data karyawan
   manggil_api_login(var_nama, var_sandi){
     this.loadingService.tampil_loading_login();
     
-
     this.apiService.panggil_api_data_karyawan(var_nama, var_sandi)
     .then(res => {
 
@@ -213,8 +216,21 @@ export class LoginPage implements OnInit {
       if (err.status == -4 ) {
         this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Server tidak merespon !");
       } else {
-      this.swal.swal_aksi_gagal("Terjadi kesalahan !", "code error 2 !");
+        this.swal.swal_aksi_gagal("Terjadi kesalahan !", "code error 2 !");
       }
+    });
+  }
+
+  //test koneksi
+  test_koneksi(nama){
+    this.apiService.cek_koneksi()
+    .then(data => {
+
+      this.manggil_api_lupa_nama(nama);
+    })
+    .catch(error => {
+      this.loadingService.tutuploading();
+      this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Server tidak merespon !");
     });
   }
 }
