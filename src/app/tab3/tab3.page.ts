@@ -113,11 +113,16 @@ export class Tab3Page {
     this.nama_ls = await this.storage.get('nama');
   }
 
+  //delay
+  interval_counter() {
+    return new Promise(resolve => { setTimeout(() => resolve(""), 1000);});
+  }
+
   async tampilkandata(){
     this.loadingCtrl.tampil_loading_login();
     const data_l_nama = await this.storage.get('nama');
     const data_l_sandi = await this.storage.get('sandi');
-
+    await this.interval_counter();
   
     this.apiService.panggil_api_data_karyawan(data_l_nama, data_l_sandi)
     .then(res => {
@@ -167,7 +172,6 @@ export class Tab3Page {
   errorHandler(event) {
     event.target.src = "assets/bi.png";
   }
-
   //pengecekan data jika kosong data variable kosong
   pengecekan_var(data_var){
     let a; 
@@ -196,7 +200,6 @@ export class Tab3Page {
     }
     return a;
   }
-
   //sensor password
   lihat_password(){
     if (this.lihatsandi == false) {
@@ -209,12 +212,11 @@ export class Tab3Page {
   //dapatkan data gambar
   kamera(){
     this.camera.getPicture(this.cameraOptions).then(res=>{
-      this.loadingCtrl.tampil_loading_login();
-
       let data_img_base64 = 'data:image/jpeg;base64,' + res;
       this.base64_img = data_img_base64;
 
       if (this.cek_koneksi == true) {
+        this.loadingCtrl.tampil_loading_login();
         this.test_koneksi(null, null);
       } else {
         this.loadingCtrl.tutuploading();
@@ -225,12 +227,12 @@ export class Tab3Page {
   }
   galeri(){
     this.camera.getPicture(this.galeriOptions).then(res=>{
-      this.loadingCtrl.tampil_loading_login();
 
       let data_img_base64 = 'data:image/jpeg;base64,' + res;
       this.base64_img = data_img_base64;
 
       if (this.cek_koneksi == true) {
+        this.loadingCtrl.tampil_loading_login();
         this.test_koneksi(null, null);
       } else {
         this.loadingCtrl.tutuploading();
@@ -282,7 +284,7 @@ export class Tab3Page {
           if(error.status == -4){
             this.swalService.swal_aksi_gagal("Terjadi kesalahan !", "Server tidak merespon !");
           }else{
-            this.swalService.swal_aksi_gagal("Ubah foto gagal !", "Code error 14 !");
+            this.swalService.swal_code_error("Ubah foto gagal !", "Code error 14 !");
           }
 
         });
@@ -296,7 +298,7 @@ export class Tab3Page {
     }, (err) => {
       // error
       this.loadingCtrl.tutuploading();
-      this.swalService.swal_aksi_gagal("Terjadi kesalahan !", "code error 13 !");
+      this.swalService.swal_code_error("Terjadi kesalahan !", "code error 13 !");
     });
   }
 
@@ -344,7 +346,6 @@ export class Tab3Page {
           this.loadingCtrl.tampil_loading_login();
 
           this.test_koneksi(nama_baru, null);
-
 
         } else {
 
@@ -394,6 +395,8 @@ export class Tab3Page {
 
   api_ubah_nama(nama_baru){
 
+    this.interval_counter();
+
     this.apiService.panggil_api_update_data_karyawan(this.type_update_akun, this.nama_ls, nama_baru, "", "")
     .then(res => {
       const data_json = JSON.parse(res.data);
@@ -422,7 +425,7 @@ export class Tab3Page {
         this.swalService.swal_aksi_gagal("Terjadi kesalahan !", "Server tidak merespon !");
         return
       }else{
-        this.swalService.swal_aksi_gagal("Terjadi kesalahan !", "code error 6 !");
+        this.swalService.swal_code_error("Terjadi kesalahan !", "code error 6 !");
         return
       }
 
@@ -430,6 +433,8 @@ export class Tab3Page {
   }
 
   api_ubah_sandi(sandi_baru){
+
+    this.interval_counter();
 
     this.apiService.panggil_api_update_data_karyawan(this.type_update_akun, this.nama_ls, "", sandi_baru, "")
     .then(res => {
@@ -456,7 +461,7 @@ export class Tab3Page {
       if(err.status == -4){
         this.swalService.swal_aksi_gagal("Terjadi kesalahan !", "Server tidak merespon !");
       }else{
-        this.swalService.swal_aksi_gagal("Terjadi kesalahan !", "code error 8 !");
+        this.swalService.swal_code_error("Terjadi kesalahan !", "code error 8 !");
       }
     });
   }

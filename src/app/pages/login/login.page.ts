@@ -8,6 +8,7 @@ import { Network } from '@awesome-cordova-plugins/network/ngx';
 import { LoadingServiceService } from 'src/app/services/loading-service.service';
 import { SwalServiceService } from 'src/app/services/swal-service.service';
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
+import { SetGetServiceService } from 'src/app/services/set-get-service.service';
 
 
 @Component({
@@ -32,12 +33,14 @@ export class LoginPage implements OnInit {
     private network: Network,
     private router:Router,
     private storage:Storage,
+    private setget:SetGetServiceService,
     private loadingService:LoadingServiceService,
     private apiService:ApiServicesService,
     private modalCtrl: ModalController,
     private swal: SwalServiceService) { 
 
     this.ngOnInit();
+    this.setget.set_koneksi(0);
   }
 
   ngOnInit() {
@@ -62,6 +65,11 @@ export class LoginPage implements OnInit {
     })
   }
 
+  //delay
+  interval_counter() {
+    return new Promise(resolve => { setTimeout(() => resolve(""), 1000);});
+  }
+
   //error form
   get errorControl() {
     return this.myGroup.controls;
@@ -80,7 +88,6 @@ export class LoginPage implements OnInit {
     } else {
       this.local_nama = this.myGroup.value.nama_pengguna;
       this.local_sandi = this.myGroup.value.sandi_pengguna;
-
       if (this.cek_koneksi == true) {
         this.manggil_api_login(this.local_nama, this.local_sandi);
       }else{
@@ -101,14 +108,13 @@ export class LoginPage implements OnInit {
         return;
       } else {
         this.data_api_lupa_sandi_nama = data.data.data;
-        this.loadingService.tampil_loading_login();
         if (this.cek_koneksi == true) {
+          this.loadingService.tampil_loading_login();
           this.test_koneksi(this.data_api_lupa_sandi_nama);
         }else{
           this.swal.swal_aksi_gagal("Terjadi kesalahan", "Tidak ada koneksi internet !");
         }
         
-        // this.manggil_api_lupa_nama(this.data_api_lupa_sandi_nama);
       }
     }).catch(err => {
       // console.log(err);
@@ -134,6 +140,9 @@ export class LoginPage implements OnInit {
 
   //memanggil api lupa nama
   manggil_api_lupa_nama(nama_baru){
+
+    this.interval_counter();
+
     this.apiService.panggil_api_reset_password(nama_baru)
     .then(res => {
       const data_json = JSON.parse(res.data);
@@ -172,6 +181,8 @@ export class LoginPage implements OnInit {
   manggil_api_login(var_nama, var_sandi){
     this.loadingService.tampil_loading_login();
     
+    this.interval_counter();
+
     this.apiService.panggil_api_data_karyawan(var_nama, var_sandi)
     .then(res => {
 

@@ -2,11 +2,12 @@ import { Component, ViewChild } from '@angular/core';
 import { IonRouterOutlet, Platform } from '@ionic/angular';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
-import { Storage } from '@ionic/storage-angular';
 import { SetGetServiceService } from './services/set-get-service.service';
 import { ToastService } from './services/toast.service';
-import Swal from 'sweetalert2';
 import { LoadingServiceService } from './services/loading-service.service';
+import { Network } from '@awesome-cordova-plugins/network/ngx';
+import Swal from 'sweetalert2';
+import { SwalServiceService } from './services/swal-service.service';
 
 @Component({
   selector: 'app-root',
@@ -14,11 +15,15 @@ import { LoadingServiceService } from './services/loading-service.service';
   styleUrls: ['app.component.scss'],
 })
 export class AppComponent {
+
+  cek_koneksi = true;
+
   @ViewChild(IonRouterOutlet,{static:true}) routerOutlet: IonRouterOutlet;
   constructor(private platform: Platform, 
     private location: Location, 
+    private swalService: SwalServiceService,
+    private network: Network,
     private loadingService: LoadingServiceService,
-    private storage:Storage, 
     private router: Router, 
     private setget: SetGetServiceService, 
     private toastService: ToastService) {
@@ -26,12 +31,30 @@ export class AppComponent {
     this.platform.ready().then(()=>{
       this.hardbackbutton();
     });
+
+    //pengecekan koneksi
+    this.network.onDisconnect().subscribe(() => {
+      this.cek_koneksi = false;
+
+      let a = this.setget.get_koneksi();
+
+      if (a == 1) {
+        this.loadingService.tutuploading();
+        this.swalService.swal_code_error("Tidak ada internet", "Kembali ke login !");
+      }
+    });
+  
+    this.network.onConnect().subscribe(() => {
+      setTimeout(() => {
+        this.cek_koneksi = true;
+      }, );
+    });
   }
   
   async hardbackbutton(){
     this.platform.backButton.subscribeWithPriority(10, () => {
       let a = this.setget.getData();
-      let b = this.setget.sat();
+      let b = this.setget.get_tab_page();
       
       if (a == 1) {
         this.toastService.Toast_tampil();

@@ -34,6 +34,7 @@ export class Tab1Page {
     private router: Router, 
     private apiService:ApiServicesService) {
     
+    this.setget.set_koneksi(1);
     this.tampilkan_data();
   }
 
@@ -46,7 +47,7 @@ export class Tab1Page {
   async tampilkan_data(){
 
     this.loadingCtrl.tampil_loading_login();
-    this.setget.set(0);
+    this.setget.set_tab_page(0);
     await this.interval_counter();
     
     const data_l_nama = await this.storage.get('nama');
@@ -119,7 +120,7 @@ export class Tab1Page {
         if (error.status == -4) {
           this.tidak_ada_respon();
         } else {
-          this.swalService.swal_aksi_gagal("Terjadi kesalahan !", "code error 16 !");
+          this.swalService.swal_code_error("Terjadi kesalahan !", "code error 16 !");
         }
       }
 
@@ -203,7 +204,7 @@ export class Tab1Page {
   //pindah aktiviti
   kegiatan(e, f){
     this.setget.setDatakegiatan(e, f);
-    this.setget.set(1);
+    this.setget.set_tab_page(1);
     this.router.navigate(["/kegiatan"], { replaceUrl: true });
   }
 

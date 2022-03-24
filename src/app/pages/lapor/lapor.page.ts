@@ -99,6 +99,11 @@ export class LaporPage implements OnInit {
   ngOnInit() {
   }
 
+  //delay
+  interval_counter() {
+    return new Promise(resolve => { setTimeout(() => resolve(""), 1000);});
+  }
+
   ionViewWillEnter(){
     this.tampilkan_data();
   }
@@ -172,12 +177,16 @@ export class LaporPage implements OnInit {
       headers: {}
     }
 
+    this.interval_counter();
+    
     fileTransfer.upload(this.base64_img, URL, options)
     .then(data => {
 
       const responecode = data.responseCode;
 
       if (responecode == 200) {
+        this.interval_counter();
+
         this.apiService.kirim_api_progres(this.lapor_id, "https://oraicon.000webhostapp.com/upload/" + this.name_img, keterangan, persen)
         .then(data => {
           
@@ -205,7 +214,7 @@ export class LaporPage implements OnInit {
           if (error.status == -4) {
             this.swal.swal_aksi_gagal("Terjadi kesalahan", "Server tidak merespon !");
           } else {
-            this.swal.swal_aksi_gagal("Terjadi kesalahan", "code error 10 !");
+            this.swal.swal_code_error("Terjadi kesalahan", "code error 10 !");
           }
 
       
@@ -225,7 +234,7 @@ export class LaporPage implements OnInit {
       // console.log(error);
 
       this.loadingService.tutuploading();
-      this.swal.swal_aksi_gagal("Terjadi kesalahan", "code error 12 !");
+      this.swal.swal_code_error("Terjadi kesalahan", "code error 12 !");
   
     });
   }

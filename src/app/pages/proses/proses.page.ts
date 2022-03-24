@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from "@angular/router";
 import { SetGetServiceService } from 'src/app/services/set-get-service.service';
 import { NavController } from '@ionic/angular';
 import { LoadingServiceService } from 'src/app/services/loading-service.service';
@@ -16,6 +15,7 @@ import Swal from 'sweetalert2';
 })
 export class ProsesPage implements OnInit {
 
+  //variable
   timeout = 0;
   data_type_page;
   data_id_header;
@@ -27,31 +27,42 @@ export class ProsesPage implements OnInit {
   persen_tertinggi;
   tanggal_pm = {};
   tanggal_detail;
-
   tipe_page = true;
   riwayat_laporan = false;
   riwayat_loading = true;
-  //variable
 
   constructor(private momentService: MomentService,
     private swal: SwalServiceService,
     private apiService: ApiServicesService, 
     private loadingService: LoadingServiceService, 
-    private navCtrl: NavController, private route: ActivatedRoute, 
-    private setget: SetGetServiceService,) { }
+    private navCtrl: NavController, 
+    private setget: SetGetServiceService,) { 
+      
+  }
 
   ngOnInit() {
   }
 
+  //delay
+  interval_counter() {
+    return new Promise(resolve => { setTimeout(() => resolve(""), 1000);});
+  }
+
+  //awal masuk page
   async ionViewWillEnter(){
     this.tampilkan_data();
   }
 
-  //baru
   kembali(){
     this.navCtrl.back();
   }
 
+  ionViewDidLeave(){
+    this.riwayat_laporan = false;
+    this.riwayat_loading = true;
+  }
+
+  //menampilkan data progres detail
   async tampilkan_data(){
     this.loadingService.tampil_loading_login();
     const a = this.setget.getProses();
@@ -67,6 +78,8 @@ export class ProsesPage implements OnInit {
     } else {
       this.tipe_page = true; 
     }
+
+    this.interval_counter();
 
     this.apiService.panggil_api_get_progres_detail(this.data_id_header)
     .then(data => {
@@ -102,15 +115,18 @@ export class ProsesPage implements OnInit {
       if (error.status == -4) {
         this.tidak_ada_respon();
       } else {
-        this.swal.swal_aksi_gagal("Terjadi kesalahan !", "code error 19 !");
+        this.swal.swal_code_error("Terjadi kesalahan !", "code error 19 !");
       }
     }
   
     });
   }
 
+  //menampilkan data progres milestone
   async tampilkan_data2(){
     
+    this.interval_counter();
+
     this.apiService.panggil_api_progres_milestone(this.data_id_kegiatan)
     .then(data => {
 
@@ -146,13 +162,14 @@ export class ProsesPage implements OnInit {
         if (error.status == -4) {
           this.tidak_ada_respon();
         } else {
-          this.swal.swal_aksi_gagal("Terjadi kesalahan !", "code error 20 !");
+          this.swal.swal_code_error("Terjadi kesalahan !", "code error 20 !");
         }
       }
     });
 
   }
 
+  // mengubah format tanggal
   asynctanggal(){
     const arr_ms =  this.data_arr_progressmilsetone
     const arr_ms_length = this.data_arr_progressmilsetone.length;
@@ -171,14 +188,17 @@ export class ProsesPage implements OnInit {
     this.back_with_success();
   }
 
+  //gambar rusak
   errorHandler(event) {
     event.target.src = "assets/bi.png";
   }
 
+  //logika compare isi ada persen
   compare( a, b ) {
     return a.progress_pengerjaan - b.progress_pengerjaan;
   }
 
+  //pindah aktiviti
   formulir(){
     let a = this.persen_tertinggi;
     
@@ -194,6 +214,7 @@ export class ProsesPage implements OnInit {
     this.navCtrl.navigateForward(['/lapor']);
   }
 
+  //berhasil mengirim data
   async back_with_success(){
     await this.setget.getAlert();
     

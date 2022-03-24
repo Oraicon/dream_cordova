@@ -6,6 +6,7 @@ import { NavController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { SwalServiceService } from 'src/app/services/swal-service.service';
 import Swal from 'sweetalert2';
+import { Network } from '@awesome-cordova-plugins/network/ngx';
 
 
 @Component({
@@ -15,6 +16,7 @@ import Swal from 'sweetalert2';
 })
 export class KegiatanPage implements OnInit {
 
+  //variable
   warna_segment = 1;
   id_header;
   judul_proyek;
@@ -23,6 +25,7 @@ export class KegiatanPage implements OnInit {
   data_kegiatan;
   loading = true; 
   timeout = 0;
+  cek_koneksi = true;
 
   constructor(
     private navCtrl: NavController, 
@@ -31,12 +34,19 @@ export class KegiatanPage implements OnInit {
     private setget: SetGetServiceService,
     private apiService: ApiServicesService,
     private loadingService: LoadingServiceService
-  ) { }
+  ) { 
+
+  }
+
+  //delay
+  interval_counter() {
+    return new Promise(resolve => { setTimeout(() => resolve(""), 1000);});
+  }
 
   ngOnInit() {
   }
 
-  //masuk_page
+  //awal masuk page
   ionViewWillEnter(){
     this.tampilkan_data();
   }
@@ -50,6 +60,7 @@ export class KegiatanPage implements OnInit {
     this.id_header = a[0];
     this.judul_proyek = a[1];
 
+    this.interval_counter();
   
     this.apiService.panggil_api_get_progres_detail(this.id_header)
     .then(data => {
@@ -77,13 +88,13 @@ export class KegiatanPage implements OnInit {
         if (error.status == -4) {
           this.tidak_ada_respon();
         } else {
-          this.swal.swal_aksi_gagal("Terjadi kesalahan !", "code error 18 !");
+          this.swal.swal_code_error("Terjadi kesalahan !", "code error 18 !");
         }
       }
     });
   }
 
-  //olah data kegiatan
+  //olah data kegiatan memisahkan prgores dan komplit
   async pisahin_progres_komplit(arr){
     let panjang_arr;
 
@@ -110,20 +121,27 @@ export class KegiatanPage implements OnInit {
     this.timeout = 0;
   }
 
+  //tutup loading dan skeleton loading
   async tutuploading(){
     this.loading = false; 
     this.loadingService.tutuploading();
   }
 
+  //warna segment
   segmentChanged(e){
     this.warna_segment = e.detail.value;
   }
 
+  //pindah aktiviti
   proyek_kegiatan(id_detail, page_type){
 
     this.setget.setProses(this.id_header, id_detail);
     this.setget.set_Page(page_type);
     this.navCtrl.navigateForward(['/proses']);
+  }
+
+  ionViewDidLeave(){
+    this.loading = true;
   }
 
   kembali(){

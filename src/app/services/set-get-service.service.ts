@@ -17,14 +17,14 @@ export class SetGetServiceService {
   private lapor_nama_kegiatan;
   private _page;
   private _persen;
-
-  private sut;
-
   private _id_kegiatan;
   private _nama_proyek_header;
+  private data_tab_to_page;
+  private data_koneksi;
   
   constructor() { }
 
+  //seter geter loading
   getData() {
     return this._data;
   }
@@ -33,6 +33,7 @@ export class SetGetServiceService {
     this._data = data;
   }
   
+  //data kegiatan
   getDatakegiatan() {
     let a = [];
     return a = [this._id_kegiatan, this._nama_proyek_header];
@@ -43,14 +44,16 @@ export class SetGetServiceService {
     this._nama_proyek_header = data2;
   }
 
-  sat() {
-    return this.sut;
+  //logika ngatur tab untuk load
+  get_tab_page() {
+    return this.data_tab_to_page;
   }
 
-  set(data) {
-    this.sut = data;
+  set_tab_page(data) {
+    this.data_tab_to_page = data;
   }
 
+  //seter geter alert
   setAlert(data){
     this.alert_data = data;
   }
@@ -99,6 +102,7 @@ export class SetGetServiceService {
     return a = [this.lapor_id, this.lapor_nama_kegiatan];
   }
 
+  //seter geter page
   set_Page(nomor){
     this._page = nomor;
   }
@@ -107,12 +111,22 @@ export class SetGetServiceService {
     return this._page;
   }
 
+  //seter geter persen
   set_persen(persen){
     this._persen = persen;
   }
 
   get_persen(){
     return this._persen;
+  }
+
+  //
+  set_koneksi(data){
+    this.data_koneksi = data;
+  }
+
+  get_koneksi(){
+    return this.data_koneksi;
   }
 
 }
