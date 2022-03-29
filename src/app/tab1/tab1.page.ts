@@ -15,6 +15,8 @@ import Swal from 'sweetalert2';
 })
 export class Tab1Page {
 
+  logika_loading = 0;
+  logika_loading_lenght = 0;
   //variabel
   data_header_id = [];
   data_masih_proses = {};
@@ -97,7 +99,11 @@ export class Tab1Page {
 
   //olah isi data array
   async tampilkan_data2(arr){
-    
+
+    if (arr != null) {
+    this.logika_loading_lenght = arr.length;
+    }
+
     for (let index = 0; index < arr.length; index++) {
       let element = arr[index].id;
       
@@ -120,7 +126,7 @@ export class Tab1Page {
         if (error.status == -4) {
           this.tidak_ada_respon();
         } else {
-          this.swalService.swal_code_error("Terjadi kesalahan !", "code error 16 !");
+          this.swalService.swal_code_error("Terjadi kesalahan !", "code error 16 !, kembali ke login !");
         }
       }
 
@@ -156,13 +162,18 @@ export class Tab1Page {
       b = [];      
     }
 
-    this.data_beranda = true;
-    this.data_beranda_loading_tidak_ada = true;
-    this.timeout = 0;
-    if(this.setget.getData() != 0){
-      this.loadingCtrl.tutuploading();
-    }   
+    this.logika_loading++;
 
+    if(this.logika_loading == this.logika_loading_lenght){
+      this.logika_loading = 0;
+      this.logika_loading_lenght = 0;
+      this.data_beranda = true;
+      this.data_beranda_loading_tidak_ada = true;
+      this.timeout = 0;
+      if(this.setget.getData() != 0){
+        this.loadingCtrl.tutuploading();
+      } 
+    }
   }
 
   //refresh page
@@ -173,7 +184,8 @@ export class Tab1Page {
     this.data_sudah_komplit = {};
     this.data_header = [];
     this.tanggal_deadline = {};
-
+    this.logika_loading = 0;
+    this.logika_loading_lenght = 0;
     this.data_beranda_loading_tidak_ada = false;
     this.tampilkan_data();
   }

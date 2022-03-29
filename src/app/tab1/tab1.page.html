@@ -25,7 +25,7 @@
       <ion-col size="12" class="" *ngFor="let data of data_header; let i = index">
         <ion-card class="bayangan">
           <ion-card-header>
-            <ion-card-title class="ion-text-center">{{  data.nama_proyek }}</ion-card-title>
+            <ion-card-title class="ion-text-center text_judul">{{  data.nama_proyek }}</ion-card-title>
           </ion-card-header>
           <ion-card-content class="ion-no-padding">
             <ion-grid fixed class="ion-no-padding">
@@ -33,24 +33,24 @@
                 <ion-col size="12">
                   <ion-list>
                     <ion-item>
-                      <ion-label>Regional :</ion-label>
-                      <ion-label class="ion-text-end">{{  data.nama_regional }}</ion-label>
+                      <ion-label class="text_konten">Regional :</ion-label>
+                      <ion-label class="ion-text-end text_konten">{{  data.nama_regional }}</ion-label>
                     </ion-item>
                     <ion-item>
-                      <ion-label>LOP :</ion-label>
-                      <ion-label class="ion-text-end">{{  data.lop }}</ion-label>
+                      <ion-label class="text_konten">LOP :</ion-label>
+                      <ion-label class="ion-text-end text_konten">{{  data.lop }}</ion-label>
                     </ion-item>
                     <ion-item>
-                      <ion-label>Supervisi :</ion-label>
-                      <ion-label class="ion-text-end">{{  data.nama_supervisi }}</ion-label>
+                      <ion-label class="text_konten">Supervisi :</ion-label>
+                      <ion-label class="ion-text-end text_konten">{{  data.nama_supervisi }}</ion-label>
                     </ion-item>
                     <ion-item>
-                      <ion-label>Mandor :</ion-label>
-                      <ion-label class="ion-text-end">{{  data.nama_mandor }}</ion-label>
+                      <ion-label class="text_konten">Mandor :</ion-label>
+                      <ion-label class="ion-text-end text_konten">{{  data.nama_mandor }}</ion-label>
                     </ion-item>
                     <ion-item>
-                      <ion-label>Deadline Proyek :</ion-label>
-                      <ion-label class="ion-text-end">{{  tanggal_deadline[data.id] }}</ion-label>
+                      <ion-label class="text_konten">Deadline Proyek :</ion-label>
+                      <ion-label class="ion-text-end text_konten">{{  tanggal_deadline[data.id] }}</ion-label>
                     </ion-item>
                   </ion-list>
                 </ion-col>
@@ -84,38 +84,15 @@
 
                 <ng-template #kegiatan_ada>
                   <ion-row>
-                    <!-- card masih proses -->
-                    <ion-col size="6">
-                      <ion-card class="kuning bayangan">
-                        <ion-card-content>
-                          <ion-grid fixed class="ion-no-padding">
-                            <ion-row class="ion-text-center">
-                              <ion-col size="12" class="hitam">
-                                <h2 class="bold">Masih Proses</h2>
-                                  <h1 class="text_konten_banyak" *ngIf="data_masih_proses[data.id] !=0; else kosong1">{{ data_masih_proses[data.id] }}</h1>
-                                  <ng-template #kosong1>
-                                    <h1 class="text_konten_banyak">0</h1>
-                                  </ng-template>
-                                  <h3>Kegiatan</h3>
-                              </ion-col>
-                            </ion-row>
-                          </ion-grid>
-                        </ion-card-content>
-                      </ion-card>
-                    </ion-col>
-                    <!-- card proses selesai-->
-                    <ion-col size="6">
-                      <ion-card class="hijau bayangan">
+                    <ion-col size="12">
+                      <ion-card color="primary" class="bayangan">
                         <ion-card-content>
                           <ion-grid fixed class="ion-no-padding">
                             <ion-row class="ion-text-center">
                               <ion-col size="12" class="putih">
-                                <h2 class="bold">Sudah Selesai</h2>
-                                  <h1 class="text_konten_banyak" *ngIf="data_sudah_komplit[data.id] != 0; else kosong2">{{ data_sudah_komplit[data.id] }}</h1>
-                                  <ng-template #kosong2>
-                                    <h1 class="text_konten_banyak">0</h1>
-                                  </ng-template>
-                                  <h3>Kegiatan</h3>
+                                <h2 class="bold">Kegiatan</h2>
+                                  <h1 class="text_konten_banyak">Sudah selesai</h1>
+                                  <h3>Kegiatan dalam proyek ini sudah selesai</h3>
                               </ion-col>
                             </ion-row>
                           </ion-grid>
@@ -187,27 +164,6 @@
                   </ion-col>
                 </ion-row>
               </ng-template>
-
-              <!-- <ion-row>
-                <ion-col size="12">
-                  <ion-card color="medium" class="bayangan">
-                    <ion-card-content>
-                      <ion-grid fixed class="ion-no-padding">
-                        <ion-row class="ion-text-center">
-                          <ion-col size="12" class="putih">
-                            <h2 class="bold">Kegiatan</h2>
-                              <h1 class="text_konten_banyak">Tidak ada</h1>
-                              <h3>Belum ada kegiatan dalam proyek ini</h3>
-                          </ion-col>
-                        </ion-row>
-                      </ion-grid>
-                    </ion-card-content>
-                  </ion-card>
-                </ion-col>
-              </ion-row> -->
-
-
-
             </ion-grid>
           </ion-card-content>
         </ion-card>

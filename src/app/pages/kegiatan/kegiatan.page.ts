@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ApiServicesService } from 'src/app/services/api-services.service';
 import { LoadingServiceService } from 'src/app/services/loading-service.service';
 import { SetGetServiceService } from 'src/app/services/set-get-service.service';
@@ -6,7 +6,6 @@ import { NavController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { SwalServiceService } from 'src/app/services/swal-service.service';
 import Swal from 'sweetalert2';
-import { Network } from '@awesome-cordova-plugins/network/ngx';
 
 
 @Component({
@@ -17,6 +16,7 @@ import { Network } from '@awesome-cordova-plugins/network/ngx';
 export class KegiatanPage implements OnInit {
 
   //variable
+  @ViewChild('slides') slides;
   warna_segment = 1;
   id_header;
   judul_proyek;
@@ -25,7 +25,12 @@ export class KegiatanPage implements OnInit {
   data_kegiatan;
   loading = true; 
   timeout = 0;
-  cek_koneksi = true;
+
+  slideOpts = {
+    initialSlide: 0,
+    speed: 400,
+    pagination: false
+  };
 
   constructor(
     private navCtrl: NavController, 
@@ -88,7 +93,7 @@ export class KegiatanPage implements OnInit {
         if (error.status == -4) {
           this.tidak_ada_respon();
         } else {
-          this.swal.swal_code_error("Terjadi kesalahan !", "code error 18 !");
+          this.swal.swal_code_error("Terjadi kesalahan !", "code error 18 !, kembali ke login !");
         }
       }
     });
@@ -127,10 +132,29 @@ export class KegiatanPage implements OnInit {
     this.loadingService.tutuploading();
   }
 
-  //warna segment
+  // warna segment
   segmentChanged(e){
     this.warna_segment = e.detail.value;
   }
+
+  // segmentChanged(e){
+  //   this.warna_segment = e.detail.value;
+  //   if (this.warna_segment == 1) {
+  //     this.slides.slideTo(0, 400);
+  //   }else{
+  //     this.slides.slideTo(1, 400);
+  //   }
+  // }
+
+  // slideDidChange() {
+  //   this.slides.getActiveIndex().then(index => {
+  //     if (index == 0) {
+  //       this.warna_segment = 1;
+  //     } else {
+  //       this.warna_segment = 2;
+  //     }
+  //   });
+  // };
 
   //pindah aktiviti
   proyek_kegiatan(id_detail, page_type){

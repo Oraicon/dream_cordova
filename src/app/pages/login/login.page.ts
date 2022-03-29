@@ -222,7 +222,7 @@ export class LoginPage implements OnInit {
     .catch(err => {
       
       this.loadingService.tutuploading();
-      // console.log(err);
+      console.log(err);
       
       if (err.status == -4 ) {
         this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Server tidak merespon !");

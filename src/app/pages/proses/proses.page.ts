@@ -23,6 +23,7 @@ export class ProsesPage implements OnInit {
   data_judul_kegiatan;
   data_obj_kegiatan = {};
   data_obj_kegiatan_tanggal = {};
+  status_pengerjaan;
   data_arr_progressmilsetone;
   persen_tertinggi;
   tanggal_pm = {};
@@ -94,6 +95,11 @@ export class ProsesPage implements OnInit {
           if (arr[index].id == this.data_id_kegiatan) {
             this.data_obj_kegiatan = arr[index];
             this.data_judul_kegiatan = arr[index].nama_kegiatan;
+            if (arr[index].status_pengerjaan == "IN PROGRESS") {
+              this.status_pengerjaan = "Sedang diproses"
+            } else {
+              this.status_pengerjaan = "Sudah selesai"
+            }
             if (arr[index].completed_date != null) {
               this.tanggal_detail = this.momentService.ubah_format_tanggal(arr[index].completed_date);
             } else {
@@ -115,7 +121,7 @@ export class ProsesPage implements OnInit {
       if (error.status == -4) {
         this.tidak_ada_respon();
       } else {
-        this.swal.swal_code_error("Terjadi kesalahan !", "code error 19 !");
+        this.swal.swal_code_error("Terjadi kesalahan !", "code error 19 !, kembali ke login !");
       }
     }
   
@@ -162,7 +168,7 @@ export class ProsesPage implements OnInit {
         if (error.status == -4) {
           this.tidak_ada_respon();
         } else {
-          this.swal.swal_code_error("Terjadi kesalahan !", "code error 20 !");
+          this.swal.swal_code_error("Terjadi kesalahan !", "code error 20 !, kembali ke login !");
         }
       }
     });

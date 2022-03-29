@@ -30,6 +30,7 @@ export class Tab3Page {
   //persiapan variable
   imgURL:any = 'assets/pp.jpg';
   cek_koneksi = true;
+  // btoa = btoa('dream_1.0', )
 
   //variable frontend
   lihatsandi = false;
@@ -163,7 +164,7 @@ export class Tab3Page {
         if (err.status == -4) {
           this.tidak_ada_respon();
         } else {
-          this.swalService.swal_aksi_gagal("Terjadi kesalahan !", "code error 13 !");
+          this.swalService.swal_code_error("Terjadi kesalahan !", "code error 17 !");
         }
       }
     });
@@ -212,6 +213,7 @@ export class Tab3Page {
   //dapatkan data gambar
   kamera(){
     this.camera.getPicture(this.cameraOptions).then(res=>{
+      console.log(res);
       let data_img_base64 = 'data:image/jpeg;base64,' + res;
       this.base64_img = data_img_base64;
 
@@ -227,7 +229,7 @@ export class Tab3Page {
   }
   galeri(){
     this.camera.getPicture(this.galeriOptions).then(res=>{
-
+      console.log(res);
       let data_img_base64 = 'data:image/jpeg;base64,' + res;
       this.base64_img = data_img_base64;
 
@@ -248,7 +250,9 @@ export class Tab3Page {
     const l_storage_data_nama = await this.storage.get('nama');
 
     //persiapan url dan nama
-    let URL="https://oraicon.000webhostapp.com/upload.php";
+    // let URL="https://oraicon.000webhostapp.com/upload.php";
+    let URL="https://dads-demo-1.000webhostapp.com/api/uploadImage";
+    // let URL="https://dads-demo-1.000webhostapp.com/ga/uploadImage";
     this.name_img = this.datepipe.transform((new Date), 'MMddyyyyhmmss.')+ this.format_img;
     let nama_file = this.name_img.toString();
 
@@ -257,16 +261,23 @@ export class Tab3Page {
       fileKey: 'filekey',
       fileName: nama_file,
       chunkedMode: false,
+      httpMethod: "POST",
       mimeType: "image/JPEG",
-      headers: {}
+      headers: {
+        // "Authorization": "Basic ZHJlYW1fMS4wOmRyZWFtXzEuMA=="
+      }
     }
 
     //upload ke server
     fileTransfer.upload(this.base64_img, URL, options)
     .then((res) => {
       // success upload foto
+      console.log(res);
       const get_respon_code = res.responseCode;
-      const url_path = "https://oraicon.000webhostapp.com/upload/"+this.name_img;
+      // const url_path = "https://oraicon.000webhostapp.com/upload/"+this.name_img;
+      const url_path = "https://dads-demo-1.000webhostapp.com/data_upload/"+this.name_img;
+      // const url_path = null;
+
 
       if (get_respon_code == 200) {
         this.apiService.panggil_api_update_data_karyawan(this.type_update_gambar, l_storage_data_nama, "", "", url_path)
@@ -284,7 +295,7 @@ export class Tab3Page {
           if(error.status == -4){
             this.swalService.swal_aksi_gagal("Terjadi kesalahan !", "Server tidak merespon !");
           }else{
-            this.swalService.swal_code_error("Ubah foto gagal !", "Code error 14 !");
+            this.swalService.swal_code_error("Ubah foto gagal !", "Code error 14 !, kembali ke login !");
           }
 
         });
@@ -297,8 +308,9 @@ export class Tab3Page {
 
     }, (err) => {
       // error
+      console.log(err);
       this.loadingCtrl.tutuploading();
-      this.swalService.swal_code_error("Terjadi kesalahan !", "code error 13 !");
+      this.swalService.swal_code_error("Terjadi kesalahan !", "code error 13 !, kembali ke login !");
     });
   }
 
@@ -425,7 +437,7 @@ export class Tab3Page {
         this.swalService.swal_aksi_gagal("Terjadi kesalahan !", "Server tidak merespon !");
         return
       }else{
-        this.swalService.swal_code_error("Terjadi kesalahan !", "code error 6 !");
+        this.swalService.swal_code_error("Terjadi kesalahan !", "code error 6 !, kembali ke login !");
         return
       }
 
@@ -461,7 +473,7 @@ export class Tab3Page {
       if(err.status == -4){
         this.swalService.swal_aksi_gagal("Terjadi kesalahan !", "Server tidak merespon !");
       }else{
-        this.swalService.swal_code_error("Terjadi kesalahan !", "code error 8 !");
+        this.swalService.swal_code_error("Terjadi kesalahan !", "code error 8 !, kembali ke login !");
       }
     });
   }

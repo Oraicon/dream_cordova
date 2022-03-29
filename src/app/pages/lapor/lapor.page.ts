@@ -164,7 +164,7 @@ export class LaporPage implements OnInit {
     
     const fileTransfer: FileTransferObject = this.transfer.create();
 
-    let URL="https://oraicon.000webhostapp.com/upload.php";
+    let URL="https://dads-demo-1.000webhostapp.com/api/uploadImage";
     this.name_img = this.datepipe.transform((new Date), 'MMddyyyyhmmss.') + this.format_img;
     let nama_file = this.name_img.toString();
 
@@ -187,7 +187,7 @@ export class LaporPage implements OnInit {
       if (responecode == 200) {
         this.interval_counter();
 
-        this.apiService.kirim_api_progres(this.lapor_id, "https://oraicon.000webhostapp.com/upload/" + this.name_img, keterangan, persen)
+        this.apiService.kirim_api_progres(this.lapor_id, "data_upload/" + this.name_img, keterangan, persen)
         .then(data => {
           
           const data_json = JSON.parse(data.data);
@@ -214,7 +214,7 @@ export class LaporPage implements OnInit {
           if (error.status == -4) {
             this.swal.swal_aksi_gagal("Terjadi kesalahan", "Server tidak merespon !");
           } else {
-            this.swal.swal_code_error("Terjadi kesalahan", "code error 10 !");
+            this.swal.swal_code_error("Terjadi kesalahan", "code error 10 !, kembali ke login !");
           }
 
       
@@ -234,7 +234,7 @@ export class LaporPage implements OnInit {
       // console.log(error);
 
       this.loadingService.tutuploading();
-      this.swal.swal_code_error("Terjadi kesalahan", "code error 12 !");
+      this.swal.swal_code_error("Terjadi kesalahan", "code error 12 !, kembali ke login !");
   
     });
   }

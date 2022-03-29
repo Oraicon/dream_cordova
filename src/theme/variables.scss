@@ -111,9 +111,6 @@
 }
 
 .card_border{
-  // border-color: #FF0300;
-  // border-width: thin;
-  // border-style: solid;
   border-radius: 15px;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
@@ -158,8 +155,6 @@
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 
-//
-
 .bold{
   font-weight: bold;
 }
@@ -170,4 +165,9 @@
 
 .error{
   color: red;
+}
+
+// font
+.text_header{
+  font-size: 150%;
 }

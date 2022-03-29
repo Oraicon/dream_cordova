@@ -19,27 +19,26 @@
     <ion-row class="background_color_biru_gelap ion-padding-top">
       <ion-col size="12" class="">
         <ion-card class="bayangan">
-          <ion-card-header class="no_padding_bottom">
+          <!-- <ion-card-header class="no_padding_bottom">
             <ion-card-title class="ion-text-start">Kegiatan {{ lapor_namakegiatan }}</ion-card-title>
-          </ion-card-header>
+          </ion-card-header> -->
           <ion-card-content class="ion-no-padding">
             <ion-grid fixed class="ion-no-padding">
               <ion-row>
                 <ion-col size="12">
                   <form (ngSubmit)="onSubmit()" [formGroup]="myGroup" novalidate>
-
                     <ion-list>
                       <ion-item>
-                        <ion-label position="floating">Keterangan Kegiatan</ion-label>
-                        <ion-textarea  formControlName="data_keterangan" required maxlength="255" placeholder="Keterangan dari foto . . "></ion-textarea>
+                        <ion-label position="floating" class="label_font">Keterangan Kegiatan</ion-label>
+                        <ion-textarea class="label_font" formControlName="data_keterangan" required maxlength="255" placeholder="Keterangan dari foto . . "></ion-textarea>
                       </ion-item>
                       <ion-label class="error ion-padding-start" *ngIf="isSubmitted && errorControl.data_keterangan.errors?.required">
                         *Keterangan harus diisi.
                       </ion-label>
                       <ion-item>
-                        <ion-label>Persen Pengerjaan</ion-label>
-                        <ion-select okText="Pilih" cancelText="Batal" [interfaceOptions]="customAlertOptions" interface="alert" placeholder="0%" formControlName="data_persen" required>
-                          <ion-select-option *ngFor="let data of array_persen" value="{{ data }}">{{ data }}%</ion-select-option>
+                        <ion-label class="label_font">Persen Pengerjaan</ion-label>
+                        <ion-select class="label_font" okText="Pilih" cancelText="Batal" [interfaceOptions]="customAlertOptions" interface="alert" placeholder="0%" formControlName="data_persen" required>
+                          <ion-select-option class="label_font" *ngFor="let data of array_persen" value="{{ data }}">{{ data }}%</ion-select-option>
                         </ion-select>
                       </ion-item>
                       <ion-label class="error ion-padding-start" *ngIf="isSubmitted && errorControl.data_persen.errors?.required">
