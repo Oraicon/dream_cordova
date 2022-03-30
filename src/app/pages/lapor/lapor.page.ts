@@ -22,6 +22,7 @@ export class LaporPage implements OnInit {
   pilih_gambar = true;
   gambar_kosong = true;
   isSubmitted = false;
+  md5_upload = "288fc19f351cedab3648fddf62311278";
   
   //variable
   imgURL:any = 'assets/ss_.png';
@@ -182,12 +183,13 @@ export class LaporPage implements OnInit {
     fileTransfer.upload(this.base64_img, URL, options)
     .then(data => {
 
-      const responecode = data.responseCode;
+      const data_json = JSON.parse(data.response);
+      const data_status = data_json.status;
 
-      if (responecode == 200) {
+      if (data_status == 0) {
         this.interval_counter();
 
-        this.apiService.kirim_api_progres(this.lapor_id, "data_upload/" + this.name_img, keterangan, persen)
+        this.apiService.kirim_api_progres(this.lapor_id, this.md5_upload+ "/" + this.name_img, keterangan, persen)
         .then(data => {
           
           const data_json = JSON.parse(data.data);

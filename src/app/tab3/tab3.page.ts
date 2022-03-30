@@ -30,7 +30,7 @@ export class Tab3Page {
   //persiapan variable
   imgURL:any = 'assets/pp.jpg';
   cek_koneksi = true;
-  // btoa = btoa('dream_1.0', )
+  md5_upload = "288fc19f351cedab3648fddf62311278";
 
   //variable frontend
   lihatsandi = false;
@@ -197,7 +197,7 @@ export class Tab3Page {
     if (gambar == "" || gambar == null || gambar == undefined) {
       a = "assets/bi.png";
     } else {
-      a = gambar;
+      a = "https://dads-demo-1.000webhostapp.com/"+ gambar;
     }
     return a;
   }
@@ -250,9 +250,7 @@ export class Tab3Page {
     const l_storage_data_nama = await this.storage.get('nama');
 
     //persiapan url dan nama
-    // let URL="https://oraicon.000webhostapp.com/upload.php";
     let URL="https://dads-demo-1.000webhostapp.com/api/uploadImage";
-    // let URL="https://dads-demo-1.000webhostapp.com/ga/uploadImage";
     this.name_img = this.datepipe.transform((new Date), 'MMddyyyyhmmss.')+ this.format_img;
     let nama_file = this.name_img.toString();
 
@@ -273,13 +271,11 @@ export class Tab3Page {
     .then((res) => {
       // success upload foto
       console.log(res);
-      const get_respon_code = res.responseCode;
-      // const url_path = "https://oraicon.000webhostapp.com/upload/"+this.name_img;
-      const url_path = "https://dads-demo-1.000webhostapp.com/data_upload/"+this.name_img;
-      // const url_path = null;
+      const data_json = JSON.parse(res.response);
+      const data_status = data_json.status;
+      const url_path = this.md5_upload+"/"+this.name_img;
 
-
-      if (get_respon_code == 200) {
+      if (data_status == 0) {
         this.apiService.panggil_api_update_data_karyawan(this.type_update_gambar, l_storage_data_nama, "", "", url_path)
         .then(res => {
 

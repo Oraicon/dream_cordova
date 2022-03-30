@@ -1,36 +1,50 @@
+
+.background_color{
+  --background: #1B2338;
+}
+
+.padding_button{
+  --padding-end: 0px
+}
+
+.background_color_biru_gelap{
+  background: #1B2338;
+  height: 5rem;
+  border-radius: 0 0 50% 50%;
+}
+
+.border_radius{
+  border-radius: 1rem;
+}
+
+.text_konten_banyak{
+  font-size: 2rem;
+  font-weight: 800;
+}
+
+.padding_sendiri{
+  padding-bottom: 0px;
+}
+
+ion-slides {
+  width: 100%;
+  height: 100%;
+}
+
+// fontsize
 .text_header{
-    font-size: 1.5rem;
-  }
-  
-  
-  .background_color{
-    --background: #1B2338;
-  }
-  
-  .padding_button{
-    --padding-end: 0px
-  }
-  
-  .background_color_biru_gelap{
-    background: #1B2338;
-    height: 5rem;
-    border-radius: 0 0 50% 50%;
-  }
-  
-  .border_radius{
-    border-radius: 1rem;
-  }
-  
-  .text_konten_banyak{
-    font-size: 2rem;
-    font-weight: 800;
-  }
+  font-size: 150%;
+}
 
-  .padding_sendiri{
-    padding-bottom: 0px;
-  }
+.text_judul{
+  font-size: 160%;
+}
 
-  ion-slides {
-    width: 100%;
-    height: 100%;
-  }
+.text_segment{
+  font-size: 120%;
+}
+
+.text_konten{
+  size: 110%;
+}
+
