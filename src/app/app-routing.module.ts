@@ -35,10 +35,6 @@ const routes: Routes = [
     loadChildren: () => import('./pages/proses/proses.module').then( m => m.ProsesPageModule),
     canActivate: [GuardServiceService]
   },
-  // {
-  //   path: 'proses_log',
-  //   loadChildren: () => import('./pages/proses-log/proses-log.module').then( m => m.ProsesLogPageModule)
-  // },
   {
     path: 'lapor',
     loadChildren: () => import('./pages/lapor/lapor.module').then( m => m.LaporPageModule),

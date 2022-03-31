@@ -36,7 +36,11 @@ export class Tab1Page {
     private router: Router, 
     private apiService:ApiServicesService) {
     
+    //pengecekan koneksi
     this.setget.set_koneksi(1);
+    //pengecekan root page
+    this.setget.set_tab_page(0);
+    //manggil data
     this.tampilkan_data();
   }
 
@@ -48,11 +52,11 @@ export class Tab1Page {
   //menampilkan data
   async tampilkan_data(){
 
-    this.loadingCtrl.tampil_loading_login();
-    this.setget.set_tab_page(0);
-    await this.interval_counter();
-    
+    this.loadingCtrl.tampil_loading();
+
     const data_l_nama = await this.storage.get('nama');
+
+    await this.interval_counter();
     
     this.apiService.panggil_api_progres_header(data_l_nama)
     .then(res => {
@@ -66,15 +70,15 @@ export class Tab1Page {
       } else {
         this.data_beranda = false;
         this.data_beranda_loading_tidak_ada = true;
-        this.loadingCtrl.tutuploading();
+        this.loadingCtrl.tutup_loading();
       }
 
     })
     .catch(err => {
-      this.loadingCtrl.tutuploading();
+      this.loadingCtrl.tutup_loading();
       this.timeout++;
 
-      if (this.timeout == 2) {
+      if (this.timeout == 3) {
           this.keluar_aplikasi();
       } else {
         if (err.status == -4) {
@@ -113,14 +117,12 @@ export class Tab1Page {
         const data_json = JSON.parse(data.data);
         const arr_data_progres = data_json.data;
         this.tampilkan_data3(arr_data_progres, element);
-        return;
-    
       })
       .catch(error => {
-        this.loadingCtrl.tutuploading();
+        this.loadingCtrl.tutup_loading();
         this.timeout++;
         
-        if (this.timeout == 2) {
+        if (this.timeout == 3) {
           this.keluar_aplikasi();
       } else {
         if (error.status == -4) {
@@ -170,9 +172,7 @@ export class Tab1Page {
       this.data_beranda = true;
       this.data_beranda_loading_tidak_ada = true;
       this.timeout = 0;
-      if(this.setget.getData() != 0){
-        this.loadingCtrl.tutuploading();
-      } 
+      this.loadingCtrl.tutup_loading();
     }
   }
 
@@ -190,10 +190,14 @@ export class Tab1Page {
     this.tampilkan_data();
   }
   
-
   //logout
   keluar(){
-    this.loadingCtrl.tampil_loading_login();
+    const a = this.setget.getData();
+    if (a == 1) {
+      this.loadingCtrl.tutup_loading();
+    }
+
+    this.loadingCtrl.tampil_loading();
     Swal.fire({
       icon: 'warning',
       title: 'Keluar akun ?',
@@ -205,10 +209,10 @@ export class Tab1Page {
       denyButtonText: `Tidak`,
     }).then((result) => {
       if (result.isConfirmed) {
-        this.loadingCtrl.tutuploading();
+        this.loadingCtrl.tutup_loading();
         this.router.navigate(["/login"], { replaceUrl: true });
       }else {
-        this.loadingCtrl.tutuploading();
+        this.loadingCtrl.tutup_loading();
       }
     });
   }
@@ -221,7 +225,12 @@ export class Tab1Page {
   }
 
   async tidak_ada_respon(){
-    this.loadingCtrl.tampil_loading_login();
+    const a = this.setget.getData();
+    if (a == 1) {
+      this.loadingCtrl.tutup_loading();
+    }
+    
+    this.loadingCtrl.tampil_loading();
     Swal.fire({
       icon: 'warning',
       title: 'Terjadi kesalahan !',
@@ -231,14 +240,19 @@ export class Tab1Page {
       confirmButtonText: 'Iya !',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.loadingCtrl.tutuploading();
+        this.loadingCtrl.tutup_loading();
         this.tampilkan_data();
       }
     });
   }
 
   async keluar_aplikasi(){
-    this.loadingCtrl.tampil_loading_login();
+    const a = this.setget.getData();
+    if (a == 1) {
+      this.loadingCtrl.tutup_loading();
+    }
+
+    this.loadingCtrl.tampil_loading();
     Swal.fire({
       icon: 'warning',
       title: 'Terjadi kesalahan !',
@@ -248,7 +262,7 @@ export class Tab1Page {
       confirmButtonText: 'Iya !',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.loadingCtrl.tutuploading();
+        this.loadingCtrl.tutup_loading();
         navigator['app'].exitApp();
       }
     });

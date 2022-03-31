@@ -65,6 +65,13 @@ export class LoginPage implements OnInit {
     })
   }
 
+  ionViewDidEnter(){
+    const a = this.setget.getData();
+    if (a == 1) {
+      this.loadingService.tutup_loading();
+    }
+  }
+
   //delay
   interval_counter() {
     return new Promise(resolve => { setTimeout(() => resolve(""), 1000);});
@@ -109,7 +116,6 @@ export class LoginPage implements OnInit {
       } else {
         this.data_api_lupa_sandi_nama = data.data.data;
         if (this.cek_koneksi == true) {
-          this.loadingService.tampil_loading_login();
           this.test_koneksi(this.data_api_lupa_sandi_nama);
         }else{
           this.swal.swal_aksi_gagal("Terjadi kesalahan", "Tidak ada koneksi internet !");
@@ -140,6 +146,7 @@ export class LoginPage implements OnInit {
 
   //memanggil api lupa nama
   manggil_api_lupa_nama(nama_baru){
+    this.loadingService.tampil_loading();
 
     this.interval_counter();
 
@@ -152,23 +159,23 @@ export class LoginPage implements OnInit {
       if (data_status == 1) {
         //mendapatkan data
         const data_email = data_json.data[0].email;
-        this.loadingService.tutuploading();
+        this.loadingService.tutup_loading();
         this.swal.swal_aksi_berhasil("Sandi terkirim !", "Sandi baru sudah dikirim ke email: "+data_email);
   
       } else if (data_status == 0) {
         //jika status != 1
-        this.loadingService.tutuploading();
+        this.loadingService.tutup_loading();
         this.swal.swal_aksi_gagal("Sandi tidak terkirim !", "Sandi gagal dikirim ke email");
       } 
       else if (data_status == 2) {
         //jika status != 1
-        this.loadingService.tutuploading();
+        this.loadingService.tutup_loading();
         this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Nama tidak ditemukan !");
       }         
     })
     .catch(err => {
       //error
-      this.loadingService.tutuploading();
+      this.loadingService.tutup_loading();
       if (err.status == -4) {
         this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Server tidak merespon !");
       } else {
@@ -179,7 +186,7 @@ export class LoginPage implements OnInit {
 
   //memanggil api data karyawan
   manggil_api_login(var_nama, var_sandi){
-    this.loadingService.tampil_loading_login();
+    this.loadingService.tampil_loading();
     
     this.interval_counter();
 
@@ -194,26 +201,26 @@ export class LoginPage implements OnInit {
       this.storage.set('nama', var_nama);
       this.storage.set('sandi', var_sandi);
       
-      this.loadingService.tutuploading();
+      this.loadingService.tutup_loading();
 
       this.ionViewDidLeave();
       
     } else if (data_status == 2) {
-      this.loadingService.tutuploading();
+      this.loadingService.tutup_loading();
       
       this.swal.swal_aksi_gagal("Login gagal !", "Sandi tidak sesuai !");
 
     } else if (data_status == 3) {
-      this.loadingService.tutuploading();
+      this.loadingService.tutup_loading();
 
       this.swal.swal_aksi_gagal("Login gagal !", "Pengguna tidak aktif !");
 
     } else if (data_status == 0){
-      this.loadingService.tutuploading();
+      this.loadingService.tutup_loading();
 
       this.swal.swal_aksi_gagal("Login gagal !", "Pengguna tidak ditemukan !");
     } else {
-      this.loadingService.tutuploading();
+      this.loadingService.tutup_loading();
 
       this.swal.swal_aksi_gagal("Terjadi kesalahan !", "code error 1 !");
     }
@@ -221,7 +228,7 @@ export class LoginPage implements OnInit {
     })
     .catch(err => {
       
-      this.loadingService.tutuploading();
+      this.loadingService.tutup_loading();
       console.log(err);
       
       if (err.status == -4 ) {
@@ -240,7 +247,7 @@ export class LoginPage implements OnInit {
       this.manggil_api_lupa_nama(nama);
     })
     .catch(error => {
-      this.loadingService.tutuploading();
+      this.loadingService.tutup_loading();
       this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Server tidak merespon !");
     });
   }

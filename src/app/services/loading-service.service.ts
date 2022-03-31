@@ -9,7 +9,7 @@ export class LoadingServiceService {
 
   constructor(private loadingCtrl: LoadingController, private setget: SetGetServiceService) { }
 
-  async tampil_loading_login(){
+  async tampil_loading(){
     const loading = await this.loadingCtrl.create({
       message: 'Sedang memproses . . .',
     });
@@ -21,11 +21,7 @@ export class LoadingServiceService {
     })
   }
 
-  tutuploading(){
-    let a = this.setget.getData();
-
-    if (a == 1) {
-      this.loadingCtrl.dismiss();
-    }
+  tutup_loading(){
+    this.loadingCtrl.dismiss();
   }
 }

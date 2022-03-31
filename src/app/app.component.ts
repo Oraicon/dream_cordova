@@ -6,8 +6,8 @@ import { SetGetServiceService } from './services/set-get-service.service';
 import { ToastService } from './services/toast.service';
 import { LoadingServiceService } from './services/loading-service.service';
 import { Network } from '@awesome-cordova-plugins/network/ngx';
-import Swal from 'sweetalert2';
 import { SwalServiceService } from './services/swal-service.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-root',
@@ -39,7 +39,10 @@ export class AppComponent {
       let a = this.setget.get_koneksi();
 
       if (a == 1) {
-        this.loadingService.tutuploading();
+        const a = this.setget.getData();
+        if (a == 1) {
+          this.loadingService.tutup_loading();
+        }
         this.swalService.swal_code_error("Tidak ada internet", "Kembali ke login !");
       }
     });
@@ -51,6 +54,7 @@ export class AppComponent {
     });
   }
   
+  //backbutton logik
   async hardbackbutton(){
     this.platform.backButton.subscribeWithPriority(10, () => {
       let a = this.setget.getData();
@@ -72,8 +76,14 @@ export class AppComponent {
     });
   }
 
+  //keluar aplikasi
   async exitapp() {
-    this.loadingService.tampil_loading_login();
+    const a = this.setget.getData();
+    if (a == 1) {
+      this.loadingService.tutup_loading();
+    }
+
+    this.loadingService.tampil_loading();
     Swal.fire({
       icon: 'warning',
       title: 'Keluar aplikasi ?',
@@ -85,10 +95,10 @@ export class AppComponent {
       denyButtonText: `Tidak`,
     }).then((result) => {
       if (result.isConfirmed) {
-        this.loadingService.tutuploading();
+        this.loadingService.tutup_loading();
         navigator['app'].exitApp();
       }else {
-        this.loadingService.tutuploading();
+        this.loadingService.tutup_loading();
       }
     });
   }

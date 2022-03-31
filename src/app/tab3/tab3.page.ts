@@ -13,6 +13,7 @@ import { ModalGantinamaPage } from '../modal/modal-gantinama/modal-gantinama.pag
 import { SwalServiceService } from '../services/swal-service.service';
 import { Router } from '@angular/router';
 import { Network } from '@awesome-cordova-plugins/network/ngx';
+import { SetGetServiceService } from '../services/set-get-service.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -24,7 +25,6 @@ export class Tab3Page {
 
   // varibale lokal storage
   nama_ls;
-  pasword_ls;
   time_out = 0;
 
   //persiapan variable
@@ -82,6 +82,7 @@ export class Tab3Page {
 
 
   constructor(private momentService: MomentService,
+    private setget: SetGetServiceService,
     private network: Network,
     private swalService: SwalServiceService,
     private actionSheetController: ActionSheetController,
@@ -120,7 +121,7 @@ export class Tab3Page {
   }
 
   async tampilkandata(){
-    this.loadingCtrl.tampil_loading_login();
+    this.loadingCtrl.tampil_loading();
     const data_l_nama = await this.storage.get('nama');
     const data_l_sandi = await this.storage.get('sandi');
     await this.interval_counter();
@@ -152,19 +153,19 @@ export class Tab3Page {
 
       this.imgURL = this.pengecekan_gambar(data_status_data.image);
 
-      this.loadingCtrl.tutuploading();
+      this.loadingCtrl.tutup_loading();
     })
     .catch(err => {
-      this.loadingCtrl.tutuploading();
+      this.loadingCtrl.tutup_loading();
       this.time_out++;
 
-      if (this.time_out == 2) {
+      if (this.time_out == 3) {
         this.keluar_aplikasi();
       } else {
         if (err.status == -4) {
           this.tidak_ada_respon();
         } else {
-          this.swalService.swal_code_error("Terjadi kesalahan !", "code error 17 !");
+          this.swalService.swal_code_error("Terjadi kesalahan !", "code error 17, kembali ke login !");
         }
       }
     });
@@ -218,13 +219,15 @@ export class Tab3Page {
       this.base64_img = data_img_base64;
 
       if (this.cek_koneksi == true) {
-        this.loadingCtrl.tampil_loading_login();
+        this.loadingCtrl.tampil_loading();
         this.test_koneksi(null, null);
       } else {
-        this.loadingCtrl.tutuploading();
+        this.loadingCtrl.tutup_loading();
         this.swalService.swal_aksi_gagal("Terjadi kesalahan", "Tidak ada koneksi internet !");
       }
 
+    }).catch(error => {
+      return;
     });
   }
   galeri(){
@@ -234,13 +237,15 @@ export class Tab3Page {
       this.base64_img = data_img_base64;
 
       if (this.cek_koneksi == true) {
-        this.loadingCtrl.tampil_loading_login();
+        this.loadingCtrl.tampil_loading();
         this.test_koneksi(null, null);
       } else {
-        this.loadingCtrl.tutuploading();
+        this.loadingCtrl.tutup_loading();
         this.swalService.swal_aksi_gagal("Terjadi kesalahan", "Tidak ada koneksi internet !");
       }
-    });
+    }).catch(error => {
+      return;
+    });;
   }
 
   //upload gambar + update di api
@@ -270,7 +275,6 @@ export class Tab3Page {
     fileTransfer.upload(this.base64_img, URL, options)
     .then((res) => {
       // success upload foto
-      console.log(res);
       const data_json = JSON.parse(res.response);
       const data_status = data_json.status;
       const url_path = this.md5_upload+"/"+this.name_img;
@@ -279,15 +283,22 @@ export class Tab3Page {
         this.apiService.panggil_api_update_data_karyawan(this.type_update_gambar, l_storage_data_nama, "", "", url_path)
         .then(res => {
 
-          this.imgURL = this.base64_img;
-          this.loadingCtrl.tutuploading();
-          this.swalService.swal_aksi_berhasil("Ubah foto berhasil !", "Foto profil anda berhasil diubah !");
+          const data_json = JSON.parse(res.data);
+          const status_data = data_json.status;
 
+          if (status_data == 1) {
+            this.imgURL = this.base64_img;
+            this.loadingCtrl.tutup_loading();
+            this.swalService.swal_aksi_berhasil("Ubah foto berhasil !", "Foto profil anda berhasil diubah !");
+          } else {
+            this.loadingCtrl.tutup_loading();
+            this.swalService.swal_aksi_gagal("Ubah foto gagal !", "Foto profil anda gagal diubah !");
+          }
         })
         .catch(error => {
 
           //error upload ke database data profil
-          this.loadingCtrl.tutuploading();
+          this.loadingCtrl.tutup_loading();
           if(error.status == -4){
             this.swalService.swal_aksi_gagal("Terjadi kesalahan !", "Server tidak merespon !");
           }else{
@@ -298,14 +309,14 @@ export class Tab3Page {
       } else {
         console.log(res);
         //error response upload foto
-        this.loadingCtrl.tutuploading();
+        this.loadingCtrl.tutup_loading();
         this.swalService.swal_aksi_gagal("Terjadi kesalahan !", "code error 4 !");
       }
 
     }, (err) => {
       // error
-      console.log(err);
-      this.loadingCtrl.tutuploading();
+      // console.log(err);
+      this.loadingCtrl.tutup_loading();
       this.swalService.swal_code_error("Terjadi kesalahan !", "code error 13 !, kembali ke login !");
     });
   }
@@ -346,19 +357,14 @@ export class Tab3Page {
       if (data.data.data == null) {
         return;
       } else {
-
         if (this.cek_koneksi == true) {
 
           let nama_baru = data.data.data;
-
-          this.loadingCtrl.tampil_loading_login();
-
+          this.loadingCtrl.tampil_loading();
           this.test_koneksi(nama_baru, null);
 
         } else {
-
           this.swalService.swal_aksi_gagal("Terjadi kesalahan", "Tidak ada koneksi internet !");
-
         }
         
       }
@@ -384,7 +390,7 @@ export class Tab3Page {
 
           let sandi_baru = data.data.data;
 
-          this.loadingCtrl.tampil_loading_login();
+          this.loadingCtrl.tampil_loading();
 
           this.test_koneksi(null, sandi_baru);
 
@@ -415,11 +421,11 @@ export class Tab3Page {
         //mendapatkan data
         this.storage.set('nama', nama_baru);
         this.username_pengguna = nama_baru;
-        this.loadingCtrl.tutuploading();
+        this.loadingCtrl.tutup_loading();
         this.swalService.swal_aksi_berhasil("Berhasil !", "Nama pengguna anda telah diganti dengan " + nama_baru);
       } else {
         //jika status != 1
-        this.loadingCtrl.tutuploading();
+        this.loadingCtrl.tutup_loading();
         this.swalService.swal_aksi_gagal("Ubah nama gagal !", "code error 5 !");
       }
       
@@ -427,7 +433,7 @@ export class Tab3Page {
     .catch(err => {
       //error
       console.log(err);
-      this.loadingCtrl.tutuploading();
+      this.loadingCtrl.tutup_loading();
 
       if(err.status == -4){
         this.swalService.swal_aksi_gagal("Terjadi kesalahan !", "Server tidak merespon !");
@@ -454,18 +460,18 @@ export class Tab3Page {
         //mendapatkan data
         this.storage.set('sandi', sandi_baru);
         this.sandi_pengguna = sandi_baru;
-        this.loadingCtrl.tutuploading();
+        this.loadingCtrl.tutup_loading();
         this.swalService.swal_aksi_berhasil("Berhasil !", "Sandi pengguna anda telah diubah !");
       } else {
         //jika status != 1
-        this.loadingCtrl.tutuploading();
+        this.loadingCtrl.tutup_loading();
         this.swalService.swal_aksi_gagal("Ubah password gagal !", "code error 7 !");
       }
       
     })
     .catch(err => {
       //error
-      this.loadingCtrl.tutuploading();
+      this.loadingCtrl.tutup_loading();
       if(err.status == -4){
         this.swalService.swal_aksi_gagal("Terjadi kesalahan !", "Server tidak merespon !");
       }else{
@@ -475,8 +481,8 @@ export class Tab3Page {
   }
 
   //logout
-  async keluar(){
-    this.loadingCtrl.tampil_loading_login();
+  async keluar(){   
+    this.loadingCtrl.tampil_loading();
     Swal.fire({
       icon: 'warning',
       title: 'Keluar akun ?',
@@ -488,16 +494,21 @@ export class Tab3Page {
       denyButtonText: `Tidak`,
     }).then((result) => {
       if (result.isConfirmed) {
-        this.loadingCtrl.tutuploading();
+        this.loadingCtrl.tutup_loading();
         this.router.navigate(["/login"], { replaceUrl: true });
       }else {
-        this.loadingCtrl.tutuploading();
+        this.loadingCtrl.tutup_loading();
       }
     });
   }
 
   async tidak_ada_respon(){
-    this.loadingCtrl.tampil_loading_login();
+    const a = this.setget.getData();
+    if (a == 1) {
+      this.loadingCtrl.tutup_loading();
+    }
+
+    this.loadingCtrl.tampil_loading();
     Swal.fire({
       icon: 'warning',
       title: 'Terjadi kesalahan !',
@@ -507,14 +518,19 @@ export class Tab3Page {
       confirmButtonText: 'Iya !',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.loadingCtrl.tutuploading();
+        this.loadingCtrl.tutup_loading();
         this.tampilkandata();
       }
     });
   }
 
   async keluar_aplikasi(){
-    this.loadingCtrl.tampil_loading_login();
+    const a = this.setget.getData();
+    if (a == 1) {
+      this.loadingCtrl.tutup_loading();
+    }
+
+    this.loadingCtrl.tampil_loading();
     Swal.fire({
       icon: 'warning',
       title: 'Terjadi kesalahan !',
@@ -524,7 +540,7 @@ export class Tab3Page {
       confirmButtonText: 'Iya !',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.loadingCtrl.tutuploading();
+        this.loadingCtrl.tutup_loading();
         navigator['app'].exitApp();
       }
     });
@@ -544,7 +560,7 @@ export class Tab3Page {
 
     })
     .catch(error => {
-      this.loadingCtrl.tutuploading();
+      this.loadingCtrl.tutup_loading();
       this.swalService.swal_aksi_gagal("Terjadi kesalahan !", "Server tidak merespon !");
     });
   }

@@ -7,7 +7,6 @@ import { DatePipe } from '@angular/common';
 import { Storage } from '@ionic/storage-angular';
 import { ApiServicesService } from '../services/api-services.service';
 import { LoadingServiceService } from '../services/loading-service.service';
-import { AlertServicesService } from '../services/alert-services.service';
 import { Router } from '@angular/router';
 import { SetGetServiceService } from 'src/app/services/set-get-service.service';
 
@@ -65,7 +64,6 @@ export class Tab2Page {
     private navCtrl: NavController, 
     private router: Router, 
     private storage: Storage, 
-    private alertService: AlertServicesService, 
     private alertCtrl: AlertController, 
     private loadingService: LoadingServiceService, 
     private apiService : ApiServicesService, 

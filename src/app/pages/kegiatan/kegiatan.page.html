@@ -99,15 +99,19 @@
               <ion-card-content class="ion-no-padding">
                 <ion-grid fixed class="ion-no-padding">
                   <ion-row>
-                    <h2 class="ion-padding-start ion-no-margin text_konten">Daftar Kegiatan</h2>
                     <ion-col size="12">
                       
                       <div *ngIf="data_masih_proses != 0; then data_ada; else data_tidak_ada"></div>
                       
                       <ng-template #data_ada>
+                        <ion-item class="ion-align-items-center abu" lines="none">
+                          <ion-icon class="padding_icon" name="clipboard-outline"></ion-icon>
+                          <h2 class="ion-no-margin text_konten">Daftar Kegiatan</h2>
+                        </ion-item>
+
                         <ion-list>
                           <ion-item button *ngFor="let data_proses of data_masih_proses" (click)="proyek_kegiatan(data_proses.id, 1)">
-                            <ion-label class="text_konten">{{ data_proses.nama_kegiatan }}</ion-label>
+                            <ion-label class="text_konten ion-text-wrap">{{ data_proses.nama_kegiatan }}</ion-label>
                             <ion-icon name="chevron-forward-outline" class="ion-text-end"></ion-icon>
                           </ion-item>
                         </ion-list>
@@ -177,12 +181,17 @@
               <ion-card-content class="ion-no-padding">
                 <ion-grid fixed class="ion-no-padding">
                   <ion-row>
-                    <h2 class="ion-padding-start ion-no-margin">Daftar Kegiatan</h2>
+
                     <ion-col size="12">
   
                       <div *ngIf="data_sudah_komplit != 0; then data_ada; else data_tidak_ada"></div>
   
                       <ng-template #data_ada>
+                        <ion-item class="ion-align-items-center abu" lines="none">
+                          <ion-icon class="padding_icon" name="clipboard-outline"></ion-icon>
+                          <h2 class="ion-no-margin text_konten">Daftar Kegiatan</h2>
+                        </ion-item>
+
                         <ion-list>
                           <ion-item button *ngFor="let data_komplit of data_sudah_komplit" (click)="proyek_kegiatan(data_komplit.id, 2)">
                             <ion-label>{{ data_komplit.nama_kegiatan }}</ion-label>

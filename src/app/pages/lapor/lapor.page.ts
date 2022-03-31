@@ -200,11 +200,11 @@ export class LaporPage implements OnInit {
             this.setget.set_Page(a);
         
             this.setget.setAlert(1);
-            this.loadingService.tutuploading();
+            this.loadingService.tutup_loading();
         
             this.navCtrl.back();
           } else {
-            this.loadingService.tutuploading();
+            this.loadingService.tutup_loading();
             this.swal.swal_aksi_gagal("Terjadi kesalahan", "code error 9 !");
           }
       
@@ -212,7 +212,7 @@ export class LaporPage implements OnInit {
         .catch(error => {
       
           // console.log(error);
-          this.loadingService.tutuploading();
+          this.loadingService.tutup_loading();
           if (error.status == -4) {
             this.swal.swal_aksi_gagal("Terjadi kesalahan", "Server tidak merespon !");
           } else {
@@ -224,7 +224,7 @@ export class LaporPage implements OnInit {
       } else {
         // console.log("error");
 
-        this.loadingService.tutuploading();
+        this.loadingService.tutup_loading();
         this.swal.swal_aksi_gagal("Terjadi kesalahan", "code error 11 !");
         
       }
@@ -235,7 +235,7 @@ export class LaporPage implements OnInit {
   
       // console.log(error);
 
-      this.loadingService.tutuploading();
+      this.loadingService.tutup_loading();
       this.swal.swal_code_error("Terjadi kesalahan", "code error 12 !, kembali ke login !");
   
     });
@@ -299,7 +299,7 @@ export class LaporPage implements OnInit {
         const persen = this.myGroup.value.data_persen;
 
         if (this.cek_koneksi == true) {
-          this.loadingService.tampil_loading_login();
+          this.loadingService.tampil_loading();
           this.test_koneksi(keterangan, persen);
         } else {
           this.swal.swal_aksi_gagal("Terjadi kesalahan", "Tidak ada koneksi internet !");
@@ -319,7 +319,7 @@ export class LaporPage implements OnInit {
 
     })
     .catch(error => {
-      this.loadingService.tutuploading();
+      this.loadingService.tutup_loading();
       this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Server tidak merespon !");
     });
   }

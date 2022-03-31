@@ -58,7 +58,7 @@ export class KegiatanPage implements OnInit {
 
   //get data kegiatan
   async tampilkan_data(){
-    this.loadingService.tampil_loading_login();
+    this.loadingService.tampil_loading();
 
     const a = this.setget.getDatakegiatan();
 
@@ -79,12 +79,12 @@ export class KegiatanPage implements OnInit {
       } else {
         this.data_masih_proses = [];
         this.data_sudah_komplit = [];
-        this.loadingService.tutuploading();
+        this.loadingService.tutup_loading();
       }
   
     })
     .catch(error => {
-      this.loadingService.tutuploading();
+      this.loadingService.tutup_loading();
       this.timeout++;
       
       if (this.timeout == 2) {
@@ -122,39 +122,20 @@ export class KegiatanPage implements OnInit {
     a = [];
     b = [];
 
-    this.tutuploading();
+    this.tutup_loading();
     this.timeout = 0;
   }
 
   //tutup loading dan skeleton loading
-  async tutuploading(){
+  async tutup_loading(){
     this.loading = false; 
-    this.loadingService.tutuploading();
+    this.loadingService.tutup_loading();
   }
 
   // warna segment
   segmentChanged(e){
     this.warna_segment = e.detail.value;
   }
-
-  // segmentChanged(e){
-  //   this.warna_segment = e.detail.value;
-  //   if (this.warna_segment == 1) {
-  //     this.slides.slideTo(0, 400);
-  //   }else{
-  //     this.slides.slideTo(1, 400);
-  //   }
-  // }
-
-  // slideDidChange() {
-  //   this.slides.getActiveIndex().then(index => {
-  //     if (index == 0) {
-  //       this.warna_segment = 1;
-  //     } else {
-  //       this.warna_segment = 2;
-  //     }
-  //   });
-  // };
 
   //pindah aktiviti
   proyek_kegiatan(id_detail, page_type){
@@ -173,7 +154,7 @@ export class KegiatanPage implements OnInit {
   }
 
   async tidak_ada_respon(){
-    this.loadingService.tampil_loading_login();
+    this.loadingService.tampil_loading();
     Swal.fire({
       icon: 'warning',
       title: 'Terjadi kesalahan !',
@@ -183,14 +164,14 @@ export class KegiatanPage implements OnInit {
       confirmButtonText: 'Iya !',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.loadingService.tutuploading();
+        this.loadingService.tutup_loading();
         this.tampilkan_data();
       }
     });
   }
 
   async keluar_aplikasi(){
-    this.loadingService.tampil_loading_login();
+    this.loadingService.tampil_loading();
     Swal.fire({
       icon: 'warning',
       title: 'Terjadi kesalahan !',
@@ -200,7 +181,7 @@ export class KegiatanPage implements OnInit {
       confirmButtonText: 'Iya !',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.loadingService.tutuploading();
+        this.loadingService.tutup_loading();
         navigator['app'].exitApp();
       }
     });

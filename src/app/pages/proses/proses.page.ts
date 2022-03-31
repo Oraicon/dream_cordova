@@ -65,7 +65,7 @@ export class ProsesPage implements OnInit {
 
   //menampilkan data progres detail
   async tampilkan_data(){
-    this.loadingService.tampil_loading_login();
+    this.loadingService.tampil_loading();
     const a = this.setget.getProses();
     const b = this.setget.get_Page();
 
@@ -113,7 +113,7 @@ export class ProsesPage implements OnInit {
     })
     .catch(error => {
       this.timeout++;
-      this.loadingService.tutuploading();
+      this.loadingService.tutup_loading();
       // console.log(error);
       if (this.timeout == 2) {
         this.keluar_aplikasi();
@@ -155,12 +155,12 @@ export class ProsesPage implements OnInit {
       }
       else{
         this.riwayat_loading = false;
-        this.loadingService.tutuploading();
+        this.loadingService.tutup_loading();
       }
     })
     .catch(error => {
       // console.log(error);
-      this.loadingService.tutuploading();
+      this.loadingService.tutup_loading();
 
       if (this.timeout == 2) {
         this.keluar_aplikasi();
@@ -190,7 +190,7 @@ export class ProsesPage implements OnInit {
 
     this.riwayat_laporan = true;
     this.riwayat_loading = false;
-    this.loadingService.tutuploading();
+    this.loadingService.tutup_loading();
     this.back_with_success();
   }
 
@@ -231,7 +231,7 @@ export class ProsesPage implements OnInit {
   }
 
   async tidak_ada_respon(){
-    this.loadingService.tampil_loading_login();
+    this.loadingService.tampil_loading();
     Swal.fire({
       icon: 'warning',
       title: 'Terjadi kesalahan !',
@@ -241,14 +241,14 @@ export class ProsesPage implements OnInit {
       confirmButtonText: 'Iya !',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.loadingService.tutuploading();
+        this.loadingService.tutup_loading();
         this.tampilkan_data();
       }
     });
   }
 
   async keluar_aplikasi(){
-    this.loadingService.tampil_loading_login();
+    this.loadingService.tampil_loading();
     Swal.fire({
       icon: 'warning',
       title: 'Terjadi kesalahan !',
@@ -258,7 +258,7 @@ export class ProsesPage implements OnInit {
       confirmButtonText: 'Iya !',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.loadingService.tutuploading();
+        this.loadingService.tutup_loading();
         navigator['app'].exitApp();
       }
     });

@@ -35,7 +35,7 @@
         </ion-col>
       </ng-template>
       <ion-col size="12">
-        <ion-item class="ion-align-items-center">
+        <ion-item class="ion-align-items-center ">
           <ion-icon class="padding_icon" name="person-outline"></ion-icon>
           <p class="">Data Akun</p>
         </ion-item>
@@ -81,7 +81,7 @@
       </ion-col>
       
       <ion-col size="12">
-        <ion-item>
+        <ion-item class="ion-align-items-center ">
           <ion-icon class="padding_icon" name="documents-outline"></ion-icon>
           <p class="">Informasi Pengguna</p>
         </ion-item>
@@ -170,8 +170,8 @@
           <ion-item>
             <ion-label>
               <h2>Tanggal Bergabung</h2>
-              <h3  *ngIf="tanggalbergabung_pengguna; else bergabung">{{ tanggalbergabung_pengguna }}</h3>
-              <ng-template #bergabung>
+              <h3  *ngIf="tanggalbergabung_pengguna; else bergng">{{ tanggalbergabung_pengguna }}</h3>
+              <ng-template #bergng>
                 <ion-skeleton-text class="" animated style="width: 40%; height: 1rem;"></ion-skeleton-text>
               </ng-template> 
             </ion-label>

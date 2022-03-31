@@ -27,7 +27,7 @@ export class SwalServiceService {
   }
 
   swal_aksi_berhasil(text1, text2){
-    this.loading.tampil_loading_login();
+    this.loading.tampil_loading();
     Swal.fire({
       icon: 'success',
       title: '' + text1,
@@ -37,13 +37,13 @@ export class SwalServiceService {
       confirmButtonText: 'OK !',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.loading.tutuploading();
+        this.loading.tutup_loading();
       }
     });
   }
 
   swal_aksi_gagal(text1, text2){
-    this.loading.tampil_loading_login();
+    this.loading.tampil_loading();
     Swal.fire({
       icon: 'error',
       title: '' + text1,
@@ -53,13 +53,13 @@ export class SwalServiceService {
       confirmButtonText: 'OK !',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.loading.tutuploading();
+        this.loading.tutup_loading();
       }
     });
   }
 
   swal_code_error(text1, text2){
-    this.loading.tampil_loading_login();
+    this.loading.tampil_loading();
     Swal.fire({
       icon: 'error',
       title: '' + text1,
@@ -69,7 +69,7 @@ export class SwalServiceService {
       confirmButtonText: 'OK !',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.loading.tutuploading();
+        this.loading.tutup_loading();
         this.router.navigate(["/login"], { replaceUrl: true });
       }
     });
