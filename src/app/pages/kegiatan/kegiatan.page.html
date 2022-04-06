@@ -79,7 +79,7 @@
                   </ion-col>
                   <ion-col size="12">
                     
-                    <ion-segment (ionChange)="segmentChanged($event)" value="1" [color]="warna_segment == 1 ? 'warning' : 'success'">
+                    <ion-segment (ionChange)="segmentChanged($event)" [(ngModel)]="warna_segment" [color]="warna_segment == 1 ? 'warning' : 'success'">
                       <ion-segment-button value="1">
                         <ion-label class="text_segment">Masih Proses</ion-label>
                       </ion-segment-button>
@@ -92,8 +92,148 @@
                 </ion-row>
               </ion-grid>
             </ion-card-header>
+
+            <ion-card-content>
+              <ion-slides  #slides pager="true" [options]="slideOpts" (ionSlideDidChange)="slideDidChange(slides)">
+                <ion-slide>
+                  
+                  <ion-grid class="grid_width ion-no-padding" fixed>
+                    <ion-row>
+                      <ion-col size="12">
+                      
+                        <div *ngIf="data_masih_proses != 0; then data_ada; else data_tidak_ada"></div>
+                      
+                        <ng-template #data_ada>
+                          <ion-item class="ion-align-items-center abu" lines="none">
+                            <ion-icon class="padding_icon" name="clipboard-outline"></ion-icon>
+                            <h2 class="ion-no-margin text_konten">Daftar Kegiatan</h2>
+                          </ion-item>
   
-            <div *ngIf="warna_segment == 1; then masih_proses; else sudah_beres"></div>
+                          <ion-list>
+                            <ion-item button *ngFor="let data_proses of data_masih_proses" (click)="proyek_kegiatan(data_proses.id, 1)">
+                              <ion-label class="text_konten ion-text-wrap">{{ data_proses.nama_kegiatan }}</ion-label>
+                              <ion-icon name="chevron-forward-outline" class="ion-text-end"></ion-icon>
+                            </ion-item>
+                          </ion-list>
+                        </ng-template>
+    
+                        <ng-template #data_tidak_ada>
+    
+                        <div *ngIf="data_sudah_komplit != 0; then data_ada_beres; else data_ada_belum_beres"></div>
+    
+                        <ng-template #data_ada_beres>
+                          <ion-grid fixed class="ion-no-padding">
+                            <ion-row>
+                              <ion-col size="12">
+                                <img class="image_size" src="assets/beres.png" (error)="errorHandler($event)">
+                              </ion-col>
+                              <ion-col size="12">
+                                <ion-grid fixed>
+                                  <ion-row class="ion-text-center">
+                                    <ion-col size="12">
+                                      <h1>Kegiatan selesai !</h1>
+              
+                                    </ion-col>
+                                    <ion-col size="12">
+                                      <h2>Anda telah menyelesaikan seluruh kegiatan di proyek ini !</h2>
+              
+                                    </ion-col>
+                                  </ion-row>
+                                </ion-grid>
+                              </ion-col>
+                            </ion-row>
+                          </ion-grid>
+                        </ng-template>
+    
+                        <ng-template #data_ada_belum_beres>
+                          <ion-grid fixed class="ion-no-padding">
+                            <ion-row>
+                              <ion-col size="12">
+                                <img class="image_size" src="assets/kosong.png" (error)="errorHandler($event)">
+                              </ion-col>
+                              <ion-col size="12">
+                                <ion-grid fixed>
+                                  <ion-row class="ion-text-center">
+                                    <ion-col size="12">
+                                      <h1 >Tidak ada Kegiatan !</h1>
+              
+                                    </ion-col>
+                                    <ion-col size="12">
+                                      <h2>Maaf, belum ada kegiatan di proyek ini !</h2>
+              
+                                    </ion-col>
+                                  </ion-row>
+                                </ion-grid>
+                              </ion-col>
+                            </ion-row>
+                          </ion-grid>
+                        </ng-template>
+    
+                        </ng-template>
+
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+
+                </ion-slide>
+
+                <ion-slide >
+
+                  <ng-container
+                    *ngIf="data_sudah_komplit != 0; then ada; else data_tidak_ada">
+                  </ng-container>
+
+                  <ng-template #ada>
+                    <ion-grid fixed class="grid_width ion-no-padding">
+                      <ion-row>
+                        <ion-col size="12">
+                            <ion-list>
+                              <ion-item class="ion-align-items-center abu" lines="none">
+                                <ion-icon class="padding_icon" name="clipboard-outline"></ion-icon>
+                                <h2 class="ion-no-margin text_konten">Daftar Kegiatan</h2>
+                              </ion-item>
+  
+                              <ion-item button *ngFor="let data_komplit of data_sudah_komplit" (click)="proyek_kegiatan(data_komplit.id, 2)">
+                                <ion-label>{{ data_komplit.nama_kegiatan }}</ion-label>
+                                <ion-icon name="chevron-forward-outline" class="ion-text-end"></ion-icon>
+                              </ion-item>
+                            </ion-list>
+                        </ion-col>
+                      </ion-row>
+                    </ion-grid>
+                  </ng-template>
+
+                  <ng-template #data_tidak_ada>
+
+                      <ion-grid fixed class="grid_width ion-no-padding">
+                        <ion-row>
+                          <ion-col size="12">
+                            <img class="image_size" src="assets/kosong.png" (error)="errorHandler($event)">
+                          </ion-col>
+                          <ion-col size="12">
+                            <ion-grid fixed>
+                              <ion-row class="ion-text-center">
+                                <ion-col size="12">
+                                  <h1 >Tidak ada Kegiatan !</h1>
+          
+                                </ion-col>
+                                <ion-col size="12">
+                                  <h2>Belum ada kegiatan yang selesai !</h2>
+          
+                                </ion-col>
+                              </ion-row>
+                            </ion-grid>
+                          </ion-col>
+                        </ion-row>
+                      </ion-grid>
+
+                  </ng-template>
+                  </ion-slide>
+              </ion-slides>
+
+              </ion-card-content>
+  
+            <!-- <div *ngIf="warna_segment == 1; then masih_proses; else sudah_beres"></div>
   
             <ng-template #masih_proses>
               <ion-card-content class="ion-no-padding">
@@ -228,7 +368,7 @@
                   </ion-row>
                 </ion-grid>
               </ion-card-content>
-            </ng-template>
+            </ng-template> -->
   
           </ion-card>
         </ion-col>

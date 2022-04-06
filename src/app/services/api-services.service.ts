@@ -45,6 +45,7 @@ export class ApiServicesService {
 
   kirim_api_progres(api_progres, api_image, api_remark, api_progres_pengerjaan){
     // this.http.useBasicAuth('dream_1.0', 'dream_1.0');
+    this.http.setRequestTimeout(20.0);
     return this.http.post('https://dads-demo-1.000webhostapp.com/api/insertProgressMilestone', {"progress_detail_id" :api_progres, "url_image" :api_image, "remark" :api_remark, "progress_pengerjaan" :api_progres_pengerjaan}, {'Accept': 'application/json', 'Content-Type':'application/x-www-form-urlencoded'})
   }
 

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { LoadingServiceService } from './loading-service.service';
+import { SetGetServiceService } from './set-get-service.service';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 
@@ -10,6 +11,7 @@ import Swal from 'sweetalert2';
 export class SwalServiceService {
 
   constructor(
+    private setget: SetGetServiceService,
     private loading: LoadingServiceService,
     private router: Router
   ) { }
@@ -69,6 +71,7 @@ export class SwalServiceService {
       confirmButtonText: 'OK !',
     }).then((result) => {
       if (result.isConfirmed) {
+        this.setget.set_swal(0);
         this.loading.tutup_loading();
         this.router.navigate(["/login"], { replaceUrl: true });
       }

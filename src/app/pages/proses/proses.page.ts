@@ -31,6 +31,7 @@ export class ProsesPage implements OnInit {
   tipe_page = true;
   riwayat_laporan = false;
   riwayat_loading = true;
+  data_swal;
 
   constructor(private momentService: MomentService,
     private swal: SwalServiceService,
@@ -51,6 +52,7 @@ export class ProsesPage implements OnInit {
 
   //awal masuk page
   async ionViewWillEnter(){
+    this.setget.set_swal(0);
     this.tampilkan_data();
   }
 
@@ -115,7 +117,7 @@ export class ProsesPage implements OnInit {
       this.timeout++;
       this.loadingService.tutup_loading();
       // console.log(error);
-      if (this.timeout == 2) {
+      if (this.timeout >= 3) {
         this.keluar_aplikasi();
     } else {
       if (error.status == -4) {
@@ -162,13 +164,18 @@ export class ProsesPage implements OnInit {
       // console.log(error);
       this.loadingService.tutup_loading();
 
-      if (this.timeout == 2) {
-        this.keluar_aplikasi();
-      } else {
-        if (error.status == -4) {
-          this.tidak_ada_respon();
+      this.data_swal = this.setget.get_swal();
+
+      if(this.data_swal == 0){
+        this.setget.set_swal(1);
+        if (this.timeout >= 3) {
+          this.keluar_aplikasi();
         } else {
-          this.swal.swal_code_error("Terjadi kesalahan !", "code error 20 !, kembali ke login !");
+          if (error.status == -4) {
+            this.tidak_ada_respon();
+          } else {
+            this.swal.swal_code_error("Terjadi kesalahan !", "code error 20 !, kembali ke login !");
+          }
         }
       }
     });
@@ -231,23 +238,49 @@ export class ProsesPage implements OnInit {
   }
 
   async tidak_ada_respon(){
+    const a = this.setget.getData();
+    if (a == 1) {
+      this.loadingService.tutup_loading();
+    }
+
+    this.data_type_page;
+    this.data_id_header;
+    this.data_id_kegiatan;
+    this.data_judul_kegiatan;
+    this.data_obj_kegiatan = {};
+    this.data_obj_kegiatan_tanggal = {};
+    this.status_pengerjaan;
+    this.data_arr_progressmilsetone;
+    this.persen_tertinggi;
+    this.tanggal_pm = {};
+    this.tanggal_detail;
+    this.tipe_page = true;
+    this.riwayat_laporan = false;
+    this.riwayat_loading = true;
+
     this.loadingService.tampil_loading();
     Swal.fire({
       icon: 'warning',
       title: 'Terjadi kesalahan !',
-      text: 'Server tidak merespon, tekan iya untuk mencoba lagi !',
+      text: 'Server tidak merespon, coba lagi ?!',
       backdrop: false,
       confirmButtonColor: '#3880ff',
       confirmButtonText: 'Iya !',
     }).then((result) => {
       if (result.isConfirmed) {
         this.loadingService.tutup_loading();
+        this.setget.set_swal(0);
         this.tampilkan_data();
       }
     });
   }
 
   async keluar_aplikasi(){
+    const a = this.setget.getData();
+    if (a == 1) {
+      this.loadingService.tutup_loading();
+    }
+
     this.loadingService.tampil_loading();
     Swal.fire({
       icon: 'warning',

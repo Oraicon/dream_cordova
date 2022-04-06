@@ -15,4 +15,12 @@ export class ToastService {
     });
     toast.present();
   }
+
+  async Toast_mengirim_kembali() {
+    const toast = await this.toastController.create({
+      message: 'Gagal mengirim, mencoba mengirim kembali !',
+      duration: 2000
+    });
+    toast.present();
+  }
 }

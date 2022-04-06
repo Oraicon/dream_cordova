@@ -160,7 +160,7 @@ export class LoginPage implements OnInit {
         //mendapatkan data
         const data_email = data_json.data[0].email;
         this.loadingService.tutup_loading();
-        this.swal.swal_aksi_berhasil("Sandi terkirim !", "Sandi baru sudah dikirim ke email: "+data_email);
+        this.swal.swal_aksi_berhasil("Sandi terkirim !", "Sandi baru sudah dikirim ke email: " + data_email);
   
       } else if (data_status == 0) {
         //jika status != 1
@@ -177,7 +177,7 @@ export class LoginPage implements OnInit {
       //error
       this.loadingService.tutup_loading();
       if (err.status == -4) {
-        this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Server tidak merespon !");
+        this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Tidak ada respon, coba beberapa saat lagi !");
       } else {
         this.swal.swal_aksi_gagal("Terjadi kesalahan !", "code error 3 !");
       }
@@ -232,7 +232,7 @@ export class LoginPage implements OnInit {
       console.log(err);
       
       if (err.status == -4 ) {
-        this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Server tidak merespon !");
+        this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Tidak ada respon, coba beberapa saat lagi !");
       } else {
         this.swal.swal_aksi_gagal("Terjadi kesalahan !", "code error 2 !");
       }
@@ -243,12 +243,14 @@ export class LoginPage implements OnInit {
   test_koneksi(nama){
     this.apiService.cek_koneksi()
     .then(data => {
-
       this.manggil_api_lupa_nama(nama);
     })
     .catch(error => {
-      this.loadingService.tutup_loading();
-      this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Server tidak merespon !");
+      const a = this.setget.getData();
+      if (a == 1) {
+        this.loadingService.tutup_loading();
+      }
+      this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Tidak ada respon, coba beberapa saat lagi !");
     });
   }
 }

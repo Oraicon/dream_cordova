@@ -87,7 +87,7 @@ export class KegiatanPage implements OnInit {
       this.loadingService.tutup_loading();
       this.timeout++;
       
-      if (this.timeout == 2) {
+      if (this.timeout >= 3) {
           this.keluar_aplikasi();
       } else {
         if (error.status == -4) {
@@ -135,7 +135,23 @@ export class KegiatanPage implements OnInit {
   // warna segment
   segmentChanged(e){
     this.warna_segment = e.detail.value;
+
+    if (this.warna_segment == 1) {
+      this.slides.slideTo(0, 400);
+    }else{
+      this.slides.slideTo(1, 400);
+    }
   }
+
+  slideDidChange() {
+    this.slides.getActiveIndex().then(index => {
+      if (index == 0) {
+        this.warna_segment = 1;
+      } else {
+        this.warna_segment = 2;
+      }
+    });
+  };
 
   //pindah aktiviti
   proyek_kegiatan(id_detail, page_type){
@@ -154,11 +170,16 @@ export class KegiatanPage implements OnInit {
   }
 
   async tidak_ada_respon(){
+    const a = this.setget.getData();
+    if (a == 1) {
+      this.loadingService.tutup_loading();
+    }
+
     this.loadingService.tampil_loading();
     Swal.fire({
       icon: 'warning',
       title: 'Terjadi kesalahan !',
-      text: 'Server tidak merespon, tekan iya untuk mencoba lagi !',
+      text: 'Server tidak merespon, coba lagi ?!',
       backdrop: false,
       confirmButtonColor: '#3880ff',
       confirmButtonText: 'Iya !',
@@ -171,6 +192,11 @@ export class KegiatanPage implements OnInit {
   }
 
   async keluar_aplikasi(){
+    const a = this.setget.getData();
+    if (a == 1) {
+      this.loadingService.tutup_loading();
+    }
+
     this.loadingService.tampil_loading();
     Swal.fire({
       icon: 'warning',

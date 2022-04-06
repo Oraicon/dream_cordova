@@ -10,6 +10,8 @@ import { SetGetServiceService } from 'src/app/services/set-get-service.service';
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { SwalServiceService } from 'src/app/services/swal-service.service';
 import { Network } from '@awesome-cordova-plugins/network/ngx';
+import Swal from 'sweetalert2';
+import { ToastService } from 'src/app/services/toast.service';
 
 
 @Component({
@@ -60,15 +62,14 @@ export class LaporPage implements OnInit {
     mediaType: this.camera.MediaType.PICTURE
   }
 
-  customAlertOptions: any = {
-    header: 'Persen Pengerjaan',
-    mode: 'ios',
-    translucent: true
-  };
+  customPopoverOptions: any ={
+    mode: 'ios'
+  }
 
   myGroup: FormGroup;
 
   constructor(private setget: SetGetServiceService, 
+    private toastService: ToastService,
     private network: Network,
     private swal: SwalServiceService,
     public formBuilder: FormBuilder,
@@ -183,44 +184,16 @@ export class LaporPage implements OnInit {
     fileTransfer.upload(this.base64_img, URL, options)
     .then(data => {
 
+      console.log(data);
+
       const data_json = JSON.parse(data.response);
       const data_status = data_json.status;
 
       if (data_status == 0) {
         this.interval_counter();
 
-        this.apiService.kirim_api_progres(this.lapor_id, this.md5_upload+ "/" + this.name_img, keterangan, persen)
-        .then(data => {
-          
-          const data_json = JSON.parse(data.data);
-          const data_status = data_json.status;
+        this.test_koneksi2(nama_file, keterangan, persen, a);
 
-          if (data_status == 0) {
-            this.setget.setLog(this.lapor_id, this.nama_kegiatan);
-            this.setget.set_Page(a);
-        
-            this.setget.setAlert(1);
-            this.loadingService.tutup_loading();
-        
-            this.navCtrl.back();
-          } else {
-            this.loadingService.tutup_loading();
-            this.swal.swal_aksi_gagal("Terjadi kesalahan", "code error 9 !");
-          }
-      
-        })
-        .catch(error => {
-      
-          // console.log(error);
-          this.loadingService.tutup_loading();
-          if (error.status == -4) {
-            this.swal.swal_aksi_gagal("Terjadi kesalahan", "Server tidak merespon !");
-          } else {
-            this.swal.swal_code_error("Terjadi kesalahan", "code error 10 !, kembali ke login !");
-          }
-
-      
-        });
       } else {
         // console.log("error");
 
@@ -238,6 +211,41 @@ export class LaporPage implements OnInit {
       this.loadingService.tutup_loading();
       this.swal.swal_code_error("Terjadi kesalahan", "code error 12 !, kembali ke login !");
   
+    });
+  }
+
+  mengirim_data(nama_file, keterangan, persen, a){
+    this.apiService.kirim_api_progres(this.lapor_id, this.md5_upload+ "/" + nama_file, keterangan, persen)
+    .then(data => {
+      
+      console.log(data);
+
+      const data_json = JSON.parse(data.data);
+      const data_status = data_json.status;
+
+      if (data_status == 0) {
+        this.setget.setLog(this.lapor_id, this.nama_kegiatan);
+        this.setget.set_Page(a);
+    
+        this.setget.setAlert(1);
+        this.loadingService.tutup_loading();
+    
+        this.navCtrl.back();
+      } else {
+        this.loadingService.tutup_loading();
+        this.swal.swal_aksi_gagal("Terjadi kesalahan", "code error 9 !");
+      }
+  
+    })
+    .catch(error => {
+  
+      // console.log(error);
+      this.loadingService.tutup_loading();
+      if (error.status == -4) {
+        this.swal.swal_aksi_gagal("Terjadi kesalahan", "Server tidak merespon !");
+      } else {
+        this.swal.swal_code_error("Terjadi kesalahan", "code error 10 !, kembali ke login !");
+      }
     });
   }
 
@@ -298,12 +306,29 @@ export class LaporPage implements OnInit {
         const keterangan = this.myGroup.value.data_keterangan;
         const persen = this.myGroup.value.data_persen;
 
-        if (this.cek_koneksi == true) {
-          this.loadingService.tampil_loading();
-          this.test_koneksi(keterangan, persen);
-        } else {
-          this.swal.swal_aksi_gagal("Terjadi kesalahan", "Tidak ada koneksi internet !");
-        }
+        this.loadingService.tampil_loading();
+        Swal.fire({
+          title: 'Perhatian !!',
+          text: "Pastikan anda sudah mengisi data dengan benar !. Proses pengiriman tergantung dari sinyal internet !",
+          icon: 'info',
+          backdrop: false,
+          showDenyButton: true,
+          confirmButtonColor: '#3880ff',
+          confirmButtonText: 'Ya',
+          denyButtonText: `Tidak`,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.loadingService.tutup_loading();
+            if (this.cek_koneksi == true) {
+              this.loadingService.tampil_loading();
+              this.test_koneksi(keterangan, persen);
+            } else {
+              this.swal.swal_aksi_gagal("Terjadi kesalahan", "Tidak ada koneksi internet !");
+            }
+          }
+        })
+
+
 
       }else{
         this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Gambar tidak boleh kosong !");
@@ -315,12 +340,30 @@ export class LaporPage implements OnInit {
     this.apiService.cek_koneksi()
     .then(data => {
 
+      console.log(data);
+
       this.validasi(keterangan, persen);
 
     })
     .catch(error => {
       this.loadingService.tutup_loading();
-      this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Server tidak merespon !");
+      this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Tidak ada respon, coba beberapa saat lagi !");
+    });
+  }
+
+  test_koneksi2(nama_file, keterangan, persen, a){
+    this.apiService.cek_koneksi()
+    .then(data => {
+
+      console.log(data);
+
+      this.mengirim_data(nama_file, keterangan, persen, a);
+
+    })
+    .catch(error => {
+      console.log(error);
+      this.toastService.Toast_mengirim_kembali();
+      this.test_koneksi2(nama_file, keterangan, persen, a);
     });
   }
 

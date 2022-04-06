@@ -31,7 +31,7 @@ export class Tab3Page {
   imgURL:any = 'assets/pp.jpg';
   cek_koneksi = true;
   md5_upload = "288fc19f351cedab3648fddf62311278";
-
+  
   //variable frontend
   lihatsandi = false;
   nik_pengguna;
@@ -159,7 +159,7 @@ export class Tab3Page {
       this.loadingCtrl.tutup_loading();
       this.time_out++;
 
-      if (this.time_out == 3) {
+      if (this.time_out >= 3) {
         this.keluar_aplikasi();
       } else {
         if (err.status == -4) {
@@ -226,8 +226,6 @@ export class Tab3Page {
         this.swalService.swal_aksi_gagal("Terjadi kesalahan", "Tidak ada koneksi internet !");
       }
 
-    }).catch(error => {
-      return;
     });
   }
   galeri(){
@@ -243,9 +241,7 @@ export class Tab3Page {
         this.loadingCtrl.tutup_loading();
         this.swalService.swal_aksi_gagal("Terjadi kesalahan", "Tidak ada koneksi internet !");
       }
-    }).catch(error => {
-      return;
-    });;
+    });
   }
 
   //upload gambar + update di api
@@ -300,7 +296,7 @@ export class Tab3Page {
           //error upload ke database data profil
           this.loadingCtrl.tutup_loading();
           if(error.status == -4){
-            this.swalService.swal_aksi_gagal("Terjadi kesalahan !", "Server tidak merespon !");
+            this.swalService.swal_aksi_gagal("Terjadi kesalahan !", "Tidak ada respon, coba beberapa saat lagi !");
           }else{
             this.swalService.swal_code_error("Ubah foto gagal !", "Code error 14 !, kembali ke login !");
           }
@@ -436,7 +432,7 @@ export class Tab3Page {
       this.loadingCtrl.tutup_loading();
 
       if(err.status == -4){
-        this.swalService.swal_aksi_gagal("Terjadi kesalahan !", "Server tidak merespon !");
+        this.swalService.swal_aksi_gagal("Terjadi kesalahan !", "Tidak ada respon, coba beberapa saat lagi !");
         return
       }else{
         this.swalService.swal_code_error("Terjadi kesalahan !", "code error 6 !, kembali ke login !");
@@ -473,7 +469,7 @@ export class Tab3Page {
       //error
       this.loadingCtrl.tutup_loading();
       if(err.status == -4){
-        this.swalService.swal_aksi_gagal("Terjadi kesalahan !", "Server tidak merespon !");
+        this.swalService.swal_aksi_gagal("Terjadi kesalahan !", "Tidak ada respon, coba beberapa saat lagi !");
       }else{
         this.swalService.swal_code_error("Terjadi kesalahan !", "code error 8 !, kembali ke login !");
       }
@@ -512,7 +508,7 @@ export class Tab3Page {
     Swal.fire({
       icon: 'warning',
       title: 'Terjadi kesalahan !',
-      text: 'Server tidak merespon, tekan iya untuk mencoba lagi !',
+      text: 'Server tidak merespon, coba lagi ?!',
       backdrop: false,
       confirmButtonColor: '#3880ff',
       confirmButtonText: 'Iya !',
@@ -561,7 +557,7 @@ export class Tab3Page {
     })
     .catch(error => {
       this.loadingCtrl.tutup_loading();
-      this.swalService.swal_aksi_gagal("Terjadi kesalahan !", "Server tidak merespon !");
+      this.swalService.swal_aksi_gagal("Terjadi kesalahan !", "Tidak ada respon, coba beberapa saat lagi !");
     });
   }
   

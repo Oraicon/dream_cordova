@@ -19,6 +19,7 @@ export class SetGetServiceService {
   private _persen;
   private _id_kegiatan;
   private _nama_proyek_header;
+  private _swal;
   private data_tab_to_page;
   private data_koneksi;
   
@@ -127,6 +128,14 @@ export class SetGetServiceService {
 
   get_koneksi(){
     return this.data_koneksi;
+  }
+
+  set_swal(data){
+    this._swal = data;
+  }
+
+  get_swal(){
+    return this._swal;
   }
 
 }

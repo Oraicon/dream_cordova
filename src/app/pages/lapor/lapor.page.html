@@ -45,7 +45,7 @@
                       </ion-label>
                       <ion-item>
                         <ion-label class="label_font">Persen Pengerjaan</ion-label>
-                        <ion-select class="label_font" okText="Pilih" cancelText="Batal" [interfaceOptions]="customAlertOptions" interface="alert" placeholder="0%" formControlName="data_persen" required>
+                        <ion-select class="label_font" okText="Pilih" cancelText="Batal" [interfaceOptions]="customPopoverOptions" interface="popover" placeholder="0%" formControlName="data_persen" required>
                           <ion-select-option class="label_font" *ngFor="let data of array_persen" value="{{ data }}">{{ data }}%</ion-select-option>
                         </ion-select>
                       </ion-item>
@@ -61,7 +61,7 @@
                             </ion-col>
 
                             <ion-col size="12" class="ion-padding-top" *ngIf="pilih_gambar; else gambar_ada">
-                              <ion-button (click)="presentActionSheet()" expand="block" class="ion-no-margin" class="button_height">
+                              <ion-button (click)="presentActionSheet()" color="secondary" expand="block" class="ion-no-margin" class="button_height">
                                 <h2>
                                   Pilih Gambar
                                 </h2>

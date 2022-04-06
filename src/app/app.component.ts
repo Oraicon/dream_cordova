@@ -33,9 +33,13 @@ export class AppComponent {
     });
 
     //pengecekan koneksi
+    this.pengecekan_koneksi();
+  }
+
+  async pengecekan_koneksi(){
     this.network.onDisconnect().subscribe(() => {
       this.cek_koneksi = false;
-
+      
       let a = this.setget.get_koneksi();
 
       if (a == 1) {
@@ -43,7 +47,7 @@ export class AppComponent {
         if (a == 1) {
           this.loadingService.tutup_loading();
         }
-        this.swalService.swal_code_error("Tidak ada internet", "Kembali ke login !");
+        this.kelogin();
       }
     });
   
@@ -52,6 +56,17 @@ export class AppComponent {
         this.cek_koneksi = true;
       }, );
     });
+  }
+
+  async kelogin(){
+    await this.interval_counter();
+
+    this.swalService.swal_code_error("Tidak ada internet", "Kembali ke login !");
+  }
+
+  //delay
+  interval_counter() {
+    return new Promise(resolve => { setTimeout(() => resolve(""), 1000);});
   }
   
   //backbutton logik
