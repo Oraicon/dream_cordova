@@ -1,11 +1,15 @@
 import { Component, OnInit } from '@angular/core';
+import { FileTransfer, FileUploadOptions, FileTransferObject } from '@awesome-cordova-plugins/file-transfer/ngx';
 import { SetGetServiceService } from 'src/app/services/set-get-service.service';
+import { ActionSheetController } from '@ionic/angular';
 import { NavController } from '@ionic/angular';
 import { LoadingServiceService } from 'src/app/services/loading-service.service';
 import { MomentService } from 'src/app/services/moment.service';
 import { ApiServicesService } from 'src/app/services/api-services.service';
 import { SwalServiceService } from 'src/app/services/swal-service.service';
+import { Camera, CameraOptions } from '@awesome-cordova-plugins/camera/ngx';
 import Swal from 'sweetalert2';
+import { ToastService } from 'src/app/services/toast.service';
 
 
 @Component({
@@ -27,14 +31,44 @@ export class ProsesPage implements OnInit {
   data_arr_progressmilsetone;
   persen_tertinggi;
   tanggal_pm = {};
+  data_gambar_rusak = {};
   tanggal_detail;
   tipe_page = true;
   riwayat_laporan = false;
   riwayat_loading = true;
   data_swal;
+  imgURL;
+
+  base64_img:string="";
+  name_img:string="";
+  format_img:string="JPEG";
+  URL="https://dads-demo-1.000webhostapp.com/api/uploadImage";
+
+  //persiapan kamera
+  cameraOptions: CameraOptions = {
+    quality: 50,
+    correctOrientation: true,
+    sourceType: this.camera.PictureSourceType.CAMERA,
+    destinationType: this.camera.DestinationType.DATA_URL,
+    encodingType: this.camera.EncodingType.JPEG,
+    mediaType: this.camera.MediaType.PICTURE
+  }
+
+  galeriOptions: CameraOptions = {
+    quality: 50,
+    correctOrientation: true,
+    sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
+    destinationType: this.camera.DestinationType.DATA_URL,
+    encodingType: this.camera.EncodingType.JPEG,
+    mediaType: this.camera.MediaType.PICTURE
+  }
 
   constructor(private momentService: MomentService,
+    private actionSheetController: ActionSheetController,
+    private toastService: ToastService,
     private swal: SwalServiceService,
+    private camera: Camera, 
+    private transfer: FileTransfer, 
     private apiService: ApiServicesService, 
     private loadingService: LoadingServiceService, 
     private navCtrl: NavController, 
@@ -48,6 +82,17 @@ export class ProsesPage implements OnInit {
   //delay
   interval_counter() {
     return new Promise(resolve => { setTimeout(() => resolve(""), 1000);});
+  }
+
+  //delay
+  delay() {
+    console.log("masuk dealy");
+    return new Promise(resolve => { setTimeout(() => resolve(""), 30000);});
+  }
+
+  async delayed(){
+    await this.delay();
+    return 1;
   }
 
   //awal masuk page
@@ -67,6 +112,9 @@ export class ProsesPage implements OnInit {
 
   //menampilkan data progres detail
   async tampilkan_data(){
+    this.data_gambar_rusak = {};
+    this.riwayat_laporan = false;
+    this.riwayat_loading = true;
     this.loadingService.tampil_loading();
     const a = this.setget.getProses();
     const b = this.setget.get_Page();
@@ -119,13 +167,13 @@ export class ProsesPage implements OnInit {
       // console.log(error);
       if (this.timeout >= 3) {
         this.keluar_aplikasi();
-    } else {
-      if (error.status == -4) {
-        this.tidak_ada_respon();
       } else {
-        this.swal.swal_code_error("Terjadi kesalahan !", "code error 19 !, kembali ke login !");
+        if (error.status == -4) {
+          this.tidak_ada_respon();
+        } else {
+          this.swal.swal_code_error("Terjadi kesalahan !", "code error 19 !, kembali ke login !");
+        }
       }
-    }
   
     });
   }
@@ -202,8 +250,12 @@ export class ProsesPage implements OnInit {
   }
 
   //gambar rusak
-  errorHandler(event) {
+  errorHandler(event, a) {
     event.target.src = "assets/bi.png";
+    this.data_gambar_rusak[a] = "rusak";
+    console.log(this.data_gambar_rusak);
+
+    
   }
 
   //logika compare isi ada persen
@@ -225,6 +277,115 @@ export class ProsesPage implements OnInit {
     this.setget.set_persen(a);
 
     this.navCtrl.navigateForward(['/lapor']);
+  }
+
+  async presentActionSheet(namafile) {
+    const actionSheet = await this.actionSheetController.create({
+      header: 'Kirim ulang gambar',
+      cssClass: 'my-custom-class',
+      buttons: [{
+        text: 'Kamera',
+        icon: 'camera-outline',
+        handler: () => {
+          this.kamera();
+          const n = namafile.substring(33);
+          this.name_img = n;
+        }
+      }, {
+        text: 'Galeri',
+        icon: 'image-outline',
+        handler: () => {
+          this.galeri();
+          const n = namafile.substring(33);
+          this.name_img = n;
+        }
+      }, {
+        text: 'Batal',
+        icon: 'close',
+        role: 'cancel',
+      }]
+    });
+    await actionSheet.present();
+  }
+
+  //dapatkan gambar dari kamera
+  kamera(){
+    this.camera.getPicture(this.cameraOptions).then(res=>{
+      this.imgURL = 'data:image/jpeg;base64,' + res;
+      this.base64_img = this.imgURL;
+      this.swal_gambar(this.imgURL);
+    });
+  }
+
+  //dapatkan gambar dari galeri
+  galeri(){
+    this.camera.getPicture(this.galeriOptions).then(res=>{
+      this.imgURL = 'data:image/jpeg;base64,' + res;
+      this.base64_img = this.imgURL;
+      this.swal_gambar(this.imgURL);
+    });
+  }
+
+  async mengirim_gambar(){
+
+    console.log("mengirim gambar");
+
+    const fileTransfer: FileTransferObject = this.transfer.create();
+    //mengisi data option
+    let options: FileUploadOptions = {
+      fileKey: 'filekey',
+      fileName: this.name_img,
+      chunkedMode: false,
+      mimeType: "image/JPEG",
+      headers: {}
+    }
+
+    fileTransfer.upload(this.base64_img, this.URL, options)
+    .then(data => {
+
+      console.log(data);
+
+      const data_json = JSON.parse(data.response);
+      const data_status = data_json.status;
+
+      if (data_status == 0) {
+
+        this.loadingService.tutup_loading();
+        this.toastService.Toast("Berhasil menyimpan gambar !");
+        this.ionViewWillEnter();
+
+      } else {
+        // console.log("error");
+
+        this.loadingService.tutup_loading();
+        this.swal.swal_aksi_gagal("Terjadi kesalahan", "code error 22 !");
+        
+      }
+
+    })
+    .catch(error => {
+  
+      console.log(error);
+
+      let status = error.code;
+
+      if (status == 4) {
+        this.loadingService.tutup_loading();
+        this.swal.swal_aksi_gagal("Terjadi kesalahan", "Mengirim gambar terlalu lama");
+      }else{
+        this.loadingService.tutup_loading();
+        this.swal.swal_code_error("Terjadi kesalahan", "code error 21 !, kembali ke login !");
+      }
+
+  
+    });
+    
+    let waktu_habis = await this.delayed();
+    console.log(waktu_habis);
+    if (waktu_habis == 1) {
+      fileTransfer.abort();
+    }
+
   }
 
   //berhasil mengirim data
@@ -295,6 +456,31 @@ export class ProsesPage implements OnInit {
         navigator['app'].exitApp();
       }
     });
+  }
+
+  swal_gambar(gambar){
+    this.loadingService.tampil_loading();
+    Swal.fire({
+      title: 'Peringatan !!',
+      text: 'Pastikan gambar sesuai dengan kegiatan pengerjaan !',
+      imageUrl: '' + gambar,
+      imageWidth: 300,
+      imageHeight: 200,
+      imageAlt: 'Custom image',
+      backdrop: false,
+      confirmButtonColor: '#3880ff',
+      confirmButtonText: 'Kirim !',
+      showDenyButton: true,
+      denyButtonText: `Batal `,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.loadingService.tutup_loading();
+        this.loadingService.tampil_loading();
+        this.mengirim_gambar();
+      }else{
+        this.loadingService.tutup_loading();
+      }
+    })
   }
 
 }

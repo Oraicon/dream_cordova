@@ -11,7 +11,7 @@ export class ApiServicesService {
 
   panggil_api_data_karyawan(api_name, api_sandi){
     // this.http.useBasicAuth('dream_1.0', 'dream_1.0');
-    this.http.setRequestTimeout(20.0);
+    this.http.setRequestTimeout(30.0);
     return this.http.post('https://dads-demo-1.000webhostapp.com/api/getdatakaryawan', {"username" :api_name, "password" :api_sandi}, {'Accept': 'application/json', 'Content-Type':'application/x-www-form-urlencoded'})
   }
 
@@ -22,19 +22,19 @@ export class ApiServicesService {
 
   panggil_api_progres_header(api_name){
     // this.http.useBasicAuth('dream_1.0', 'dream_1.0');
-    this.http.setRequestTimeout(20.0);
+    this.http.setRequestTimeout(30.0);
     return this.http.post('https://dads-demo-1.000webhostapp.com/api/getProgressHeader', {"username" :api_name}, {'Accept': 'application/json', 'Content-Type':'application/x-www-form-urlencoded'})
   }
 
   panggil_api_get_progres_detail(api_id){
     // this.http.useBasicAuth('dream_1.0', 'dream_1.0');
-    this.http.setRequestTimeout(20.0);
+    this.http.setRequestTimeout(30.0);
     return this.http.post('https://dads-demo-1.000webhostapp.com/api/getProgressDetail', {'progress_id' : api_id}, {'Accept': 'application/json', 'Content-Type':'application/x-www-form-urlencoded'})
   }
 
   panggil_api_progres_milestone(api_id){
     // this.http.useBasicAuth('dream_1.0', 'dream_1.0');
-    this.http.setRequestTimeout(20.0);
+    this.http.setRequestTimeout(30.0);
     return this.http.post('https://dads-demo-1.000webhostapp.com/api/getProgressMilestone', {'progress_detail_id' : api_id}, {'Accept': 'application/json', 'Content-Type':'application/x-www-form-urlencoded'})
   }
 
@@ -45,13 +45,13 @@ export class ApiServicesService {
 
   kirim_api_progres(api_progres, api_image, api_remark, api_progres_pengerjaan){
     // this.http.useBasicAuth('dream_1.0', 'dream_1.0');
-    this.http.setRequestTimeout(20.0);
+    this.http.setRequestTimeout(30.0);
     return this.http.post('https://dads-demo-1.000webhostapp.com/api/insertProgressMilestone', {"progress_detail_id" :api_progres, "url_image" :api_image, "remark" :api_remark, "progress_pengerjaan" :api_progres_pengerjaan}, {'Accept': 'application/json', 'Content-Type':'application/x-www-form-urlencoded'})
   }
 
   cek_koneksi(){
     // this.http.useBasicAuth('dream_1.0', 'dream_1.0');
-    this.http.setRequestTimeout(20.0);
+    this.http.setRequestTimeout(30.0);
     return this.http.post('https://dads-demo-1.000webhostapp.com/api/cekAPI', {}, {'Accept': 'application/json', 'Content-Type':'application/x-www-form-urlencoded'})
   }
 }

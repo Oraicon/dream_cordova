@@ -23,4 +23,12 @@ export class ToastService {
     });
     toast.present();
   }
+
+  async Toast(text){
+    const toast = await this.toastController.create({
+      message: ''+text,
+      duration: 2000
+    });
+    toast.present();
+  }
 }

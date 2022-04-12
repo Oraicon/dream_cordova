@@ -193,6 +193,8 @@ export class LoginPage implements OnInit {
     this.apiService.panggil_api_data_karyawan(var_nama, var_sandi)
     .then(res => {
 
+    console.log(res);
+
     const data_json = JSON.parse(res.data);
     const data_status = data_json.status;
 

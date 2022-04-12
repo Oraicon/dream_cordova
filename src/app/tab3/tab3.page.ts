@@ -120,6 +120,17 @@ export class Tab3Page {
     return new Promise(resolve => { setTimeout(() => resolve(""), 1000);});
   }
 
+  //delay
+  delay() {
+    console.log("masuk dealy");
+    return new Promise(resolve => { setTimeout(() => resolve(""), 30000);});
+  }
+
+  async delayed(){
+    await this.delay();
+    return 1;
+  }
+
   async tampilkandata(){
     this.loadingCtrl.tampil_loading();
     const data_l_nama = await this.storage.get('nama');
@@ -273,35 +284,11 @@ export class Tab3Page {
       // success upload foto
       const data_json = JSON.parse(res.response);
       const data_status = data_json.status;
-      const url_path = this.md5_upload+"/"+this.name_img;
-
+      
       if (data_status == 0) {
-        this.apiService.panggil_api_update_data_karyawan(this.type_update_gambar, l_storage_data_nama, "", "", url_path)
-        .then(res => {
+        
+        this.upload_data_server(l_storage_data_nama);
 
-          const data_json = JSON.parse(res.data);
-          const status_data = data_json.status;
-
-          if (status_data == 1) {
-            this.imgURL = this.base64_img;
-            this.loadingCtrl.tutup_loading();
-            this.swalService.swal_aksi_berhasil("Ubah foto berhasil !", "Foto profil anda berhasil diubah !");
-          } else {
-            this.loadingCtrl.tutup_loading();
-            this.swalService.swal_aksi_gagal("Ubah foto gagal !", "Foto profil anda gagal diubah !");
-          }
-        })
-        .catch(error => {
-
-          //error upload ke database data profil
-          this.loadingCtrl.tutup_loading();
-          if(error.status == -4){
-            this.swalService.swal_aksi_gagal("Terjadi kesalahan !", "Tidak ada respon, coba beberapa saat lagi !");
-          }else{
-            this.swalService.swal_code_error("Ubah foto gagal !", "Code error 14 !, kembali ke login !");
-          }
-
-        });
       } else {
         console.log(res);
         //error response upload foto
@@ -311,9 +298,49 @@ export class Tab3Page {
 
     }, (err) => {
       // error
-      // console.log(err);
+      let status = err.code;
+      if (status == 4) {
+        this.loadingCtrl.tutup_loading();
+        this.swalService.swal_aksi_gagal("Terjadi kesalahan", "Mengirim gambar terlalu lama");
+      } else {
+        this.loadingCtrl.tutup_loading();
+        this.swalService.swal_code_error("Terjadi kesalahan !", "code error 13 !, kembali ke login !");
+      }
+    });
+
+    let waktu_habis = await this.delayed();
+    if (waktu_habis == 1) {
+      fileTransfer.abort();
+    }
+  }
+
+  upload_data_server(nama){
+    const url_path = this.md5_upload+"/"+this.name_img;
+    this.apiService.panggil_api_update_data_karyawan(this.type_update_gambar, nama, "", "", url_path)
+    .then(res => {
+
+      const data_json = JSON.parse(res.data);
+      const status_data = data_json.status;
+
+      if (status_data == 1) {
+        this.imgURL = this.base64_img;
+        this.loadingCtrl.tutup_loading();
+        this.swalService.swal_aksi_berhasil("Ubah foto berhasil !", "Foto profil anda berhasil diubah !");
+      } else {
+        this.loadingCtrl.tutup_loading();
+        this.swalService.swal_aksi_gagal("Ubah foto gagal !", "Foto profil anda gagal diubah !");
+      }
+    })
+    .catch(error => {
+
+      //error upload ke database data profil
       this.loadingCtrl.tutup_loading();
-      this.swalService.swal_code_error("Terjadi kesalahan !", "code error 13 !, kembali ke login !");
+      if(error.status == -4){
+        this.swalService.swal_aksi_gagal("Terjadi kesalahan !", "Tidak ada respon, coba beberapa saat lagi !");
+      }else{
+        this.swalService.swal_code_error("Ubah foto gagal !", "Code error 14 !, kembali ke login !");
+      }
+
     });
   }
 
@@ -550,7 +577,7 @@ export class Tab3Page {
         this.api_ubah_nama(nama);
       } else if (sandi != null){
         this.api_ubah_sandi(sandi);
-      } else {
+      }else {
         this.upload();
       }
 

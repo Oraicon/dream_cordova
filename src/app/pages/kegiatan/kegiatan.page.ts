@@ -53,6 +53,7 @@ export class KegiatanPage implements OnInit {
 
   //awal masuk page
   ionViewWillEnter(){
+    this.warna_segment  = 1;
     this.tampilkan_data();
   }
 
@@ -122,14 +123,9 @@ export class KegiatanPage implements OnInit {
     a = [];
     b = [];
 
-    this.tutup_loading();
-    this.timeout = 0;
-  }
-
-  //tutup loading dan skeleton loading
-  async tutup_loading(){
     this.loading = false; 
     this.loadingService.tutup_loading();
+    this.timeout = 0;
   }
 
   // warna segment
@@ -179,7 +175,7 @@ export class KegiatanPage implements OnInit {
     Swal.fire({
       icon: 'warning',
       title: 'Terjadi kesalahan !',
-      text: 'Server tidak merespon, coba lagi ?!',
+      text: 'Tidak ada respon, coba lagi ?!',
       backdrop: false,
       confirmButtonColor: '#3880ff',
       confirmButtonText: 'Iya !',

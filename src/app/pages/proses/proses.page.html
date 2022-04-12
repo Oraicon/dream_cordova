@@ -110,7 +110,7 @@
         <ion-col size="12" class="">
           <ion-card class="bayangan">
             <ion-card-header class="pad_bottom">
-              <ion-card-title class="ion-text-center">{{  data_obj_kegiatan.nama_kegiatan }}</ion-card-title>
+              <ion-card-title class="ion-text-center ion-text-wrap text_judul">{{  data_obj_kegiatan.nama_kegiatan }}</ion-card-title>
             </ion-card-header>
             <ion-card-content class="ion-no-padding">
               <ion-grid fixed class="ion-no-padding">
@@ -192,7 +192,30 @@
           <ion-col size="12" *ngFor='let data of data_arr_progressmilsetone;'>
             <ion-card class="bayangan">
               <div class="ion-text-center">
-                <img src="https://dads-demo-1.000webhostapp.com/{{ data.evidence_img }}" class="" (error)="errorHandler($event)">
+                <img src="https://dads-demo-1.000webhostapp.com/{{ data.evidence_img }}" class="" (error)="errorHandler($event, data.id)">
+
+                <ng-container
+                  *ngIf="data_type_page == 1; then fabada else fabtidakada">
+                </ng-container>
+
+                <ng-template #fabada>
+                  <ng-container
+                    *ngIf="data_gambar_rusak[data.id] == 'rusak'; then gambar_rusak; else ada">
+                  </ng-container>
+
+                  <ng-template #gambar_rusak>
+                    <ion-fab vertical="top" horizontal="end" size="large" slot="fixed" (click)="presentActionSheet(data.evidence_img)">
+                      <ion-fab-button color="secondary">
+                        <ion-icon name="create-outline"></ion-icon>
+                      </ion-fab-button>
+                    </ion-fab>
+                  </ng-template>
+  
+                  <ng-template #ada></ng-template>
+                </ng-template>
+
+                <ng-template #fabtidakada></ng-template>
+
               </div>
               <ion-card-content>
                 <ion-grid fixed class="ion-no-padding">
@@ -256,7 +279,7 @@
     </ion-row>
   </ion-grid>
 
-  <div *ngIf="tipe_page;else fab_ada"></div>
+  <!-- <div *ngIf="tipe_page;else fab_ada"></div>
 
   <ng-template #fab_ada>
     <ion-fab horizontal="end" vertical="bottom" slot="fixed" (click)="formulir()">
@@ -264,15 +287,19 @@
         <ion-icon size="large" name="add-outline"></ion-icon>
       </ion-fab-button>
     </ion-fab>
-  </ng-template>
+  </ng-template> -->
 
   
 </ion-content>
 
-<!-- <ion-footer>
-  <ion-toolbar class="ion-no-margin">
-    <ion-button class="ion-no-padding ion-no-margin bold" [routerLink]="['/formulir']" expand="block" fill="clear">
-      Click me
-    </ion-button>
-  </ion-toolbar>
-</ion-footer> -->
+<ng-container *ngIf="tipe_page;else fab_ada"></ng-container>
+
+<ng-template #fab_ada>
+  <ion-footer>
+    <ion-toolbar class="ion-no-margin">
+      <ion-button class="ion-no-padding ion-no-margin bold" (click)="formulir()" expand="block" fill="clear">
+        Lapor Kegiatan
+      </ion-button>
+    </ion-toolbar>
+  </ion-footer>
+</ng-template>

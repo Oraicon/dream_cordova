@@ -26,8 +26,8 @@
           </ion-fab>
         </div>
       </ion-col>
-      <ion-col *ngIf="nama_pengguna; else templateName" size="12" class="ion-text-center ion-no-margin">
-        <h1>{{ nama_pengguna }}</h1>
+      <ion-col *ngIf="nama_pengguna; else templateName" size="12" class="ion-text-center ion-no-margin ion-text-wrap">
+        <h1 class="ion-padding-start ion-padding-end">{{ nama_pengguna }}</h1>
       </ion-col>
       <ng-template #templateName>
         <ion-col size="12" size="12" class="ion-text-center ion-no-margin padding_skeleton_loading">
@@ -48,7 +48,7 @@
                 <ion-skeleton-text class="" animated style="width: 30%; height: 1rem;"></ion-skeleton-text>
               </ng-template>
             </ion-label>
-            <ion-button color="primary2" expand="block" fill="outline" (click)="ubahnama()">
+            <ion-button color="secondary" expand="block" fill="outline" (click)="ubahnama()">
               Ubah
             </ion-button>
           </ion-item>
@@ -72,7 +72,7 @@
                 <ion-skeleton-text class="" animated style="width: 30%; height: 1rem;"></ion-skeleton-text>
               </ng-template>
             </ion-label>
-            <ion-button color="primary2" expand="block" fill="outline" (click)="ubahpassword()">
+            <ion-button color="secondary" expand="block" fill="outline" (click)="ubahpassword()">
               Ubah
             </ion-button>
           </ion-item>

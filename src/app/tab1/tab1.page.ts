@@ -130,11 +130,11 @@ export class Tab1Page {
       .catch(error => {
         console.log(error);
         this.loadingCtrl.tutup_loading();
-        this.timeout++;
         this.data_swal = this.setget.get_swal();
 
         if (this.data_swal == 0) {
           this.setget.set_swal(1);
+          this.timeout++;
           if (this.timeout == 3) {
               this.keluar_aplikasi();
           } else {
@@ -251,7 +251,7 @@ export class Tab1Page {
     Swal.fire({
       icon: 'warning',
       title: 'Terjadi kesalahan !',
-      text: 'Server tidak merespon, coba lagi ?!',
+      text: 'Tidak ada respon, coba lagi !',
       backdrop: false,
       confirmButtonColor: '#3880ff',
       confirmButtonText: 'Iya !',
