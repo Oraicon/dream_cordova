@@ -371,7 +371,7 @@ export class ProsesPage implements OnInit {
 
       if (status == 4) {
         this.loadingService.tutup_loading();
-        this.swal.swal_aksi_gagal("Terjadi kesalahan", "Mengirim gambar terlalu lama");
+        this.swal.swal_aksi_gagal("Terjadi kesalahan", "TIdak ada respon, coba beberapa saat lagi !");
       }else{
         this.loadingService.tutup_loading();
         this.swal.swal_code_error("Terjadi kesalahan", "code error 21 !, kembali ke login !");

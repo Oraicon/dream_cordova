@@ -86,13 +86,18 @@
   --ion-color-light-contrast-rgb: 0, 0, 0;
   --ion-color-light-shade: #d7d8da;
   --ion-color-light-tint: #f5f6f9;
+
+  .ion-color-main2 {
+    --ion-color-base: #1B2338;
+    --ion-color-base-rgb: 27, 35, 56;
+    --ion-color-contrast: #ffffff;
+    --ion-color-contrast-rgb: 255, 255, 255;
+    --ion-color-shade: #24335a;
+    --ion-color-tint: #12182a;
+  }
 }
 
 //css sendiri
-// ion-content {
-//   // --background: #E5E5E5;
-// }
-
 .warna_putih{
   color: white;
 }

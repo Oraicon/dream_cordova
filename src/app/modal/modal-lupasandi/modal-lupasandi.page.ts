@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
+import { LoadingServiceService } from 'src/app/services/loading-service.service';
 
 
 @Component({
@@ -15,6 +16,7 @@ export class ModalLupasandiPage implements OnInit {
   isSubmitted = false;
 
   constructor(
+    private loadingService: LoadingServiceService,
     private formBuilder: FormBuilder,
     private modalCtrl: ModalController) { }
 
@@ -34,6 +36,7 @@ export class ModalLupasandiPage implements OnInit {
     if (!this.myGroup.valid) {
       return false;
     } else {
+      this.loadingService.tampil_loading();
       this.modalCtrl.dismiss({data: this.myGroup.value.nama_pengguna});
     }
   }

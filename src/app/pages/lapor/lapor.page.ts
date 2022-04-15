@@ -39,7 +39,6 @@ export class LaporPage implements OnInit {
   lapor_namakegiatan;
   datapersen;
   array_persen = [];
-  place;
   cek_koneksi = true;
 
   base64_img:string="";
@@ -256,7 +255,7 @@ export class LaporPage implements OnInit {
       this.loadingService.tutup_loading();
       if (error.status == -4) {
         console.log(error);
-        this.toastService.Toast_mengirim_kembali();
+        this.toastService.Toast("Gagal mengirim, mencoba mengirim kembali !");
         this.mengirim_data_api(nama_file, keterangan, persen);
       } else {
         this.swal.swal_code_error("Terjadi kesalahan", "code error 10 !, kembali ke login !");
@@ -294,7 +293,6 @@ export class LaporPage implements OnInit {
   }
 
   batal_laporan(){
-    this.place = null;
     this.nama_kegiatan = "Nama Kegiatan";
   }
 
@@ -324,7 +322,7 @@ export class LaporPage implements OnInit {
         this.name_img = nama_file.toString();
         let a;
     
-        if (this.place == 100){
+        if (persen == 100){
           a = 2
         } else {
           a = 1
@@ -335,12 +333,12 @@ export class LaporPage implements OnInit {
         this.loadingService.tampil_loading();
         Swal.fire({
           title: 'Perhatian !!',
-          text: "Pastikan anda sudah mengisi data dengan benar ! Proses pengiriman tergantung dari sinyal internet !",
+          text: "Pastikan anda sudah mengisi data dengan benar !",
           icon: 'info',
           backdrop: false,
           showDenyButton: true,
           confirmButtonColor: '#3880ff',
-          confirmButtonText: 'Ya !',
+          confirmButtonText: 'Kirim !',
           denyButtonText: `Batal`,
         }).then((result) => {
           if (result.isConfirmed) {
@@ -387,7 +385,7 @@ export class LaporPage implements OnInit {
     })
     .catch(error => {
       console.log(error);
-      this.toastService.Toast_mengirim_kembali();
+      this.toastService.Toast("Gagal mengirim, mencoba mengirim kembali !");
       this.test_koneksi_api(nama_file, keterangan, persen);
     });
   }

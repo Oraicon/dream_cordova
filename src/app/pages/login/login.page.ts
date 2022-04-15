@@ -112,6 +112,7 @@ export class LoginPage implements OnInit {
     });
     modal.onDidDismiss().then(data => {
       if (data.data.data == null) {
+        this.loadingService.tutup_loading();
         return;
       } else {
         this.data_api_lupa_sandi_nama = data.data.data;
@@ -146,8 +147,6 @@ export class LoginPage implements OnInit {
 
   //memanggil api lupa nama
   manggil_api_lupa_nama(nama_baru){
-    this.loadingService.tampil_loading();
-
     this.interval_counter();
 
     this.apiService.panggil_api_reset_password(nama_baru)
