@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
+import { LoadingServiceService } from 'src/app/services/loading-service.service';
+
 
 @Component({
   selector: 'app-modal-gantinama',
@@ -16,6 +18,7 @@ export class ModalGantinamaPage implements OnInit {
 
   constructor( 
     private formBuilder: FormBuilder,
+    private loadingService: LoadingServiceService,
     private modalCtrl: ModalController) { }
 
   ngOnInit() {
@@ -37,6 +40,7 @@ export class ModalGantinamaPage implements OnInit {
     if (!this.myGroup.valid) {
       return false;
     } else {
+      this.loadingService.tampil_loading("Mengganti nama . . .");
       this.modalCtrl.dismiss({data: this.myGroup.value.nama_pengguna});
     }
   }

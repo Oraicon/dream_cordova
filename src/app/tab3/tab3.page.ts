@@ -111,16 +111,12 @@ export class Tab3Page {
     });
   }
 
-  async get_data_lokal(){
-    this.nama_ls = await this.storage.get('nama');
-  }
-
-  //delay
+  //delay 
   interval_counter() {
-    return new Promise(resolve => { setTimeout(() => resolve(""), 1000);});
+    return new Promise(resolve => { setTimeout(() => resolve(""), 250);});
   }
 
-  //delay
+  //delay file transfer 30 detik
   delay() {
     console.log("masuk dealy");
     return new Promise(resolve => { setTimeout(() => resolve(""), 30000);});
@@ -131,8 +127,174 @@ export class Tab3Page {
     return 1;
   }
 
+  errorHandler(event) {
+    event.target.src = "assets/bi.png";
+  }
+
+  //pengecekan data jika kosong data variable kosong
+  pengecekan_var(data_var){
+    let a; 
+    if(data_var == "" || data_var == null || data_var == undefined){
+      a = "Data tidak ada";
+    }else{
+      a = data_var;
+    }
+    return a;
+  }
+
+  pengecekan_tanggal(tanggal){
+    let a;
+    if (tanggal == "" || tanggal == null || tanggal == undefined) {
+      a = "Data tidak ada";
+    } else {
+      a = this.momentService.ubah_format_tanggal(tanggal);
+    }
+    return a;
+  }
+
+  pengecekan_gambar(gambar){
+    let a;
+    if (gambar == "" || gambar == null || gambar == undefined) {
+      a = "assets/bi.png";
+    } else {
+      a = "https://dads-demo-1.000webhostapp.com/"+ gambar;
+    }
+    return a;
+  }
+
+  //sensor password
+  lihat_password(){
+    if (this.lihatsandi == false) {
+      this.lihatsandi = true;
+    }else{
+      this.lihatsandi = false;
+    }
+  }
+
+  //modal ganti gambar
+  async presentActionSheet() {
+    const actionSheet = await this.actionSheetController.create({
+      header: 'Pilih Gambar',
+      cssClass: 'my-custom-class',
+      buttons: [{
+        text: 'Kamera',
+        icon: 'camera-outline',
+        handler: () => {
+          this.kamera();
+        }
+      }, {
+        text: 'Galeri',
+        icon: 'image-outline',
+        handler: () => {
+          this.galeri();
+        }
+      }, {
+        text: 'Batal',
+        icon: 'close',
+        role: 'cancel',
+      }]
+    });
+    await actionSheet.present();
+  }
+
+  //dapatkan data gambar dari galeri/kamera
+  kamera(){
+    this.camera.getPicture(this.cameraOptions).then(res=>{
+      console.log(res);
+      let data_img_base64 = 'data:image/jpeg;base64,' + res;
+      this.base64_img = data_img_base64;
+
+      if (this.cek_koneksi == true) {
+        this.loadingCtrl.tampil_loading("Menyimpan gambar . . .");
+        this.test_koneksi(null, null);
+      } else {
+        this.loadingCtrl.tutup_loading();
+        this.swalService.swal_aksi_gagal("Terjadi kesalahan", "Tidak ada koneksi internet !");
+      }
+
+    });
+  }
+
+  galeri(){
+    this.camera.getPicture(this.galeriOptions).then(res=>{
+      console.log(res);
+      let data_img_base64 = 'data:image/jpeg;base64,' + res;
+      this.base64_img = data_img_base64;
+
+      if (this.cek_koneksi == true) {
+        this.loadingCtrl.tampil_loading("Menyimpan gambar . . .");
+        this.test_koneksi(null, null);
+      } else {
+        this.loadingCtrl.tutup_loading();
+        this.swalService.swal_aksi_gagal("Terjadi kesalahan", "Tidak ada koneksi internet !");
+      }
+    });
+  }
+
+  //mengubah nama pengguna
+  async ubahnama(){
+    const modal = await this.modalCtrl.create({
+      component: ModalGantinamaPage,
+      cssClass: 'small-modal-ganti-nama',
+      backdropDismiss:false
+    });
+    modal.onDidDismiss().then(data => {
+      if (data.data.data == null) {
+        return;
+      } else {
+        if (this.cek_koneksi == true) {
+
+          let nama_baru = data.data.data;
+          this.test_koneksi(nama_baru, null);
+
+        } else {
+          this.swalService.swal_aksi_gagal("Terjadi kesalahan", "Tidak ada koneksi internet !");
+        }
+        
+      }
+    }).catch(err => {
+      // console.log(err);
+    });
+    await modal.present();
+  }
+
+  //mengubah sandi pengguna
+  async ubahpassword(){
+    const modal = await this.modalCtrl.create({
+      component: ModalGantisandiPage,
+      cssClass: 'small-modal-ganti-sandi',
+      backdropDismiss:false
+    });
+    modal.onDidDismiss().then(data => {
+      if (data.data.data == null) {
+        return;
+      } else {
+
+        if (this.cek_koneksi == true) {
+
+          let sandi_baru = data.data.data;
+
+          this.test_koneksi(null, sandi_baru);
+
+        } else {
+
+          this.swalService.swal_aksi_gagal("Terjadi kesalahan", "Tidak ada koneksi internet !");
+          
+        }
+        
+      }
+    }).catch(err => {
+      // console.log(err);
+    });
+    await modal.present();
+  }
+
+  async get_data_lokal(){
+    this.nama_ls = await this.storage.get('nama');
+  }
+
   async tampilkandata(){
-    this.loadingCtrl.tampil_loading();
+    this.loadingCtrl.tampil_loading("Memuat data . . .");
     const data_l_nama = await this.storage.get('nama');
     const data_l_sandi = await this.storage.get('sandi');
     await this.interval_counter();
@@ -182,76 +344,22 @@ export class Tab3Page {
     });
   }
 
-  errorHandler(event) {
-    event.target.src = "assets/bi.png";
-  }
-  //pengecekan data jika kosong data variable kosong
-  pengecekan_var(data_var){
-    let a; 
-    if(data_var == "" || data_var == null || data_var == undefined){
-      a = "Data tidak ada";
-    }else{
-      a = data_var;
-    }
-    return a;
-  }
-  pengecekan_tanggal(tanggal){
-    let a;
-    if (tanggal == "" || tanggal == null || tanggal == undefined) {
-      a = "Data tidak ada";
-    } else {
-      a = this.momentService.ubah_format_tanggal(tanggal);
-    }
-    return a;
-  }
-  pengecekan_gambar(gambar){
-    let a;
-    if (gambar == "" || gambar == null || gambar == undefined) {
-      a = "assets/bi.png";
-    } else {
-      a = "https://dads-demo-1.000webhostapp.com/"+ gambar;
-    }
-    return a;
-  }
-  //sensor password
-  lihat_password(){
-    if (this.lihatsandi == false) {
-      this.lihatsandi = true;
-    }else{
-      this.lihatsandi = false;
-    }
-  }
+  test_koneksi(nama, sandi){
+    this.apiService.cek_koneksi()
+    .then(data => {
 
-  //dapatkan data gambar
-  kamera(){
-    this.camera.getPicture(this.cameraOptions).then(res=>{
-      console.log(res);
-      let data_img_base64 = 'data:image/jpeg;base64,' + res;
-      this.base64_img = data_img_base64;
-
-      if (this.cek_koneksi == true) {
-        this.loadingCtrl.tampil_loading();
-        this.test_koneksi(null, null);
-      } else {
-        this.loadingCtrl.tutup_loading();
-        this.swalService.swal_aksi_gagal("Terjadi kesalahan", "Tidak ada koneksi internet !");
+      if (nama != null) {
+        this.api_ubah_nama(nama);
+      } else if (sandi != null){
+        this.api_ubah_sandi(sandi);
+      }else {
+        this.upload();
       }
 
-    });
-  }
-  galeri(){
-    this.camera.getPicture(this.galeriOptions).then(res=>{
-      console.log(res);
-      let data_img_base64 = 'data:image/jpeg;base64,' + res;
-      this.base64_img = data_img_base64;
-
-      if (this.cek_koneksi == true) {
-        this.loadingCtrl.tampil_loading();
-        this.test_koneksi(null, null);
-      } else {
-        this.loadingCtrl.tutup_loading();
-        this.swalService.swal_aksi_gagal("Terjadi kesalahan", "Tidak ada koneksi internet !");
-      }
+    })
+    .catch(error => {
+      this.loadingCtrl.tutup_loading();
+      this.swalService.swal_aksi_gagal("Terjadi kesalahan !", "Tidak ada respon, coba beberapa saat lagi !");
     });
   }
 
@@ -344,92 +452,6 @@ export class Tab3Page {
     });
   }
 
-  async presentActionSheet() {
-    const actionSheet = await this.actionSheetController.create({
-      header: 'Pilih Gambar',
-      cssClass: 'my-custom-class',
-      buttons: [{
-        text: 'Kamera',
-        icon: 'camera-outline',
-        handler: () => {
-          this.kamera();
-        }
-      }, {
-        text: 'Galeri',
-        icon: 'image-outline',
-        handler: () => {
-          this.galeri();
-        }
-      }, {
-        text: 'Batal',
-        icon: 'close',
-        role: 'cancel',
-      }]
-    });
-    await actionSheet.present();
-  }
-
-  //mengubah nama pengguna
-  async ubahnama(){
-    const modal = await this.modalCtrl.create({
-      component: ModalGantinamaPage,
-      cssClass: 'small-modal-ganti-nama',
-      backdropDismiss:false
-    });
-    modal.onDidDismiss().then(data => {
-      if (data.data.data == null) {
-        return;
-      } else {
-        if (this.cek_koneksi == true) {
-
-          let nama_baru = data.data.data;
-          this.loadingCtrl.tampil_loading();
-          this.test_koneksi(nama_baru, null);
-
-        } else {
-          this.swalService.swal_aksi_gagal("Terjadi kesalahan", "Tidak ada koneksi internet !");
-        }
-        
-      }
-    }).catch(err => {
-      // console.log(err);
-    });
-    await modal.present();
-  }
-
-  //mengubah sandi pengguna
-  async ubahpassword(){
-    const modal = await this.modalCtrl.create({
-      component: ModalGantisandiPage,
-      cssClass: 'small-modal-ganti-sandi',
-      backdropDismiss:false
-    });
-    modal.onDidDismiss().then(data => {
-      if (data.data.data == null) {
-        return;
-      } else {
-
-        if (this.cek_koneksi == true) {
-
-          let sandi_baru = data.data.data;
-
-          this.loadingCtrl.tampil_loading();
-
-          this.test_koneksi(null, sandi_baru);
-
-        } else {
-
-          this.swalService.swal_aksi_gagal("Terjadi kesalahan", "Tidak ada koneksi internet !");
-          
-        }
-        
-      }
-    }).catch(err => {
-      // console.log(err);
-    });
-    await modal.present();
-  }
-
   api_ubah_nama(nama_baru){
 
     this.interval_counter();
@@ -503,35 +525,13 @@ export class Tab3Page {
     });
   }
 
-  //logout
-  async keluar(){   
-    this.loadingCtrl.tampil_loading();
-    Swal.fire({
-      icon: 'warning',
-      title: 'Keluar akun ?',
-      text: 'Kembali ke login, anda yakin ?',
-      backdrop: false,
-      showDenyButton: true,
-      confirmButtonColor: '#3880ff',
-      confirmButtonText: 'Ya',
-      denyButtonText: `Tidak`,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.loadingCtrl.tutup_loading();
-        this.router.navigate(["/login"], { replaceUrl: true });
-      }else {
-        this.loadingCtrl.tutup_loading();
-      }
-    });
-  }
-
   async tidak_ada_respon(){
     const a = this.setget.getData();
     if (a == 1) {
       this.loadingCtrl.tutup_loading();
     }
 
-    this.loadingCtrl.tampil_loading();
+    this.loadingCtrl.tampil_loading("");
     Swal.fire({
       icon: 'warning',
       title: 'Terjadi kesalahan !',
@@ -553,7 +553,7 @@ export class Tab3Page {
       this.loadingCtrl.tutup_loading();
     }
 
-    this.loadingCtrl.tampil_loading();
+    this.loadingCtrl.tampil_loading("");
     Swal.fire({
       icon: 'warning',
       title: 'Terjadi kesalahan !',
@@ -569,23 +569,25 @@ export class Tab3Page {
     });
   }
 
-  test_koneksi(nama, sandi){
-    this.apiService.cek_koneksi()
-    .then(data => {
-
-      if (nama != null) {
-        this.api_ubah_nama(nama);
-      } else if (sandi != null){
-        this.api_ubah_sandi(sandi);
+  //logout
+  async keluar(){   
+    this.loadingCtrl.tampil_loading("");
+    Swal.fire({
+      icon: 'warning',
+      title: 'Keluar akun ?',
+      text: 'Kembali ke login, anda yakin ?',
+      backdrop: false,
+      showDenyButton: true,
+      confirmButtonColor: '#3880ff',
+      confirmButtonText: 'Ya',
+      denyButtonText: `Tidak`,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.loadingCtrl.tutup_loading();
+        this.router.navigate(["/login"], { replaceUrl: true });
       }else {
-        this.upload();
+        this.loadingCtrl.tutup_loading();
       }
-
-    })
-    .catch(error => {
-      this.loadingCtrl.tutup_loading();
-      this.swalService.swal_aksi_gagal("Terjadi kesalahan !", "Tidak ada respon, coba beberapa saat lagi !");
     });
   }
-  
 }

@@ -43,11 +43,7 @@ export class KegiatanPage implements OnInit {
 
   }
 
-  //delay
-  interval_counter() {
-    return new Promise(resolve => { setTimeout(() => resolve(""), 1000);});
-  }
-
+  //ionic lifecycle
   ngOnInit() {
   }
 
@@ -57,9 +53,51 @@ export class KegiatanPage implements OnInit {
     this.tampilkan_data();
   }
 
+  ionViewDidLeave(){
+    this.loading = true;
+  }
+
+  //delay
+  interval_counter() {
+    return new Promise(resolve => { setTimeout(() => resolve(""), 1000);});
+  }  
+
+  //fungsi ion select dengan ion slides
+  segmentChanged(e){
+    this.warna_segment = e.detail.value;
+
+    if (this.warna_segment == 1) {
+      this.slides.slideTo(0, 400);
+    }else{
+      this.slides.slideTo(1, 400);
+    }
+  }
+
+  slideDidChange() {
+    this.slides.getActiveIndex().then(index => {
+      if (index == 0) {
+        this.warna_segment = 1;
+      } else {
+        this.warna_segment = 2;
+      }
+    });
+  };
+
+  //pindah aktiviti
+  proyek_kegiatan(id_detail, page_type){
+    this.setget.setProses(this.id_header, id_detail);
+    this.setget.set_Page(page_type);
+    this.navCtrl.navigateForward(['/proses']);
+  }
+
+  //kembali ke aktiviti sebelumnya
+  kembali(){
+    this.router.navigate(["/tabs/tab1"], { replaceUrl: true });
+  }
+
   //get data kegiatan
   async tampilkan_data(){
-    this.loadingService.tampil_loading();
+    this.loadingService.tampil_loading("Memuat data . . .");
 
     const a = this.setget.getDatakegiatan();
 
@@ -128,50 +166,13 @@ export class KegiatanPage implements OnInit {
     this.timeout = 0;
   }
 
-  // warna segment
-  segmentChanged(e){
-    this.warna_segment = e.detail.value;
-
-    if (this.warna_segment == 1) {
-      this.slides.slideTo(0, 400);
-    }else{
-      this.slides.slideTo(1, 400);
-    }
-  }
-
-  slideDidChange() {
-    this.slides.getActiveIndex().then(index => {
-      if (index == 0) {
-        this.warna_segment = 1;
-      } else {
-        this.warna_segment = 2;
-      }
-    });
-  };
-
-  //pindah aktiviti
-  proyek_kegiatan(id_detail, page_type){
-
-    this.setget.setProses(this.id_header, id_detail);
-    this.setget.set_Page(page_type);
-    this.navCtrl.navigateForward(['/proses']);
-  }
-
-  ionViewDidLeave(){
-    this.loading = true;
-  }
-
-  kembali(){
-    this.router.navigate(["/tabs/tab1"], { replaceUrl: true });
-  }
-
   async tidak_ada_respon(){
     const a = this.setget.getData();
     if (a == 1) {
       this.loadingService.tutup_loading();
     }
 
-    this.loadingService.tampil_loading();
+    this.loadingService.tampil_loading("");
     Swal.fire({
       icon: 'warning',
       title: 'Terjadi kesalahan !',
@@ -193,7 +194,7 @@ export class KegiatanPage implements OnInit {
       this.loadingService.tutup_loading();
     }
 
-    this.loadingService.tampil_loading();
+    this.loadingService.tampil_loading("");
     Swal.fire({
       icon: 'warning',
       title: 'Terjadi kesalahan !',
@@ -208,5 +209,4 @@ export class KegiatanPage implements OnInit {
       }
     });
   }
-
 }

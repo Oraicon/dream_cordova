@@ -36,7 +36,7 @@ export class ModalLupasandiPage implements OnInit {
     if (!this.myGroup.valid) {
       return false;
     } else {
-      this.loadingService.tampil_loading();
+      this.loadingService.tampil_loading("Mengirim data . . .");
       this.modalCtrl.dismiss({data: this.myGroup.value.nama_pengguna});
     }
   }

@@ -9,9 +9,9 @@ export class LoadingServiceService {
 
   constructor(private loadingCtrl: LoadingController, private setget: SetGetServiceService) { }
 
-  async tampil_loading(){
+  async tampil_loading(text){
     const loading = await this.loadingCtrl.create({
-      message: 'Sedang memproses . . .',
+      message: ''+text,
     });
     await loading.present().then(() => {
       this.setget.setData(1);

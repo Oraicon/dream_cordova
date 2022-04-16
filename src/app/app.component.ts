@@ -98,7 +98,7 @@ export class AppComponent {
       this.loadingService.tutup_loading();
     }
 
-    this.loadingService.tampil_loading();
+    this.loadingService.tampil_loading(null);
     Swal.fire({
       icon: 'warning',
       title: 'Keluar aplikasi ?',

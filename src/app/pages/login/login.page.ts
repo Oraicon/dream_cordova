@@ -43,6 +43,7 @@ export class LoginPage implements OnInit {
     this.setget.set_koneksi(0);
   }
 
+  //Ionic lifecycle
   ngOnInit() {
     //persiapan storage
     this.storage.create();
@@ -64,43 +65,36 @@ export class LoginPage implements OnInit {
       sandi_pengguna: ['', [Validators.required]]
     })
   }
-
   ionViewDidEnter(){
     const a = this.setget.getData();
     if (a == 1) {
       this.loadingService.tutup_loading();
     }
   }
+  //pindah aktiviti
+  ionViewDidLeave(){
+    this.router.navigate(["/tabs/tab1"], { replaceUrl: true });
+  }
 
   //delay
   interval_counter() {
-    return new Promise(resolve => { setTimeout(() => resolve(""), 1000);});
+    return new Promise(resolve => { setTimeout(() => resolve(""), 250);});
+  }
+
+  //fungsi lihat sandi
+  lihat_sandi(){
+    this.showPassword = !this.showPassword;
+
+    if (this.passwordToggleIcon == 'eye-outline') {
+      this.passwordToggleIcon = 'eye-off-outline';
+    } else {
+      this.passwordToggleIcon = 'eye-outline';
+    }
   }
 
   //error form
   get errorControl() {
     return this.myGroup.controls;
-  }
-
-  //button on click / enter di password
-  onSubmit(){
-    this.isSubmitted = true;
-
-    this.storage.set('auth', false);
-    this.storage.set('nama', null);
-    this.storage.set('sandi', null);
-    
-    if (!this.myGroup.valid) {
-      return false;
-    } else {
-      this.local_nama = this.myGroup.value.nama_pengguna;
-      this.local_sandi = this.myGroup.value.sandi_pengguna;
-      if (this.cek_koneksi == true) {
-        this.manggil_api_login(this.local_nama, this.local_sandi);
-      }else{
-        this.swal.swal_aksi_gagal("Terjadi kesalahan", "Tidak ada koneksi internet !");
-      }
-    }
   }
 
   //manggil modal lupa sandi
@@ -129,63 +123,45 @@ export class LoginPage implements OnInit {
     await modal.present();
   }
 
-  //fungsi lihat sandi
-  lihat_sandi(){
-    this.showPassword = !this.showPassword;
+  //validasi
+  onSubmit(){
+    this.isSubmitted = true;
 
-    if (this.passwordToggleIcon == 'eye-outline') {
-      this.passwordToggleIcon = 'eye-off-outline';
+    this.storage.set('auth', false);
+    this.storage.set('nama', null);
+    this.storage.set('sandi', null);
+    
+    if (!this.myGroup.valid) {
+      return false;
     } else {
-      this.passwordToggleIcon = 'eye-outline';
+      this.local_nama = this.myGroup.value.nama_pengguna;
+      this.local_sandi = this.myGroup.value.sandi_pengguna;
+      if (this.cek_koneksi == true) {
+        this.manggil_api_login(this.local_nama, this.local_sandi);
+      }else{
+        this.swal.swal_aksi_gagal("Terjadi kesalahan", "Tidak ada koneksi internet !");
+      }
     }
   }
 
-  //transisi page
-  ionViewDidLeave(){
-    this.router.navigate(["/tabs/tab1"], { replaceUrl: true });
-  }
-
-  //memanggil api lupa nama
-  manggil_api_lupa_nama(nama_baru){
-    this.interval_counter();
-
-    this.apiService.panggil_api_reset_password(nama_baru)
-    .then(res => {
-      const data_json = JSON.parse(res.data);
-      const data_status = data_json.status;
-  
-      //validasi data
-      if (data_status == 1) {
-        //mendapatkan data
-        const data_email = data_json.data[0].email;
-        this.loadingService.tutup_loading();
-        this.swal.swal_aksi_berhasil("Sandi terkirim !", "Sandi baru sudah dikirim ke email: " + data_email);
-  
-      } else if (data_status == 0) {
-        //jika status != 1
-        this.loadingService.tutup_loading();
-        this.swal.swal_aksi_gagal("Sandi tidak terkirim !", "Sandi gagal dikirim ke email");
-      } 
-      else if (data_status == 2) {
-        //jika status != 1
-        this.loadingService.tutup_loading();
-        this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Nama tidak ditemukan !");
-      }         
+  //test koneksi
+  test_koneksi(nama){
+    this.apiService.cek_koneksi()
+    .then(data => {
+      this.manggil_api_lupa_nama(nama);
     })
-    .catch(err => {
-      //error
-      this.loadingService.tutup_loading();
-      if (err.status == -4) {
-        this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Tidak ada respon, coba beberapa saat lagi !");
-      } else {
-        this.swal.swal_aksi_gagal("Terjadi kesalahan !", "code error 3 !");
+    .catch(error => {
+      const a = this.setget.getData();
+      if (a == 1) {
+        this.loadingService.tutup_loading();
       }
+      this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Tidak ada respon, coba beberapa saat lagi !");
     });
   }
 
   //memanggil api data karyawan
   manggil_api_login(var_nama, var_sandi){
-    this.loadingService.tampil_loading();
+    this.loadingService.tampil_loading("Sedang memproses . . .");
     
     this.interval_counter();
 
@@ -239,19 +215,42 @@ export class LoginPage implements OnInit {
       }
     });
   }
+  
+  //memanggil api lupa nama
+  manggil_api_lupa_nama(nama_baru){
+    this.interval_counter();
 
-  //test koneksi
-  test_koneksi(nama){
-    this.apiService.cek_koneksi()
-    .then(data => {
-      this.manggil_api_lupa_nama(nama);
-    })
-    .catch(error => {
-      const a = this.setget.getData();
-      if (a == 1) {
+    this.apiService.panggil_api_reset_password(nama_baru)
+    .then(res => {
+      const data_json = JSON.parse(res.data);
+      const data_status = data_json.status;
+  
+      //validasi data
+      if (data_status == 1) {
+        //mendapatkan data
+        const data_email = data_json.data[0].email;
         this.loadingService.tutup_loading();
+        this.swal.swal_aksi_berhasil("Sandi terkirim !", "Sandi baru sudah dikirim ke email: " + data_email);
+  
+      } else if (data_status == 0) {
+        //jika status != 1
+        this.loadingService.tutup_loading();
+        this.swal.swal_aksi_gagal("Sandi tidak terkirim !", "Sandi gagal dikirim ke email");
+      } 
+      else if (data_status == 2) {
+        //jika status != 1
+        this.loadingService.tutup_loading();
+        this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Nama tidak ditemukan !");
+      }         
+    })
+    .catch(err => {
+      //error
+      this.loadingService.tutup_loading();
+      if (err.status == -4) {
+        this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Tidak ada respon, coba beberapa saat lagi !");
+      } else {
+        this.swal.swal_aksi_gagal("Terjadi kesalahan !", "code error 3 !");
       }
-      this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Tidak ada respon, coba beberapa saat lagi !");
     });
   }
 }

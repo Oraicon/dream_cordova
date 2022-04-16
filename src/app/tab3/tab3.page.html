@@ -48,11 +48,12 @@
                 <ion-skeleton-text class="" animated style="width: 30%; height: 1rem;"></ion-skeleton-text>
               </ng-template>
             </ion-label>
-            <ion-button color="primary" expand="block" fill="outline" (click)="ubahnama()">
+            <ion-button *ngIf="nama_pengguna; else username_button" color="primary" expand="block" fill="outline" (click)="ubahnama()">
               Ubah
             </ion-button>
+            <ng-template #username_button>
+            </ng-template>
           </ion-item>
-          
           <ion-item>
             <ion-label (click)="lihat_password()">
               <h2>Sandi Pengguna</h2>
@@ -72,9 +73,11 @@
                 <ion-skeleton-text class="" animated style="width: 30%; height: 1rem;"></ion-skeleton-text>
               </ng-template>
             </ion-label>
-            <ion-button color="primary" expand="block" fill="outline" (click)="ubahpassword()">
+            <ion-button *ngIf="sandi_pengguna; else password_button" color="primary" expand="block" fill="outline" (click)="ubahpassword()">
               Ubah
             </ion-button>
+            <ng-template #password_button>
+            </ng-template>
           </ion-item>
 
         </ion-list>

@@ -48,10 +48,32 @@ export class Tab1Page {
 
   //delay
   interval_counter() {
-    return new Promise(resolve => { setTimeout(() => resolve(""), 1000);});
+    return new Promise(resolve => { setTimeout(() => resolve(""), 250);});
   }
 
-  //menampilkan data
+  //refresh page
+  doRefresh(event){
+    event.target.complete();
+    //membuat variable kosong
+    this.data_header_id = [];
+    this.data_masih_proses = {};
+    this.data_sudah_komplit = {};
+    this.data_header = [];
+    this.tanggal_deadline = {};
+    this.logika_loading = 0;
+    this.logika_loading_lenght = 0;
+    this.data_beranda_loading_tidak_ada = false;
+    this.tampilkan_data();
+  }
+
+  //pindah aktiviti
+  kegiatan(e, f){
+    this.setget.setDatakegiatan(e, f);
+    this.setget.set_tab_page(1);
+    this.router.navigate(["/kegiatan"], { replaceUrl: true });
+  }
+
+  //menampilkan data & mengolah data dari 1 sampai 3
   async tampilkan_data(){
 
     const a = this.setget.getData();
@@ -59,7 +81,7 @@ export class Tab1Page {
       this.loadingCtrl.tutup_loading();
     }
 
-    this.loadingCtrl.tampil_loading();
+    this.loadingCtrl.tampil_loading("Memuat data . . .");
 
     const data_l_nama = await this.storage.get('nama');
 
@@ -100,7 +122,7 @@ export class Tab1Page {
   }
 
   //olah data jadi array
-  tampilkan_data1(arr){
+  async tampilkan_data1(arr){
     for (let index = 0; index < arr.length; index++) {
       this.data_header.push(arr[index]);
       if (index == arr.length-1) {
@@ -188,50 +210,7 @@ export class Tab1Page {
       this.loadingCtrl.tutup_loading();
     }
   }
-
-  //refresh page
-  doRefresh(event){
-    event.target.complete();
-    this.data_header_id = [];
-    this.data_masih_proses = {};
-    this.data_sudah_komplit = {};
-    this.data_header = [];
-    this.tanggal_deadline = {};
-    this.logika_loading = 0;
-    this.logika_loading_lenght = 0;
-    this.data_beranda_loading_tidak_ada = false;
-    this.tampilkan_data();
-  }
   
-  //logout
-  keluar(){
-    this.loadingCtrl.tampil_loading();
-    Swal.fire({
-      icon: 'warning',
-      title: 'Keluar akun ?',
-      text: 'Kembali ke login, anda yakin ?',
-      backdrop: false,
-      showDenyButton: true,
-      confirmButtonColor: '#3880ff',
-      confirmButtonText: 'Ya',
-      denyButtonText: `Tidak`,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.loadingCtrl.tutup_loading();
-        this.router.navigate(["/login"], { replaceUrl: true });
-      }else {
-        this.loadingCtrl.tutup_loading();
-      }
-    });
-  }
-
-  //pindah aktiviti
-  kegiatan(e, f){
-    this.setget.setDatakegiatan(e, f);
-    this.setget.set_tab_page(1);
-    this.router.navigate(["/kegiatan"], { replaceUrl: true });
-  }
-
   async tidak_ada_respon(){
     const a = this.setget.getData();
     if (a == 1) {
@@ -247,7 +226,7 @@ export class Tab1Page {
     this.logika_loading_lenght = 0;
     this.data_beranda_loading_tidak_ada = false;
     
-    this.loadingCtrl.tampil_loading();
+    this.loadingCtrl.tampil_loading("");
     Swal.fire({
       icon: 'warning',
       title: 'Terjadi kesalahan !',
@@ -270,7 +249,7 @@ export class Tab1Page {
       this.loadingCtrl.tutup_loading();
     }
 
-    this.loadingCtrl.tampil_loading();
+    this.loadingCtrl.tampil_loading("");
     Swal.fire({
       icon: 'warning',
       title: 'Terjadi kesalahan !',
@@ -286,4 +265,25 @@ export class Tab1Page {
     });
   }
 
+  //logout
+  async keluar(){
+    this.loadingCtrl.tampil_loading("");
+    Swal.fire({
+      icon: 'warning',
+      title: 'Keluar akun ?',
+      text: 'Kembali ke login, anda yakin ?',
+      backdrop: false,
+      showDenyButton: true,
+      confirmButtonColor: '#3880ff',
+      confirmButtonText: 'Ya',
+      denyButtonText: `Tidak`,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.loadingCtrl.tutup_loading();
+        this.router.navigate(["/login"], { replaceUrl: true });
+      }else {
+        this.loadingCtrl.tutup_loading();
+      }
+    });
+  }
 }

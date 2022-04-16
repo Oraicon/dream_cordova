@@ -3,6 +3,7 @@ import { ModalController } from '@ionic/angular';
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { Storage } from '@ionic/storage-angular';
 import { SwalServiceService } from 'src/app/services/swal-service.service';
+import { LoadingServiceService } from 'src/app/services/loading-service.service';
 
 
 
@@ -26,6 +27,7 @@ export class ModalGantisandiPage implements OnInit {
 
   constructor(
     private swal: SwalServiceService,
+    private loadingService: LoadingServiceService,
     private storage: Storage,
     private formBuilder: FormBuilder,
     private modalCtrl: ModalController) { }
@@ -97,6 +99,7 @@ export class ModalGantisandiPage implements OnInit {
         if (password_baru_2 != password_baru) {
           this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Sandi baru anda tidak sama !");
         } else {
+          this.loadingService.tampil_loading("Mengganti sandi . . .");
           this.modalCtrl.dismiss({data: password_baru});
         }
       }

@@ -79,12 +79,25 @@ export class ProsesPage implements OnInit {
   ngOnInit() {
   }
 
-  //delay
-  interval_counter() {
-    return new Promise(resolve => { setTimeout(() => resolve(""), 1000);});
+
+
+  //ionic lifecycle
+  async ionViewWillEnter(){
+    this.setget.set_swal(0);
+    this.tampilkan_data();
+  }
+
+  ionViewDidLeave(){
+    this.riwayat_laporan = false;
+    this.riwayat_loading = true;
   }
 
   //delay
+  interval_counter() {
+    return new Promise(resolve => { setTimeout(() => resolve(""), 250);});
+  }
+
+  //delay file transfer 30 detik
   delay() {
     console.log("masuk dealy");
     return new Promise(resolve => { setTimeout(() => resolve(""), 30000);});
@@ -95,19 +108,82 @@ export class ProsesPage implements OnInit {
     return 1;
   }
 
-  //awal masuk page
-  async ionViewWillEnter(){
-    this.setget.set_swal(0);
-    this.tampilkan_data();
+  // mengubah format tanggal
+  asynctanggal(){
+    const arr_ms =  this.data_arr_progressmilsetone
+    const arr_ms_length = this.data_arr_progressmilsetone.length;
+
+    for (let index = 0; index < arr_ms_length; index++) {
+      let id_ms = arr_ms[index].id;
+
+      let tanggal = this.momentService.ubah_format_tanggal(arr_ms[index].create_date);
+
+      this.tanggal_pm[id_ms] = tanggal;
+    }
+
+    this.riwayat_laporan = true;
+    this.riwayat_loading = false;
+    this.loadingService.tutup_loading();
+    this.back_with_success();
   }
 
+  //gambar rusak
+  errorHandler(event, a) {
+    event.target.src = "assets/bi.png";
+    this.data_gambar_rusak[a] = "rusak";
+  }
+
+  //logika compare isi ada persen
+  compare( a, b ) {
+    return a.progress_pengerjaan - b.progress_pengerjaan;
+  }
+
+  //berhasil mengirim data
+  async back_with_success(){
+    await this.setget.getAlert();
+    
+    if (this.setget.getAlert() == 1) {
+      this.swal.swal_aksi_berhasil("Laporan Terkirim !", "Data laporan telah terkirim !");
+      this.setget.setAlert(0);
+    }
+  }
+
+  //dapatkan data gambar dari galeri/kamera
+  kamera(){
+    this.camera.getPicture(this.cameraOptions).then(res=>{
+      this.imgURL = 'data:image/jpeg;base64,' + res;
+      this.base64_img = this.imgURL;
+      this.swal_gambar(this.imgURL);
+    });
+  }
+
+  galeri(){
+    this.camera.getPicture(this.galeriOptions).then(res=>{
+      this.imgURL = 'data:image/jpeg;base64,' + res;
+      this.base64_img = this.imgURL;
+      this.swal_gambar(this.imgURL);
+    });
+  }
+
+  //pindah aktiviti
+  formulir(){
+    let a = this.persen_tertinggi;
+    
+    if(a == undefined){
+      a = 0;
+    }else{
+      a = this.persen_tertinggi;
+    }
+
+    this.setget.setLog(this.data_id_kegiatan, this.data_judul_kegiatan);
+    this.setget.set_persen(a);
+
+    this.navCtrl.navigateForward(['/lapor']);
+  }
+
+  //kembali ke aktiviti sebelumnya
   kembali(){
     this.navCtrl.back();
-  }
-
-  ionViewDidLeave(){
-    this.riwayat_laporan = false;
-    this.riwayat_loading = true;
   }
 
   //menampilkan data progres detail
@@ -115,7 +191,7 @@ export class ProsesPage implements OnInit {
     this.data_gambar_rusak = {};
     this.riwayat_laporan = false;
     this.riwayat_loading = true;
-    this.loadingService.tampil_loading();
+    this.loadingService.tampil_loading("Memuat data . . .");
     const a = this.setget.getProses();
     const b = this.setget.get_Page();
 
@@ -230,55 +306,7 @@ export class ProsesPage implements OnInit {
 
   }
 
-  // mengubah format tanggal
-  asynctanggal(){
-    const arr_ms =  this.data_arr_progressmilsetone
-    const arr_ms_length = this.data_arr_progressmilsetone.length;
-
-    for (let index = 0; index < arr_ms_length; index++) {
-      let id_ms = arr_ms[index].id;
-
-      let tanggal = this.momentService.ubah_format_tanggal(arr_ms[index].create_date);
-
-      this.tanggal_pm[id_ms] = tanggal;
-    }
-
-    this.riwayat_laporan = true;
-    this.riwayat_loading = false;
-    this.loadingService.tutup_loading();
-    this.back_with_success();
-  }
-
-  //gambar rusak
-  errorHandler(event, a) {
-    event.target.src = "assets/bi.png";
-    this.data_gambar_rusak[a] = "rusak";
-    console.log(this.data_gambar_rusak);
-
-    
-  }
-
-  //logika compare isi ada persen
-  compare( a, b ) {
-    return a.progress_pengerjaan - b.progress_pengerjaan;
-  }
-
-  //pindah aktiviti
-  formulir(){
-    let a = this.persen_tertinggi;
-    
-    if(a == undefined){
-      a = 0;
-    }else{
-      a = this.persen_tertinggi;
-    }
-
-    this.setget.setLog(this.data_id_kegiatan, this.data_judul_kegiatan);
-    this.setget.set_persen(a);
-
-    this.navCtrl.navigateForward(['/lapor']);
-  }
-
+  //modal ganti gambar
   async presentActionSheet(namafile) {
     const actionSheet = await this.actionSheetController.create({
       header: 'Kirim ulang gambar',
@@ -308,22 +336,30 @@ export class ProsesPage implements OnInit {
     await actionSheet.present();
   }
 
-  //dapatkan gambar dari kamera
-  kamera(){
-    this.camera.getPicture(this.cameraOptions).then(res=>{
-      this.imgURL = 'data:image/jpeg;base64,' + res;
-      this.base64_img = this.imgURL;
-      this.swal_gambar(this.imgURL);
-    });
-  }
-
-  //dapatkan gambar dari galeri
-  galeri(){
-    this.camera.getPicture(this.galeriOptions).then(res=>{
-      this.imgURL = 'data:image/jpeg;base64,' + res;
-      this.base64_img = this.imgURL;
-      this.swal_gambar(this.imgURL);
-    });
+  //alert konfirmasi ganti gambar
+  swal_gambar(gambar){
+    this.loadingService.tampil_loading("");
+    Swal.fire({
+      title: 'Peringatan !!',
+      text: 'Pastikan gambar sesuai dengan kegiatan pengerjaan !',
+      imageUrl: '' + gambar,
+      imageWidth: 300,
+      imageHeight: 200,
+      imageAlt: 'Custom image',
+      backdrop: false,
+      confirmButtonColor: '#3880ff',
+      confirmButtonText: 'Kirim !',
+      showDenyButton: true,
+      denyButtonText: `Batal `,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.loadingService.tutup_loading();
+        this.loadingService.tampil_loading("Menyimpan gambar . . .");
+        this.mengirim_gambar();
+      }else{
+        this.loadingService.tutup_loading();
+      }
+    })
   }
 
   async mengirim_gambar(){
@@ -388,16 +424,6 @@ export class ProsesPage implements OnInit {
 
   }
 
-  //berhasil mengirim data
-  async back_with_success(){
-    await this.setget.getAlert();
-    
-    if (this.setget.getAlert() == 1) {
-      this.swal.swal_aksi_berhasil("Laporan Terkirim !", "Data laporan telah terkirim !");
-      this.setget.setAlert(0);
-    }
-  }
-
   async tidak_ada_respon(){
     const a = this.setget.getData();
     if (a == 1) {
@@ -419,7 +445,7 @@ export class ProsesPage implements OnInit {
     this.riwayat_laporan = false;
     this.riwayat_loading = true;
 
-    this.loadingService.tampil_loading();
+    this.loadingService.tampil_loading("");
     Swal.fire({
       icon: 'warning',
       title: 'Terjadi kesalahan !',
@@ -442,7 +468,7 @@ export class ProsesPage implements OnInit {
       this.loadingService.tutup_loading();
     }
 
-    this.loadingService.tampil_loading();
+    this.loadingService.tampil_loading("");
     Swal.fire({
       icon: 'warning',
       title: 'Terjadi kesalahan !',
@@ -458,29 +484,5 @@ export class ProsesPage implements OnInit {
     });
   }
 
-  swal_gambar(gambar){
-    this.loadingService.tampil_loading();
-    Swal.fire({
-      title: 'Peringatan !!',
-      text: 'Pastikan gambar sesuai dengan kegiatan pengerjaan !',
-      imageUrl: '' + gambar,
-      imageWidth: 300,
-      imageHeight: 200,
-      imageAlt: 'Custom image',
-      backdrop: false,
-      confirmButtonColor: '#3880ff',
-      confirmButtonText: 'Kirim !',
-      showDenyButton: true,
-      denyButtonText: `Batal `,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.loadingService.tutup_loading();
-        this.loadingService.tampil_loading();
-        this.mengirim_gambar();
-      }else{
-        this.loadingService.tutup_loading();
-      }
-    })
-  }
 
 }
