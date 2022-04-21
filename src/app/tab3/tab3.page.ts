@@ -31,7 +31,7 @@ export class Tab3Page {
   //persiapan variable
   imgURL:any = 'assets/pp.jpg';
   cek_koneksi = true;
-  md5_upload = "288fc19f351cedab3648fddf62311278";
+  md5_upload = "assets/images/";
   
   //variable frontend
   lihatsandi = false;
@@ -159,7 +159,7 @@ export class Tab3Page {
     if (gambar == "" || gambar == null || gambar == undefined) {
       a = "assets/bi.png";
     } else {
-      a = "https://dads-demo-1.000webhostapp.com/"+ gambar;
+      a = "https://dream-beta.technosolusitama.in/"+ gambar;
     }
     return a;
   }
@@ -373,7 +373,7 @@ export class Tab3Page {
     const l_storage_data_nama = await this.storage.get('nama');
 
     //persiapan url dan nama
-    let URL="https://dads-demo-1.000webhostapp.com/api/uploadImage";
+    let URL="https://dream-beta.technosolusitama.in/api/uploadImage";
     this.name_img = this.datepipe.transform((new Date), 'MMddyyyyhmmss.')+ this.format_img;
     let nama_file = this.name_img.toString();
 

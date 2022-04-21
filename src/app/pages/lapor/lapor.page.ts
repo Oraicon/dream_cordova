@@ -24,8 +24,8 @@ export class LaporPage implements OnInit {
   pilih_gambar = true;
   gambar_kosong = true;
   isSubmitted = false;
-  md5_upload = "288fc19f351cedab3648fddf62311278";
-  URL="https://dads-demo-1.000webhostapp.com/api/uploadImage";
+  md5_upload = "assets/images/";
+  URL="https://dream-beta.technosolusitama.in/api/uploadImage";
 
   
   //variable
@@ -282,30 +282,58 @@ export class LaporPage implements OnInit {
           }
   
           this.data_page = a;
-  
-          this.loadingService.tampil_loading("");
-          Swal.fire({
-            title: 'Perhatian !!',
-            text: "Pastikan anda sudah mengisi data dengan benar !",
-            icon: 'info',
-            backdrop: false,
-            showDenyButton: true,
-            confirmButtonColor: '#3880ff',
-            confirmButtonText: 'Kirim !',
-            denyButtonText: `Batal`,
-          }).then((result) => {
-            if (result.isConfirmed) {
-              this.loadingService.tutup_loading();
-              if (this.cek_koneksi == true) {
-                this.loadingService.tampil_loading("Mengirim data . . .");
-                this.test_koneksi_api(nama_file, this.keterangan, this.persen);
-              } else {
-                this.swal.swal_aksi_gagal("Terjadi kesalahan", "Tidak ada koneksi internet !");
+
+          if(a == 2){
+            this.loadingService.tampil_loading("");
+            Swal.fire({
+              title: 'Perhatian !!',
+              text: "Dengan persen pengerjaan 100% maka kegiatan selesai, dan pastikan anda sudah mengisi data dengan benar !",
+              icon: 'info',
+              backdrop: false,
+              showDenyButton: true,
+              confirmButtonColor: '#3880ff',
+              confirmButtonText: 'Kirim !',
+              denyButtonText: `Batal`,
+            }).then((result) => {
+              if (result.isConfirmed) {
+                this.loadingService.tutup_loading();
+                if (this.cek_koneksi == true) {
+                  this.loadingService.tampil_loading("Mengirim data . . .");
+                  this.test_koneksi_api(nama_file, this.keterangan, this.persen);
+                } else {
+                  this.swal.swal_aksi_gagal("Terjadi kesalahan", "Tidak ada koneksi internet !");
+                }
+              }else{
+                this.loadingService.tutup_loading();
               }
-            }else{
-              this.loadingService.tutup_loading();
-            }
-          })
+            })
+          }else{
+            this.loadingService.tampil_loading("");
+            Swal.fire({
+              title: 'Perhatian !!',
+              text: "Pastikan anda sudah mengisi data dengan benar !",
+              icon: 'info',
+              backdrop: false,
+              showDenyButton: true,
+              confirmButtonColor: '#3880ff',
+              confirmButtonText: 'Kirim !',
+              denyButtonText: `Batal`,
+            }).then((result) => {
+              if (result.isConfirmed) {
+                this.loadingService.tutup_loading();
+                if (this.cek_koneksi == true) {
+                  this.loadingService.tampil_loading("Mengirim data . . .");
+                  this.test_koneksi_api(nama_file, this.keterangan, this.persen);
+                } else {
+                  this.swal.swal_aksi_gagal("Terjadi kesalahan", "Tidak ada koneksi internet !");
+                }
+              }else{
+                this.loadingService.tutup_loading();
+              }
+            })
+          }
+  
+          
         }else{
           this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Gambar tidak boleh kosong !");
         }

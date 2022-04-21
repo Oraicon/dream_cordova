@@ -245,12 +245,12 @@ export class LoginPage implements OnInit {
         //mendapatkan data
         const data_email = data_json.data[0].email;
         this.loadingService.tutup_loading();
-        this.swal.swal_aksi_berhasil("Sandi terkirim !", "Sandi baru sudah dikirim ke email: " + data_email);
+        this.swal.swal_aksi_berhasil("Sukses !", "Sandi baru sudah dikirim ke email: " + data_email);
   
       } else if (data_status == 0) {
         //jika status != 1
         this.loadingService.tutup_loading();
-        this.swal.swal_aksi_gagal("Sandi tidak terkirim !", "Sandi gagal dikirim ke email");
+        this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Sandi gagal dikirim ke email");
       } 
       else if (data_status == 2) {
         //jika status != 1

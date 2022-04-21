@@ -42,7 +42,7 @@ export class ProsesPage implements OnInit {
   base64_img:string="";
   name_img:string="";
   format_img:string="JPEG";
-  URL="https://dads-demo-1.000webhostapp.com/api/uploadImage";
+  URL="https://dream-beta.technosolusitama.in/api/uploadImage";
 
   //persiapan kamera
   cameraOptions: CameraOptions = {
@@ -78,8 +78,6 @@ export class ProsesPage implements OnInit {
 
   ngOnInit() {
   }
-
-
 
   //ionic lifecycle
   async ionViewWillEnter(){

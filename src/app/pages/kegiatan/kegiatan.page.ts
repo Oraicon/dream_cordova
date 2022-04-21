@@ -49,7 +49,7 @@ export class KegiatanPage implements OnInit {
 
   //awal masuk page
   ionViewWillEnter(){
-    this.warna_segment  = 1;
+    this.warna_segment = 1;
     this.tampilkan_data();
   }
 
