@@ -1,6 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonRouterOutlet, Platform } from '@ionic/angular';
-import { Location } from '@angular/common';
+import { IonRouterOutlet, NavController, Platform } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { SetGetServiceService } from './services/set-get-service.service';
 import { ToastService } from './services/toast.service';
@@ -20,9 +19,9 @@ export class AppComponent {
 
   @ViewChild(IonRouterOutlet,{static:true}) routerOutlet: IonRouterOutlet;
   constructor(private platform: Platform, 
-    private location: Location, 
     private swalService: SwalServiceService,
     private network: Network,
+    private navCtrl:NavController, 
     private loadingService: LoadingServiceService,
     private router: Router, 
     private setget: SetGetServiceService, 
@@ -31,6 +30,8 @@ export class AppComponent {
     this.platform.ready().then(()=>{
       this.hardbackbutton();
     });
+
+    this.setget.setButton(0);
 
     //pengecekan koneksi
     this.pengecekan_koneksi();
@@ -74,7 +75,11 @@ export class AppComponent {
     this.platform.backButton.subscribeWithPriority(10, () => {
       let a = this.setget.getData();
       let b = this.setget.get_tab_page();
-      
+      let keterangan = this.setget.get_lapor()[0];
+      let persen = this.setget.get_lapor()[1];
+      let imgURL = this.setget.get_lapor()[2];
+      let data_button = this.setget.getButton();
+
       if (a == 1) {
         this.toastService.Toast_tampil();
       } else {
@@ -85,7 +90,42 @@ export class AppComponent {
             this.exitapp();
           }
         }else{
-          this.location.back();
+          if (b == 2) {
+            if (keterangan != undefined || persen != undefined || imgURL != 'assets/ss_.png') {
+              this.loadingService.tampil_loading("");
+              Swal.fire({
+                icon: 'warning',
+                title: 'Data akan hilang !',
+                text: 'Data formulir laporan anda akan terhapus, anda yakin ?',
+                backdrop: false,
+                showDenyButton: true,
+                confirmButtonColor: '#3880ff',
+                confirmButtonText: 'Ya',
+                denyButtonText: `Tidak`,
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  this.loadingService.tutup_loading();
+                  this.navCtrl.back();
+                }else {
+                  this.loadingService.tutup_loading();
+                }
+              });
+            }else{
+              if (data_button == 0){
+                this.setget.setButton(1);
+                this.navCtrl.back();
+              }else{
+                this.toastService.Toast_tampil();
+              }
+            }
+          }else{              
+            if (data_button == 0){
+              this.setget.setButton(1);
+              this.navCtrl.back();
+            }else{
+              this.toastService.Toast_tampil();
+            }
+          }
         }
       }
     });

@@ -18,6 +18,7 @@ export class LoadingServiceService {
     });
     await loading.onDidDismiss().then(() => {
       this.setget.setData(0);
+      this.setget.setButton(0);
     })
   }
 

@@ -29,6 +29,7 @@
       <ion-col *ngIf="nama_pengguna; else templateName" size="12" class="ion-text-center ion-no-margin ion-text-wrap">
         <h1 class="ion-padding-start ion-padding-end">{{ nama_pengguna }}</h1>
       </ion-col>
+      <!-- loading skeleton -->
       <ng-template #templateName>
         <ion-col size="12" size="12" class="ion-text-center ion-no-margin padding_skeleton_loading">
           <ion-skeleton-text class="padding_skeleton_loading" animated style="width: 100%; height: 2rem;"></ion-skeleton-text>
@@ -44,6 +45,7 @@
             <ion-label>
               <h2>Nama Pengguna</h2>
               <h3 *ngIf="nama_pengguna; else username">{{ username_pengguna }}</h3>
+              <!-- loading skeleton -->
               <ng-template #username>
                 <ion-skeleton-text class="" animated style="width: 30%; height: 1rem;"></ion-skeleton-text>
               </ng-template>
@@ -61,7 +63,8 @@
 
               <ng-template #sandi>                
                 <h3 *ngIf="lihatsandi; else tidakterlihat" >{{ sandi_pengguna }}</h3>
-  
+
+                <!-- sensor sandi -->
                 <ng-template #tidakterlihat>
                   <h3>
                     {{ sandi_pengguna_tidak_terlihat }}
@@ -69,6 +72,7 @@
                 </ng-template>
               </ng-template>
 
+              <!-- loading skeleton -->
               <ng-template #password>
                 <ion-skeleton-text class="" animated style="width: 30%; height: 1rem;"></ion-skeleton-text>
               </ng-template>
@@ -93,6 +97,8 @@
             <ion-label>
               <h2>NIK</h2>
               <h3 *ngIf="nik_pengguna; else nik">{{ nik_pengguna }}</h3>
+
+              <!-- loading skeleton -->
               <ng-template #nik>
                 <ion-skeleton-text class="" animated style="width: 40%; height: 1rem;"></ion-skeleton-text>
               </ng-template> 
@@ -102,6 +108,8 @@
             <ion-label>
               <h2>Email</h2>
               <h3 *ngIf="email_pengguna; else email">{{ email_pengguna }}</h3>
+
+              <!-- loading skeleton -->
               <ng-template #email>
                 <ion-skeleton-text class="" animated style="width: 40%; height: 1rem;"></ion-skeleton-text>
               </ng-template> 
@@ -111,6 +119,8 @@
             <ion-label>
               <h2>Nomor Telepon</h2>
               <h3 *ngIf="nohp_pengguna; else no_hp">{{ nohp_pengguna }}</h3>
+              
+              <!-- loading skeleton -->
               <ng-template #no_hp>
                 <ion-skeleton-text class="" animated style="width: 40%; height: 1rem;"></ion-skeleton-text>
               </ng-template> 
@@ -120,6 +130,8 @@
             <ion-label>
               <h2>Tempat Lahir</h2>
               <h3 *ngIf="tempatlahir_pengguna; else tempatlahir">{{ tempatlahir_pengguna }}</h3>
+              
+              <!-- loading skeleton -->
               <ng-template #tempatlahir>
                 <ion-skeleton-text class="" animated style="width: 40%; height: 1rem;"></ion-skeleton-text>
               </ng-template> 
@@ -129,6 +141,8 @@
             <ion-label>
               <h2>Tanggal Lahir</h2>
               <h3 *ngIf="tanggallahir_pengguna; else tanggallahir">{{ tanggallahir_pengguna }}</h3>
+              
+              <!-- loading skeleton -->
               <ng-template #tanggallahir>
                 <ion-skeleton-text class="" animated style="width: 40%; height: 1rem;"></ion-skeleton-text>
               </ng-template> 
@@ -138,6 +152,8 @@
             <ion-label>
               <h2>Jenis Kelamin</h2>
               <h3 *ngIf="kelamin_pengguna; else kelamin">{{ kelamin_pengguna }}</h3>
+              
+              <!-- loading skeleton -->
               <ng-template #kelamin>
                 <ion-skeleton-text class="" animated style="width: 40%; height: 1rem;"></ion-skeleton-text>
               </ng-template> 
@@ -147,6 +163,8 @@
             <ion-label>
               <h2>Alamat</h2>
               <h3 class="ion-text-wrap" *ngIf="alamat_pengguna; else alamat">{{ alamat_pengguna }}</h3>
+              
+              <!-- loading skeleton -->
               <ng-template #alamat>
                 <ion-skeleton-text class="" animated style="width: 40%; height: 1rem;"></ion-skeleton-text>
               </ng-template> 
@@ -156,6 +174,8 @@
             <ion-label>
               <h2>Jabatan</h2>
               <h3 *ngIf="jabatan_pengguna; else jabatan">{{ jabatan_pengguna }}</h3>
+              
+              <!-- loading skeleton -->
               <ng-template #jabatan>
                 <ion-skeleton-text class="" animated style="width: 40%; height: 1rem;"></ion-skeleton-text>
               </ng-template> 
@@ -165,6 +185,8 @@
             <ion-label>
               <h2>Posisi</h2>
               <h3 *ngIf="posisi_pengguna; else posisi">{{ posisi_pengguna }}</h3>
+              
+              <!-- loading skeleton -->
               <ng-template #posisi>
                 <ion-skeleton-text class="" animated style="width: 40%; height: 1rem;"></ion-skeleton-text>
               </ng-template> 
@@ -174,6 +196,8 @@
             <ion-label>
               <h2>Tanggal Bergabung</h2>
               <h3  *ngIf="tanggalbergabung_pengguna; else bergng">{{ tanggalbergabung_pengguna }}</h3>
+              
+              <!-- loading skeleton -->
               <ng-template #bergng>
                 <ion-skeleton-text class="" animated style="width: 40%; height: 1rem;"></ion-skeleton-text>
               </ng-template> 
@@ -183,6 +207,8 @@
             <ion-label>
               <h2>Departemen</h2>
               <h3  *ngIf="departemen_pengguna; else departemen">{{ departemen_pengguna }}</h3>
+              
+              <!-- loading skeleton -->
               <ng-template #departemen>
                 <ion-skeleton-text class="" animated style="width: 40%; height: 1rem;"></ion-skeleton-text>
               </ng-template> 
@@ -192,6 +218,8 @@
             <ion-label>
               <h2>Bank Pengguna</h2>
               <h3 class="ion-text-wrap" *ngIf="bank_pengguna; else bank">{{ bank_pengguna }}</h3>
+              
+              <!-- loading skeleton -->
               <ng-template #bank>
                 <ion-skeleton-text class="" animated style="width: 40%; height: 1rem;"></ion-skeleton-text>
               </ng-template> 
@@ -201,6 +229,8 @@
             <ion-label>
               <h2>No Rekening</h2>
               <h3 *ngIf="rekening_pengguna; else rekening">{{ rekening_pengguna }}</h3>
+              
+              <!-- loading skeleton -->
               <ng-template #rekening>
                 <ion-skeleton-text class="" animated style="width: 40%; height: 1rem;"></ion-skeleton-text>
               </ng-template> 

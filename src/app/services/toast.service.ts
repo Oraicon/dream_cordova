@@ -10,7 +10,7 @@ export class ToastService {
 
   async Toast_tampil() {
     const toast = await this.toastController.create({
-      message: 'Fitur sedang tidak bisa digunakan !',
+      message: 'Sedeang memproses . . .',
       duration: 2000
     });
     toast.present();

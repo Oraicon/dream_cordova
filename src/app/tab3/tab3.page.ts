@@ -15,6 +15,7 @@ import { Router } from '@angular/router';
 import { Network } from '@awesome-cordova-plugins/network/ngx';
 import { SetGetServiceService } from '../services/set-get-service.service';
 import Swal from 'sweetalert2';
+import { ToastService } from '../services/toast.service';
 
 @Component({
   selector: 'app-tab3',
@@ -83,6 +84,7 @@ export class Tab3Page {
 
   constructor(private momentService: MomentService,
     private setget: SetGetServiceService,
+    private toastCtrl: ToastService,
     private network: Network,
     private swalService: SwalServiceService,
     private actionSheetController: ActionSheetController,
@@ -345,6 +347,7 @@ export class Tab3Page {
   }
 
   test_koneksi(nama, sandi){
+    this.toastCtrl.Toast("Pengecekan koneksi internet . . .");
     this.apiService.cek_koneksi()
     .then(data => {
 

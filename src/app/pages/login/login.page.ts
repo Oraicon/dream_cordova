@@ -9,6 +9,7 @@ import { LoadingServiceService } from 'src/app/services/loading-service.service'
 import { SwalServiceService } from 'src/app/services/swal-service.service';
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { SetGetServiceService } from 'src/app/services/set-get-service.service';
+import { ToastService } from 'src/app/services/toast.service';
 
 
 @Component({
@@ -31,6 +32,7 @@ export class LoginPage implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private network: Network,
+    private toastService: ToastService,
     private router:Router,
     private storage:Storage,
     private setget:SetGetServiceService,
@@ -47,6 +49,7 @@ export class LoginPage implements OnInit {
   ngOnInit() {
     //persiapan storage
     this.storage.create();
+    this.setget.setButton(0);
     
     //pengecekan koneksi
     this.network.onDisconnect().subscribe(() => {
@@ -110,6 +113,7 @@ export class LoginPage implements OnInit {
         return;
       } else {
         this.data_api_lupa_sandi_nama = data.data.data;
+
         if (this.cek_koneksi == true) {
           this.test_koneksi(this.data_api_lupa_sandi_nama);
         }else{
@@ -130,22 +134,34 @@ export class LoginPage implements OnInit {
     this.storage.set('auth', false);
     this.storage.set('nama', null);
     this.storage.set('sandi', null);
+
+    let data_button = this.setget.getButton();
+    console.log(data_button);
     
     if (!this.myGroup.valid) {
       return false;
     } else {
-      this.local_nama = this.myGroup.value.nama_pengguna;
-      this.local_sandi = this.myGroup.value.sandi_pengguna;
-      if (this.cek_koneksi == true) {
-        this.manggil_api_login(this.local_nama, this.local_sandi);
-      }else{
-        this.swal.swal_aksi_gagal("Terjadi kesalahan", "Tidak ada koneksi internet !");
+
+      if (data_button == 0) {
+        this.setget.setButton(1);
+
+        this.local_nama = this.myGroup.value.nama_pengguna;
+        this.local_sandi = this.myGroup.value.sandi_pengguna;
+        if (this.cek_koneksi == true) {
+          this.manggil_api_login(this.local_nama, this.local_sandi);
+        }else{
+          this.swal.swal_aksi_gagal("Terjadi kesalahan", "Tidak ada koneksi internet !");
+        }
+      } else {
+        this.toastService.Toast_tampil();
       }
+
     }
   }
 
   //test koneksi
   test_koneksi(nama){
+    this.toastService.Toast("Pengecekan koneksi internet . . .");
     this.apiService.cek_koneksi()
     .then(data => {
       this.manggil_api_lupa_nama(nama);
@@ -167,8 +183,6 @@ export class LoginPage implements OnInit {
 
     this.apiService.panggil_api_data_karyawan(var_nama, var_sandi)
     .then(res => {
-
-    console.log(res);
 
     const data_json = JSON.parse(res.data);
     const data_status = data_json.status;
@@ -206,7 +220,6 @@ export class LoginPage implements OnInit {
     .catch(err => {
       
       this.loadingService.tutup_loading();
-      console.log(err);
       
       if (err.status == -4 ) {
         this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Tidak ada respon, coba beberapa saat lagi !");
@@ -222,6 +235,8 @@ export class LoginPage implements OnInit {
 
     this.apiService.panggil_api_reset_password(nama_baru)
     .then(res => {
+      console.log(res);
+
       const data_json = JSON.parse(res.data);
       const data_status = data_json.status;
   

@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
+import { ToastService } from 'src/app/services/toast.service';
 import { Storage } from '@ionic/storage-angular';
 import { SwalServiceService } from 'src/app/services/swal-service.service';
 import { LoadingServiceService } from 'src/app/services/loading-service.service';
+import { SetGetServiceService } from 'src/app/services/set-get-service.service';
 
 
 
@@ -27,8 +29,10 @@ export class ModalGantisandiPage implements OnInit {
 
   constructor(
     private swal: SwalServiceService,
+    private setget: SetGetServiceService,
     private loadingService: LoadingServiceService,
     private storage: Storage,
+    private toastService: ToastService,
     private formBuilder: FormBuilder,
     private modalCtrl: ModalController) { }
 
@@ -39,6 +43,7 @@ export class ModalGantisandiPage implements OnInit {
       sandi_baru2: ['', [Validators.required, Validators.minLength(8)]]
     })
 
+    this.setget.setButton(0);
     this.get_data_lokal();
   }
 
@@ -86,23 +91,34 @@ export class ModalGantisandiPage implements OnInit {
 
   onSubmit(){
     this.isSubmitted = true;
+
+    let data_button = this.setget.getButton();
+
     if (!this.myGroup.valid) {
       return false;
     } else {
       const password_lama = this.myGroup.value.sandi_lama;
       const password_baru = this.myGroup.value.sandi_baru;
       const password_baru_2 = this.myGroup.value.sandi_baru2; 
-
-      if (this.pasword_ls != password_lama) {
-        this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Sandi lama anda tidak sama !");
-      } else {
-        if (password_baru_2 != password_baru) {
-          this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Sandi baru anda tidak sama !");
+      if (data_button == 0) {
+        this.setget.setButton(1);
+        if (this.pasword_ls != password_lama) {
+          this.loadingService.tutup_loading();
+          this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Sandi lama anda tidak sama !");
         } else {
-          this.loadingService.tampil_loading("Mengganti sandi . . .");
-          this.modalCtrl.dismiss({data: password_baru});
+          if (password_baru_2 != password_baru) {
+            this.loadingService.tutup_loading();
+            this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Sandi baru anda tidak sama !");
+          } else {
+            this.loadingService.tampil_loading("Mengganti sandi . . .");
+            this.modalCtrl.dismiss({data: password_baru});
+          }
         }
+      } else {
+        this.toastService.Toast_tampil();
       }
+
+
     }
   }
 

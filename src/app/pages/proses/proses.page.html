@@ -19,7 +19,8 @@
     <ion-row class="background_color_biru_gelap ion-padding-top">
 
       <div *ngIf="riwayat_loading; then tampilkan_loading; else tampilkan_riwayat"></div>
-
+      
+      <!-- loading skeleton -->
       <ng-template #tampilkan_loading>
 
         <ion-col size="12" class="">
@@ -105,6 +106,7 @@
 
       </ng-template>
 
+      <!-- menampilkan data -->
       <ng-template #tampilkan_riwayat>
 
         <ion-col size="12" class="">
@@ -296,8 +298,8 @@
 
 <ng-template #fab_ada>
   <ion-footer>
-    <ion-toolbar class="ion-no-margin">
-      <ion-button class="ion-no-padding ion-no-margin bold font_size_button" (click)="formulir()" expand="block" fill="clear" color="main2">
+    <ion-toolbar class="ion-no-margin background_color">
+      <ion-button class="ion-no-padding ion-no-margin bold font_size_button" (click)="formulir()" expand="block" fill="clear" color="light">
         Lapor Kegiatan
       </ion-button>
     </ion-toolbar>

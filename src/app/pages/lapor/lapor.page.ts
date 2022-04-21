@@ -40,6 +40,8 @@ export class LaporPage implements OnInit {
   datapersen;
   array_persen = [];
   cek_koneksi = true;
+  keterangan;
+  persen;
 
   base64_img:string="";
   name_img:string="";
@@ -83,6 +85,8 @@ export class LaporPage implements OnInit {
     private camera: Camera, 
     private loadingService: LoadingServiceService) {
 
+    this.setget.setButton(0);
+
     this.myGroup = this.formBuilder.group({
       data_keterangan: ['', [Validators.required]],
       data_persen: ['', [Validators.required]]
@@ -106,6 +110,13 @@ export class LaporPage implements OnInit {
 
   ionViewWillEnter(){
     this.tampilkan_data();
+    this.setget.set_tab_page(2);
+    this.setget.set_lapor(this.keterangan,this.persen,this.imgURL);
+  }
+
+  ionViewDidLeave(){
+    this.setget.set_tab_page(1);
+    this.setget.set_lapor(undefined,undefined,"'assets/ss_.png'");
   }
 
   //delay filetranfer 30 detik
@@ -171,6 +182,7 @@ export class LaporPage implements OnInit {
   //dapatkan gambar dari kamera
   kamera(){
     this.camera.getPicture(this.cameraOptions).then(res=>{
+      this.setget.set_lapor(this.keterangan,this.persen,"ada");
       this.imgURL = 'data:image/jpeg;base64,' + res;
       this.data_gambar = false;
       this.base64_img = this.imgURL;
@@ -183,6 +195,7 @@ export class LaporPage implements OnInit {
   galeri(){
     this.camera.getPicture(this.galeriOptions).then(res=>{
       this.imgURL = 'data:image/jpeg;base64,' + res;
+      this.setget.set_lapor(this.keterangan,this.persen,"ada");
       this.data_gambar = false;
       this.base64_img = this.imgURL;
       this.pilih_gambar = false;
@@ -199,62 +212,112 @@ export class LaporPage implements OnInit {
     event.target.src = "assets/bi.png";
   }
 
+  batal_gambar(){
+    this.data_gambar = true;
+    this.imgURL = 'assets/ss_.png';
+    this.setget.set_lapor(this.keterangan,this.persen,this.imgURL);
+  }
+
+  //saat mengetik keterangan
+  onKey(e){
+    this.keterangan = this.myGroup.value.data_keterangan;
+    this.setget.set_lapor(this.keterangan,this.persen,this.imgURL);
+    console.log(this.keterangan);
+  }
+
+  onChange(e){
+    this.persen = this.myGroup.value.data_persen;
+    this.setget.set_lapor(this.keterangan,this.persen,this.imgURL);
+    console.log(this.persen);
+  }
+
   //kembali ke aktiviti sebelumnya
   kembali(){
-    this.navCtrl.back();
+    if (this.keterangan != null || this.persen != null || this.imgURL != 'assets/ss_.png') {
+      this.loadingService.tampil_loading("");
+      Swal.fire({
+        icon: 'warning',
+        title: 'Data akan hilang !',
+        text: 'Data formulir laporan anda akan terhapus, anda yakin ?',
+        backdrop: false,
+        showDenyButton: true,
+        confirmButtonColor: '#3880ff',
+        confirmButtonText: 'Ya',
+        denyButtonText: `Tidak`,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.loadingService.tutup_loading();
+          this.navCtrl.back();
+        }else {
+          this.loadingService.tutup_loading();
+        }
+      });
+    } else {
+      this.navCtrl.back();
+    }
   }
 
   //validasi
   onSubmit(){
     this.isSubmitted = true;
+
+    let data_button = this.setget.getButton();
+
     if (!this.myGroup.valid) {
       return false;
     } else {
-      if(this.imgURL != 'assets/ss_.png'){
-        const keterangan = this.myGroup.value.data_keterangan;
-        const persen = this.myGroup.value.data_persen;
-        let nama_file  = this.datepipe.transform((new Date), 'MMddyyyyhmmss.') + this.format_img;
-        this.name_img = nama_file.toString();
-        let a;
-    
-        if (persen == 100){
-          a = 2
-        } else {
-          a = 1
-        }
-
-        this.data_page = a;
-
-        this.loadingService.tampil_loading("");
-        Swal.fire({
-          title: 'Perhatian !!',
-          text: "Pastikan anda sudah mengisi data dengan benar !",
-          icon: 'info',
-          backdrop: false,
-          showDenyButton: true,
-          confirmButtonColor: '#3880ff',
-          confirmButtonText: 'Kirim !',
-          denyButtonText: `Batal`,
-        }).then((result) => {
-          if (result.isConfirmed) {
-            this.loadingService.tutup_loading();
-            if (this.cek_koneksi == true) {
-              this.loadingService.tampil_loading("Mengirim data . . .");
-              this.test_koneksi_api(nama_file, keterangan, persen);
-            } else {
-              this.swal.swal_aksi_gagal("Terjadi kesalahan", "Tidak ada koneksi internet !");
-            }
-          }else{
-            this.loadingService.tutup_loading();
+      if (data_button == 0) {
+        this.setget.setButton(1);
+        if(this.imgURL != 'assets/ss_.png'){
+          this.keterangan = this.myGroup.value.data_keterangan;
+          this.persen = this.myGroup.value.data_persen;
+          let nama_file  = this.datepipe.transform((new Date), 'MMddyyyyhmmss.') + this.format_img;
+          this.name_img = nama_file.toString();
+          let a;
+      
+          if (this.persen == 100){
+            a = 2
+          } else {
+            a = 1
           }
-        })
-      }else{
-        this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Gambar tidak boleh kosong !");
+  
+          this.data_page = a;
+  
+          this.loadingService.tampil_loading("");
+          Swal.fire({
+            title: 'Perhatian !!',
+            text: "Pastikan anda sudah mengisi data dengan benar !",
+            icon: 'info',
+            backdrop: false,
+            showDenyButton: true,
+            confirmButtonColor: '#3880ff',
+            confirmButtonText: 'Kirim !',
+            denyButtonText: `Batal`,
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this.loadingService.tutup_loading();
+              if (this.cek_koneksi == true) {
+                this.loadingService.tampil_loading("Mengirim data . . .");
+                this.test_koneksi_api(nama_file, this.keterangan, this.persen);
+              } else {
+                this.swal.swal_aksi_gagal("Terjadi kesalahan", "Tidak ada koneksi internet !");
+              }
+            }else{
+              this.loadingService.tutup_loading();
+            }
+          })
+        }else{
+          this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Gambar tidak boleh kosong !");
+        }
+      } else {
+        this.toastService.Toast_tampil();
       }
+
     }
   }
 
   test_koneksi_api(nama_file, keterangan, persen){
+    this.toastService.Toast("Pengecekan koneksi internet . . .");
     this.apiService.cek_koneksi()
     .then(data => {
 
@@ -277,8 +340,6 @@ export class LaporPage implements OnInit {
     this.apiService.kirim_api_progres(this.lapor_id, this.md5_upload+ "/" + nama_file, keterangan, persen)
     .then(data => {
       
-      console.log(data);
-
       const data_json = JSON.parse(data.data);
       const data_status = data_json.status;
 
@@ -320,7 +381,6 @@ export class LaporPage implements OnInit {
 
     fileTransfer.upload(this.base64_img, this.URL, options)
     .then(data => {
-
       console.log(data);
 
       const data_json = JSON.parse(data.response);
@@ -347,8 +407,6 @@ export class LaporPage implements OnInit {
     })
     .catch(error => {
   
-      // console.log(error);
-
       let status = error.code;
 
       if (status == 4) {

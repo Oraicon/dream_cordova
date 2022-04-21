@@ -10,12 +10,16 @@ export class SetGetServiceService {
   private nama_proyek_header;
   private proses_id_header;
   private proses_id_detail;
+  private lapor_keterangan;
+  private lapor_persen;
+  private lapor_gambar;
   private data_tab_to_page;
   private log_id;
   private log_nama_kegiatan;
   //variable fungsi tricky
   private alert_data;
   private data_koneksi;
+  private _press_button;
   private _data;
   private _page;
   private _persen;
@@ -75,6 +79,19 @@ export class SetGetServiceService {
     return this._persen;
   }
 
+  //setter getter data keterangan untuk membaca fungsi apakah keterangan, persen pengerjaan, dan atau gambar ada atau tidak, yang ada di lapor.page.ts ke app.component.ts
+  set_lapor(data1, data2, data3){
+    this.lapor_keterangan = data1;
+    this.lapor_persen = data2;
+    this.lapor_gambar = data3;
+  }
+
+  get_lapor(){
+    let a = [];
+    return a = [this.lapor_keterangan, this.lapor_persen, this.lapor_gambar];
+  }
+
+
   //fungsi tricky
   //setter getter untuk mengatur logika tab perpindahan dari aktiviti tabs ke aktiviti proyek, untuk mengtrigger ionic lifcycle ionviewwillenter, yang berada di app.component.ts
   set_tab_page(data) {
@@ -113,12 +130,21 @@ export class SetGetServiceService {
   }
 
   //setter getter loading untuk mengatur logika jika loading muncul maka tidak bisa menggunakan hard back button.
+  setData(data) {
+    this._data = data;
+  }
+
   getData() {
     return this._data;
   }
 
-  setData(data) {
-    this._data = data;
+  //setter getter data press button 0 boleh klik, 1 tidak boleh.
+  setButton(data) {
+    this._press_button = data;
+  }
+  
+  getButton() {
+    return this._press_button;
   }
 
 
