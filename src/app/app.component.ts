@@ -67,7 +67,7 @@ export class AppComponent {
 
   //delay
   interval_counter() {
-    return new Promise(resolve => { setTimeout(() => resolve(""), 1000);});
+    return new Promise(resolve => { setTimeout(() => resolve(""), 100);});
   }
   
   //backbutton logik
@@ -95,8 +95,8 @@ export class AppComponent {
               this.loadingService.tampil_loading("");
               Swal.fire({
                 icon: 'warning',
-                title: 'Data akan hilang !',
-                text: 'Data formulir laporan anda akan terhapus, anda yakin ?',
+                title: 'Peringatan !',
+                text: 'Formulir laporan anda yang sudah diisi akan terhapus, anda yakin ?',
                 backdrop: false,
                 showDenyButton: true,
                 confirmButtonColor: '#3880ff',

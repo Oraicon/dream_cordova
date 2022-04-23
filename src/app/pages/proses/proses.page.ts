@@ -92,7 +92,7 @@ export class ProsesPage implements OnInit {
 
   //delay
   interval_counter() {
-    return new Promise(resolve => { setTimeout(() => resolve(""), 250);});
+    return new Promise(resolve => { setTimeout(() => resolve(""), 100);});
   }
 
   //delay file transfer 30 detik
@@ -141,7 +141,7 @@ export class ProsesPage implements OnInit {
     await this.setget.getAlert();
     
     if (this.setget.getAlert() == 1) {
-      this.swal.swal_aksi_berhasil("Laporan Terkirim !", "Data laporan telah terkirim !");
+      this.swal.swal_aksi_berhasil("Berhasil !", "Data laporan telah terkirim !");
       this.setget.setAlert(0);
     }
   }

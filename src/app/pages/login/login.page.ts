@@ -199,17 +199,17 @@ export class LoginPage implements OnInit {
     } else if (data_status == 2) {
       this.loadingService.tutup_loading();
       
-      this.swal.swal_aksi_gagal("Login gagal !", "Sandi tidak sesuai !");
+      this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Sandi tidak sesuai !");
 
     } else if (data_status == 3) {
       this.loadingService.tutup_loading();
 
-      this.swal.swal_aksi_gagal("Login gagal !", "Pengguna tidak aktif !");
+      this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Pengguna tidak aktif !");
 
     } else if (data_status == 0){
       this.loadingService.tutup_loading();
 
-      this.swal.swal_aksi_gagal("Login gagal !", "Pengguna tidak ditemukan !");
+      this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Pengguna tidak ditemukan !");
     } else {
       this.loadingService.tutup_loading();
 
@@ -245,7 +245,7 @@ export class LoginPage implements OnInit {
         //mendapatkan data
         const data_email = data_json.data[0].email;
         this.loadingService.tutup_loading();
-        this.swal.swal_aksi_berhasil("Sukses !", "Sandi baru sudah dikirim ke email: " + data_email);
+        this.swal.swal_aksi_berhasil("Berhasil !", "Sandi baru sudah dikirim ke email: " + data_email);
   
       } else if (data_status == 0) {
         //jika status != 1

@@ -237,8 +237,8 @@ export class LaporPage implements OnInit {
       this.loadingService.tampil_loading("");
       Swal.fire({
         icon: 'warning',
-        title: 'Data akan hilang !',
-        text: 'Data formulir laporan anda akan terhapus, anda yakin ?',
+        title: 'Peringatan !',
+        text: 'Formulir laporan anda yang sudah diisi akan terhapus, anda yakin ?',
         backdrop: false,
         showDenyButton: true,
         confirmButtonColor: '#3880ff',
@@ -286,7 +286,7 @@ export class LaporPage implements OnInit {
           if(a == 2){
             this.loadingService.tampil_loading("");
             Swal.fire({
-              title: 'Perhatian !!',
+              title: 'Perhatian !',
               text: "Dengan persen pengerjaan 100% maka kegiatan selesai, dan pastikan anda sudah mengisi data dengan benar !",
               icon: 'info',
               backdrop: false,
@@ -310,7 +310,7 @@ export class LaporPage implements OnInit {
           }else{
             this.loadingService.tampil_loading("");
             Swal.fire({
-              title: 'Perhatian !!',
+              title: 'Perhatian !',
               text: "Pastikan anda sudah mengisi data dengan benar !",
               icon: 'info',
               backdrop: false,

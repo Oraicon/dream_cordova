@@ -48,7 +48,7 @@ export class Tab1Page {
 
   //delay
   interval_counter() {
-    return new Promise(resolve => { setTimeout(() => resolve(""), 250);});
+    return new Promise(resolve => { setTimeout(() => resolve(""), 100);});
   }
 
   //refresh page

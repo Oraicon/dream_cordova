@@ -115,7 +115,7 @@ export class Tab3Page {
 
   //delay 
   interval_counter() {
-    return new Promise(resolve => { setTimeout(() => resolve(""), 250);});
+    return new Promise(resolve => { setTimeout(() => resolve(""), 100);});
   }
 
   //delay file transfer 30 detik
@@ -412,7 +412,7 @@ export class Tab3Page {
       let status = err.code;
       if (status == 4) {
         this.loadingCtrl.tutup_loading();
-        this.swalService.swal_aksi_gagal("Terjadi kesalahan", "Mengirim gambar terlalu lama");
+        this.swalService.swal_aksi_gagal("Terjadi kesalahan !", "Mengirim gambar terlalu lama");
       } else {
         this.loadingCtrl.tutup_loading();
         this.swalService.swal_code_error("Terjadi kesalahan !", "code error 13 !, kembali ke login !");
@@ -436,10 +436,10 @@ export class Tab3Page {
       if (status_data == 1) {
         this.imgURL = this.base64_img;
         this.loadingCtrl.tutup_loading();
-        this.swalService.swal_aksi_berhasil("Ubah foto berhasil !", "Foto profil anda berhasil diubah !");
+        this.swalService.swal_aksi_berhasil("Berhasil !", "Foto profil anda berhasil diubah !");
       } else {
         this.loadingCtrl.tutup_loading();
-        this.swalService.swal_aksi_gagal("Ubah foto gagal !", "Foto profil anda gagal diubah !");
+        this.swalService.swal_aksi_gagal("Terjadi kesalahan !", "Foto profil anda gagal diubah !");
       }
     })
     .catch(error => {
@@ -449,7 +449,7 @@ export class Tab3Page {
       if(error.status == -4){
         this.swalService.swal_aksi_gagal("Terjadi kesalahan !", "Tidak ada respon, coba beberapa saat lagi !");
       }else{
-        this.swalService.swal_code_error("Ubah foto gagal !", "Code error 14 !, kembali ke login !");
+        this.swalService.swal_code_error("Terjadi kesalahan !", "Code error 14 !, kembali ke login !");
       }
 
     });
@@ -474,7 +474,7 @@ export class Tab3Page {
       } else {
         //jika status != 1
         this.loadingCtrl.tutup_loading();
-        this.swalService.swal_aksi_gagal("Ubah nama gagal !", "code error 5 !");
+        this.swalService.swal_aksi_gagal("Terjadi kesalahan !", "code error 5 !");
       }
       
     })
@@ -513,7 +513,7 @@ export class Tab3Page {
       } else {
         //jika status != 1
         this.loadingCtrl.tutup_loading();
-        this.swalService.swal_aksi_gagal("Ubah password gagal !", "code error 7 !");
+        this.swalService.swal_aksi_gagal("Terjadi kesalahan !", "code error 7 !");
       }
       
     })

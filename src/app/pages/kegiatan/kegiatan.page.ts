@@ -59,7 +59,7 @@ export class KegiatanPage implements OnInit {
 
   //delay
   interval_counter() {
-    return new Promise(resolve => { setTimeout(() => resolve(""), 1000);});
+    return new Promise(resolve => { setTimeout(() => resolve(""), 100);});
   }  
 
   //fungsi ion select dengan ion slides
