@@ -11,7 +11,7 @@ export class ToastService {
   async Toast_tampil() {
     const toast = await this.toastController.create({
       message: 'Sedeang memproses . . .',
-      duration: 2000
+      duration: 1000
     });
     toast.present();
   }
@@ -19,7 +19,7 @@ export class ToastService {
   async Toast(text){
     const toast = await this.toastController.create({
       message: ''+text,
-      duration: 2000
+      duration: 1000
     });
     toast.present();
   }

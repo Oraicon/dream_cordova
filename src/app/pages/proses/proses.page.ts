@@ -141,7 +141,7 @@ export class ProsesPage implements OnInit {
     await this.setget.getAlert();
     
     if (this.setget.getAlert() == 1) {
-      this.swal.swal_aksi_berhasil("Berhasil !", "Data laporan telah terkirim !");
+      this.swal.swal_aksi_berhasil_timer2d("Berhasil !", "Data laporan telah terkirim !");
       this.setget.setAlert(0);
     }
   }

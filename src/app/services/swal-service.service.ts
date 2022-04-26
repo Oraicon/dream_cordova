@@ -44,6 +44,23 @@ export class SwalServiceService {
     });
   }
 
+  swal_aksi_berhasil_timer2d(text1, text2){
+    this.loading.tampil_loading(null);
+    Swal.fire({
+      icon: 'success',
+      title: '' + text1,
+      text: ''+text2,
+      backdrop: false,
+      timer: 1500,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.loading.tutup_loading();
+      }else{
+        this.loading.tutup_loading();
+      }
+    });
+  }
+
   swal_aksi_gagal(text1, text2){
     this.loading.tampil_loading(null);
     Swal.fire({

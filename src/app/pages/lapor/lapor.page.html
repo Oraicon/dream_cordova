@@ -56,7 +56,7 @@
                           *Persen pengerjaan harus diisi.
                         </ion-label>
 
-                        <ion-item>
+                        <ion-item lines="none">
                           <ion-grid fixed class="ion-no-padding ion-padding-top">
                             <ion-row>
   
@@ -90,11 +90,20 @@
                                   </div>
                                   
                                 </ion-col>
-                              </ng-template>
-  
+                              </ng-template>  
                             </ion-row>
   
                           </ion-grid>
+                        </ion-item>
+
+                        <ion-item *ngFor="let data of arr_img; let i = index">
+                          <ion-thumbnail slot="start">
+                            <img src="{{ data.img }}"/>
+                          </ion-thumbnail>
+                          <ion-label>{{ data.nama }}</ion-label>
+                          <ion-button slot="end" fill="clear" color="danger" (click)="deleteImage(i)">
+                            <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+                          </ion-button>
                         </ion-item>
 
                         <ion-item lines="none">
