@@ -43,7 +43,15 @@ const routes: Routes = [
     path: '',
     redirectTo: '/login',
     pathMatch: 'full'
+  },  {
+    path: 'list',
+    loadChildren: () => import('./pages/list/list.module').then( m => m.ListPageModule)
+  },
+  {
+    path: 'modal-isikonten',
+    loadChildren: () => import('./modal/modal-isikonten/modal-isikonten.module').then( m => m.ModalIsikontenPageModule)
   }
+
 
 
 

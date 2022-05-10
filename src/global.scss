@@ -52,6 +52,14 @@
     }
 }
 
+//small modal login
+.konten-modal{
+    &::part(content){
+        position: absolute; 
+        display: block; 
+    }
+}
+
 //modal ganti nama
 .small-modal-ganti-nama{
     &::part(content){

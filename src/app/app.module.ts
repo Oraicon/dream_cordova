@@ -16,14 +16,14 @@ import { Network } from '@awesome-cordova-plugins/network/ngx';
 import { DatePipe } from '@angular/common';
 import { WebView } from '@awesome-cordova-plugins/ionic-webview/ngx';
 import { SetGetServiceService } from './services/set-get-service.service';
-
+import { Chooser } from '@awesome-cordova-plugins/chooser/ngx';
 
 
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, IonicStorageModule.forRoot()],
-  providers: [HTTP, Camera, SetGetServiceService, FileTransfer, FileTransferObject, Network, DatePipe, WebView, { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
+  providers: [HTTP, Camera, SetGetServiceService, FileTransfer, FileTransferObject, Network, DatePipe, WebView, Chooser,{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -1,0 +1,79 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar class="background_color">
+    <ion-grid fixed>
+      <ion-row class="ion-align-items-center">
+        <ion-col size="10" class="ion-align-items-center text_header bold putih">Riwayat Lampiran</ion-col>
+        <ion-col size="2" class="ion-text-end">
+          <ion-button (click)="kembali()" fill="clear" class="padding_button">
+            <ion-icon name="arrow-back-outline" size="large" class="putih"></ion-icon>
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="background_konten">
+
+  <ion-grid fixed class="ion-no-padding">
+    <ion-row class="background_color_biru_gelap ion-padding-top">
+
+      <ion-col size="12">
+        <ion-card>
+          <ion-card-header class="pad_bottom">
+            <ion-card-title>ID Barang : MTU-852</ion-card-title>
+            <ion-skeleton-text animated style="width: 60%; height: 2rem;"></ion-skeleton-text>
+          </ion-card-header>
+        
+          <ion-card-content class="ion-no-padding">
+            <ion-list>
+
+              <!-- loading skeleton -->
+              <ion-item class="ion-activatable" (click)="tampilkan_konten()">
+                <ion-thumbnail slot="start">
+                  <ion-skeleton-text animated style="width: 100%; height: 100%;"></ion-skeleton-text>
+                </ion-thumbnail>
+                  <ion-skeleton-text animated style="width: 60%; height: 1.5rem;"></ion-skeleton-text>
+                <ion-ripple-effect></ion-ripple-effect>
+              </ion-item>
+
+              <ng-container *ngIf="get_ext == 'JPEG'; then jpeg; else pdf" ></ng-container>
+
+              <ng-template #jpeg>
+                <!--  *ngFor="let data of data_list_img; let i = index" -->
+                <ion-item class="ion-activatable" *ngFor="let data of data_list_img; let i = index">
+                  <ion-thumbnail slot="start">
+                    <img (click)="tampilkan_konten(data, data_nama[i])" src="https://dream-beta.technosolusitama.in/{{ data }}"/>
+                  </ion-thumbnail>
+                  <ion-label class="ion-text-wrap" (click)="tampilkan_konten(data, data_nama[i])">{{ data_nama[i] }}</ion-label>
+                  <ion-button color="primary" expand="block" fill="outline" (click)="ubahnama()">
+                    Edit
+                  </ion-button>
+                  <ion-ripple-effect></ion-ripple-effect>
+                </ion-item>
+              </ng-template>
+
+              <ng-template #pdf>
+                <!-- pdf -->
+                <ion-item class="ion-activatable">
+                  <ion-thumbnail slot="start">
+                    <img src="assets/pdf_icon.png"/>
+                  </ion-thumbnail>
+                  <ion-label class="ion-text-wrap" 
+                  >nama pdf</ion-label>
+                  <ion-button color="primary" expand="block" fill="outline" (click)="ubahnama()">
+                    Edit
+                  </ion-button>
+                  <ion-ripple-effect></ion-ripple-effect>
+                </ion-item>
+              </ng-template>
+
+            </ion-list>
+          </ion-card-content>
+        </ion-card>
+        
+      </ion-col>
+
+    </ion-row>
+  </ion-grid> 
+</ion-content>

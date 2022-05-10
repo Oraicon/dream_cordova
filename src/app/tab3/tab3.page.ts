@@ -98,7 +98,7 @@ export class Tab3Page {
     private storage:Storage, 
     private apiService:ApiServicesService) {
     
-    this.tampilkandata();
+    // this.tampilkandata();
     this.get_data_lokal();
 
     //pengecekan koneksi

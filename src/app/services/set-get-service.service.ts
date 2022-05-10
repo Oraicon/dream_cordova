@@ -16,6 +16,7 @@ export class SetGetServiceService {
   private data_tab_to_page;
   private log_id;
   private log_nama_kegiatan;
+  private list_data_img;
   //variable fungsi tricky
   private alert_data;
   private data_koneksi;
@@ -24,6 +25,8 @@ export class SetGetServiceService {
   private _page;
   private _persen;
   private _swal;
+  private data_list_gambar;
+  private data_list_nama;
   
   constructor() { }
 
@@ -91,6 +94,14 @@ export class SetGetServiceService {
     return a = [this.lapor_keterangan, this.lapor_persen, this.lapor_gambar];
   }
 
+  //setter getter untuk data list_path_image dari proses.page.ts ke list.page.ts 
+  set_list_path(data){
+    this.list_data_img = data;
+  }
+
+  get_list_path(){
+    return this.list_data_img;
+  }
 
   //fungsi tricky
   //setter getter untuk mengatur logika tab perpindahan dari aktiviti tabs ke aktiviti proyek, untuk mengtrigger ionic lifcycle ionviewwillenter, yang berada di app.component.ts
@@ -147,7 +158,16 @@ export class SetGetServiceService {
     return this._press_button;
   }
 
+  //setter getter data dari list ke detail kegiatan, yang ada di list.page.ts dan modal-isikonten.page.ts
+  setdatalist(data1, data2){
+    this.data_list_gambar = data1;
+    this.data_list_nama = data2;
+  }
 
+  getdatalist(){
+    let a = [];
+    return a = [this.data_list_gambar, this.data_list_nama];
+  }
   //data tab.tabs2.page.ts
   // setLapor(id, nama_kegiatan){
   //   this.lapor_id = id;

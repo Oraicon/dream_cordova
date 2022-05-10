@@ -111,10 +111,10 @@
 
         <ion-col size="12" class="">
           <ion-card class="bayangan">
-            <ion-card-header class="pad_bottom">
+            <ion-card-header class="pad_bottom" (click)="hide_detail()">
               <ion-card-title class="ion-text-center ion-text-wrap text_judul">{{  data_obj_kegiatan.nama_kegiatan }}</ion-card-title>
             </ion-card-header>
-            <ion-card-content class="ion-no-padding">
+            <ion-card-content class="ion-no-padding" [hidden]=hidedetail>
               <ion-grid fixed class="ion-no-padding">
                 <ion-row>
                   <ion-col size="12">
@@ -133,23 +133,29 @@
                           </h3>
                         </ion-label>
                       </ion-item>
+
                       <ion-item>
                         <ion-label>
-                          <h2 class="ion-no-margin padding_bottom_detail_informasi detail_informasi">
-                            Keterangan
+                          <h2 class="padding_bottom_detail_informasi ion-no-margin detail_informasi">
+                            Koordinat
                           </h2>
-                          <div class="ion-no-margin ion-text-wrap">
-                            <h3 *ngIf="data_obj_kegiatan.keterangan != null; else keterangan_kosong">
-                              {{  data_obj_kegiatan.keterangan }}
-                            </h3>
-                            <ng-template #keterangan_kosong>
-                              <h3>
-                                Tidak ada keterangan
-                              </h3>
-                            </ng-template>
-                          </div>
+                          <ion-grid fixed class="ion-no-padding">
+                            <ion-row>
+                              <ion-col size="6">
+                                <h3 class="ion-no-margin">
+                                  lattitude : -0.8425675
+                                </h3>
+                              </ion-col>
+                              <ion-col size="6">
+                                <h3 class="ion-no-margin">
+                                  longitude : 134.0020447
+                                </h3>
+                              </ion-col>
+                            </ion-row>
+                          </ion-grid>
                         </ion-label>
                       </ion-item>
+
                       <ion-item >
                         <ion-label>
                           <h2 class="ion-no-margin padding_bottom_detail_informasi detail_informasi">
@@ -177,6 +183,24 @@
   
                       <ng-template #tanggal_kosong>
                       </ng-template>
+
+                      <ion-item>
+                        <ion-label>
+                          <h2 class="ion-no-margin padding_bottom_detail_informasi detail_informasi">
+                            Keterangan
+                          </h2>
+                          <div class="ion-no-margin ion-text-wrap">
+                            <h3 *ngIf="data_obj_kegiatan.keterangan != null; else keterangan_kosong">
+                              {{  data_obj_kegiatan.keterangan }}
+                            </h3>
+                            <ng-template #keterangan_kosong>
+                              <h3>
+                                Tidak ada keterangan
+                              </h3>
+                            </ng-template>
+                          </div>
+                        </ion-label>
+                      </ion-item>
   
                     </ion-list>
                   </ion-col>
@@ -186,8 +210,61 @@
           </ion-card>
         </ion-col>
 
-        <ion-col size="12" class="ion-text-start ion-padding-start ion-padding-top ion-padding-bottom">
-          <h1 class="ion-no-margin">Riwayat Laporan</h1>
+        <!-- searchbar -->
+        <ion-col size="12" class="">
+          <ion-card class="">
+            <ion-card-content class="ion-no-padding" [hidden]=false>
+              <ion-grid fixed class="ion-no-padding">
+                <ion-row>
+                  <ion-col size="12">
+                    <ion-searchbar class="ion-no-padding"></ion-searchbar>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+
+        <ion-col size="12">
+          <div class="scrollan" scrolly="true" style="max-height:42rem">
+
+              <ion-card *ngFor='let data of data_arr_progressmilsetone;' class="ion-activatable" (click)="lihat_list(data.list_path_image)" >
+                <ion-card-content>
+                  <ion-grid fixed class="ion-no-padding">
+                    <ion-row>
+                      <ion-col size="12" class="ion-text-end">22-20-2022</ion-col>
+                    </ion-row>
+                    <ion-row class="pad_bottom">
+                      <ion-col size="6" class="hitam">
+                        <h1 class="hitam">
+                          MTU-002
+                        </h1>
+                      </ion-col>
+                      <ion-col size="6" class="ion-text-end">
+                        <h1 class="hitam">
+                          Volume : 8
+                        </h1>
+                      </ion-col>
+                    </ion-row>
+                    <ion-row>
+                      <ion-col size="12" class="hitam">
+                        <h1 class="hitam">Keterangan</h1>
+                      </ion-col>
+                    </ion-row>
+                    <ion-row>
+                      <ion-col size="12">
+                        <h2>
+                          Keep close to Nature's heart... and break clear away, once in awhile,
+                          and climb a mountain or spend a week in the woods. Wash your spirit clean.
+                        </h2>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+                </ion-card-content>
+                <ion-ripple-effect></ion-ripple-effect>
+              </ion-card>
+
+          </div>
         </ion-col>
 
         <div *ngIf="riwayat_laporan; else data_arr_progressmilsetone_kosong">
@@ -280,18 +357,6 @@
 
     </ion-row>
   </ion-grid>
-
-  <!-- <div *ngIf="tipe_page;else fab_ada"></div>
-
-  <ng-template #fab_ada>
-    <ion-fab horizontal="end" vertical="bottom" slot="fixed" (click)="formulir()">
-      <ion-fab-button color="primary">
-        <ion-icon size="large" name="add-outline"></ion-icon>
-      </ion-fab-button>
-    </ion-fab>
-  </ng-template> -->
-
-  
 </ion-content>
 
 <ng-container *ngIf="tipe_page;else fab_ada"></ng-container>

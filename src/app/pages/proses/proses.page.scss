@@ -44,6 +44,16 @@
   padding-top: 0px;
 }
 
+//scroll
+.scrollan[scrollx=true],div[scrolly=true] {
+  position: relative;
+  overflow: hidden;
+}
+
+.scrollan[scrolly=true] {
+    overflow-y: auto;
+}
+
 // fontsize
 .text_header{
   font-size: 150%;
@@ -54,7 +64,7 @@
 }
 
 .pad_bottom{
-  padding-bottom: 5px;
+  padding-bottom: 12px;
 }
 
 .detail_informasi{

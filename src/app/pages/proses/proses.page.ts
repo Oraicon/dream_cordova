@@ -34,10 +34,13 @@ export class ProsesPage implements OnInit {
   data_gambar_rusak = {};
   tanggal_detail;
   tipe_page = true;
+  hidedetail = false;
   riwayat_laporan = false;
-  riwayat_loading = true;
+  riwayat_loading = false;
   data_swal;
   imgURL;
+
+  data_list_evidance_img = {};
 
   base64_img:string="";
   name_img:string="";
@@ -131,6 +134,15 @@ export class ProsesPage implements OnInit {
     this.data_gambar_rusak[a] = "rusak";
   }
 
+  //minimize detail informasi
+  hide_detail(){
+    if (this.hidedetail == true) {
+      this.hidedetail = false;
+    } else {
+      this.hidedetail = true;
+    }
+  }
+
   //logika compare isi ada persen
   compare( a, b ) {
     return a.progress_pengerjaan - b.progress_pengerjaan;
@@ -163,7 +175,7 @@ export class ProsesPage implements OnInit {
     });
   }
 
-  //pindah aktiviti
+  //pindah aktiviti laporan
   formulir(){
     let a = this.persen_tertinggi;
     
@@ -177,6 +189,14 @@ export class ProsesPage implements OnInit {
     this.setget.set_persen(a);
 
     this.navCtrl.navigateForward(['/lapor']);
+  }
+
+  // pindah aktiviti detail riwayat
+  lihat_list(data){
+    let arr_list_data = data.split(",");
+    this.setget.set_list_path(arr_list_data);
+
+    this.navCtrl.navigateForward(['/list']);
   }
 
   //kembali ke aktiviti sebelumnya
@@ -255,12 +275,31 @@ export class ProsesPage implements OnInit {
   //menampilkan data progres milestone
   async tampilkan_data2(){
     
+    let arr = [];
+
     this.interval_counter();
 
     this.apiService.panggil_api_progres_milestone(this.data_id_kegiatan)
     .then(data => {
 
       const data_json = JSON.parse(data.data);
+
+      // let arr_data_mentah = data_json.data;
+
+      // for (let index = 0; index < arr_data_mentah.length; index++) {
+      //   const element = arr_data_mentah[index];
+        
+      //   this.data_list_evidance_img[element.id] = element.list_path_image;
+      // }
+
+      // console.log(this.data_list_evidance_img);
+
+      // const data_mentah = data_json.data[0].list_path_image;
+
+      // let splitted = data_mentah.split(","); 
+
+      // console.log(splitted);
+
       const data_status = data_json.status;
 
       if (data_status == 1) {

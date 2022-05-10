@@ -1,0 +1,24 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar class="background_color">
+    <ion-grid fixed>
+      <ion-row class="ion-align-items-center">
+        <ion-col size="9" class="ion-align-items-center text_header bold putih">{{ namaImg }}</ion-col>
+        <ion-col size="3" class="ion-text-end">
+          <ion-button (click)="tutup()" class="padding_button" color="danger">
+            <ion-icon name="close-outline" size="large" class="putih"></ion-icon>
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-align-items-center background_konten">
+  <ion-grid class="ion-text-center ion-align-items-center">
+    <ion-row>
+      <ion-col size="12">
+        <img class="size_img" src="{{ imgURL }}"/>
+      </ion-col>    
+    </ion-row>
+  </ion-grid>
+</ion-content>
