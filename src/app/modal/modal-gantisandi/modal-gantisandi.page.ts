@@ -47,6 +47,14 @@ export class ModalGantisandiPage implements OnInit {
     this.get_data_lokal();
   }
 
+  ionViewWillEnter(){
+    this.setget.set_tab_page(3);
+  }
+
+  ionViewWillLeave(){
+    this.setget.set_tab_page(0);
+  }
+
   async get_data_lokal(){
     this.pasword_ls = await this.storage.get('sandi');
   }

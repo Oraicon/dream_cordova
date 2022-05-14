@@ -17,13 +17,18 @@ import { DatePipe } from '@angular/common';
 import { WebView } from '@awesome-cordova-plugins/ionic-webview/ngx';
 import { SetGetServiceService } from './services/set-get-service.service';
 import { Chooser } from '@awesome-cordova-plugins/chooser/ngx';
+import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
+import { Ng2SearchPipeModule } from 'ng2-search-filter';
+import { File } from '@awesome-cordova-plugins/file/ngx';
+import { DocumentViewer } from '@awesome-cordova-plugins/document-viewer/ngx';
+import { Geolocation } from '@awesome-cordova-plugins/geolocation/ngx';
 
 
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, IonicStorageModule.forRoot()],
-  providers: [HTTP, Camera, SetGetServiceService, FileTransfer, FileTransferObject, Network, DatePipe, WebView, Chooser,{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
+  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, IonicStorageModule.forRoot(), Ng2SearchPipeModule],
+  providers: [HTTP, Camera, SetGetServiceService, FileTransfer, FileTransferObject, File, DocumentViewer, Network, DatePipe, WebView, Chooser, InAppBrowser, Geolocation,{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

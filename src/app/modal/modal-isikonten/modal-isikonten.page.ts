@@ -20,6 +20,14 @@ export class ModalIsikontenPage implements OnInit {
   ngOnInit() {
   }
 
+  ionViewWillEnter(){
+    this.setget.set_tab_page(3);
+  }
+
+  ionViewWillLeave(){
+    this.setget.set_tab_page(1);
+  }
+
   ionViewDidEnter(){
     let data = this.setget.getdatalist();
     this.imgURL = data[0];

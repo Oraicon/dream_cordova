@@ -31,6 +31,14 @@ export class ModalGantinamaPage implements OnInit {
     })
   }
 
+  ionViewWillEnter(){
+    this.setget.set_tab_page(3);
+  }
+
+  ionViewWillLeave(){
+    this.setget.set_tab_page(0);
+  }
+
   get errorControl() {
     return this.myGroup.controls;
   }

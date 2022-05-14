@@ -124,7 +124,9 @@ export class LoginPage implements OnInit {
     }).catch(err => {
       // console.log(err);
     });
-    await modal.present();
+    await modal.present().then(() => {
+      
+    });
   }
 
   //validasi

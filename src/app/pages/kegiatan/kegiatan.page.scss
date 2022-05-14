@@ -34,6 +34,16 @@ ion-list{
   width: 100%;
 }
 
+//scroll
+.scrollan[scrollx=true],div[scrolly=true] {
+  position: relative;
+  overflow: hidden;
+}
+
+.scrollan[scrolly=true] {
+  overflow-y: auto;
+}
+
 // fontsize
 .text_header{
   font-size: 150%;

@@ -13,6 +13,7 @@ import { Network } from '@awesome-cordova-plugins/network/ngx';
 import { ToastService } from 'src/app/services/toast.service';
 import { Chooser, ChooserResult } from '@awesome-cordova-plugins/chooser/ngx';
 import { Storage } from '@ionic/storage-angular';
+import { Geolocation } from '@awesome-cordova-plugins/geolocation/ngx';
 import Swal from 'sweetalert2';
 
 
@@ -45,9 +46,7 @@ export class LaporPage implements OnInit {
   persen;
   tipe_lampiran;
 
-  arr_img = [];
-  arr_file_pdf = [];
-  img_counter = 0;
+  arr_data_img_pdf = [];
   // abort_file_transfer = 0;
 
   base64_img:string="";
@@ -80,6 +79,7 @@ export class LaporPage implements OnInit {
   myGroup: FormGroup;
 
   constructor(private setget: SetGetServiceService, 
+    private geolocation: Geolocation,
     private storage: Storage,
     private toastService: ToastService,
     private network: Network,
@@ -181,6 +181,12 @@ export class LaporPage implements OnInit {
         handler: () => {
           this.galeri();
         }
+      },{
+        text: 'PDF',
+        icon: 'document-outline',
+        handler: () => {
+          this.dapatkan_pdf();
+        }
       }, {
         text: 'Batal',
         icon: 'close',
@@ -240,15 +246,15 @@ export class LaporPage implements OnInit {
       nama : nama,
     }
 
-    this.arr_img.push(obj_image);
+    this.arr_data_img_pdf.push(obj_image);
     this.loadingService.tutup_loading();
-    console.log(this.arr_img);
+    // console.log(this.arr_img);
   }
 
   //logik menghapus array gammbar
   deleteImage(e){
     console.log(e);
-    this.arr_img.splice(e, 1);
+    this.arr_data_img_pdf.splice(e, 1);
   }
 
   dapatkan_pdf(){
@@ -261,16 +267,17 @@ export class LaporPage implements OnInit {
       }
 
       let type_data = data.mediaType;
-      let nama_data = data.name;
+      // let nama_data = data.name;
+      let nama_file  = this.datepipe.transform((new Date), 'MMddyyyyhmmss.') + ".pdf"; 
       let path_uri_data = data.dataURI;
 
       if (type_data == "application/pdf") {
         let obj_image = {
           pdf : path_uri_data,
-          nama : nama_data,
+          nama : nama_file,
         }
     
-        this.arr_file_pdf.push(obj_image);
+        this.arr_data_img_pdf.push(obj_image);
         this.loadingService.tutup_loading();
       } else {
         console.log("ini bukan pdf");
@@ -284,10 +291,10 @@ export class LaporPage implements OnInit {
     })
   }
 
-  deletefile(e){
-    console.log(e);
-    this.arr_file_pdf.splice(e, 1);
-  }
+  // deletefile(e){
+  //   console.log(e);
+  //   this.arr_file_pdf.splice(e, 1);
+  // }
 
   get errorControl() {
     return this.myGroup.controls;
@@ -316,16 +323,16 @@ export class LaporPage implements OnInit {
     this.setget.set_lapor(this.keterangan,this.persen,this.imgURL);
   }
 
-  onChangetype(e){
-    this.tipe_lampiran = this.myGroup.value.data_type;
-    this.arr_file_pdf = [];
-    this.arr_img = [];
-    this.setget.set_lapor(this.keterangan,this.persen,"ada");
-  }
+  // onChangetype(e){
+  //   this.tipe_lampiran = this.myGroup.value.data_type;
+  //   this.arr_file_pdf = [];
+  //   this.arr_img = [];
+  //   this.setget.set_lapor(this.keterangan,this.persen,"ada");
+  // }
 
   //kembali ke aktiviti sebelumnya
   kembali(){
-    if (this.keterangan != null || this.persen != null || this.imgURL != 'assets/ss_.png' || this.arr_file_pdf.length != 0) {
+    if (this.keterangan != null || this.persen != null || this.imgURL != 'assets/ss_.png' || this.arr_data_img_pdf.length != 0) {
       this.loadingService.tampil_loading("");
       Swal.fire({
         icon: 'warning',
@@ -362,7 +369,7 @@ export class LaporPage implements OnInit {
     } else {
       if (data_button == 0) {
         this.setget.setButton(1);
-        if(this.imgURL != 'assets/ss_.png' || this.arr_file_pdf.length != 0){
+        if(this.imgURL != 'assets/ss_.png' || this.arr_data_img_pdf.length != 0){
           this.keterangan = this.myGroup.value.data_keterangan;
           this.persen = this.myGroup.value.data_persen;
           this.tipe_lampiran = this.myGroup.value.data_type;
@@ -490,11 +497,11 @@ export class LaporPage implements OnInit {
 
   async mengirim_informasi_data(id){
 
-    if (this.tipe_lampiran == 1) {
+    // if (this.tipe_lampiran == 1) {
       this.toastService.Toast("Mengirim data & menyimpan gambar");
 
-      for (let index = 0; index < this.arr_img.length; index++) {
-        let element = this.arr_img[index];
+      for (let index = 0; index < this.arr_data_img_pdf.length; index++) {
+        let element = this.arr_data_img_pdf[index];
 
         this.apiService.kirim_api_progres_img(id, element.nama)
         .then(data => {
@@ -504,7 +511,7 @@ export class LaporPage implements OnInit {
 
           if (data_status == 0) {
 
-            if (index == this.arr_img.length - 1) {
+            if (index == this.arr_data_img_pdf.length - 1) {
               this.looping_file("img");
             }
             
@@ -525,57 +532,57 @@ export class LaporPage implements OnInit {
         }
         });
       }
-    }else{
-      this.toastService.Toast("Mengirim data & menyimpan pdf");
+    // }else{
+    //   this.toastService.Toast("Mengirim data & menyimpan pdf");
 
-      for (let index = 0; index < this.arr_file_pdf.length; index++) {
-        let element = this.arr_file_pdf[index];
+    //   for (let index = 0; index < this.arr_file_pdf.length; index++) {
+    //     let element = this.arr_file_pdf[index];
         
-        this.apiService.kirim_api_progres_img(id, element.nama)
-        .then(data => {
-          console.log(data);
-          const data_json = JSON.parse(data.data);
-          const data_status = data_json.status;
+    //     this.apiService.kirim_api_progres_img(id, element.nama)
+    //     .then(data => {
+    //       console.log(data);
+    //       const data_json = JSON.parse(data.data);
+    //       const data_status = data_json.status;
 
-          if (data_status == 0) {
+    //       if (data_status == 0) {
 
-            if (index == this.arr_file_pdf.length - 1) {
-              this.looping_file("pdf");
-            }
+    //         if (index == this.arr_file_pdf.length - 1) {
+    //           this.looping_file("pdf");
+    //         }
             
-          } else {
-            this.swal.swal_aksi_gagal("Terjadi kesalahan", "code error BELUM2 !");
-          }
+    //       } else {
+    //         this.swal.swal_aksi_gagal("Terjadi kesalahan", "code error BELUM2 !");
+    //       }
 
-        })
-        .catch(error => {
+    //     })
+    //     .catch(error => {
       
-        // console.log(error);
-        this.loadingService.tutup_loading();
-        if (error.status == -4) {
-          console.log(error);
-          this.swal.swal_code_error("Terjadi kesalahan", "code error belum3 !");
-        } else {
-          this.swal.swal_code_error("Terjadi kesalahan", "code error BELUM !, kembali ke login !");
-        }
-        });
-      }
-    }
+    //     // console.log(error);
+    //     this.loadingService.tutup_loading();
+    //     if (error.status == -4) {
+    //       console.log(error);
+    //       this.swal.swal_code_error("Terjadi kesalahan", "code error belum3 !");
+    //     } else {
+    //       this.swal.swal_code_error("Terjadi kesalahan", "code error BELUM !, kembali ke login !");
+    //     }
+    //     });
+    //   }
+    // }
 
   }
 
   looping_file(tipe){
-    if (tipe == "img") {
-      for (let index = 0; index < this.arr_img.length; index++) {
-        let element = this.arr_img[index];
+    // if (tipe == "img") {
+      for (let index = 0; index < this.arr_data_img_pdf.length; index++) {
+        let element = this.arr_data_img_pdf[index];
         this.mengirim_gambar(element.nama, element.img, index)
       }
-    } else {
-      for (let index = 0; index < this.arr_file_pdf.length; index++) {
-        let element = this.arr_file_pdf[index];
-        this.mengirim_pdf(element.pdf, element.nama, index)
-      }
-    }
+    // } else {
+    //   for (let index = 0; index < this.arr_file_pdf.length; index++) {
+    //     let element = this.arr_file_pdf[index];
+    //     this.mengirim_pdf(element.pdf, element.nama, index)
+    //   }
+    // }
   }
 
   async mengirim_gambar(namafile, base64, index){
@@ -605,7 +612,7 @@ export class LaporPage implements OnInit {
         // this.setget.set_Page(this.data_page);
     
         // this.setget.setAlert(1);
-        if (index == this.arr_img.length-1) {
+        if (index == this.arr_data_img_pdf.length-1) {
           this.loadingService.tutup_loading();
           this.toastService.Toast("Berhasil menyimpan "+namafile)
           this.loadingService.tampil_loading(null);
@@ -662,84 +669,96 @@ export class LaporPage implements OnInit {
     }
   }
 
-  async mengirim_pdf(path_pdf, namafile, index){
-    const fileTransfer: FileTransferObject = this.transfer.create();
-    //mengisi data option
-    let options: FileUploadOptions = {
-      fileKey: 'filekey',
-      fileName: namafile,
-      chunkedMode: false,
-      mimeType: "application/pdf",
-      headers: {}
-    }
+  testgeo(){
+    this.geolocation.getCurrentPosition({enableHighAccuracy: true })
+    .then((res) => {
+      let lat = res.coords.latitude;
+      let lng = res.coords.longitude;
 
-    fileTransfer.upload(path_pdf, this.URL, options)
-    .then(data => {
-      console.log(data);
-
-      const data_json = JSON.parse(data.response);
-      const data_status = JSON.parse(data_json.status);
-
-      console.log(data_status)
-
-      if (data_status == 0) {
-        this.setget.setLog(this.lapor_id, this.nama_kegiatan);
-        this.setget.set_Page(this.data_page);
-    
-        this.setget.setAlert(1);
-        if (index == this.arr_file_pdf.length-1) {
-          this.loadingService.tutup_loading();
-          this.toastService.Toast("Berhasil menyimpan "+namafile)
-          this.loadingService.tampil_loading(null);
-          Swal.fire({
-            icon: 'success',
-            title: 'Sukses !' ,
-            text: 'Berhasil menyimpan data',
-            backdrop: false,
-            confirmButtonColor: '#3880ff',
-            confirmButtonText: 'OK !',
-          }).then((result) => {
-            if (result.isConfirmed) {
-              this.loadingService.tutup_loading();
-              // this.navCtrl.back();
-            }
-          });
-        }else{
-          this.toastService.Toast("Berhasil menyimpan "+namafile)
-        }
-    
-        // this.navCtrl.back();
-
-      } else {
-        // console.log("error");
-
-        // this.loadingService.tutup_loading();
-        // this.swal.swal_aksi_gagal("Terjadi kesalahan", "code error 11 !");
-        this.toastService.Toast("Gagal menyimpan "+namafile)
-        
-      }
+      console.log(lat+", "+ lng);
+    }).catch((e) =>{
+      console.log(e);
     })
-    .catch(error => {
-  
-      let status = error.code;
-
-      if (status == 4) {
-        this.loadingService.tutup_loading();
-        this.toastService.Toast("Tidak ada respon, gagal menyimpan "+namafile)
-        // this.swal.swal_aksi_gagal("Terjadi kesalahan", " kirim gambar kembali di detail kegiatan !");
-      }else{
-        this.loadingService.tutup_loading();
-        this.toastService.Toast("code error 12, gagal menyimpan "+namafile)
-        // this.swal.swal_code_error("Terjadi kesalahan", "code error 12 !, kembali ke login !");
-      }
-    });
-
-    let waktu_habis = await this.delayed(index);
-    if (waktu_habis == index) {
-      // if (this.abort_file_transfer == 0) {
-        fileTransfer.abort();
-      // }
-    }
   }
+
+  // async mengirim_pdf(path_pdf, namafile, index){
+  //   const fileTransfer: FileTransferObject = this.transfer.create();
+  //   //mengisi data option
+  //   let options: FileUploadOptions = {
+  //     fileKey: 'filekey',
+  //     fileName: namafile,
+  //     chunkedMode: false,
+  //     mimeType: "application/pdf",
+  //     headers: {}
+  //   }
+
+  //   fileTransfer.upload(path_pdf, this.URL, options)
+  //   .then(data => {
+  //     console.log(data);
+
+  //     const data_json = JSON.parse(data.response);
+  //     const data_status = JSON.parse(data_json.status);
+
+  //     console.log(data_status)
+
+  //     if (data_status == 0) {
+  //       this.setget.setLog(this.lapor_id, this.nama_kegiatan);
+  //       this.setget.set_Page(this.data_page);
+    
+  //       this.setget.setAlert(1);
+  //       if (index == this.arr_file_pdf.length-1) {
+  //         this.loadingService.tutup_loading();
+  //         this.toastService.Toast("Berhasil menyimpan "+namafile)
+  //         this.loadingService.tampil_loading(null);
+  //         Swal.fire({
+  //           icon: 'success',
+  //           title: 'Sukses !' ,
+  //           text: 'Berhasil menyimpan data',
+  //           backdrop: false,
+  //           confirmButtonColor: '#3880ff',
+  //           confirmButtonText: 'OK !',
+  //         }).then((result) => {
+  //           if (result.isConfirmed) {
+  //             this.loadingService.tutup_loading();
+  //             // this.navCtrl.back();
+  //           }
+  //         });
+  //       }else{
+  //         this.toastService.Toast("Berhasil menyimpan "+namafile)
+  //       }
+    
+  //       // this.navCtrl.back();
+
+  //     } else {
+  //       // console.log("error");
+
+  //       // this.loadingService.tutup_loading();
+  //       // this.swal.swal_aksi_gagal("Terjadi kesalahan", "code error 11 !");
+  //       this.toastService.Toast("Gagal menyimpan "+namafile)
+        
+  //     }
+  //   })
+  //   .catch(error => {
+  
+  //     let status = error.code;
+
+  //     if (status == 4) {
+  //       this.loadingService.tutup_loading();
+  //       this.toastService.Toast("Tidak ada respon, gagal menyimpan "+namafile)
+  //       // this.swal.swal_aksi_gagal("Terjadi kesalahan", " kirim gambar kembali di detail kegiatan !");
+  //     }else{
+  //       this.loadingService.tutup_loading();
+  //       this.toastService.Toast("code error 12, gagal menyimpan "+namafile)
+  //       // this.swal.swal_code_error("Terjadi kesalahan", "code error 12 !, kembali ke login !");
+  //     }
+  //   });
+
+  //   let waktu_habis = await this.delayed(index);
+  //   if (waktu_habis == index) {
+  //     // if (this.abort_file_transfer == 0) {
+  //       fileTransfer.abort();
+  //     // }
+  //   }
+  // }
 
 }

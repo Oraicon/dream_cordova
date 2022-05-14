@@ -17,6 +17,7 @@ export class SetGetServiceService {
   private log_id;
   private log_nama_kegiatan;
   private list_data_img;
+  private list_data_kode_barang;
   //variable fungsi tricky
   private alert_data;
   private data_koneksi;
@@ -95,12 +96,14 @@ export class SetGetServiceService {
   }
 
   //setter getter untuk data list_path_image dari proses.page.ts ke list.page.ts 
-  set_list_path(data){
-    this.list_data_img = data;
+  set_list_path(data1, data2){
+    this.list_data_img = data1;
+    this.list_data_kode_barang = data2
   }
 
   get_list_path(){
-    return this.list_data_img;
+    let a = [];
+    return a = [this.list_data_img, this.list_data_kode_barang];
   }
 
   //fungsi tricky

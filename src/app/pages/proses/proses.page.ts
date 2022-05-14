@@ -8,8 +8,8 @@ import { MomentService } from 'src/app/services/moment.service';
 import { ApiServicesService } from 'src/app/services/api-services.service';
 import { SwalServiceService } from 'src/app/services/swal-service.service';
 import { Camera, CameraOptions } from '@awesome-cordova-plugins/camera/ngx';
-import Swal from 'sweetalert2';
 import { ToastService } from 'src/app/services/toast.service';
+import Swal from 'sweetalert2';
 
 
 @Component({
@@ -145,7 +145,7 @@ export class ProsesPage implements OnInit {
 
   //logika compare isi ada persen
   compare( a, b ) {
-    return a.progress_pengerjaan - b.progress_pengerjaan;
+    return a.upload_date - b.upload_date;
   }
 
   //berhasil mengirim data
@@ -192,9 +192,10 @@ export class ProsesPage implements OnInit {
   }
 
   // pindah aktiviti detail riwayat
-  lihat_list(data){
-    let arr_list_data = data.split(",");
-    this.setget.set_list_path(arr_list_data);
+  lihat_list(arr_data_list, kode_barang){
+    console.log(kode_barang);
+    let arr_list_data = arr_data_list.split(",");
+    this.setget.set_list_path(arr_list_data, kode_barang);
 
     this.navCtrl.navigateForward(['/list']);
   }
@@ -283,22 +284,6 @@ export class ProsesPage implements OnInit {
     .then(data => {
 
       const data_json = JSON.parse(data.data);
-
-      // let arr_data_mentah = data_json.data;
-
-      // for (let index = 0; index < arr_data_mentah.length; index++) {
-      //   const element = arr_data_mentah[index];
-        
-      //   this.data_list_evidance_img[element.id] = element.list_path_image;
-      // }
-
-      // console.log(this.data_list_evidance_img);
-
-      // const data_mentah = data_json.data[0].list_path_image;
-
-      // let splitted = data_mentah.split(","); 
-
-      // console.log(splitted);
 
       const data_status = data_json.status;
 

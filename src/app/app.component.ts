@@ -80,6 +80,8 @@ export class AppComponent {
       let imgURL = this.setget.get_lapor()[2];
       let data_button = this.setget.getButton();
 
+      console.log(b);
+
       if (a == 1) {
         this.toastService.Toast_tampil();
       } else {
@@ -87,7 +89,11 @@ export class AppComponent {
           if (b == 1) {
             this.router.navigate(["/tabs/tab1"], { replaceUrl: true });
           }else{
-            this.exitapp();
+            if (b == 3) {
+              this.toastService.Toast("Tekan X untuk menutup modal . .");
+            } else {
+              this.exitapp();
+            }
           }
         }else{
           if (b == 2) {
@@ -118,6 +124,8 @@ export class AppComponent {
                 this.toastService.Toast_tampil();
               }
             }
+          }else if (b == 3){
+              this.toastService.Toast("Tekan X untuk menutup modal . .");
           }else{              
             if (data_button == 0){
               this.setget.setButton(1);
