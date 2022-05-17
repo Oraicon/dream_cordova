@@ -26,6 +26,9 @@ export class KegiatanPage implements OnInit {
   loading = true; 
   timeout = 0;
 
+  detail_kegiatan;
+  searchTerm: string;
+
   slideOpts = {
     initialSlide: 0,
     speed: 400,
@@ -50,7 +53,8 @@ export class KegiatanPage implements OnInit {
   //awal masuk page
   ionViewWillEnter(){
     this.warna_segment = 1;
-    this.tampilkan_data();
+    // this.tampilkan_data();
+    this.menampilkan_detail_kegiatan();
   }
 
   ionViewDidLeave(){
@@ -84,9 +88,10 @@ export class KegiatanPage implements OnInit {
   };
 
   //pindah aktiviti
-  proyek_kegiatan(id_detail, page_type){
-    this.setget.setProses(this.id_header, id_detail);
-    this.setget.set_Page(page_type);
+  proyek_kegiatan(id_detail){
+    console.log(id_detail);
+    this.setget.setProses(null, id_detail);
+    this.setget.set_Page(1);
     this.navCtrl.navigateForward(['/proses']);
   }
 
@@ -136,6 +141,33 @@ export class KegiatanPage implements OnInit {
         }
       }
     });
+  }
+
+  async menampilkan_detail_kegiatan(){
+    const a = this.setget.getDatakegiatan();
+    const id_master_rap = a[0];
+
+    this.apiService.dapatkan_data_proyek_rap_detail(id_master_rap)
+    .then(data => {
+
+      const data_json = JSON.parse(data.data);
+      const status_data = data_json.status;
+      if (status_data == 1) {
+
+        this.detail_kegiatan = data_json.data;
+        console.log(this.detail_kegiatan);
+
+
+      }
+    })
+    .catch(error => {
+  
+      console.log(error.status);
+      console.log(error.error); // error message as string
+      console.log(error.headers);
+  
+    });
+
   }
 
   //olah data kegiatan memisahkan prgores dan komplit

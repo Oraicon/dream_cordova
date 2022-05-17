@@ -50,6 +50,10 @@ const routes: Routes = [
   {
     path: 'modal-isikonten',
     loadChildren: () => import('./modal/modal-isikonten/modal-isikonten.module').then( m => m.ModalIsikontenPageModule)
+  },
+  {
+    path: 'modal-hasil',
+    loadChildren: () => import('./modal/modal-hasil/modal-hasil.module').then( m => m.ModalHasilPageModule)
   }
 
 

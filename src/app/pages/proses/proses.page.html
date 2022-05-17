@@ -210,6 +210,42 @@
           </ion-card>
         </ion-col>
 
+        <ion-col size="12">
+          <ion-card>
+            <ion-card-header>
+              <ion-card-title class="ion-text-center">{{ data_detail_kegiatan.uraian_kegiatan }}</ion-card-title>
+            </ion-card-header>
+            <ion-card-content class="ion-no-padding">
+              <ion-list>
+                <ion-item>
+                  <ion-label>
+                    <h2 class="ion-no-margin padding_bottom_detail_informasi detail_informasi">
+                      Volume pengerjaan
+                    </h2>
+                    <div class="ion-no-margin ion-text-wrap">
+                      <h3>
+                        {{ data_detail_kegiatan.volume }} {{ data_detail_kegiatan.nama }}
+                      </h3>
+                    </div>
+                  </ion-label>
+                </ion-item>
+                <ion-item>
+                  <ion-label>
+                    <h2 class="ion-no-margin padding_bottom_detail_informasi detail_informasi">
+                      Progress Pengerjaan
+                    </h2>
+                    <div class="ion-no-margin ion-text-wrap">
+                      <h3>
+                        0%
+                      </h3>
+                    </div>
+                  </ion-label>
+                </ion-item>
+              </ion-list>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+
         <!-- searchbar -->
         <ion-col size="12" class="">
           <ion-card class="">
@@ -228,21 +264,21 @@
         <ion-col size="12" *ngIf="riwayat_laporan; else data_arr_progressmilsetone_kosong">
           <div class="scrollan" scrolly="true" style="max-height:28rem">
 
-              <ion-card *ngFor='let data of data_arr_progressmilsetone; let i = index' class="ion-activatable" (click)="lihat_list(data.list_path_image, 'MTU-00'+i)" >
+              <ion-card *ngFor='let data of data_arr_progressmilsetone; let i = index' class="ion-activatable" (click)="lihat_list(data.list_path, data.item)" >
                 <ion-card-content>
                   <ion-grid fixed class="ion-no-padding">
                     <ion-row>
-                      <ion-col size="12" class="ion-text-end">{{ tanggal_pm[data.id] }}</ion-col>
+                      <ion-col size="12" class="ion-text-end">{{ data.date_created }}</ion-col>
                     </ion-row>
                     <ion-row class="pad_bottom">
                       <ion-col size="6" class="hitam">
                         <h1 class="hitam">
-                          MTU-00{{ i }}
+                          {{ data.item }}
                         </h1>
                       </ion-col>
                       <ion-col size="6" class="ion-text-end">
                         <h1 class="hitam">
-                          Volume : {{ i }}
+                          Volume : {{ data.volume }} {{ data.satuan }}
                         </h1>
                       </ion-col>
                     </ion-row>
@@ -254,7 +290,7 @@
                     <ion-row>
                       <ion-col size="12">
                         <h2>
-                          {{ data.remark }}
+                          {{ data.keterangan }}
                         </h2>
                       </ion-col>
                     </ion-row>

@@ -1,14 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FileTransfer, FileUploadOptions, FileTransferObject } from '@awesome-cordova-plugins/file-transfer/ngx';
 import { SetGetServiceService } from 'src/app/services/set-get-service.service';
-import { ActionSheetController } from '@ionic/angular';
 import { NavController } from '@ionic/angular';
 import { LoadingServiceService } from 'src/app/services/loading-service.service';
 import { MomentService } from 'src/app/services/moment.service';
 import { ApiServicesService } from 'src/app/services/api-services.service';
 import { SwalServiceService } from 'src/app/services/swal-service.service';
-import { Camera, CameraOptions } from '@awesome-cordova-plugins/camera/ngx';
-import { ToastService } from 'src/app/services/toast.service';
 import Swal from 'sweetalert2';
 
 
@@ -28,7 +24,7 @@ export class ProsesPage implements OnInit {
   data_obj_kegiatan = {};
   data_obj_kegiatan_tanggal = {};
   status_pengerjaan;
-  data_arr_progressmilsetone;
+  data_arr_progressmilsetone = [];
   persen_tertinggi;
   tanggal_pm = {};
   data_gambar_rusak = {};
@@ -42,36 +38,15 @@ export class ProsesPage implements OnInit {
 
   data_list_evidance_img = {};
 
+  data_detail_kegiatan = {};
+
   base64_img:string="";
   name_img:string="";
   format_img:string="JPEG";
   URL="https://dream-beta.technosolusitama.in/api/uploadImage";
 
-  //persiapan kamera
-  cameraOptions: CameraOptions = {
-    quality: 50,
-    correctOrientation: true,
-    sourceType: this.camera.PictureSourceType.CAMERA,
-    destinationType: this.camera.DestinationType.DATA_URL,
-    encodingType: this.camera.EncodingType.JPEG,
-    mediaType: this.camera.MediaType.PICTURE
-  }
-
-  galeriOptions: CameraOptions = {
-    quality: 50,
-    correctOrientation: true,
-    sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
-    destinationType: this.camera.DestinationType.DATA_URL,
-    encodingType: this.camera.EncodingType.JPEG,
-    mediaType: this.camera.MediaType.PICTURE
-  }
-
   constructor(private momentService: MomentService,
-    private actionSheetController: ActionSheetController,
-    private toastService: ToastService,
     private swal: SwalServiceService,
-    private camera: Camera, 
-    private transfer: FileTransfer, 
     private apiService: ApiServicesService, 
     private loadingService: LoadingServiceService, 
     private navCtrl: NavController, 
@@ -85,7 +60,8 @@ export class ProsesPage implements OnInit {
   //ionic lifecycle
   async ionViewWillEnter(){
     this.setget.set_swal(0);
-    this.tampilkan_data();
+    // this.tampilkan_data();
+    this.dapatkan_kegiatan_detail_kegiatan_rap();
   }
 
   ionViewDidLeave(){
@@ -145,7 +121,7 @@ export class ProsesPage implements OnInit {
 
   //logika compare isi ada persen
   compare( a, b ) {
-    return a.upload_date - b.upload_date;
+    return a.date_created - b.date_created;
   }
 
   //berhasil mengirim data
@@ -158,23 +134,6 @@ export class ProsesPage implements OnInit {
     }
   }
 
-  //dapatkan data gambar dari galeri/kamera
-  kamera(){
-    this.camera.getPicture(this.cameraOptions).then(res=>{
-      this.imgURL = 'data:image/jpeg;base64,' + res;
-      this.base64_img = this.imgURL;
-      this.swal_gambar(this.imgURL);
-    });
-  }
-
-  galeri(){
-    this.camera.getPicture(this.galeriOptions).then(res=>{
-      this.imgURL = 'data:image/jpeg;base64,' + res;
-      this.base64_img = this.imgURL;
-      this.swal_gambar(this.imgURL);
-    });
-  }
-
   //pindah aktiviti laporan
   formulir(){
     let a = this.persen_tertinggi;
@@ -185,7 +144,7 @@ export class ProsesPage implements OnInit {
       a = this.persen_tertinggi;
     }
 
-    this.setget.setLog(this.data_id_kegiatan, this.data_judul_kegiatan);
+    this.setget.setLog(this.data_detail_kegiatan, this.data_judul_kegiatan);
     this.setget.set_persen(a);
 
     this.navCtrl.navigateForward(['/lapor']);
@@ -195,6 +154,7 @@ export class ProsesPage implements OnInit {
   lihat_list(arr_data_list, kode_barang){
     console.log(kode_barang);
     let arr_list_data = arr_data_list.split(",");
+    console.log(arr_list_data);
     this.setget.set_list_path(arr_list_data, kode_barang);
 
     this.navCtrl.navigateForward(['/list']);
@@ -216,6 +176,8 @@ export class ProsesPage implements OnInit {
 
     this.data_id_header = a[0];
     this.data_id_kegiatan = a[1];
+
+    console.log(this.data_id_kegiatan);
 
     this.data_type_page = b;
 
@@ -328,123 +290,6 @@ export class ProsesPage implements OnInit {
 
   }
 
-  //modal ganti gambar
-  async presentActionSheet(namafile) {
-    const actionSheet = await this.actionSheetController.create({
-      header: 'Kirim ulang gambar',
-      cssClass: 'my-custom-class',
-      buttons: [{
-        text: 'Kamera',
-        icon: 'camera-outline',
-        handler: () => {
-          this.kamera();
-          const n = namafile.substring(33);
-          this.name_img = n;
-        }
-      }, {
-        text: 'Galeri',
-        icon: 'image-outline',
-        handler: () => {
-          this.galeri();
-          const n = namafile.substring(33);
-          this.name_img = n;
-        }
-      }, {
-        text: 'Batal',
-        icon: 'close',
-        role: 'cancel',
-      }]
-    });
-    await actionSheet.present();
-  }
-
-  //alert konfirmasi ganti gambar
-  swal_gambar(gambar){
-    this.loadingService.tampil_loading("");
-    Swal.fire({
-      title: 'Peringatan !!',
-      text: 'Pastikan gambar sesuai dengan kegiatan pengerjaan !',
-      imageUrl: '' + gambar,
-      imageWidth: 300,
-      imageHeight: 200,
-      imageAlt: 'Custom image',
-      backdrop: false,
-      confirmButtonColor: '#3880ff',
-      confirmButtonText: 'Kirim !',
-      showDenyButton: true,
-      denyButtonText: `Batal `,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.loadingService.tutup_loading();
-        this.loadingService.tampil_loading("Menyimpan gambar . . .");
-        this.mengirim_gambar();
-      }else{
-        this.loadingService.tutup_loading();
-      }
-    })
-  }
-
-  async mengirim_gambar(){
-
-    console.log("mengirim gambar");
-
-    const fileTransfer: FileTransferObject = this.transfer.create();
-    //mengisi data option
-    let options: FileUploadOptions = {
-      fileKey: 'filekey',
-      fileName: this.name_img,
-      chunkedMode: false,
-      mimeType: "image/JPEG",
-      headers: {}
-    }
-
-    fileTransfer.upload(this.base64_img, this.URL, options)
-    .then(data => {
-
-      console.log(data);
-
-      const data_json = JSON.parse(data.response);
-      const data_status = data_json.status;
-
-      if (data_status == 0) {
-
-        this.loadingService.tutup_loading();
-        this.toastService.Toast("Berhasil menyimpan gambar !");
-        this.ionViewWillEnter();
-
-      } else {
-        // console.log("error");
-
-        this.loadingService.tutup_loading();
-        this.swal.swal_aksi_gagal("Terjadi kesalahan", "code error 22 !");
-        
-      }
-
-    })
-    .catch(error => {
-  
-      console.log(error);
-
-      let status = error.code;
-
-      if (status == 4) {
-        this.loadingService.tutup_loading();
-        this.swal.swal_aksi_gagal("Terjadi kesalahan", "TIdak ada respon, coba beberapa saat lagi !");
-      }else{
-        this.loadingService.tutup_loading();
-        this.swal.swal_code_error("Terjadi kesalahan", "code error 21 !, kembali ke login !");
-      }
-
-  
-    });
-    
-    let waktu_habis = await this.delayed();
-    console.log(waktu_habis);
-    if (waktu_habis == 1) {
-      fileTransfer.abort();
-    }
-
-  }
 
   async tidak_ada_respon(){
     const a = this.setget.getData();
@@ -506,5 +351,70 @@ export class ProsesPage implements OnInit {
     });
   }
 
+  async dapatkan_kegiatan_detail_kegiatan_rap(){
+    const a = this.setget.getProses();
+
+    this.data_id_kegiatan = a[1];
+
+    console.log(this.data_id_kegiatan);
+
+    this.data_id_kegiatan = a[1];
+
+    this.tipe_page = false;
+
+    this.apiService.dapatkan_data_detail_kegiatan(this.data_id_kegiatan)
+    .then(data => {
+
+
+      const data_json = JSON.parse(data.data);
+      const status_data = data_json.status;
+      console.log(data_json);
+      if (status_data == 1) {
+        
+        this.data_detail_kegiatan = data_json.data[0];
+
+        console.log(this.data_detail_kegiatan);
+
+        this.dapatkan_file_detail_kegiatan();
+
+      }
+    })
+    .catch(error => {
+  
+      console.log(error.status);
+      console.log(error.error); // error message as string
+      console.log(error.headers);
+  
+    });
+  }
+
+  async dapatkan_file_detail_kegiatan(){
+    this.apiService.menampilkan_data_harian(this.data_id_kegiatan)
+    .then(data => {
+
+      const data_json = JSON.parse(data.data);
+      const status_data = data_json.status;
+      console.log(data_json);
+      if (status_data == 1) {
+        
+        let arr_detail_harian = data_json.data;
+        arr_detail_harian.sort(this.compare);
+        arr_detail_harian.reverse();
+        this.data_arr_progressmilsetone = arr_detail_harian;
+
+        console.log(this.data_arr_progressmilsetone);
+
+        this.riwayat_laporan = true;
+
+      }
+    })
+    .catch(error => {
+  
+      console.log(error.status);
+      console.log(error.error); // error message as string
+      console.log(error.headers);
+  
+    });
+  }
 
 }

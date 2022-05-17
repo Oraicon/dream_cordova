@@ -118,7 +118,7 @@
                       <ion-searchbar class="ion-no-padding "></ion-searchbar>
 
                       <ion-list>
-                        <div class="scrollan" scrolly="true" style="max-height:6rem">
+                        <div class="scrollan" scrolly="true" style="max-height:50rem">
                           <ion-item button *ngFor="let data_proses of data_masih_proses" (click)="proyek_kegiatan(data_proses.id, 1)">
                             <ion-label class="text_konten ion-text-wrap">{{ data_proses.nama_kegiatan }}</ion-label>
                             <ion-icon name="chevron-forward-outline" class="ion-text-end"></ion-icon>
@@ -212,7 +212,7 @@
 
                         <ion-col size="12">
                           <ion-list>  
-                            <div class="scrollan" scrolly="true" style="max-height:6rem">
+                            <div class="scrollan" scrolly="true" style="max-height:50rem">
                               <ion-item button *ngFor="let data_komplit of data_sudah_komplit" (click)="proyek_kegiatan(data_komplit.id, 2)">
                                 <ion-label class="text_konten">
                                   <h2 class="ion-text-wrap">
@@ -264,7 +264,36 @@
 
         </ion-card>
       </ion-col>
+
+      <ion-col size="12">
+        <ion-grid fixed class="grid_width ion-no-padding">
+          <ion-row>
+            <ion-col size="12">
+              <ion-card>
+                <ion-card-header>
+                  <ion-searchbar class="ion-no-padding" [(ngModel)]="searchTerm"></ion-searchbar>
+                </ion-card-header>
+                <ion-card-content>
+                  <ion-list>  
+                    <div class="scrollan" scrolly="true" style="max-height:45rem">
+                      <ion-item button *ngFor="let data of detail_kegiatan | filter:searchTerm" (click)="proyek_kegiatan(data.id)">
+                        <ion-label class="text_konten">
+                          <h2 class="ion-text-wrap">
+                            {{ data.uraian_kegiatan }}
+                          </h2>
+                        </ion-label>
+                        <ion-icon name="chevron-forward-outline" class="ion-text-end"></ion-icon>
+                      </ion-item>
+                    </div>
+                  </ion-list>
+                </ion-card-content>
+              </ion-card>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-col>
     </ion-row>
+
   </ion-grid>
   
 </ion-content>

@@ -21,6 +21,12 @@
 //     font-weight: 800;
 // }
 
+.hr {
+    border-bottom: 2px solid rgb(255, 255, 255);
+    margin: 10px 0;
+    width: 100%;
+}
+
 .image_size{
     height: auto;
     width: 15rem;
@@ -37,7 +43,7 @@
 }
 
 .text_konten{
-    font-size: 120%;
+    font-size: 90%;
 }
 
 
@@ -52,4 +58,8 @@ h2 {
 
 h3{
     font-size: 110%;
+}
+
+.size_img{
+    max-width: 40%;
 }
