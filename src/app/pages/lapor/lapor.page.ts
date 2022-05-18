@@ -12,11 +12,9 @@ import { SwalServiceService } from 'src/app/services/swal-service.service';
 import { Network } from '@awesome-cordova-plugins/network/ngx';
 import { ToastService } from 'src/app/services/toast.service';
 import { Chooser, ChooserResult } from '@awesome-cordova-plugins/chooser/ngx';
-import { Storage } from '@ionic/storage-angular';
 import { Geolocation } from '@awesome-cordova-plugins/geolocation/ngx';
 import Swal from 'sweetalert2';
 import { ModalHasilPage } from 'src/app/modal/modal-hasil/modal-hasil.page';
-
 
 @Component({
   selector: 'app-lapor',
@@ -50,7 +48,8 @@ export class LaporPage implements OnInit {
   long;
 
   arr_data_img_pdf = [];
-  // abort_file_transfer = 0;
+  sedang_mengirim = false;
+  data_progres_bar = 0;
 
   base64_img:string="";
   name_img:string="";
@@ -84,7 +83,6 @@ export class LaporPage implements OnInit {
   constructor(private setget: SetGetServiceService, 
     private modalCtrl: ModalController,
     private geolocation: Geolocation,
-    private storage: Storage,
     private toastService: ToastService,
     private network: Network,
     private swal: SwalServiceService,
@@ -124,7 +122,6 @@ export class LaporPage implements OnInit {
 
   ionViewWillEnter(){
     this.tampilkan_data();
-    this.storage.set("perulangan_arr", "1");
     this.setget.set_tab_page(2);
     // this.setget.set_lapor(this.keterangan,this.persen,this.imgURL);
   }
@@ -368,6 +365,8 @@ export class LaporPage implements OnInit {
     } else {
       if (data_button == 0) {
         this.setget.setButton(1);
+        this.data_progres_bar = 0;
+
         if(this.imgURL != 'assets/ss_.png' || this.arr_data_img_pdf.length != 0){
           this.item = this.myGroup.value.data_item;
           this.volume = this.myGroup.value.data_volume;
@@ -388,6 +387,8 @@ export class LaporPage implements OnInit {
                 this.loadingService.tutup_loading();
                 if (this.cek_koneksi == true) {
                   this.loadingService.tampil_loading("Mengirim data . . .");
+                  this.sedang_mengirim = true;
+                  this.data_progres_bar = 0.1;
                   this.get_geo();
                 } else {
                   this.swal.swal_aksi_gagal("Terjadi kesalahan", "Tidak ada koneksi internet !");
@@ -405,24 +406,22 @@ export class LaporPage implements OnInit {
   }
 
   test_koneksi_api(item, volume, keterangan, lat, long){
-    console.log(item, volume, keterangan, lat, long);
-    this.toastService.Toast("Pengecekan koneksi internet . . .");
     this.apiService.cek_koneksi()
     .then(data => {
-
+  
       this.mengirim_data_api(item, volume, keterangan, lat, long);
-
+      this.data_progres_bar = 0.3;
+  
     })
     .catch(error => {
       console.log(error);
       this.toastService.Toast("Gagal mengirim, mencoba mengirim kembali !");
+      this.data_progres_bar = 0.2;
       this.test_koneksi_api(item, volume, keterangan, lat, long);
     });
   }
 
   async mengirim_data_api(item, volume, keterangan, lat, long){
-
-    this.toastService.Toast("Mengirim data laporan");
 
     this.apiService.kirim_data_laporan(this.lapor_id.id, item, volume, lat, long, keterangan)
     .then(data => {
@@ -431,9 +430,10 @@ export class LaporPage implements OnInit {
       const data_json = JSON.parse(data.data);
       const data_status = data_json.status;
       const data_id_evidence = data_json.data;
-
+  
       if (data_status == 0) {
         this.mengirim_informasi_data(data_id_evidence);
+        this.data_progres_bar = 0.4;
       } else {
         this.loadingService.tutup_loading();
         this.swal.swal_aksi_gagal("Terjadi kesalahan", "code error 9 !");
@@ -447,6 +447,7 @@ export class LaporPage implements OnInit {
         console.log(error);
         this.toastService.Toast("Gagal mengirim, mencoba mengirim kembali !");
         this.mengirim_data_api(item, volume, keterangan, lat, long);
+        this.data_progres_bar = 0.2;
       } else {
         this.swal.swal_code_error("Terjadi kesalahan", "code error 10 !, kembali ke login !");
       }
@@ -455,226 +456,148 @@ export class LaporPage implements OnInit {
 
   async mengirim_informasi_data(id){
 
-    // if (this.tipe_lampiran == 1) {
-      this.toastService.Toast("Mengirim data & menyimpan gambar");
+    this.data_progres_bar = 0.5;
 
-      console.log(this.arr_data_img_pdf);
+    console.log(this.arr_data_img_pdf);
 
-      for (let index = 0; index < this.arr_data_img_pdf.length; index++) {
-        let element = this.arr_data_img_pdf[index];
-        this.apiService.menyimpan_path_file(id, element.nama)
-        .then(data => {
-          const data_json = JSON.parse(data.data);
-          const data_status = data_json.status;
+    for (let index = 0; index < this.arr_data_img_pdf.length; index++) {
+      let element = this.arr_data_img_pdf[index];
+      this.apiService.menyimpan_path_file(id, element.nama)
+      .then(data => {
+        const data_json = JSON.parse(data.data);
+        const data_status = data_json.status;
 
-          if (data_status == 0) {
+        if (data_status == 0) {
 
-            if (index == this.arr_data_img_pdf.length - 1) {
-              this.looping_file();
-            }
-            
-          } else {
-            this.swal.swal_aksi_gagal("Terjadi kesalahan", "code error BELUM2 !");
+          if (index == this.arr_data_img_pdf.length - 1) {
+            this.looping_file();
+            this.data_progres_bar = 0.6;
           }
-
-        })
-        .catch(error => {
-      
-        // console.log(error);
-        this.loadingService.tutup_loading();
-        console.log(error);
-        if (error.status == -4) {
-          this.swal.swal_code_error("Terjadi kesalahan", "code error belum3 !");
+          
         } else {
-          this.swal.swal_code_error("Terjadi kesalahan", "code error BELUM !, kembali ke login !");
+          this.swal.swal_aksi_gagal("Terjadi kesalahan", "code error BELUM2 !");
         }
-        });
-      }
-  }
 
-  looping_file(){
-    console.log(this.arr_data_img_pdf)
-      for (let index = 0; index < this.arr_data_img_pdf.length; index++) {
-        let element = this.arr_data_img_pdf[index];
-        let path_file = element.path;
-        let nama_file = element.nama;
-        let get_ext = element.tipe;
-
-        this.mengirim_file(nama_file, path_file, index, get_ext)
-      }
-  }
-
-  async mengirim_file(namafile, path_file, index, ext){
-
-    let file_ext
+      })
+      .catch(error => {
     
-    if (ext = "JPEG") {
-      file_ext = "image/JPEG"
-    } else {
-      file_ext = "application/pdf"
-    }
-
-    const fileTransfer: FileTransferObject = this.transfer.create();
-    //mengisi data option
-    let options: FileUploadOptions = {
-      fileKey: 'filekey',
-      fileName: namafile,
-      chunkedMode: false,
-      mimeType: file_ext,
-      headers: {}
-    }
-
-    fileTransfer.upload(path_file, this.URL, options)
-    .then(data => {
-      
-      console.log(data);
-
-      const data_json = JSON.parse(data.response);
-      const data_status = data_json.status;
-
-      if (data_status == 0) {
-        // this.setget.setLog(this.lapor_id, this.nama_kegiatan);
-        // this.setget.set_Page(this.data_page);
-    
-        // this.setget.setAlert(1);
-        if (index == this.arr_data_img_pdf.length-1) {
-          this.loadingService.tutup_loading();
-          this.toastService.Toast("Berhasil menyimpan "+namafile)
-          this.loadingService.tampil_loading(null);
-          Swal.fire({
-            icon: 'success',
-            title: 'Sukses !' ,
-            text: 'Berhasil menyimpan data',
-            backdrop: false,
-            confirmButtonColor: '#3880ff',
-            confirmButtonText: 'OK !',
-          }).then((result) => {
-            if (result.isConfirmed) {
-              this.loadingService.tutup_loading();
-              // this.navCtrl.back();
-            }
-          });
-        }else{
-          this.toastService.Toast("Berhasil menyimpan "+namafile);
-          // this.img_counter++;
-          // this.mengirim_gambar();
-        }
-    
-        // this.navCtrl.back();
-
-      } else {
-        // console.log("error");
-
-        // this.loadingService.tutup_loading();
-        // this.swal.swal_aksi_gagal("Terjadi kesalahan", "code error 11 !");
-        this.toastService.Toast("Gagal menyimpan "+namafile)
-        
-      }
-    })
-    .catch(error => {
-
+      // console.log(error);
+      this.loadingService.tutup_loading();
       console.log(error);
-  
-      let status = error.code;
-
-      if (status == 4) {
-        this.loadingService.tutup_loading();
-        this.toastService.Toast("Tidak ada respon, gagal menyimpan "+namafile)
-        // this.swal.swal_aksi_gagal("Terjadi kesalahan", " kirim gambar kembali di detail kegiatan !");
-      }else{
-        this.loadingService.tutup_loading();
-        this.toastService.Toast("code error 12, gagal menyimpan "+namafile)
-        // this.swal.swal_code_error("Terjadi kesalahan", "code error 12 !, kembali ke login !");
+      if (error.status == -4) {
+        this.toastService.Toast("Gagal mengirim, mencoba mengirim kembali !");
+        this.mengirim_informasi_data(id);
+        this.data_progres_bar = 0.5;
+      } else {
+        this.swal.swal_code_error("Terjadi kesalahan", "code error BELUM !, kembali ke login !");
       }
-    });
-
-    let waktu_habis = await this.delayed(index);
-    if (waktu_habis == index) {
-      // if (this.abort_file_transfer == 0) {
-        fileTransfer.abort();
-      // }
+      });
     }
+}
+
+looping_file(){
+  this.data_progres_bar = 0.7;
+
+  for (let index = 0; index < this.arr_data_img_pdf.length; index++) {
+    let element = this.arr_data_img_pdf[index];
+    let path_file = element.path;
+    let nama_file = element.nama;
+    let get_ext = element.tipe;
+
+    this.mengirim_file(nama_file, path_file, index, get_ext)
   }
+}
 
-  // async mengirim_pdf(path_pdf, namafile, index){
-  //   const fileTransfer: FileTransferObject = this.transfer.create();
-  //   //mengisi data option
-  //   let options: FileUploadOptions = {
-  //     fileKey: 'filekey',
-  //     fileName: namafile,
-  //     chunkedMode: false,
-  //     mimeType: "application/pdf",
-  //     headers: {}
-  //   }
+async mengirim_file(namafile, path_file, index, ext){
 
-  //   fileTransfer.upload(path_pdf, this.URL, options)
-  //   .then(data => {
-  //     console.log(data);
+let file_ext
 
-  //     const data_json = JSON.parse(data.response);
-  //     const data_status = JSON.parse(data_json.status);
+if (ext = "JPEG") {
+  file_ext = "image/JPEG"
+} else {
+  file_ext = "application/pdf"
+}
 
-  //     console.log(data_status)
+const fileTransfer: FileTransferObject = this.transfer.create();
+//mengisi data option
+let options: FileUploadOptions = {
+  fileKey: 'filekey',
+  fileName: namafile,
+  chunkedMode: false,
+  mimeType: file_ext,
+  headers: {}
+}
 
-  //     if (data_status == 0) {
-  //       this.setget.setLog(this.lapor_id, this.nama_kegiatan);
-  //       this.setget.set_Page(this.data_page);
-    
-  //       this.setget.setAlert(1);
-  //       if (index == this.arr_file_pdf.length-1) {
-  //         this.loadingService.tutup_loading();
-  //         this.toastService.Toast("Berhasil menyimpan "+namafile)
-  //         this.loadingService.tampil_loading(null);
-  //         Swal.fire({
-  //           icon: 'success',
-  //           title: 'Sukses !' ,
-  //           text: 'Berhasil menyimpan data',
-  //           backdrop: false,
-  //           confirmButtonColor: '#3880ff',
-  //           confirmButtonText: 'OK !',
-  //         }).then((result) => {
-  //           if (result.isConfirmed) {
-  //             this.loadingService.tutup_loading();
-  //             // this.navCtrl.back();
-  //           }
-  //         });
-  //       }else{
-  //         this.toastService.Toast("Berhasil menyimpan "+namafile)
-  //       }
-    
-  //       // this.navCtrl.back();
-
-  //     } else {
-  //       // console.log("error");
-
-  //       // this.loadingService.tutup_loading();
-  //       // this.swal.swal_aksi_gagal("Terjadi kesalahan", "code error 11 !");
-  //       this.toastService.Toast("Gagal menyimpan "+namafile)
-        
-  //     }
-  //   })
-  //   .catch(error => {
+fileTransfer.upload(path_file, this.URL, options)
+.then(data => {
   
-  //     let status = error.code;
+  console.log(data);
 
-  //     if (status == 4) {
-  //       this.loadingService.tutup_loading();
-  //       this.toastService.Toast("Tidak ada respon, gagal menyimpan "+namafile)
-  //       // this.swal.swal_aksi_gagal("Terjadi kesalahan", " kirim gambar kembali di detail kegiatan !");
-  //     }else{
-  //       this.loadingService.tutup_loading();
-  //       this.toastService.Toast("code error 12, gagal menyimpan "+namafile)
-  //       // this.swal.swal_code_error("Terjadi kesalahan", "code error 12 !, kembali ke login !");
-  //     }
-  //   });
+  const data_json = JSON.parse(data.response);
+  const data_status = data_json.status;
 
-  //   let waktu_habis = await this.delayed(index);
-  //   if (waktu_habis == index) {
-  //     // if (this.abort_file_transfer == 0) {
-  //       fileTransfer.abort();
-  //     // }
-  //   }
-  // }
+  if (data_status == 0) {
+
+    if (index == this.arr_data_img_pdf.length-1) {
+      this.data_progres_bar = 0.7;
+      this.sedang_mengirim = false;
+      this.loadingService.tutup_loading();
+      this.toastService.Toast("Berhasil menyimpan "+namafile)
+      this.loadingService.tampil_loading(null);
+      Swal.fire({
+        icon: 'success',
+        title: 'Sukses !' ,
+        text: 'Berhasil menyimpan data',
+        backdrop: false,
+        confirmButtonColor: '#3880ff',
+        confirmButtonText: 'OK !',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.loadingService.tutup_loading();
+          this.navCtrl.back();
+        }
+      });
+    }else{
+      this.toastService.Toast("Berhasil menyimpan "+namafile);
+      // this.img_counter++;
+      // this.mengirim_gambar();
+    }
+
+    // this.navCtrl.back();
+
+  } else {
+    // console.log("error");
+
+    // this.loadingService.tutup_loading();
+    // this.swal.swal_aksi_gagal("Terjadi kesalahan", "code error 11 !");
+    this.toastService.Toast("Gagal menyimpan "+namafile)
+    
+  }
+})
+.catch(error => {
+
+  console.log(error);
+
+  let status = error.code;
+
+  if (status == 4) {
+    this.loadingService.tutup_loading();
+    this.toastService.Toast("Tidak ada respon, gagal menyimpan "+namafile)
+    // this.swal.swal_aksi_gagal("Terjadi kesalahan", " kirim gambar kembali di detail kegiatan !");
+  }else{
+    this.loadingService.tutup_loading();
+    this.toastService.Toast("code error 12, gagal menyimpan "+namafile)
+    // this.swal.swal_code_error("Terjadi kesalahan", "code error 12 !, kembali ke login !");
+  }
+});
+
+let waktu_habis = await this.delayed(index);
+  if (waktu_habis == index) {
+    // if (this.abort_file_transfer == 0) {
+      fileTransfer.abort();
+    // }
+  }
+}
 
   async test_hasil(){
     const modal = await this.modalCtrl.create({
@@ -689,13 +612,22 @@ export class LaporPage implements OnInit {
   }
 
   get_geo(){
-    this.geolocation.getCurrentPosition({enableHighAccuracy: true })
+    this.geolocation.getCurrentPosition({
+      timeout: 10000,
+      enableHighAccuracy: true })
       .then((res) => {
         this.lat = res.coords.latitude;
         this.long = res.coords.longitude;
+        this.data_progres_bar = 0.2;
         this.test_koneksi_api(this.item, this.volume, this.keterangan, this.lat, this.long)
       }).catch((e) =>{
-        console.log(e);
+        let error_code = e.code
+  
+        if (error_code == 3) {
+          this.loadingService.tutup_loading();
+          this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Aktifkan lokasi handphone !");
+          return;
+        }
     })
   }
 

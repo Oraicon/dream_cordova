@@ -255,16 +255,18 @@
         </ion-card>
       </ion-col>
 
-      <ion-col size="12">
+      <!-- <ion-col size="12">
         <ion-button (click)="test_hasil()" expand="block" fill="clear" shape="round">
           test_hasil
         </ion-button>
-      </ion-col>
+      </ion-col> -->
+
     </ion-row>
   </ion-grid>
   
 </ion-content>
 
 <ion-footer>
-    <ion-progress-bar value="0.5"></ion-progress-bar>
+  <ion-progress-bar value="{{ data_progres_bar }}" *ngIf="sedang_mengirim; else tidak_sedang_mengirim"></ion-progress-bar>
+  <ng-template #tidak_sedang_mengirim></ng-template>
 </ion-footer>

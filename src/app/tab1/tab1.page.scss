@@ -6,6 +6,18 @@
     --padding-end: 0px
 }
 
+.padding_left{
+    padding-left: 1rem;
+}
+
+.padding_right{
+    padding-right: 1rem;
+}
+
+.padding_buttom{
+    padding-bottom: 0px;
+}
+
 .background_color_biru_gelap{
     background: #1B2338;
     height: 5rem;
@@ -16,10 +28,10 @@
     border-radius: 1rem;
 }
 
-// .text_konten_banyak{
-//     font-size: 2rem;
-//     font-weight: 800;
-// }
+.padding_icon{
+    padding-right: 5px;
+    padding-bottom: 6px;
+}
 
 .hr {
     border-bottom: 2px solid rgb(255, 255, 255);
@@ -45,7 +57,6 @@
 .text_konten{
     font-size: 90%;
 }
-
 
 h1 {
     font-size: 300%;

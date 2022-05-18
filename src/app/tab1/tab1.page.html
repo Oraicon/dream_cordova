@@ -21,215 +21,12 @@
 
   <ion-grid fixed class="ion-no-padding" *ngIf="data_beranda_loading_tidak_ada; else data_beranda_loading">
     <!-- data beranda -->
-    <ion-row class="ion-padding-top background_color_biru_gelap" *ngIf="data_beranda;else data_beranda_tidak_ada">
+    <ion-row class="ion-padding-top background_color_biru_gelap">
       <ion-col size="12" class="" *ngFor="let data of data_rap; let i = index">
-        <ion-card class="bayangan">
-          <ion-card-header>
-            <ion-card-title class="ion-text-center text_judul padding_button">{{  data.kode_rap }}</ion-card-title>
-          </ion-card-header>
-          <ion-card-content class="ion-no-padding">
-            <ion-grid fixed class="ion-no-padding">
-              <ion-row>
-                <ion-col size="12">
-                  <ion-list>
-                    <!-- <ion-item>
-                      <ion-label class="text_konten">Lokasi :</ion-label>
-                      <ion-label class="ion-text-end text_konten ion-text-wrap">{{  data.lokasi_pekerjaan }}</ion-label>
-                    </ion-item> -->
-                    <!-- <ion-item>
-                      <ion-label class="text_konten">LOP :</ion-label>
-                      <ion-label class="ion-text-end text_konten">{{  data.lop }}</ion-label>
-                    </ion-item>
-                    <ion-item>
-                      <ion-label class="text_konten">Supervisi :</ion-label>
-                      <ion-label class="ion-text-end text_konten ion-text-wrap">{{  data.nama_supervisi }}</ion-label>
-                    </ion-item> -->
-                    <ion-item>
-                      <ion-label class="text_konten">
-                        <h2>Lokasi pengerjaam :</h2>
-                        <h3>{{  data.lokasi_pekerjaan }}</h3>
-                      </ion-label>
-                    </ion-item>
-                    <ion-item>
-                      <ion-label class="text_konten">
-                        <h2>Tanggal awal proyek :</h2>
-                        <h3>{{  data.periode_awal }}</h3>
-                      </ion-label>
-                    </ion-item>
-                    <ion-item>
-                      <ion-label class="text_konten">
-                        <h2>Tanggal akhir proyek :</h2>
-                        <h3>{{  data.periode_akhir }}</h3>
-                      </ion-label>
-                    </ion-item>
-                  </ion-list>
-                </ion-col>
-              </ion-row>
 
-              <ion-row>
-                <ion-col size="12">
-                  <ion-col size="12">
-                    <ion-card color="secondary" class="bayangan ion-activatable ripple-parent" (click)="kegiatan(data.id, data.nama_proyek)">
-                      <ion-card-content>
-                        <ion-grid fixed class="ion-no-padding">
-                          <ion-row class="ion-text-start ion-align-items-center">
-                            <ion-col size="6" class="putih">
-                              <h2 class="bold">Kegiatan</h2>
-                              <h1 class="text_konten_banyak">{{ jumlah_data_kegiatan_rap }}</h1>
-                            </ion-col>
-                            <ion-col size="6" class="ion-text-end">
-                              <img class="size_img" src="assets/image_white.png" alt="">
-                            </ion-col>
-                            <ion-col size="12" class="ion-text-center">
-                              <h2>
-                                <div class="hr"> </div>
-                                Lihat kegiatan
-                              </h2>
-                            </ion-col>
-                          </ion-row>
-                        </ion-grid>
-                      </ion-card-content>
-                    <ion-ripple-effect></ion-ripple-effect>
-                    </ion-card>
-                  </ion-col>
-                </ion-col>
-              </ion-row>
+        <ng-container *ngIf="obj_data_rap[i] == 'kosong'; then rap_kosong; else rap_ada"></ng-container>
 
-              <!-- <ion-row>
-                <ion-col size="12" class="ion-padding-top ion-padding-bottom">
-                  <ion-tab-button (click)="kegiatan(data.id, data.nama_proyek)">
-                    <ion-icon size="large" name="newspaper-outline"></ion-icon>
-                    <h2>Lihat uraian kegiatan</h2>
-                  </ion-tab-button>
-                </ion-col>
-              </ion-row> -->
-
-              <!-- jika data masih proses tidak kosong -->
-              <!-- <div *ngIf="data_masih_proses[data.id] != 0; then data_ada; else data_tidak_ada "></div> -->
-
-              <!-- false -->
-              <ng-template #data_tidak_ada>
-
-                <!-- jika data sudah komplit tida kosong -->
-                <div *ngIf="data_sudah_komplit[data.id] != 0; then kegiatan_ada; else tidak_ada_kegiatan"></div>
-
-                <!-- false -->
-                <ng-template #tidak_ada_kegiatan>
-                  <ion-row>
-                    <ion-col size="12">
-                      <ion-card color="medium" class="bayangan">
-                        <ion-card-content>
-                          <ion-grid fixed class="ion-no-padding">
-                            <ion-row class="ion-text-center">
-                              <ion-col size="12" class="putih">
-                                <h2 class="bold">Kegiatan</h2>
-                                  <h1 class="text_konten_banyak">Tidak ada</h1>
-                                  <h3>Belum ada kegiatan dalam proyek ini</h3>
-                              </ion-col>
-                            </ion-row>
-                          </ion-grid>
-                        </ion-card-content>
-                      </ion-card>
-                    </ion-col>
-                  </ion-row>
-                </ng-template>
-
-                <!-- true -->
-                <ng-template #kegiatan_ada>
-                  <ion-row>
-                    <ion-col size="12">
-                      <ion-card color="primary" class="bayangan">
-                        <ion-card-content>
-                          <ion-grid fixed class="ion-no-padding">
-                            <ion-row class="ion-text-center">
-                              <ion-col size="12" class="putih">
-                                <h2 class="bold">Kegiatan</h2>
-                                  <h1 class="text_konten_banyak">Selesai</h1>
-                                  <h3>Kegiatan dalam proyek ini sudah selesai</h3>
-                              </ion-col>
-                            </ion-row>
-                          </ion-grid>
-                        </ion-card-content>
-                      </ion-card>
-                    </ion-col>
-                  </ion-row>
-                  
-                  <ion-row>
-                    <ion-col size="12" class="ion-padding-top ion-padding-bottom">
-                      <ion-tab-button (click)="kegiatan(data.id, data.nama_proyek)">
-                        <ion-icon size="large" name="newspaper-outline"></ion-icon>
-                        <h2>Lihat kegiatan</h2>
-                      </ion-tab-button>
-                    </ion-col>
-                  </ion-row>
-                </ng-template>
-              
-              </ng-template>
-
-              <!-- true -->
-              <ng-template #data_ada>
-                <ion-row>
-                  <!-- card masih proses -->
-                  <ion-col size="6">
-                    <ion-card class="kuning bayangan">
-                      <ion-card-content>
-                        <ion-grid fixed class="ion-no-padding">
-                          <ion-row class="ion-text-center">
-                            <ion-col size="12" class="hitam">
-                              <h2 class="bold">Masih Proses</h2>
-                                <h1 class="text_konten_banyak" *ngIf="data_masih_proses[data.id] !=0; else kosong1">{{ data_masih_proses[data.id] }}</h1>
-                                <ng-template #kosong1>
-                                  <h1 class="text_konten_banyak">0</h1>
-                                </ng-template>
-                                <h3>Kegiatan</h3>
-                            </ion-col>
-                          </ion-row>
-                        </ion-grid>
-                      </ion-card-content>
-                    </ion-card>
-                  </ion-col>
-                  <!-- card proses selesai-->
-                  <ion-col size="6">
-                    <ion-card class="hijau bayangan">
-                      <ion-card-content>
-                        <ion-grid fixed class="ion-no-padding">
-                          <ion-row class="ion-text-center">
-                            <ion-col size="12" class="putih">
-                              <h2 class="bold">Sudah Selesai</h2>
-                                <h1 class="text_konten_banyak" *ngIf="data_sudah_komplit[data.id] != 0; else kosong2">{{ data_sudah_komplit[data.id] }}</h1>
-                                <ng-template #kosong2>
-                                  <h1 class="text_konten_banyak">0</h1>
-                                </ng-template>
-                                <h3>Kegiatan</h3>
-                            </ion-col>
-                          </ion-row>
-                        </ion-grid>
-                      </ion-card-content>
-                    </ion-card>
-                  </ion-col>
-                </ion-row>
-                
-                <ion-row>
-                  <ion-col size="12" class="ion-padding-top ion-padding-bottom">
-                    <!-- <ion-tab-button (click)="kegiatan(data.id, data.nama_proyek)"> -->
-                    <ion-tab-button (click)="kegiatan(data.id, data.nama_proyek)">
-                      <ion-icon size="large" name="newspaper-outline"></ion-icon>
-                      <h2>Lihat uraian kegiatan</h2>
-                    </ion-tab-button>
-                  </ion-col>
-                </ion-row>
-              </ng-template>
-            </ion-grid>
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
-
-    </ion-row>
-
-    <!-- data kosong -->
-    <ng-template #data_beranda_tidak_ada>
-      <ion-row class="ion-padding-top background_color_biru_gelap">
-        <ion-col size="12" class="">
+        <ng-template #rap_kosong>
           <ion-card class="bayangan">
             <ion-card-header class="ion-text-center">
               <img class="image_size" src="assets/kosong.png" (error)="errorHandler($event)">
@@ -255,10 +52,81 @@
               </ion-grid>
             </ion-card-content>
           </ion-card>
-        </ion-col>
-      </ion-row>
-    </ng-template>
+        </ng-template>
 
+        <ng-template #rap_ada>
+          <ion-card class="bayangan">
+            <ion-card-header class="padding_buttom">
+              <ion-card-title class="ion-text-center text_judul">{{  data.kode_rap }}</ion-card-title>
+            </ion-card-header>
+            <ion-card-content class="ion-no-padding">
+              <ion-grid fixed class="ion-no-padding">
+                <ion-row>
+                  <ion-col size="12">
+                    <ion-list>
+                      <ion-item class="ion-align-items-center abu" lines="none">
+                        <ion-icon class="padding_icon" name="alert-circle-outline"></ion-icon>
+                        <h2 class="ion-no-margin detail_informasi">Detail Informasi</h2>
+                      </ion-item>
+                      <ion-item>
+                        <ion-label class="text_konten">
+                          <h3 class="abu">Lokasi pengerjaam :</h3>
+                          <h2>{{  data.lokasi_pekerjaan }}</h2>
+                        </ion-label>
+                      </ion-item>
+                      <ion-item>
+                        <ion-label class="text_konten">
+                          <h3 class="abu">Tanggal awal proyek :</h3>
+                          <h2>{{  tanggal_moment["periodeawal"+i] }}</h2>
+                        </ion-label>
+                      </ion-item>
+                      <ion-item>
+                        <ion-label class="text_konten">
+                          <h3 class="abu">Tanggal akhir proyek :</h3>
+                          <h2>{{  tanggal_moment["periodeakhir"+i] }}</h2>
+                        </ion-label>
+                      </ion-item>
+                    </ion-list>
+                  </ion-col>
+                </ion-row>
+  
+                <ion-row>
+                  <ion-col size="12">
+                    <ion-col size="12" class="ion-padding-bottom">
+                      <ion-card color="secondary" class="bayangan ion-activatable ripple-parent" (click)="kegiatan(data.id, data.kode_rap)">
+                        <ion-card-content>
+                          <ion-grid fixed class="ion-no-padding">
+                            <ion-row class="ion-text-start ion-align-items-center">
+                              <ion-col size="6" class="putih">
+                                <h2 class="bold">Total Kegiatan</h2>
+                                <h1 class="text_konten_banyak" *ngIf="obj_jumlah_kegiatan; else jumlah_kegiatan_kosong">{{ obj_jumlah_kegiatan[i] }}</h1>
+                                <ng-template #jumlah_kegiatan_kosong></ng-template>
+                              </ion-col>
+                              <ion-col size="6" class="ion-text-end padding_right">
+                                <img class="size_img" src="assets/image_white.png" alt="">
+                              </ion-col>
+                              <ion-col size="12" class="ion-text-center">
+                                <h2>
+                                  <div class="hr"> </div>
+                                  Lihat uraian kegiatan
+                                </h2>
+                              </ion-col>
+                            </ion-row>
+                          </ion-grid>
+                        </ion-card-content>
+                      <ion-ripple-effect></ion-ripple-effect>
+                      </ion-card>
+                    </ion-col>
+                  </ion-col>
+                </ion-row>
+  
+              </ion-grid>
+            </ion-card-content>
+          </ion-card>
+        </ng-template>
+
+      </ion-col>
+    </ion-row>
   </ion-grid>
 
   <!-- loading skeleton -->
@@ -287,38 +155,18 @@
                       <ion-item>
                         <ion-skeleton-text animated style="width: 30%" ></ion-skeleton-text>
                       </ion-item>
-                      <ion-item>
-                        <ion-skeleton-text animated style="width: 30%" ></ion-skeleton-text>
-                      </ion-item>
                     </ion-list>
                   </ion-col>
                 </ion-row>
                 <ion-row>
-                  <ion-col size="6" class="">
+                  <ion-col size="12" class="">
                     <ion-card>
                       <ion-card-content>
                         <ion-grid fixed class="ion-no-padding">
                           <ion-row class="ion-text-center">
-                            <ion-col size="12" class="putih">
-                              <ion-skeleton-text animated style="width: 100%" ></ion-skeleton-text>
-                              <ion-skeleton-text animated style="width: 100%; height: 1.5rem;"></ion-skeleton-text>
-                              <ion-skeleton-text animated style="width: 100%" ></ion-skeleton-text>
-                            </ion-col>
-                          </ion-row>
-                        </ion-grid>
-                      </ion-card-content>
-                    </ion-card>
-                  </ion-col>
-  
-                  <ion-col size="6" class="">
-                    <ion-card>
-                      <ion-card-content>
-                        <ion-grid fixed class="ion-no-padding">
-                          <ion-row class="ion-text-center">
-                            <ion-col size="12" class="putih">
-                              <ion-skeleton-text animated style="width: 100%" ></ion-skeleton-text>
-                              <ion-skeleton-text animated style="width: 100%; height: 1.5rem;"></ion-skeleton-text>
-                              <ion-skeleton-text animated style="width: 100%" ></ion-skeleton-text>
+                            <ion-col size="6" class="putih">
+                              <ion-skeleton-text animated style="width: 50%" ></ion-skeleton-text>
+                              <ion-skeleton-text animated style="width: 50%; height: 2rem;"></ion-skeleton-text>
                             </ion-col>
                           </ion-row>
                         </ion-grid>
@@ -326,7 +174,6 @@
                     </ion-card>
                   </ion-col>
                 </ion-row>
-                
               </ion-grid>
             </ion-card-content>
           </ion-card>

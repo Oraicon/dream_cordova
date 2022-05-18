@@ -43,7 +43,8 @@ const routes: Routes = [
     path: '',
     redirectTo: '/login',
     pathMatch: 'full'
-  },  {
+  },
+  {
     path: 'list',
     loadChildren: () => import('./pages/list/list.module').then( m => m.ListPageModule)
   },
@@ -54,9 +55,10 @@ const routes: Routes = [
   {
     path: 'modal-hasil',
     loadChildren: () => import('./modal/modal-hasil/modal-hasil.module').then( m => m.ModalHasilPageModule)
-  }
-
-
+  },  {
+    path: 'lapormeter',
+    loadChildren: () => import('./pages/lapormeter/lapormeter.module').then( m => m.LapormeterPageModule)
+  },
 
 
 ];
