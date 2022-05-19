@@ -44,7 +44,11 @@
         <ng-template #data_tampil>
           <ion-card>
             <ion-card-header class="pad_bottom">
-              <ion-card-title>Daftar file lampiran</ion-card-title>
+              <ion-card-title *ngIf="kode_barang == null; else ada_kode" >Daftar file lampiran</ion-card-title>
+
+              <ng-template #ada_kode>
+                <ion-card-title >{{ kode_barang }}</ion-card-title>
+              </ng-template>
             </ion-card-header>
           
             <ion-card-content class="ion-no-padding">
@@ -78,37 +82,6 @@
 
                   <ion-ripple-effect></ion-ripple-effect>
                 </ion-item>
-
-
-
-                <!-- <ng-container *ngIf="get_ext == 'JPEG'; then jpeg; else pdf" ></ng-container> -->
-  
-                <!-- <ng-template #jpeg>
-                  <ion-item class="ion-activatable" *ngFor="let data of data_list_img; let i = index">
-                    <ion-thumbnail slot="start">
-                      <img (error)="errorHandler($event, data.id)" (click)="tampilkan_konten(data, data_nama[i])" src="https://dream-beta.technosolusitama.in/{{ data }}"/>
-                    </ion-thumbnail>
-                    <ion-label class="ion-text-wrap" (click)="tampilkan_konten(data, data_nama[i])">{{ data_nama[i] }}</ion-label>
-                    <ion-button color="primary" expand="block" fill="outline" (click)="presentActionSheet(data_nama[i])" *ngIf="data_gambar_rusak[data.id] == 'rusak'; else gambar_tidak_rusak">
-                      Edit
-                    </ion-button>
-
-                    <ng-template #gambar_tidak_rusak></ng-template>
-
-                    <ion-ripple-effect></ion-ripple-effect>
-                  </ion-item>
-                </ng-template> -->
-  
-                <!-- <ng-template #pdf>
-                  <ion-item class="ion-activatable" *ngFor="let data of data_list_pdf; let i = index">
-                    <ion-thumbnail slot="start">
-                      <img (click)="tampilakn_pdf(data)" src="assets/pdf_icon.png"/>
-                    </ion-thumbnail>
-                    <ion-label class="ion-text-wrap" (click)="tampilakn_pdf(data)"
-                    >{{ data_nama[i] }}</ion-label>
-                    <ion-ripple-effect></ion-ripple-effect>
-                  </ion-item>
-                </ng-template> -->
   
               </ion-list>
             </ion-card-content>
@@ -117,10 +90,11 @@
         
       </ion-col>
 
-      <!-- <ion-button (click)="bukan_lokal()" expand="block" fill="clear" shape="round">
-        _
-      </ion-button> -->
-
     </ion-row>
   </ion-grid> 
 </ion-content>
+
+<ion-footer>
+  <ion-progress-bar value="{{ data_progres_bar }}" *ngIf="sedang_mengirim; else tidak_sedang_mengirim"></ion-progress-bar>
+  <ng-template #tidak_sedang_mengirim></ng-template>
+</ion-footer>

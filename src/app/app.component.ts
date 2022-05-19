@@ -75,10 +75,12 @@ export class AppComponent {
     this.platform.backButton.subscribeWithPriority(10, () => {
       let a = this.setget.getData();
       let b = this.setget.get_tab_page();
-      let keterangan = this.setget.get_lapor()[0];
-      let persen = this.setget.get_lapor()[1];
-      let imgURL = this.setget.get_lapor()[2];
       let data_button = this.setget.getButton();
+
+      let item = this.setget.get_lapor()[0];
+      let volume = this.setget.get_lapor()[1];
+      let keterangan = this.setget.get_lapor()[2];
+      let file = this.setget.get_lapor()[2];
 
       console.log(b);
 
@@ -97,7 +99,7 @@ export class AppComponent {
           }
         }else{
           if (b == 2) {
-            // if (keterangan != undefined || persen != undefined || imgURL != 'assets/ss_.png') {
+            // if (keterangan != undefined || keterangan != undefined || persen != undefined || imgURL != 'assets/ss_.png') {
             //   this.loadingService.tampil_loading("");
             //   Swal.fire({
             //     icon: 'warning',

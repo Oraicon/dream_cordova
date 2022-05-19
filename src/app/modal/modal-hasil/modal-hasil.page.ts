@@ -9,6 +9,8 @@ import { SetGetServiceService } from 'src/app/services/set-get-service.service';
 })
 export class ModalHasilPage implements OnInit {
 
+  arr_hasil = [];
+
   constructor(    
     private modalCtrl: ModalController,
     private setget: SetGetServiceService) 
@@ -20,6 +22,8 @@ export class ModalHasilPage implements OnInit {
 
   ionViewWillEnter(){
     this.setget.set_tab_page(3);
+    this.arr_hasil = this.setget.get_hasil_akhir();
+    console.log(this.arr_hasil);
   }
 
   ionViewWillLeave(){

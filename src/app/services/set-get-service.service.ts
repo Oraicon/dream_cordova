@@ -8,14 +8,18 @@ export class SetGetServiceService {
   //variable mengirimkan data
   private id_kegiatan;
   private nama_proyek_header;
-  private proses_id_header;
   private proses_id_detail;
+
+  private lapor_item;
+  private lapor_volume;
   private lapor_keterangan;
-  private lapor_persen;
-  private lapor_gambar;
+  private lapor_file;
+
   private data_tab_to_page;
+
   private log_id;
   private log_nama_kegiatan;
+
   private list_data_img;
   private list_data_kode_barang;
   //variable fungsi tricky
@@ -26,6 +30,7 @@ export class SetGetServiceService {
   private _page;
   private _persen;
   private _swal;
+  private _hasil_akhir = [];
   private data_list_gambar;
   private data_list_nama;
   
@@ -44,14 +49,12 @@ export class SetGetServiceService {
   }
 
   //setter getter fungsi untuk mengirimkan data, data id header dan data id detail ke aktiviti detail kegiatan, yang berada di kegiatan.page.ts ke proses.page.ts
-  setProses(id_header, id_detail){
-    this.proses_id_header = id_header;
+  setProses(id_detail){
     this.proses_id_detail = id_detail;
   }
 
   getProses(){
-    let a = [];
-    return a = [this.proses_id_header, this.proses_id_detail];
+    return this.proses_id_detail;
   }
 
   //setter getter fungsi untuk mengirimkan data, data id kegiatan dan judul kegiatan ke aktiviti formulir lapor, yang berada di proses.page.ts ke laporan.page.ts
@@ -84,15 +87,16 @@ export class SetGetServiceService {
   }
 
   //setter getter data keterangan untuk membaca fungsi apakah keterangan, persen pengerjaan, dan atau gambar ada atau tidak, yang ada di lapor.page.ts ke app.component.ts
-  set_lapor(data1, data2, data3){
-    this.lapor_keterangan = data1;
-    this.lapor_persen = data2;
-    this.lapor_gambar = data3;
+  set_lapor(data1, data2, data3, data4){
+    this.lapor_item = data1;
+    this.lapor_volume = data2;
+    this.lapor_keterangan = data3;
+    this.lapor_file = data4;
   }
 
   get_lapor(){
     let a = [];
-    return a = [this.lapor_keterangan, this.lapor_persen, this.lapor_gambar];
+    return a = [this.lapor_item, this.lapor_volume, this.lapor_keterangan, this.lapor_file];
   }
 
   //setter getter untuk data list_path_image dari proses.page.ts ke list.page.ts 
@@ -170,6 +174,14 @@ export class SetGetServiceService {
   getdatalist(){
     let a = [];
     return a = [this.data_list_gambar, this.data_list_nama];
+  }
+
+  set_hasil_akhir(data){
+    this._hasil_akhir = data;
+  }
+
+  get_hasil_akhir(){
+    return this._hasil_akhir;
   }
   //data tab.tabs2.page.ts
   // setLapor(id, nama_kegiatan){

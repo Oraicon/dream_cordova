@@ -18,23 +18,14 @@ export class ProsesPage implements OnInit {
 
   //variable
   timeout = 0;
-  data_type_page;
-  data_id_header;
   data_id_kegiatan;
-  data_judul_kegiatan;
-  data_obj_kegiatan = {};
-  data_obj_kegiatan_tanggal = {};
-  status_pengerjaan;
   data_arr_progressmilsetone = [];
-  persen_tertinggi;
-  tanggal_pm = {};
   data_gambar_rusak = {};
-  tanggal_detail;
   tipe_page = true;
   hidedetail = false;
   riwayat_laporan = false;
   riwayat_loading = true;
-  data_swal;
+  tanggal_pm =[];
 
   data_list_evidance_img = {};
   data_detail_kegiatan = {};
@@ -60,7 +51,6 @@ export class ProsesPage implements OnInit {
   //ionic lifecycle
   async ionViewWillEnter(){
     this.setget.set_swal(0);
-    // this.tampilkan_data();
     this.dapatkan_kegiatan_detail_kegiatan_rap();
   }
 
@@ -138,7 +128,6 @@ export class ProsesPage implements OnInit {
   lihat_list(arr_data_list, kode_barang){
     console.log(kode_barang);
     let arr_list_data = arr_data_list.split(",");
-    console.log(arr_list_data);
     this.setget.set_list_path(arr_list_data, kode_barang);
 
     this.navCtrl.navigateForward(['/list']);
@@ -155,20 +144,19 @@ export class ProsesPage implements OnInit {
       this.loadingService.tutup_loading();
     }
 
-    this.data_type_page;
-    this.data_id_header;
+    this.timeout = 0;
     this.data_id_kegiatan;
-    this.data_judul_kegiatan;
-    this.data_obj_kegiatan = {};
-    this.data_obj_kegiatan_tanggal = {};
-    this.status_pengerjaan;
-    this.data_arr_progressmilsetone;
-    this.persen_tertinggi;
-    this.tanggal_pm = {};
-    this.tanggal_detail;
+    this.data_arr_progressmilsetone = [];
+    this.data_gambar_rusak = {};
     this.tipe_page = true;
+    this.hidedetail = false;
     this.riwayat_laporan = false;
     this.riwayat_loading = true;
+    this.tanggal_pm =[];
+  
+    this.data_list_evidance_img = {};
+    this.data_detail_kegiatan = {};
+    this.data_persen;
 
     this.loadingService.tampil_loading("");
     Swal.fire({
@@ -213,12 +201,7 @@ export class ProsesPage implements OnInit {
 
     this.loadingService.tampil_loading("Memuat data . . .")
 
-    const a = this.setget.getProses();
-
-    this.data_id_kegiatan = a[1];
-
-    this.data_id_kegiatan = a[1];
-
+    this.data_id_kegiatan = this.setget.getProses();
 
     this.apiService.dapatkan_data_detail_kegiatan(this.data_id_kegiatan)
     .then(data => {
@@ -234,14 +217,23 @@ export class ProsesPage implements OnInit {
         let kuota_progres = data_json.data[0].volume;
         let total_progres = data_json.data[0].total_volume;
 
+        console.log("kuota dan total = " + kuota_progres, total_progres);
+
         if (total_progres == 0 || total_progres == null) {
           this.data_persen = "0";
         } else {
           let data_persen = total_progres * 100 / kuota_progres;
           let str_data_persen = data_persen.toString().substring(0, 4);
-  
-          this.data_persen = str_data_persen;
+          
+          if (data_persen == Infinity) {
+            this.data_persen = "Terjadi kesalahan !";
+          } else {
+            this.data_persen = str_data_persen+"%";
+          }
+
+          console.log("data persen = " + data_persen);
         }
+
 
         if (this.data_persen == "100") {
           this.tipe_page = true;
@@ -256,9 +248,21 @@ export class ProsesPage implements OnInit {
     })
     .catch(error => {
   
-      console.log(error.status);
-      console.log(error.error); // error message as string
-      console.log(error.headers);
+      console.log(error)
+  
+      this.loadingService.tutup_loading();
+  
+      this.timeout++;
+      
+      if (this.timeout >= 3) {
+        this.keluar_aplikasi();
+      } else {
+        if (error.status == -4) {
+          this.tidak_ada_respon();
+        } else {
+          this.swal.swal_code_error("Terjadi kesalahan !", "code error 19 !, kembali ke login !");
+        }
+      }
   
     });
   }
@@ -288,9 +292,21 @@ export class ProsesPage implements OnInit {
     })
     .catch(error => {
   
-      console.log(error.status);
-      console.log(error.error); // error message as string
-      console.log(error.headers);
+      console.log(error)
+  
+      this.loadingService.tutup_loading();
+  
+      this.timeout++;
+      
+      if (this.timeout >= 3) {
+        this.keluar_aplikasi();
+      } else {
+        if (error.status == -4) {
+          this.tidak_ada_respon();
+        } else {
+          this.swal.swal_code_error("Terjadi kesalahan !", "code error 20 !, kembali ke login !");
+        }
+      }
   
     });
   }

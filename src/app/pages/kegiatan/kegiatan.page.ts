@@ -56,7 +56,7 @@ export class KegiatanPage implements OnInit {
   //pindah aktiviti
   proyek_kegiatan(id_detail){
     console.log(id_detail);
-    this.setget.setProses(null, id_detail);
+    this.setget.setProses(id_detail);
     this.setget.set_Page(1);
     this.navCtrl.navigateForward(['/proses']);
   }
@@ -89,9 +89,21 @@ export class KegiatanPage implements OnInit {
     })
     .catch(error => {
   
-      console.log(error.status);
-      console.log(error.error); // error message as string
-      console.log(error.headers);
+      console.log(error)
+  
+      this.loadingService.tutup_loading();
+  
+      this.timeout++;
+      
+      if (this.timeout >= 3) {
+        this.keluar_aplikasi();
+      } else {
+        if (error.status == -4) {
+          this.tidak_ada_respon();
+        } else {
+          this.swal.swal_code_error("Terjadi kesalahan !", "code error 18 !, kembali ke login !");
+        }
+      }
     });
 
   }

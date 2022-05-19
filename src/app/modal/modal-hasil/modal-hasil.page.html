@@ -21,7 +21,7 @@
         <ion-row class="ion-text-center hitam">
           <ion-col size="6">
             <h1>
-              Lampiran
+              Nama file
             </h1>
           </ion-col>
           <ion-col size="6">
@@ -31,34 +31,22 @@
           </ion-col>
         </ion-row>
     
-        <ion-row class="ion-text-center">
-          <ion-col size="6">
-            <h2>
-              a4sd647w89qd363as4d
-            </h2>
-          </ion-col>
-          <ion-col size="6">
-            <h2>
-              Berhasil
-            </h2>
-          </ion-col>
-        </ion-row>
-
-        <ion-row class="ion-text-center">
-          <ion-col size="6">
-            <h2>
-              a4sd647w89qd363as4d
-            </h2>
-          </ion-col>
-          <ion-col size="6">
-            <h2>
-              Gagal
-            </h2>
-          </ion-col>
-        </ion-row>
+        <div *ngFor="let data of arr_hasil">
+          <ion-row class="ion-text-center">
+            <ion-col size="6">
+              <h2>
+                {{ data.namna_file }}
+              </h2>
+            </ion-col>
+            <ion-col size="6">
+              <h2>
+                {{ data.hasil }}
+              </h2>
+            </ion-col>
+          </ion-row>
+        </div>
 
       </ion-grid>
     </ion-card-content>
   </ion-card>
- 
 </ion-content>

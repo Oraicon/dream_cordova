@@ -32,20 +32,17 @@ export class LaporPage implements OnInit {
   //variable
   imgURL:any = 'assets/ss_.png';
   nama_kegiatan:any = "Nama Kegiatan";
-  data_keterangan_f;
-  data_page = 0;
-  img_default;
   lapor_id;
   lapor_namakegiatan;
-  datapersen;
 
-  array_persen = [];
   cek_koneksi = true;
   keterangan;
   item;
   volume;
   lat;
   long;
+
+  hasil_file_dikirim = [];
 
   arr_data_img_pdf = [];
   sedang_mengirim = false;
@@ -128,7 +125,7 @@ export class LaporPage implements OnInit {
 
   ionViewDidLeave(){
     this.setget.set_tab_page(1);
-    this.setget.set_lapor(undefined,undefined,"'assets/ss_.png'");
+    this.setget.set_lapor(undefined,undefined,undefined,"'assets/ss_.png'");
   }
 
   //delay filetranfer 30 detik
@@ -145,24 +142,10 @@ export class LaporPage implements OnInit {
   tampilkan_data(){
 
     let a = this.setget.getLog();
-    let b = this.setget.get_persen();
 
     this.lapor_id = a[0];
     this.lapor_namakegiatan = a[1];
-    this.datapersen = b;
     
-    this.logik_array(this.datapersen);
-  }
-
-  logik_array(nilai){
-    let a = Number(nilai);
-
-    for (let index = 1; index <= 100/10; index++) {
-      let j = index * 10;
-      if (j > a) {
-        this.array_persen.push(j);
-      }
-    }
   }
 
   //modal mendapatkan gambar
@@ -542,7 +525,12 @@ fileTransfer.upload(path_file, this.URL, options)
       this.data_progres_bar = 0.7;
       this.sedang_mengirim = false;
       this.loadingService.tutup_loading();
-      this.toastService.Toast("Berhasil menyimpan "+namafile)
+      this.toastService.Toast("Berhasil menyimpan "+namafile);
+      let obj_hasil_akhir = {
+        namna_file: namafile,
+        hasil: "Berhasil !"
+      }
+      this.hasil_file_dikirim.push(obj_hasil_akhir)
       this.loadingService.tampil_loading(null);
       Swal.fire({
         icon: 'success',
@@ -554,11 +542,18 @@ fileTransfer.upload(path_file, this.URL, options)
       }).then((result) => {
         if (result.isConfirmed) {
           this.loadingService.tutup_loading();
-          this.navCtrl.back();
+          // this.navCtrl.back();
+          this.hasil_kirim();
         }
       });
     }else{
       this.toastService.Toast("Berhasil menyimpan "+namafile);
+
+      let obj_hasil_akhir = {
+        namna_file: namafile,
+        hasil: "Berhasil !"
+      }
+      this.hasil_file_dikirim.push(obj_hasil_akhir);
       // this.img_counter++;
       // this.mengirim_gambar();
     }
@@ -566,27 +561,63 @@ fileTransfer.upload(path_file, this.URL, options)
     // this.navCtrl.back();
 
   } else {
-    // console.log("error");
+    if(index == this.arr_data_img_pdf.length-1){
+      this.sedang_mengirim = false;
+      this.loadingService.tutup_loading();
+      this.swal.swal_aksi_gagal("Terjadi kesalahan", " kirim gambar kembali di riwayat lampiran !");
+      let obj_hasil_akhir = {
+        namna_file: namafile,
+        hasil: "Gagal !"
+      }
+      this.hasil_file_dikirim.push(obj_hasil_akhir);
+      this.hasil_kirim();
+      return
+    }
 
-    // this.loadingService.tutup_loading();
-    // this.swal.swal_aksi_gagal("Terjadi kesalahan", "code error 11 !");
-    this.toastService.Toast("Gagal menyimpan "+namafile)
+    this.toastService.Toast("Gagal menyimpan "+namafile);
+
+    let obj_hasil_akhir = {
+      namna_file: namafile,
+      hasil: "Gagal !"
+    }
+    this.hasil_file_dikirim.push(obj_hasil_akhir);
     
   }
 })
 .catch(error => {
 
   console.log(error);
+  console.log("error file transfer index ke = " + index);
 
   let status = error.code;
-
+  
   if (status == 4) {
-    this.loadingService.tutup_loading();
-    this.toastService.Toast("Tidak ada respon, gagal menyimpan "+namafile)
+    this.toastService.Toast("Tidak ada respon, gagal menyimpan "+namafile);
+    let obj_hasil_akhir = {
+      namna_file: namafile,
+      hasil: "Gagal !"
+    }
+    this.hasil_file_dikirim.push(obj_hasil_akhir);
     // this.swal.swal_aksi_gagal("Terjadi kesalahan", " kirim gambar kembali di detail kegiatan !");
-  }else{
+  }else if(index == this.arr_data_img_pdf.length-1){
+    this.sedang_mengirim = false;
     this.loadingService.tutup_loading();
-    this.toastService.Toast("code error 12, gagal menyimpan "+namafile)
+    this.swal.swal_aksi_gagal("Terjadi kesalahan", " kirim gambar kembali di riwayat lampiran !");
+    let obj_hasil_akhir = {
+      namna_file: namafile,
+      hasil: "Gagal !"
+    }
+    this.hasil_file_dikirim.push(obj_hasil_akhir);
+    this.hasil_kirim();
+    return
+  }
+  else{
+    this.toastService.Toast("code error 12, gagal menyimpan "+namafile);
+    let obj_hasil_akhir = {
+      namna_file: namafile,
+      hasil: "Gagal !"
+    }
+    this.hasil_file_dikirim.push(obj_hasil_akhir);
     // this.swal.swal_code_error("Terjadi kesalahan", "code error 12 !, kembali ke login !");
   }
 });
@@ -599,16 +630,36 @@ let waktu_habis = await this.delayed(index);
   }
 }
 
-  async test_hasil(){
+  async hasil_kirim(){
+    console.log(this.hasil_file_dikirim);
+    this.setget.set_hasil_akhir(this.hasil_file_dikirim);
+
     const modal = await this.modalCtrl.create({
       component: ModalHasilPage,
       cssClass: 'konten-modal',
       backdropDismiss:false
     });
     modal.onDidDismiss().then(data => {
+      this.myGroup.value.data_keterangan;
+      this.myGroup.value.data_item;
+      this.myGroup.value.data_volume;
+    
+      this.hasil_file_dikirim = [];
+    
+      this.arr_data_img_pdf = [];
+      this.sedang_mengirim = false;
+      this.data_progres_bar = 0;
+    
+      this.base64_img="";
+      this.name_img="";
+      this.format_img="JPEG";
+
+      this.navCtrl.back();
     }).catch(err => {
     });
-    await modal.present();
+    await modal.present().then(data => {
+    }).catch(err => {
+    });
   }
 
   get_geo(){
@@ -622,9 +673,10 @@ let waktu_habis = await this.delayed(index);
         this.test_koneksi_api(this.item, this.volume, this.keterangan, this.lat, this.long)
       }).catch((e) =>{
         let error_code = e.code
+        this.sedang_mengirim = false;
+        this.loadingService.tutup_loading();
   
         if (error_code == 3) {
-          this.loadingService.tutup_loading();
           this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Aktifkan lokasi handphone !");
           return;
         }
