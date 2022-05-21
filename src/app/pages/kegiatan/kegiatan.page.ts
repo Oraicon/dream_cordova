@@ -53,6 +53,11 @@ export class KegiatanPage implements OnInit {
     return new Promise(resolve => { setTimeout(() => resolve(""), 100);});
   }  
 
+  //delay loading
+  interval_counter_loading() {
+    return new Promise(resolve => { setTimeout(() => resolve(""), 250);});
+  }  
+
   //pindah aktiviti
   proyek_kegiatan(id_detail){
     console.log(id_detail);
@@ -82,9 +87,9 @@ export class KegiatanPage implements OnInit {
       if (status_data == 1) {
 
         this.detail_kegiatan = data_json.data;
-
         this.loading = false;
-        this.loadingService.tutup_loading();
+
+        this.delay_dulu();
       }
     })
     .catch(error => {
@@ -106,6 +111,11 @@ export class KegiatanPage implements OnInit {
       }
     });
 
+  }
+
+  async delay_dulu(){
+    await this.interval_counter_loading();
+    this.loadingService.tutup_loading();
   }
 
   async tidak_ada_respon(){

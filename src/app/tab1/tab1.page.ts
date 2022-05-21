@@ -170,7 +170,10 @@ export class Tab1Page {
 
       } else {
         this.loadingCtrl.tutup_loading();
-        this.swalService.swal_code_error("Terjadi kesalahan !", "code error 15 !, kembali ke login !");
+        this.data_beranda = true;
+        this.data_beranda_loading_tidak_ada = true;
+
+        this.obj_jumlah_kegiatan[index] = 0;
       }
 
   

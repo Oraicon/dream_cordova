@@ -86,7 +86,7 @@
                           </h3>
                           <div class="ion-no-margin ion-text-wrap">
                             <h2>
-                              {{ data_persen }}
+                              {{ data_detail_kegiatan.total_volume }} {{ data_detail_kegiatan.nama }} ({{ data_persen }})
                             </h2>
                           </div>
                         </ion-label>
@@ -110,7 +110,7 @@
               <ion-grid fixed class="ion-no-padding">
                 <ion-row>
                   <ion-col size="12">
-                    <ion-searchbar placeholder="Cari riwayat" class="ion-no-padding"></ion-searchbar>
+                    <ion-searchbar placeholder="Cari riwayat" [(ngModel)]="searchTerm" class="ion-no-padding"></ion-searchbar>
                   </ion-col>
                 </ion-row>
               </ion-grid>
@@ -119,7 +119,7 @@
 
           <div class="scrollan" scrolly="true" style="max-height:29rem">
 
-            <ion-card *ngFor='let data of data_arr_progressmilsetone; let i = index' class="ion-activatable" (click)="lihat_list(data.list_path, data.item)" >
+            <ion-card *ngFor='let data of data_arr_progressmilsetone | filter:searchTerm; let i = index' class="ion-activatable" (click)="lihat_list(data.list_path, data.item)" >
               <ion-card-content>
                 <ion-grid fixed class="ion-no-padding">
                   <ion-row>

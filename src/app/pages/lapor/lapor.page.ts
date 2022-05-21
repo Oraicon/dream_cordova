@@ -23,8 +23,6 @@ import { ModalHasilPage } from 'src/app/modal/modal-hasil/modal-hasil.page';
 })
 export class LaporPage implements OnInit {
 
-  pilih_gambar = true;
-  gambar_kosong = true;
   isSubmitted = false;
   md5_upload = "assets/images/";
   URL="https://dream-beta.technosolusitama.in/api/uploadImage";
@@ -48,7 +46,6 @@ export class LaporPage implements OnInit {
   sedang_mengirim = false;
   data_progres_bar = 0;
 
-  base64_img:string="";
   name_img:string="";
   format_img:string="JPEG";
 
@@ -120,12 +117,12 @@ export class LaporPage implements OnInit {
   ionViewWillEnter(){
     this.tampilkan_data();
     this.setget.set_tab_page(2);
-    // this.setget.set_lapor(this.keterangan,this.persen,this.imgURL);
+    this.setget.set_lapor(undefined,undefined,undefined,"assets/ss_.png");
   }
 
   ionViewDidLeave(){
     this.setget.set_tab_page(1);
-    this.setget.set_lapor(undefined,undefined,undefined,"'assets/ss_.png'");
+    this.setget.set_lapor(undefined,undefined,undefined,"assets/ss_.png");
   }
 
   //delay filetranfer 30 detik
@@ -184,14 +181,12 @@ export class LaporPage implements OnInit {
   kamera(){
     this.loadingService.tampil_loading("Memuat gambar . . .");
     this.camera.getPicture(this.cameraOptions).then(res=>{
-      // this.setget.set_lapor(this.keterangan,this.persen,"ada");
+      this.setget.set_lapor(this.item, this.volume, this.keterangan, "ada");
       this.imgURL = 'data:image/jpeg;base64,' + res;
-      this.base64_img = this.imgURL;
       let nama_file  = this.datepipe.transform((new Date), 'MMddyyyyhmmss.') + this.format_img;
       this.name_img = nama_file.toString();
       this.array_img();
-      // this.pilih_gambar = false;
-      // this.gambar_kosong = false;
+
     }, (err) => {
       // Handle error
       console.log("error");
@@ -205,14 +200,11 @@ export class LaporPage implements OnInit {
     this.camera.getPicture(this.galeriOptions).then(res=>{
       console.log(res);
       this.imgURL = 'data:image/jpeg;base64,' + res;
-      // this.setget.set_lapor(this.keterangan,this.persen,"ada");
-      this.base64_img = this.imgURL;
+      this.setget.set_lapor(this.item, this.volume, this.keterangan, "ada");
       let nama_file  = this.datepipe.transform((new Date), 'MMddyyyyhmmss.') + this.format_img;
       this.name_img = nama_file.toString();
       this.array_img();
 
-      // this.pilih_gambar = false;
-      // this.gambar_kosong = false;
     }, (err) => {
       // Handle error
       console.log("error");
@@ -222,7 +214,7 @@ export class LaporPage implements OnInit {
 
   //array gambar supaya bisa lebih dari 1
   array_img(){
-    let img = this.base64_img;
+    let img = this.imgURL;
     let nama = this.name_img;
 
     let obj_image = {
@@ -265,15 +257,19 @@ export class LaporPage implements OnInit {
     
         this.arr_data_img_pdf.push(obj_image);
         this.loadingService.tutup_loading();
+        this.setget.set_lapor(this.item, this.volume, this.keterangan, "ada");
       } else {
         console.log("ini bukan pdf");
         this.loadingService.tutup_loading();
-        this.swal.swal_aksi_gagal("Terjadi kesalahan !", "File bukan bertipe PDF !")
+        this.swal.swal_aksi_gagal("Terjadi kesalahan !", "File bukan bertipe PDF !");
+        this.setget.set_lapor(this.item, this.volume, this.keterangan, "assets/ss_.png");
+
       }
 
     },(err)=>{
       console.log("eror");
       this.loadingService.tutup_loading();
+      this.swal.swal_code_error("Terjadi kesalahan !", "code error xxx datakanpdf()");
     })
   }
 
@@ -286,55 +282,53 @@ export class LaporPage implements OnInit {
     event.target.src = "assets/bi.png";
   }
 
-  batal_gambar(){
-    this.pilih_gambar = true;
-    this.gambar_kosong = true;
-    this.imgURL = 'assets/ss_.png';
-    // this.setget.set_lapor(this.keterangan,this.persen,this.imgURL);
-  }
-
-  //saat mengetik keterangan
+  //saat mengetik
   onKey(e){
+    this.item = this.myGroup.value.data_item;
+    this.volume = this.myGroup.value.data_volume;
     this.keterangan = this.myGroup.value.data_keterangan;
-    // this.setget.set_lapor(this.keterangan,this.persen,this.imgURL);
+
+    if (this.item != "") {
+      this.setget.set_lapor(this.item,this.volume,this.keterangan,this.imgURL);
+      console.log(this.item);
+    }
+
+    if (this.volume != "") {
+      console.log(this.volume);
+      this.setget.set_lapor(this.item,this.volume,this.keterangan,this.imgURL);
+    }
+
+    if (this.keterangan != "") {
+      console.log(this.keterangan);
+      this.setget.set_lapor(this.item,this.volume,this.keterangan,this.imgURL);
+    }
   }
 
-  // onChange(e){
-  //   this.persen = this.myGroup.value.data_persen;
-  //   this.setget.set_lapor(this.keterangan,this.persen,this.imgURL);
-  // }
-
-  // onChangetype(e){
-  //   this.tipe_lampiran = this.myGroup.value.data_type;
-  //   this.arr_file_pdf = [];
-  //   this.arr_img = [];
-  //   this.setget.set_lapor(this.keterangan,this.persen,"ada");
-  // }
 
   //kembali ke aktiviti sebelumnya
   kembali(){
-    // if (this.keterangan != null || this.persen != null || this.imgURL != 'assets/ss_.png' || this.arr_data_img_pdf.length != 0) {
-    //   this.loadingService.tampil_loading("");
-    //   Swal.fire({
-    //     icon: 'warning',
-    //     title: 'Peringatan !',
-    //     text: 'Formulir laporan anda yang sudah diisi akan terhapus, anda yakin ?',
-    //     backdrop: false,
-    //     showDenyButton: true,
-    //     confirmButtonColor: '#3880ff',
-    //     confirmButtonText: 'Ya',
-    //     denyButtonText: `Tidak`,
-    //   }).then((result) => {
-    //     if (result.isConfirmed) {
-    //       this.loadingService.tutup_loading();
-    //       this.navCtrl.back();
-    //     }else {
-    //       this.loadingService.tutup_loading();
-    //     }
-    //   });
-    // } else {
+    if (this.item != null || this.volume != null || this.keterangan != null || this.imgURL != 'assets/ss_.png' || this.arr_data_img_pdf.length != 0) {
+      this.loadingService.tampil_loading("");
+      Swal.fire({
+        icon: 'warning',
+        title: 'Peringatan !',
+        text: 'Formulir laporan anda yang sudah diisi akan terhapus, anda yakin ?',
+        backdrop: false,
+        showDenyButton: true,
+        confirmButtonColor: '#3880ff',
+        confirmButtonText: 'Ya',
+        denyButtonText: `Tidak`,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.loadingService.tutup_loading();
+          this.navCtrl.back();
+        }else {
+          this.loadingService.tutup_loading();
+        }
+      });
+    } else {
       this.navCtrl.back();
-    // }
+    }
   }
 
   //validasi
@@ -458,7 +452,7 @@ export class LaporPage implements OnInit {
           }
           
         } else {
-          this.swal.swal_aksi_gagal("Terjadi kesalahan", "code error BELUM2 !");
+          this.swal.swal_aksi_gagal("Terjadi kesalahan", "code error 31 !");
         }
 
       })
@@ -472,7 +466,7 @@ export class LaporPage implements OnInit {
         this.mengirim_informasi_data(id);
         this.data_progres_bar = 0.5;
       } else {
-        this.swal.swal_code_error("Terjadi kesalahan", "code error BELUM !, kembali ke login !");
+        this.swal.swal_code_error("Terjadi kesalahan", "code error 29 !, kembali ke login !");
       }
       });
     }
@@ -526,11 +520,13 @@ fileTransfer.upload(path_file, this.URL, options)
       this.sedang_mengirim = false;
       this.loadingService.tutup_loading();
       this.toastService.Toast("Berhasil menyimpan "+namafile);
+
       let obj_hasil_akhir = {
         namna_file: namafile,
         hasil: "Berhasil !"
       }
-      this.hasil_file_dikirim.push(obj_hasil_akhir)
+      this.hasil_file_dikirim.push(obj_hasil_akhir);
+
       this.loadingService.tampil_loading(null);
       Swal.fire({
         icon: 'success',
@@ -554,11 +550,7 @@ fileTransfer.upload(path_file, this.URL, options)
         hasil: "Berhasil !"
       }
       this.hasil_file_dikirim.push(obj_hasil_akhir);
-      // this.img_counter++;
-      // this.mengirim_gambar();
     }
-
-    // this.navCtrl.back();
 
   } else {
     if(index == this.arr_data_img_pdf.length-1){
@@ -587,7 +579,6 @@ fileTransfer.upload(path_file, this.URL, options)
 .catch(error => {
 
   console.log(error);
-  console.log("error file transfer index ke = " + index);
 
   let status = error.code;
   
@@ -598,35 +589,26 @@ fileTransfer.upload(path_file, this.URL, options)
       hasil: "Gagal !"
     }
     this.hasil_file_dikirim.push(obj_hasil_akhir);
-    // this.swal.swal_aksi_gagal("Terjadi kesalahan", " kirim gambar kembali di detail kegiatan !");
-  }else if(index == this.arr_data_img_pdf.length-1){
+  }
+  
+  if(index == this.arr_data_img_pdf.length-1){
     this.sedang_mengirim = false;
     this.loadingService.tutup_loading();
     this.swal.swal_aksi_gagal("Terjadi kesalahan", " kirim gambar kembali di riwayat lampiran !");
-    let obj_hasil_akhir = {
-      namna_file: namafile,
-      hasil: "Gagal !"
-    }
-    this.hasil_file_dikirim.push(obj_hasil_akhir);
     this.hasil_kirim();
-    return
+    return;
   }
-  else{
-    this.toastService.Toast("code error 12, gagal menyimpan "+namafile);
-    let obj_hasil_akhir = {
-      namna_file: namafile,
-      hasil: "Gagal !"
-    }
-    this.hasil_file_dikirim.push(obj_hasil_akhir);
-    // this.swal.swal_code_error("Terjadi kesalahan", "code error 12 !, kembali ke login !");
+
+  if(status != 4 && index != this.arr_data_img_pdf.length-1){
+    this.swal.swal_code_error("Terjadi kesalahan", "Code error 30");
+    return;
   }
+
 });
 
 let waktu_habis = await this.delayed(index);
   if (waktu_habis == index) {
-    // if (this.abort_file_transfer == 0) {
-      fileTransfer.abort();
-    // }
+    fileTransfer.abort();
   }
 }
 
@@ -634,25 +616,25 @@ let waktu_habis = await this.delayed(index);
     console.log(this.hasil_file_dikirim);
     this.setget.set_hasil_akhir(this.hasil_file_dikirim);
 
+    this.myGroup.value.data_keterangan;
+    this.myGroup.value.data_item;
+    this.myGroup.value.data_volume;
+  
+    this.hasil_file_dikirim = [];
+  
+    this.arr_data_img_pdf = [];
+    this.sedang_mengirim = false;
+    this.data_progres_bar = 0;
+  
+    this.name_img="";
+    this.format_img="JPEG";
+
     const modal = await this.modalCtrl.create({
       component: ModalHasilPage,
       cssClass: 'konten-modal',
       backdropDismiss:false
     });
     modal.onDidDismiss().then(data => {
-      this.myGroup.value.data_keterangan;
-      this.myGroup.value.data_item;
-      this.myGroup.value.data_volume;
-    
-      this.hasil_file_dikirim = [];
-    
-      this.arr_data_img_pdf = [];
-      this.sedang_mengirim = false;
-      this.data_progres_bar = 0;
-    
-      this.base64_img="";
-      this.name_img="";
-      this.format_img="JPEG";
 
       this.navCtrl.back();
     }).catch(err => {
@@ -670,7 +652,7 @@ let waktu_habis = await this.delayed(index);
         this.lat = res.coords.latitude;
         this.long = res.coords.longitude;
         this.data_progres_bar = 0.2;
-        this.test_koneksi_api(this.item, this.volume, this.keterangan, this.lat, this.long)
+        this.test_koneksi_api(this.item, this.volume, this.keterangan, this.lat, this.long);
       }).catch((e) =>{
         let error_code = e.code
         this.sedang_mengirim = false;

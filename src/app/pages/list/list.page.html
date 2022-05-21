@@ -44,7 +44,7 @@
         <ng-template #data_tampil>
           <ion-card>
             <ion-card-header class="pad_bottom">
-              <ion-card-title *ngIf="kode_barang == null; else ada_kode" >Daftar file lampiran</ion-card-title>
+              <ion-card-title *ngIf="!kode_barang ; else ada_kode" >Daftar file</ion-card-title>
 
               <ng-template #ada_kode>
                 <ion-card-title >{{ kode_barang }}</ion-card-title>

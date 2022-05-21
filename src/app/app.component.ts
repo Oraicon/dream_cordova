@@ -82,7 +82,7 @@ export class AppComponent {
       let keterangan = this.setget.get_lapor()[2];
       let file = this.setget.get_lapor()[2];
 
-      console.log(b);
+      console.log(item, volume, keterangan, file);
 
       if (a == 1) {
         this.toastService.Toast_tampil();
@@ -99,32 +99,32 @@ export class AppComponent {
           }
         }else{
           if (b == 2) {
-            // if (keterangan != undefined || keterangan != undefined || persen != undefined || imgURL != 'assets/ss_.png') {
-            //   this.loadingService.tampil_loading("");
-            //   Swal.fire({
-            //     icon: 'warning',
-            //     title: 'Peringatan !',
-            //     text: 'Formulir laporan anda yang sudah diisi akan terhapus, anda yakin ?',
-            //     backdrop: false,
-            //     showDenyButton: true,
-            //     confirmButtonColor: '#3880ff',
-            //     confirmButtonText: 'Ya',
-            //     denyButtonText: `Tidak`,
-            //   }).then((result) => {
-            //     if (result.isConfirmed) {
-            //       this.loadingService.tutup_loading();
-            //       this.navCtrl.back();
-            //     }else {
-            //       this.loadingService.tutup_loading();
-            //     }
-            //   });
-            // }else{
+            if (item != undefined || volume != undefined || keterangan != undefined || file != undefined) {
+              this.loadingService.tampil_loading("");
+              Swal.fire({
+                icon: 'warning',
+                title: 'Peringatan !',
+                text: 'Formulir laporan anda yang sudah diisi akan terhapus, anda yakin ?',
+                backdrop: false,
+                showDenyButton: true,
+                confirmButtonColor: '#3880ff',
+                confirmButtonText: 'Ya',
+                denyButtonText: `Tidak`,
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  this.loadingService.tutup_loading();
+                  this.navCtrl.back();
+                }else {
+                  this.loadingService.tutup_loading();
+                }
+              });
+            }else{
               if (data_button == 0){
                 this.setget.setButton(1);
                 this.navCtrl.back();
               }else{
                 this.toastService.Toast_tampil();
-              // }
+              }
             }
           }else if (b == 3){
               this.toastService.Toast("Tekan X untuk menutup modal . .");

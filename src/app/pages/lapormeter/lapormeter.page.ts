@@ -30,14 +30,9 @@ export class LapormeterPage implements OnInit {
   //variable
   imgURL:any = 'assets/ss_.png';
   nama_kegiatan:any = "Nama Kegiatan";
-  data_keterangan_f;
-  data_page = 0;
-  img_default;
   lapor_id;
   lapor_namakegiatan;
-  datapersen;
 
-  array_persen = [];
   cek_koneksi = true;
   keterangan;
   item;
@@ -45,11 +40,12 @@ export class LapormeterPage implements OnInit {
   lat;
   long;
 
+  hasil_file_dikirim = [];
+
   arr_data_img_pdf = [];
   sedang_mengirim = false;
   data_progres_bar = 0;
 
-  base64_img:string="";
   name_img:string="";
   format_img:string="JPEG";
 
@@ -119,11 +115,12 @@ export class LapormeterPage implements OnInit {
   ionViewWillEnter(){
     this.tampilkan_data();
     this.setget.set_tab_page(2);
+    this.setget.set_lapor(undefined,undefined,undefined,"assets/ss_.png");
   }
 
   ionViewDidLeave(){
     this.setget.set_tab_page(1);
-    this.setget.set_lapor(undefined,undefined,undefined,"'assets/ss_.png'");
+    this.setget.set_lapor(undefined,undefined,undefined,"assets/ss_.png");
   }
 
   //delay filetranfer 30 detik
@@ -143,19 +140,6 @@ export class LapormeterPage implements OnInit {
 
     this.lapor_id = a[0];
     this.lapor_namakegiatan = a[1];
-    
-    this.logik_array(this.datapersen);
-  }
-
-  logik_array(nilai){
-    let a = Number(nilai);
-
-    for (let index = 1; index <= 100/10; index++) {
-      let j = index * 10;
-      if (j > a) {
-        this.array_persen.push(j);
-      }
-    }
   }
 
   //modal mendapatkan gambar
@@ -194,9 +178,8 @@ export class LapormeterPage implements OnInit {
   kamera(){
     this.loadingService.tampil_loading("Memuat gambar . . .");
     this.camera.getPicture(this.cameraOptions).then(res=>{
-      // this.setget.set_lapor(this.keterangan,this.persen,"ada");
+      this.setget.set_lapor(this.item, this.volume, this.keterangan, "ada");
       this.imgURL = 'data:image/jpeg;base64,' + res;
-      this.base64_img = this.imgURL;
       let nama_file  = this.datepipe.transform((new Date), 'MMddyyyyhmmss.') + this.format_img;
       this.name_img = nama_file.toString();
       this.array_img();
@@ -213,8 +196,7 @@ export class LapormeterPage implements OnInit {
     this.camera.getPicture(this.galeriOptions).then(res=>{
       console.log(res);
       this.imgURL = 'data:image/jpeg;base64,' + res;
-      // this.setget.set_lapor(this.keterangan,this.persen,"ada");
-      this.base64_img = this.imgURL;
+      this.setget.set_lapor(this.item, this.volume, this.keterangan, "ada");
       let nama_file  = this.datepipe.transform((new Date), 'MMddyyyyhmmss.') + this.format_img;
       this.name_img = nama_file.toString();
       this.array_img();
@@ -227,7 +209,7 @@ export class LapormeterPage implements OnInit {
 
   //array gambar supaya bisa lebih dari 1
   array_img(){
-    let img = this.base64_img;
+    let img = this.imgURL;
     let nama = this.name_img;
 
     let obj_image = {
@@ -269,15 +251,18 @@ export class LapormeterPage implements OnInit {
     
         this.arr_data_img_pdf.push(obj_image);
         this.loadingService.tutup_loading();
+        this.setget.set_lapor(this.item, this.volume, this.keterangan, "ada");
       } else {
         console.log("ini bukan pdf");
         this.loadingService.tutup_loading();
-        this.swal.swal_aksi_gagal("Terjadi kesalahan !", "File bukan bertipe PDF !")
+        this.swal.swal_aksi_gagal("Terjadi kesalahan !", "File bukan bertipe PDF !");
+        this.setget.set_lapor(this.item, this.volume, this.keterangan, "assets/ss_.png");
       }
 
     },(err)=>{
       console.log("eror");
       this.loadingService.tutup_loading();
+      this.swal.swal_code_error("Terjadi kesalahan !", "code error xxx datakanpdf()");
     })
   }
 
@@ -290,41 +275,46 @@ export class LapormeterPage implements OnInit {
     event.target.src = "assets/bi.png";
   }
 
-  //saat mengetik keterangan
-  onKeyKeterangan(e){
-    this.keterangan = this.myGroup.value.data_keterangan;
-    // this.setget.set_lapor(this.keterangan,this.persen,this.imgURL);
-  }
-
-  onKeyVolume(e){
+  //saat mengetik
+  onKey(e){
     this.volume = this.myGroup.value.data_volume;
-    // this.setget.set_lapor(this.keterangan,this.persen,this.imgURL);
+    this.keterangan = this.myGroup.value.data_keterangan;
+
+    if (this.volume != "") {
+      console.log(this.volume);
+      this.setget.set_lapor(this.item,this.volume,this.keterangan,this.imgURL);
+    }
+
+    if (this.keterangan != "") {
+      console.log(this.keterangan);
+      this.setget.set_lapor(this.item,this.volume,this.keterangan,this.imgURL);
+    }
   }
 
   //kembali ke aktiviti sebelumnya
   kembali(){
-    // if (this.keterangan != null || this.persen != null || this.imgURL != 'assets/ss_.png' || this.arr_data_img_pdf.length != 0) {
-    //   this.loadingService.tampil_loading("");
-    //   Swal.fire({
-    //     icon: 'warning',
-    //     title: 'Peringatan !',
-    //     text: 'Formulir laporan anda yang sudah diisi akan terhapus, anda yakin ?',
-    //     backdrop: false,
-    //     showDenyButton: true,
-    //     confirmButtonColor: '#3880ff',
-    //     confirmButtonText: 'Ya',
-    //     denyButtonText: `Tidak`,
-    //   }).then((result) => {
-    //     if (result.isConfirmed) {
-    //       this.loadingService.tutup_loading();
-    //       this.navCtrl.back();
-    //     }else {
-    //       this.loadingService.tutup_loading();
-    //     }
-    //   });
-    // } else {
+    if (this.item != null || this.volume != null || this.keterangan != null || this.imgURL != 'assets/ss_.png' || this.arr_data_img_pdf.length != 0) {
+      this.loadingService.tampil_loading("");
+      Swal.fire({
+        icon: 'warning',
+        title: 'Peringatan !',
+        text: 'Formulir laporan anda yang sudah diisi akan terhapus, anda yakin ?',
+        backdrop: false,
+        showDenyButton: true,
+        confirmButtonColor: '#3880ff',
+        confirmButtonText: 'Ya',
+        denyButtonText: `Tidak`,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.loadingService.tutup_loading();
+          this.navCtrl.back();
+        }else {
+          this.loadingService.tutup_loading();
+        }
+      });
+    } else {
       this.navCtrl.back();
-    // }
+    }
   }
 
   //validasi
@@ -447,7 +437,7 @@ export class LapormeterPage implements OnInit {
             }
             
           } else {
-            this.swal.swal_aksi_gagal("Terjadi kesalahan", "code error BELUM2 !");
+            this.swal.swal_aksi_gagal("Terjadi kesalahan", "code error 31 !");
           }
 
         })
@@ -461,7 +451,7 @@ export class LapormeterPage implements OnInit {
           this.mengirim_informasi_data(id);
           this.data_progres_bar = 0.5;
         } else {
-          this.swal.swal_code_error("Terjadi kesalahan", "code error BELUM !, kembali ke login !");
+        this.swal.swal_code_error("Terjadi kesalahan", "code error 29 !, kembali ke login !");
         }
         });
       }
@@ -514,7 +504,14 @@ export class LapormeterPage implements OnInit {
           this.data_progres_bar = 0.7;
           this.sedang_mengirim = false;
           this.loadingService.tutup_loading();
-          this.toastService.Toast("Berhasil menyimpan "+namafile)
+          this.toastService.Toast("Berhasil menyimpan "+namafile);
+
+          let obj_hasil_akhir = {
+            namna_file: namafile,
+            hasil: "Berhasil !"
+          }
+          this.hasil_file_dikirim.push(obj_hasil_akhir);
+
           this.loadingService.tampil_loading(null);
           Swal.fire({
             icon: 'success',
@@ -526,23 +523,39 @@ export class LapormeterPage implements OnInit {
           }).then((result) => {
             if (result.isConfirmed) {
               this.loadingService.tutup_loading();
-              this.navCtrl.back();
+              this.hasil_kirim();
             }
           });
         }else{
           this.toastService.Toast("Berhasil menyimpan "+namafile);
-          // this.img_counter++;
-          // this.mengirim_gambar();
+
+          let obj_hasil_akhir = {
+            namna_file: namafile,
+            hasil: "Berhasil !"
+          }
+          this.hasil_file_dikirim.push(obj_hasil_akhir);
+        }
+      } else {
+        if(index == this.arr_data_img_pdf.length-1){
+          this.sedang_mengirim = false;
+          this.loadingService.tutup_loading();
+          this.swal.swal_aksi_gagal("Terjadi kesalahan", " kirim gambar kembali di riwayat lampiran !");
+          let obj_hasil_akhir = {
+            namna_file: namafile,
+            hasil: "Gagal !"
+          }
+          this.hasil_file_dikirim.push(obj_hasil_akhir);
+          this.hasil_kirim();
+          return
         }
     
-        // this.navCtrl.back();
-
-      } else {
-        // console.log("error");
-
-        // this.loadingService.tutup_loading();
-        // this.swal.swal_aksi_gagal("Terjadi kesalahan", "code error 11 !");
-        this.toastService.Toast("Gagal menyimpan "+namafile)
+        this.toastService.Toast("Gagal menyimpan "+namafile);
+    
+        let obj_hasil_akhir = {
+          namna_file: namafile,
+          hasil: "Gagal !"
+        }
+        this.hasil_file_dikirim.push(obj_hasil_akhir);
         
       }
     })
@@ -551,36 +564,65 @@ export class LapormeterPage implements OnInit {
       console.log(error);
 
       let status = error.code;
-
+      
       if (status == 4) {
+        this.toastService.Toast("Tidak ada respon, gagal menyimpan "+namafile);
+        let obj_hasil_akhir = {
+          namna_file: namafile,
+          hasil: "Gagal !"
+        }
+        this.hasil_file_dikirim.push(obj_hasil_akhir);
+      }
+      
+      if(index == this.arr_data_img_pdf.length-1){
+        this.sedang_mengirim = false;
         this.loadingService.tutup_loading();
-        this.toastService.Toast("Tidak ada respon, gagal menyimpan "+namafile)
-        // this.swal.swal_aksi_gagal("Terjadi kesalahan", " kirim gambar kembali di detail kegiatan !");
-      }else{
-        this.loadingService.tutup_loading();
-        this.toastService.Toast("code error 12, gagal menyimpan "+namafile)
-        // this.swal.swal_code_error("Terjadi kesalahan", "code error 12 !, kembali ke login !");
+        this.swal.swal_aksi_gagal("Terjadi kesalahan", " kirim gambar kembali di riwayat lampiran !");
+        this.hasil_kirim();
+        return
+      }
+
+      if(status != 4 && index != this.arr_data_img_pdf.length-1){
+        this.swal.swal_code_error("Terjadi kesalahan", "Code error 30");
+        return;
       }
     });
 
     let waktu_habis = await this.delayed(index);
     if (waktu_habis == index) {
-      // if (this.abort_file_transfer == 0) {
-        fileTransfer.abort();
-      // }
+      fileTransfer.abort();
     }
   }
 
-  async test_hasil(){
+  async hasil_kirim(){
+    console.log(this.hasil_file_dikirim);
+    this.setget.set_hasil_akhir(this.hasil_file_dikirim);
+
+    this.myGroup.value.data_keterangan;
+    this.myGroup.value.data_item;
+    this.myGroup.value.data_volume;
+  
+    this.hasil_file_dikirim = [];
+  
+    this.arr_data_img_pdf = [];
+    this.sedang_mengirim = false;
+    this.data_progres_bar = 0;
+  
+    this.name_img="";
+    this.format_img="JPEG";
+
     const modal = await this.modalCtrl.create({
       component: ModalHasilPage,
       cssClass: 'konten-modal',
       backdropDismiss:false
     });
     modal.onDidDismiss().then(data => {
+      this.navCtrl.back();
     }).catch(err => {
     });
-    await modal.present();
+    await modal.present().then(data => {
+    }).catch(err => {
+    });
   }
 
   get_geo(){

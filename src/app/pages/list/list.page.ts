@@ -148,7 +148,9 @@ export class ListPage implements OnInit {
 
   //menampilkan pdf
   tampilakn_pdf(path_pdf){
-    console.log(path_pdf);
+
+    this.loadingCtrl.tampil_loading("Sedang memuat . . .");
+
     let nama_pdf = path_pdf.substring(14);
     let data_url = "https://dream-beta.technosolusitama.in/" + path_pdf;
 
@@ -157,10 +159,12 @@ export class ListPage implements OnInit {
     trans.download(data_url, this.file.dataDirectory + nama_pdf).then((entry) => {
       console.log('download complete: ' + entry.toURL());
       let hasil =  entry.toURL(); 
+      this.loadingCtrl.tutup_loading();
       this.document.viewDocument(hasil, 'application/pdf', {title: nama_pdf});
     }, (error) => {
       // handle error
       const code_error = error.code;
+      this.loadingCtrl.tutup_loading();
 
       if (code_error == 1) {
 

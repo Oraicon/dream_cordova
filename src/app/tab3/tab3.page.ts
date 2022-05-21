@@ -201,11 +201,15 @@ export class Tab3Page {
 
   //dapatkan data gambar dari galeri/kamera
   kamera(){
+    this.loadingCtrl.tampil_loading("Memuat gambar . . .");
+
     this.camera.getPicture(this.cameraOptions).then(res=>{
       console.log(res);
       let data_img_base64 = 'data:image/jpeg;base64,' + res;
       this.base64_img = data_img_base64;
 
+      this.loadingCtrl.tutup_loading();
+
       if (this.cek_koneksi == true) {
         this.loadingCtrl.tampil_loading("Menyimpan gambar . . .");
         this.test_koneksi(null, null);
@@ -214,15 +218,23 @@ export class Tab3Page {
         this.swalService.swal_aksi_gagal("Terjadi kesalahan", "Tidak ada koneksi internet !");
       }
 
+    }, (err) => {
+      // Handle error
+      console.log("error");
+      this.loadingCtrl.tutup_loading();
     });
   }
 
   galeri(){
+    this.loadingCtrl.tampil_loading("Memuat gambar . . .");
+
     this.camera.getPicture(this.galeriOptions).then(res=>{
       console.log(res);
       let data_img_base64 = 'data:image/jpeg;base64,' + res;
       this.base64_img = data_img_base64;
 
+      this.loadingCtrl.tutup_loading();
+
       if (this.cek_koneksi == true) {
         this.loadingCtrl.tampil_loading("Menyimpan gambar . . .");
         this.test_koneksi(null, null);
@@ -230,6 +242,10 @@ export class Tab3Page {
         this.loadingCtrl.tutup_loading();
         this.swalService.swal_aksi_gagal("Terjadi kesalahan", "Tidak ada koneksi internet !");
       }
+    }, (err) => {
+      // Handle error
+      console.log("error");
+      this.loadingCtrl.tutup_loading();
     });
   }
 
@@ -408,6 +424,7 @@ export class Tab3Page {
       }
 
     }, (err) => {
+      console.log(err);
       // error
       let status = err.code;
       if (status == 4) {

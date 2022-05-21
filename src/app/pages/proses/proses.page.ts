@@ -27,6 +27,8 @@ export class ProsesPage implements OnInit {
   riwayat_loading = true;
   tanggal_pm =[];
 
+  searchTerm: string;
+
   data_list_evidance_img = {};
   data_detail_kegiatan = {};
   data_persen;
@@ -70,6 +72,11 @@ export class ProsesPage implements OnInit {
     return new Promise(resolve => { setTimeout(() => resolve(""), 30000);});
   }
 
+  //delay loading
+  interval_counter_loading() {
+    return new Promise(resolve => { setTimeout(() => resolve(""), 250);});
+  }  
+
   async delayed(){
     await this.delay();
     return 1;
@@ -89,6 +96,11 @@ export class ProsesPage implements OnInit {
 
     this.riwayat_laporan = true;
     this.riwayat_loading = false;
+    this.delay_dulu();
+  }
+
+  async delay_dulu(){
+    await this.interval_counter_loading();
     this.loadingService.tutup_loading();
   }
 
@@ -206,9 +218,9 @@ export class ProsesPage implements OnInit {
     this.apiService.dapatkan_data_detail_kegiatan(this.data_id_kegiatan)
     .then(data => {
 
-      console.log(data);
-
+      
       const data_json = JSON.parse(data.data);
+      console.log(data_json);
       const status_data = data_json.status;
       if (status_data == 1) {
         
@@ -220,7 +232,7 @@ export class ProsesPage implements OnInit {
         console.log("kuota dan total = " + kuota_progres, total_progres);
 
         if (total_progres == 0 || total_progres == null) {
-          this.data_persen = "0";
+          this.data_persen = "0%";
         } else {
           let data_persen = total_progres * 100 / kuota_progres;
           let str_data_persen = data_persen.toString().substring(0, 4);
