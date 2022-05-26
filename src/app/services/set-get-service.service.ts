@@ -19,9 +19,20 @@ export class SetGetServiceService {
 
   private log_id;
   private log_nama_kegiatan;
+  private log_satuan;
 
   private list_data_img;
   private list_data_kode_barang;
+
+  private dokumen_judul;
+  private dokumen_id;
+
+  private detail_dokumen_id;
+  private detail_dokumen_uraian;
+  private detail_dokumen_pic;
+  private detail_dokumen_keterangan;
+  private detail_dokumen_path;
+
   //variable fungsi tricky
   private alert_data;
   private data_koneksi;
@@ -33,6 +44,8 @@ export class SetGetServiceService {
   private _hasil_akhir = [];
   private data_list_gambar;
   private data_list_nama;
+  private total_meter;
+  private progress_meter;
   
   constructor() { }
 
@@ -58,14 +71,40 @@ export class SetGetServiceService {
   }
 
   //setter getter fungsi untuk mengirimkan data, data id kegiatan dan judul kegiatan ke aktiviti formulir lapor, yang berada di proses.page.ts ke laporan.page.ts
-  setLog(id, nama_kegiatan){
+  setLog(id, nama_kegiatan, satuan){
     this.log_id = id;
     this.log_nama_kegiatan = nama_kegiatan;
+    this.log_satuan = satuan;
   }
 
   getLog(){
     let a = [];
-    return a = [this.log_id, this.log_nama_kegiatan];
+    return a = [this.log_id, this.log_nama_kegiatan, this.log_satuan];
+  }
+
+  //setter getter fungsi untuk mengirimkan data, data id rap dan judul rap ke aktiviti dokumen, yang berada di tab1.page.ts ke dokumen.page.ts
+  setDokumen(id, judul_rap){
+    this.dokumen_id = id;
+    this.dokumen_judul = judul_rap;
+  }
+
+  getDokumen(){
+    let a = [];
+    return a = [this.dokumen_id, this.dokumen_judul];
+  }
+
+  //setter getter fungsi untuk mengirimkan data, data id rap dan judul rap ke aktiviti dokumen, yang berada di tab1.page.ts ke dokumen.page.ts
+  setDokumen_detail(id, uraian, pic, keterangan, path){
+    this.detail_dokumen_id = id;
+    this.detail_dokumen_uraian = uraian; 
+    this.detail_dokumen_pic = pic;
+    this.detail_dokumen_keterangan = keterangan; 
+    this.detail_dokumen_path = path;
+  }
+
+  getDokumen_detail(){
+    let a = [];
+    return a = [this.detail_dokumen_id, this.detail_dokumen_uraian, this.detail_dokumen_pic, this.detail_dokumen_keterangan, this.detail_dokumen_path];
   }
 
   //setter getter logika fungsi page untuk menentukan aktivi detail kegiatan apakah dia masih proses atau sudah komplit, yang ada di kegiatan.page.ts
@@ -176,6 +215,7 @@ export class SetGetServiceService {
     return a = [this.data_list_gambar, this.data_list_nama];
   }
 
+  //setter getter data arr untuk menampilkan array hasil akhir, yang ada di lapor.page.ts ke modal hasilakhir
   set_hasil_akhir(data){
     this._hasil_akhir = data;
   }
@@ -183,6 +223,17 @@ export class SetGetServiceService {
   get_hasil_akhir(){
     return this._hasil_akhir;
   }
+
+  setMeter(data1, data2){
+    this.total_meter = data1;
+    this.progress_meter = data2;
+  }
+
+  getMeter(){
+    let a = [];
+    return a = [this.total_meter, this.progress_meter];
+  }
+
   //data tab.tabs2.page.ts
   // setLapor(id, nama_kegiatan){
   //   this.lapor_id = id;

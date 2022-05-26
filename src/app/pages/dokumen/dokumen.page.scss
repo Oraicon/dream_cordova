@@ -1,0 +1,77 @@
+
+.background_color{
+    --background: #1B2338;
+  }
+  
+  .padding_button{
+    --padding-end: 0px
+  }
+  
+  .padding_icon{
+    padding-right: 5px;
+    padding-bottom: 6px;
+  }
+  
+  .background_color_biru_gelap{
+    background: #1B2338;
+    height: 5rem;
+    border-radius: 0 0 50% 50%;
+  }
+  
+  .border_radius{
+    border-radius: 1rem;
+  }
+  
+  .padding_sendiri{
+    padding-bottom: 0px;
+  }
+  
+  ion-list{
+    width: 100%;
+  }
+
+  .hijau_{
+    color: #28A745;
+  }
+  
+  .grid_width{
+    width: 100%;
+  }
+  
+  //scroll
+  .scrollan[scrollx=true],div[scrolly=true] {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .scrollan[scrolly=true] {
+    overflow-y: auto;
+  }
+  
+  // fontsize
+  .text_header{
+    font-size: 150%;
+  }
+  
+  .text_judul{
+    font-size: 160%;
+    padding-bottom: 5px;
+  }
+  
+  .text_segment{
+    font-size: 110%;
+  }
+  
+  .text_konten{
+    font-size: 120%;
+  }
+  
+  h2{
+    font-size: 110%;
+  }
+  
+  h1{
+    font-size: 160%;
+  }
+  
+  

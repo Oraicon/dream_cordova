@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ModalController, NavController } from '@ionic/angular';
 import { ModalIsikontenPage } from 'src/app/modal/modal-isikonten/modal-isikonten.page';
 import { SetGetServiceService } from 'src/app/services/set-get-service.service';
-import { DocumentViewer, DocumentViewerOptions  } from '@awesome-cordova-plugins/document-viewer/ngx';
 import { File } from '@awesome-cordova-plugins/file/ngx';
 import { FileTransfer, FileUploadOptions, FileTransferObject} from '@awesome-cordova-plugins/file-transfer/ngx';
 import { ActionSheetController } from '@ionic/angular';
@@ -11,6 +10,10 @@ import { Camera, CameraOptions } from '@awesome-cordova-plugins/camera/ngx';
 import Swal from 'sweetalert2';
 import { SwalServiceService } from 'src/app/services/swal-service.service';
 import { Chooser, ChooserResult } from '@awesome-cordova-plugins/chooser/ngx';
+import { Router } from '@angular/router';
+import { ToastService } from 'src/app/services/toast.service';
+import { SizecountServiceService } from 'src/app/services/sizecount-service.service';
+import { FileOpener } from '@awesome-cordova-plugins/file-opener/ngx';
 
 
 @Component({
@@ -59,14 +62,17 @@ export class ListPage implements OnInit {
   constructor(
     private chooser: Chooser,
     private navCtrl: NavController,
+    private sizeService: SizecountServiceService,
+    private toast: ToastService,
     private loadingCtrl: LoadingServiceService,
+    private router:Router,
     private actionSheetController: ActionSheetController,
     private setget: SetGetServiceService,
     private modalCtrl: ModalController,
     private camera: Camera,
     private swal: SwalServiceService, 
     private file: File,
-    private document: DocumentViewer,
+    private fileOpener: FileOpener,
     private transfer: FileTransfer
   ) { }
 
@@ -127,7 +133,16 @@ export class ListPage implements OnInit {
 
   //kembali ke aktiviti sebelumnya
   kembali(){
-    this.navCtrl.back();
+    let data_button = this.setget.getButton();
+
+    if (data_button == 0) {
+      this.setget.setButton(1);
+
+      this.router.navigate(["/proses"], { replaceUrl: true });
+
+    } else {
+      this.toast.Toast_tampil();
+    }
   }
 
   //tampilkan modal untuk menampilkan gambar
@@ -160,7 +175,9 @@ export class ListPage implements OnInit {
       console.log('download complete: ' + entry.toURL());
       let hasil =  entry.toURL(); 
       this.loadingCtrl.tutup_loading();
-      this.document.viewDocument(hasil, 'application/pdf', {title: nama_pdf});
+      this.fileOpener.open(hasil, 'application/pdf')
+      .then(() => console.log('File is opened'))
+      .catch(e => console.log('Error opening file', e));
     }, (error) => {
       // handle error
       const code_error = error.code;
@@ -172,7 +189,7 @@ export class ListPage implements OnInit {
         Swal.fire({
           icon: 'warning',
           title: 'Terjadi kesalahan !',
-          text: 'PDF tidak ditemukan, kirim ulang!',
+          text: 'File tidak ditemukan, kirim ulang!',
           backdrop: false,
           confirmButtonColor: '#3880ff',
           confirmButtonText: 'Iya !',
@@ -202,12 +219,21 @@ export class ListPage implements OnInit {
       }
 
       let type_data = data.mediaType;
-      let nama_data = data.name;;
+      let nama_data = data.name;
       let path_uri_data = data.dataURI;
+      let size_data = data.data.byteLength;
+      let int_size_data = +size_data;
 
       if (type_data == "application/pdf") {
-        this.loadingCtrl.tutup_loading();
-        this.swal_pdf(nama, path_uri_data, nama_data);
+
+        if (int_size_data >= 5242880) {
+          this.loadingCtrl.tutup_loading();
+          this.swal.swal_aksi_gagal("Terjadi kesalahan", "File berukuran 5MB atau lebih !");
+          return;
+        } else {
+          this.loadingCtrl.tutup_loading();
+          this.swal_pdf(nama, path_uri_data, nama_data);
+        }
     
       } else {
         console.log("ini bukan pdf");
@@ -225,9 +251,18 @@ export class ListPage implements OnInit {
   kamera(nama_img){
     this.loadingCtrl.tampil_loading("Memuat gambar . . .");
     this.camera.getPicture(this.cameraOptions).then(res=>{
-      this.loadingCtrl.tutup_loading();
-      this.imgURI = 'data:image/jpeg;base64,' + res;
-      this.swal_gambar(nama_img, this.imgURI);
+
+      let size_data = this.sizeService.size(res);
+      let int_size = +size_data.byteLength;
+      if (int_size >= 5242880 ) {
+        this.loadingCtrl.tutup_loading();
+        this.swal.swal_aksi_gagal("Terjadi kesalahan", "File berukuran 5MB atau lebih !");
+        return;
+      } else {
+        this.loadingCtrl.tutup_loading();
+        this.imgURI = 'data:image/jpeg;base64,' + res;
+        this.swal_gambar(nama_img, this.imgURI);
+      }
     }, (err) => {
       // Handle error
       console.log("error");
@@ -238,9 +273,17 @@ export class ListPage implements OnInit {
   galeri(nama_img){
     this.loadingCtrl.tampil_loading("Memuat gambar . . .");
     this.camera.getPicture(this.galeriOptions).then(res=>{
-      this.loadingCtrl.tutup_loading();
-      this.imgURI = 'data:image/jpeg;base64,' + res;
-      this.swal_gambar(nama_img, this.imgURI);
+      let size_data = this.sizeService.size(res);
+      let int_size = +size_data.byteLength;
+      if (int_size >= 5242880 ) {
+        this.loadingCtrl.tutup_loading();
+        this.swal.swal_aksi_gagal("Terjadi kesalahan", "File berukuran 5MB atau lebih !");
+        return;
+      } else {
+        this.loadingCtrl.tutup_loading();
+        this.imgURI = 'data:image/jpeg;base64,' + res;
+        this.swal_gambar(nama_img, this.imgURI);
+      }
     }, (err) => {
       // Handle error
       console.log("error");
@@ -277,7 +320,7 @@ export class ListPage implements OnInit {
     await actionSheet.present();
   }
   
-//gambar rusak
+  //gambar rusak
   errorHandler(event, a) {
     event.target.src = "assets/bi.png";
     this.data_gambar_rusak[a] = "rusak";
@@ -359,6 +402,7 @@ export class ListPage implements OnInit {
       const data_status = data_json.status;
 
       if (data_status == 0) {
+        this.sedang_mengirim = false;
         Swal.fire({
           icon: 'success',
           title: 'Sukses !' ,
@@ -369,9 +413,9 @@ export class ListPage implements OnInit {
         }).then((result) => {
           if (result.isConfirmed) {
             this.data_progres_bar = 0.9;
-            this.sedang_mengirim = false;
             this.loadingCtrl.tutup_loading();
-            this.navCtrl.back();
+            this.loading_skeleton = true;
+            this.ionViewWillEnter();
           }
         });
       } else {
@@ -433,6 +477,7 @@ export class ListPage implements OnInit {
       const data_status = data_json.status;
 
       if (data_status == 0) {
+        this.sedang_mengirim = false;
         Swal.fire({
           icon: 'success',
           title: 'Sukses !' ,
@@ -443,9 +488,9 @@ export class ListPage implements OnInit {
         }).then((result) => {
           if (result.isConfirmed) {
             this.data_progres_bar = 0.9;
-            this.sedang_mengirim = false;
             this.loadingCtrl.tutup_loading();
-            this.navCtrl.back();
+            this.loading_skeleton = true;
+            this.ionViewWillEnter();
           }
         });
       }else{
@@ -493,7 +538,7 @@ export class ListPage implements OnInit {
     Swal.fire({
       icon: 'warning',
       title: 'Terjadi kesalahan !',
-      text: 'Server tidak merespon, coba lagi ?!',
+      text: 'Server tidak merespon, coba beberapa saat lagi !',
       backdrop: false,
       confirmButtonColor: '#3880ff',
       confirmButtonText: 'Iya !',
@@ -501,11 +546,11 @@ export class ListPage implements OnInit {
       if (result.isConfirmed) {
         this.loadingCtrl.tutup_loading();
         this.setget.set_swal(0);
-        if (tipe_data == "img") {
-          this.mengirim_gambar(nama, path_uri);
-        } else {
-          this.mengirim_pdf(nama, path_uri);
-        }
+        // if (tipe_data == "img") {
+        //   this.mengirim_gambar(nama, path_uri);
+        // } else {
+        //   this.mengirim_pdf(nama, path_uri);
+        // }
       }
     });
   }

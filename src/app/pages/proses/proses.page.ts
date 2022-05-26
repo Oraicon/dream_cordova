@@ -5,8 +5,9 @@ import { LoadingServiceService } from 'src/app/services/loading-service.service'
 import { MomentService } from 'src/app/services/moment.service';
 import { ApiServicesService } from 'src/app/services/api-services.service';
 import { SwalServiceService } from 'src/app/services/swal-service.service';
+import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
-import { element } from 'protractor';
+import { ToastService } from 'src/app/services/toast.service';
 
 
 @Component({
@@ -17,6 +18,7 @@ import { element } from 'protractor';
 export class ProsesPage implements OnInit {
 
   //variable
+  
   timeout = 0;
   data_id_kegiatan;
   data_arr_progressmilsetone = [];
@@ -39,8 +41,10 @@ export class ProsesPage implements OnInit {
   URL="https://dream-beta.technosolusitama.in/api/uploadImage";
 
   constructor(private momentService: MomentService,
+    private router:Router,
     private swal: SwalServiceService,
     private apiService: ApiServicesService, 
+    private toast: ToastService,
     private loadingService: LoadingServiceService, 
     private navCtrl: NavController, 
     private setget: SetGetServiceService,) { 
@@ -52,7 +56,7 @@ export class ProsesPage implements OnInit {
 
   //ionic lifecycle
   async ionViewWillEnter(){
-    this.setget.set_swal(0);
+    this.setget.setButton(0);
     this.dapatkan_kegiatan_detail_kegiatan_rap();
   }
 
@@ -74,7 +78,7 @@ export class ProsesPage implements OnInit {
 
   //delay loading
   interval_counter_loading() {
-    return new Promise(resolve => { setTimeout(() => resolve(""), 250);});
+    return new Promise(resolve => { setTimeout(() => resolve(""), 500);});
   }  
 
   async delayed(){
@@ -125,29 +129,38 @@ export class ProsesPage implements OnInit {
   }
 
   //pindah aktiviti laporan
-  formulir(tipe_satuan, nama_kegiatan){
+  formulir(tipe_satuan, nama_kegiatan, total_meter, progress_meter){
     console.log(tipe_satuan);
-    this.setget.setLog(this.data_detail_kegiatan, nama_kegiatan);
+    this.setget.setLog(this.data_detail_kegiatan, nama_kegiatan, tipe_satuan);
+    this.setget.setMeter(total_meter, progress_meter);
 
-    if (tipe_satuan == "Meter") {
-      this.navCtrl.navigateForward(['/lapormeter']);
-    }else{
-      this.navCtrl.navigateForward(['/lapor']);
-    }
+    // setmeter
+    // this.navCtrl.navigateForward(['/lapormeter']);
+    this.router.navigate(["/lapormeter"], { replaceUrl: true });
   }
 
   // pindah aktiviti detail riwayat
   lihat_list(arr_data_list, kode_barang){
-    console.log(kode_barang);
     let arr_list_data = arr_data_list.split(",");
     this.setget.set_list_path(arr_list_data, kode_barang);
 
-    this.navCtrl.navigateForward(['/list']);
+    this.router.navigate(["/list"], { replaceUrl: true });
+    // this.navCtrl.navigateForward(['/list']);
   }
 
   //kembali ke aktiviti sebelumnya
   kembali(){
-    this.navCtrl.back();
+    // this.navCtrl.back();
+    let data_button = this.setget.getButton();
+
+    if (data_button == 0) {
+      this.setget.setButton(1);
+
+      this.router.navigate(["/kegiatan"], { replaceUrl: true });
+
+    } else {
+      this.toast.Toast_tampil();
+    }
   }
 
   async tidak_ada_respon(){
@@ -181,7 +194,6 @@ export class ProsesPage implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         this.loadingService.tutup_loading();
-        this.setget.set_swal(0);
         this.dapatkan_kegiatan_detail_kegiatan_rap();
       }
     });
@@ -211,6 +223,8 @@ export class ProsesPage implements OnInit {
 
   async dapatkan_kegiatan_detail_kegiatan_rap(){
 
+    let data_persen = 0;
+
     this.loadingService.tampil_loading("Memuat data . . .")
 
     this.data_id_kegiatan = this.setget.getProses();
@@ -229,12 +243,14 @@ export class ProsesPage implements OnInit {
         let kuota_progres = data_json.data[0].volume;
         let total_progres = data_json.data[0].total_volume;
 
+        console.log(kuota_progres, total_progres);
+
         console.log("kuota dan total = " + kuota_progres, total_progres);
 
         if (total_progres == 0 || total_progres == null) {
           this.data_persen = "0%";
         } else {
-          let data_persen = total_progres * 100 / kuota_progres;
+          data_persen = total_progres * 100 / kuota_progres;
           let str_data_persen = data_persen.toString().substring(0, 4);
           
           if (data_persen == Infinity) {
@@ -247,7 +263,7 @@ export class ProsesPage implements OnInit {
         }
 
 
-        if (this.data_persen == "100") {
+        if (data_persen >= 100) {
           this.tipe_page = true;
         } else {
           this.tipe_page = false;

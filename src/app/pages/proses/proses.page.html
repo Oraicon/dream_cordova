@@ -120,7 +120,7 @@
           <div class="scrollan" scrolly="true" style="max-height:29rem">
 
             <ion-card *ngFor='let data of data_arr_progressmilsetone | filter:searchTerm; let i = index' class="ion-activatable" (click)="lihat_list(data.list_path, data.item)" >
-              <ion-card-content>
+              <!-- <ion-card-content>
                 <ion-grid fixed class="ion-no-padding">
                   <ion-row>
                     <ion-col size="12" class="ion-text-end">{{ tanggal_pm[data.id] }}</ion-col>
@@ -150,7 +150,39 @@
                     </ion-col>
                   </ion-row>
                 </ion-grid>
+              </ion-card-content> -->
+
+              <ion-card-content class="nop_padding_right" >
+                <ion-grid fixed class="">
+                  <ion-row>
+                    <ion-col size="12" class="ion-text-start">{{ tanggal_pm[data.id] }}</ion-col>
+                  </ion-row>
+                  <ion-row class="ion-align-items-center">
+                    <ion-col size="11">
+                      <ion-grid fixed class="no_padding_left">
+                        <ion-row>
+                          <ion-col size="12" class="ion-text-start">
+                            <h1 class="hitam">
+                              {{ data.volume }} {{ data.nama }}
+                            </h1>
+                          </ion-col>
+                        </ion-row>
+                        <ion-row>
+                          <ion-col size="12">
+                            <h2>
+                              {{ data.keterangan }}
+                            </h2>
+                          </ion-col>
+                        </ion-row>
+                      </ion-grid>
+                    </ion-col>
+                    <ion-col size="1" class="ion-text-center">
+                      <img class="img_height" src="assets/ra.png" alt="" style="height: 50%;">
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
               </ion-card-content>
+
               <ion-ripple-effect></ion-ripple-effect>
             </ion-card>
 
@@ -174,7 +206,7 @@
     
                           </ion-col>
                           <ion-col size="12">
-                            <h2>Maaf, belum ada riwayat laporan di kegiatan ini !</h2>
+                            <h2>Maaf, belum ada riwayat laporan !</h2>
     
                           </ion-col>
                         </ion-row>
@@ -197,10 +229,16 @@
 
 <ng-template #fab_ada>
   <ion-footer>
-    <ion-toolbar class="ion-no-margin background_color">
-      <ion-button class="ion-no-padding ion-no-margin bold font_size_button" (click)="formulir(data_detail_kegiatan.nama, data_detail_kegiatan.uraian_kegiatan)" expand="block" fill="clear" color="light">
+    <ion-toolbar class="ion-no-margin">
+      <!-- <ion-button class="ion-no-padding ion-no-margin bold font_size_button" 
+      (click)="formulir(data_detail_kegiatan.nama, data_detail_kegiatan.uraian_kegiatan, data_detail_kegiatan.volume, data_detail_kegiatan.total_volume)" expand="block" fill="clear" color="light">
         Lapor Kegiatan
+      </ion-button> -->
+      <ion-button size="large" class="button_height" expand="block" (click)="formulir(data_detail_kegiatan.nama, data_detail_kegiatan.uraian_kegiatan, data_detail_kegiatan.volume, data_detail_kegiatan.total_volume)">
+        <ion-icon class="icon_padding_bottom" slot="start" name="document"></ion-icon>
+        Buat laporan
       </ion-button>
+
     </ion-toolbar>
   </ion-footer>
 </ng-template>

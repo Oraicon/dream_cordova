@@ -54,12 +54,11 @@
             <ion-card-content class="ion-no-padding">
               <ion-list>
   
-                <ion-item class="ion-activatable" *ngFor="let data of arr_data; let i = index">
+                <ion-item *ngFor="let data of arr_data; let i = index" button>
 
                   <ng-container *ngIf="data.tipe == 'JPEG'; then tampil_jpeg; else tampil_pdf"></ng-container>
 
                   <ng-template #tampil_jpeg>
-                    1
                     <ion-thumbnail slot="start">
                       <img (error)="errorHandler($event, i)" (click)="tampilkan_konten(data.path, data.nama)" src="https://dream-beta.technosolusitama.in/{{ data.path }}"/>
                     </ion-thumbnail>
@@ -79,8 +78,7 @@
                     <ion-label class="ion-text-wrap" (click)="tampilakn_pdf(data.path)"
                     >{{ data.nama }}</ion-label>
                   </ng-template>
-
-                  <ion-ripple-effect></ion-ripple-effect>
+                  
                 </ion-item>
   
               </ion-list>

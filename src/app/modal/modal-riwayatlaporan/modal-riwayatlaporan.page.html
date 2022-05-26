@@ -1,0 +1,89 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar class="background_color">
+    <ion-grid fixed>
+      <ion-row class="ion-align-items-center">
+        <ion-col size="9" class="ion-align-items-center text_header bold putih">{{ uraian }}</ion-col>
+        <ion-col size="3" class="ion-text-end">
+          <ion-button (click)="tutup()" class="padding_button" color="danger">
+            <ion-icon name="close-outline" size="large" class="putih"></ion-icon>
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-align-items-center background_konten">
+  <ion-grid fixed class="ion-no-padding">
+    <ion-row class="">
+
+      <ion-col size="12">
+
+        <ion-card>
+          <ion-card-content>
+            <ion-grid fixed class="ion-no-padding">
+              <ion-row>
+                <ion-col size="12">
+                  <ion-list>
+
+                    <ion-item>
+                      <ion-label class="ion-text-wrap">
+                        <h2 class="ion-padding-bottom">Keterangan: </h2>
+                        <h2>{{ keterangan }}</h2>
+                      </ion-label>
+                    </ion-item>
+
+                    <ng-container *ngIf="extention_file == 'JPEG'; then data_gambar; else data_pdf;"></ng-container>
+
+                    <ng-template #data_pdf>
+
+                      <ng-container *ngIf="extention_file == 'pdf'; then data_beneran_pdf; else data_docx"></ng-container>
+                      <ng-template #data_beneran_pdf>
+                        <ion-item lines="none" (click)="buka_pdf(path_file)" button>
+                          <ion-thumbnail slot="start">
+                            <img src="assets/pdf_icon.png" />
+                          </ion-thumbnail>
+                          <ion-label>{{ nama_file }}</ion-label>
+                        </ion-item>
+                      </ng-template>
+                      <ng-template #data_docx>
+                        <ion-item lines="none" (click)="buka_doc(path_file)" button>
+                          <ion-thumbnail slot="start">
+                            <img src="assets/dok_icon.png" />
+                          </ion-thumbnail>
+                          <ion-label>{{ nama_file }}</ion-label>
+                        </ion-item>
+                      </ng-template>
+                    </ng-template>
+
+                    <ng-template #data_gambar>
+                      <ion-item lines="none" button>
+                        <ion-thumbnail slot="start">
+                          <img (click)="buka_img(path_file, nama_file)" src="https://dream-beta.technosolusitama.in/{{ path_file }}" (error)="errorHandler($event)"/>
+                        </ion-thumbnail>
+                        <ion-label (click)="buka_img(path_file, nama_file)">{{ nama_file }}</ion-label>
+
+                        <ion-button color="primary" expand="block" fill="outline" (click)="presentActionSheet(path_file)" *ngIf="data_gambar_rusak == 'rusak'; else gambar_tidak_rusak">
+                          Edit
+                        </ion-button>
+                        <ng-template #gambar_tidak_rusak></ng-template>
+                      </ion-item>
+                    </ng-template>
+
+                  </ion-list>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-card-content>
+        </ion-card>
+        
+      </ion-col>
+
+    </ion-row>
+  </ion-grid> 
+</ion-content>
+
+<ion-footer>
+  <ion-progress-bar value="{{ data_progres_bar }}" *ngIf="sedang_mengirim; else tidak_sedang_mengirim"></ion-progress-bar>
+  <ng-template #tidak_sedang_mengirim></ng-template>
+</ion-footer>

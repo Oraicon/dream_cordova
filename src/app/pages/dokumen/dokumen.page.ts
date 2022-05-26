@@ -6,33 +6,34 @@ import { Router } from '@angular/router';
 import { SwalServiceService } from 'src/app/services/swal-service.service';
 import Swal from 'sweetalert2';
 import { ToastService } from 'src/app/services/toast.service';
-
+import { ActionSheetController, ModalController } from '@ionic/angular';
+import { ModalRiwayatlaporanPage } from 'src/app/modal/modal-riwayatlaporan/modal-riwayatlaporan.page';
 
 @Component({
-  selector: 'app-kegiatan',
-  templateUrl: './kegiatan.page.html',
-  styleUrls: ['./kegiatan.page.scss'],
+  selector: 'app-dokumen',
+  templateUrl: './dokumen.page.html',
+  styleUrls: ['./dokumen.page.scss'],
 })
-export class KegiatanPage implements OnInit {
+export class DokumenPage implements OnInit {
 
-  //variable
-  judul_proyek;
-  loading = true; 
-  timeout = 0;
+    //variable
+    judul_proyek;
+    loading = true; 
+    timeout = 0;
+  
+    id_cheklist_dokumen;
+    arr_cheklist_dokumen_detail = [];
 
-  detail_kegiatan;
-  searchTerm: string;
+    searchTerm: string;
 
-  constructor(
+  constructor(    
     private toast: ToastService,
     private swal: SwalServiceService,
+    private modalCtrl: ModalController,
     private router: Router, 
     private setget: SetGetServiceService,
     private apiService: ApiServicesService,
-    private loadingService: LoadingServiceService
-  ) { 
-
-  }
+    private loadingService: LoadingServiceService) { }
 
   //ionic lifecycle
   ngOnInit() {
@@ -40,8 +41,8 @@ export class KegiatanPage implements OnInit {
 
   //awal masuk page
   ionViewWillEnter(){
-    this.menampilkan_detail_kegiatan();
     this.setget.setButton(0);
+    this.menampilkan_detail_dokumen();
   }
 
   ionViewDidLeave(){
@@ -59,23 +60,58 @@ export class KegiatanPage implements OnInit {
     return new Promise(resolve => { setTimeout(() => resolve(""), 500);});
   }  
 
-  //pindah aktiviti
-  proyek_kegiatan(id_detail){
-    console.log(id_detail);
-    this.setget.setProses(id_detail);
-    this.setget.set_Page(1);
+  async menampilkan_detail_dokumen(){
+    this.loadingService.tampil_loading("Memuat data . . . ");
 
-    let data_button = this.setget.getButton();
+    let a = this.setget.getDokumen();
 
-    if (data_button == 0) {
-      this.setget.setButton(1);
+    this.id_cheklist_dokumen = a[0];
+    this.judul_proyek = a[1];
 
-      this.router.navigate(["/proses"], { replaceUrl: true });
+    this.apiService.dapatkan_data_cheklist_dokumen_detail(this.id_cheklist_dokumen)
+    .then(data => {
 
-    } else {
-      this.toast.Toast_tampil();
-    }
-    // this.navCtrl.navigateForward(['/proses']);
+      const data_json = JSON.parse(data.data);
+      const status_data = data_json.status;
+
+      if (status_data == 1) {
+        this.arr_cheklist_dokumen_detail = data_json.data;
+        console.log(this.arr_cheklist_dokumen_detail);
+
+        this.loading = false;
+      } else {
+        
+      }
+
+      this.delay_dulu();
+      
+    })
+    .catch(error => {
+  
+      console.log(error.status);
+      console.log(error.error); // error message as string
+      console.log(error.headers);
+  
+      this.loadingService.tutup_loading();
+
+      this.timeout++;
+      
+      if (this.timeout >= 3) {
+        this.keluar_aplikasi();
+      } else {
+        if (error.status == -4) {
+          this.tidak_ada_respon();
+        } else {
+          this.swal.swal_code_error("Terjadi kesalahan !", "code error 33 !, kembali ke login !");
+        }
+      }
+    });
+  }
+
+  async tutup_loading(){
+    await this.interval_counter_loading();
+    this.loadingService.tutup_loading();
+    return;
   }
 
   //kembali ke aktiviti sebelumnya
@@ -90,48 +126,6 @@ export class KegiatanPage implements OnInit {
     } else {
       this.toast.Toast_tampil();
     }
-  }
-
-  async menampilkan_detail_kegiatan(){
-    this.loadingService.tampil_loading("Memuat data . . .");
-
-    const a = this.setget.getDatakegiatan();
-
-    const id_master_rap = a[0];
-    this.judul_proyek = a[1];
-
-    this.apiService.dapatkan_data_proyek_rap_detail(id_master_rap)
-    .then(data => {
-
-      const data_json = JSON.parse(data.data);
-      const status_data = data_json.status;
-      if (status_data == 1) {
-
-        this.detail_kegiatan = data_json.data;
-        this.loading = false;
-
-        this.delay_dulu();
-      }
-    })
-    .catch(error => {
-  
-      console.log(error)
-  
-      this.loadingService.tutup_loading();
-  
-      this.timeout++;
-      
-      if (this.timeout >= 3) {
-        this.keluar_aplikasi();
-      } else {
-        if (error.status == -4) {
-          this.tidak_ada_respon();
-        } else {
-          this.swal.swal_code_error("Terjadi kesalahan !", "code error 18 !, kembali ke login !");
-        }
-      }
-    });
-
   }
 
   async delay_dulu(){
@@ -156,7 +150,7 @@ export class KegiatanPage implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         this.loadingService.tutup_loading();
-        this.menampilkan_detail_kegiatan();
+        // this.menampilkan_detail_kegiatan();
       }
     });
   }
@@ -181,5 +175,29 @@ export class KegiatanPage implements OnInit {
         navigator['app'].exitApp();
       }
     });
+  }
+
+  lapordokumen(id, uraian, pic){
+
+    console.log(id, uraian, pic);
+    this.setget.setDokumen_detail(id, uraian, pic, null, null);
+
+    let data_button = this.setget.getButton();
+
+    if (data_button == 0) {
+      this.setget.setButton(1);
+      this.router.navigate(["/lapordokumen"], { replaceUrl: true });
+    } else {
+      this.toast.Toast_tampil();
+    }
+  }
+
+  async riwayatlaporan(id,uraian, pic, keterangan, upload_dokumen){
+    this.setget.setDokumen_detail(id, uraian, pic, keterangan, upload_dokumen);
+
+    const modal = await this.modalCtrl.create({
+      component: ModalRiwayatlaporanPage,
+    });
+    return await modal.present();
   }
 }

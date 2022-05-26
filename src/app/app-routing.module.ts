@@ -59,6 +59,18 @@ const routes: Routes = [
     path: 'lapormeter',
     loadChildren: () => import('./pages/lapormeter/lapormeter.module').then( m => m.LapormeterPageModule)
   },
+  {
+    path: 'dokumen',
+    loadChildren: () => import('./pages/dokumen/dokumen.module').then( m => m.DokumenPageModule)
+  },
+  {
+    path: 'lapordokumen',
+    loadChildren: () => import('./pages/lapordokumen/lapordokumen.module').then( m => m.LapordokumenPageModule)
+  },
+  {
+    path: 'modal-riwayatlaporan',
+    loadChildren: () => import('./modal/modal-riwayatlaporan/modal-riwayatlaporan.module').then( m => m.ModalRiwayatlaporanPageModule)
+  },
 
 
 ];

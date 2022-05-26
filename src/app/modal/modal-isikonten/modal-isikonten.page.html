@@ -17,7 +17,7 @@
   <ion-grid class="ion-text-center ion-align-items-center">
     <ion-row>
       <ion-col size="12">
-        <img class="size_img" src="{{ imgURL }}"/>
+        <img class="size_img" (error)="errorHandler($event)" src="{{ imgURL }}"/>
       </ion-col>    
     </ion-row>
   </ion-grid>

@@ -1,0 +1,156 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar class="background_color">
+    <ion-grid fixed>
+      <ion-row class="ion-align-items-center">
+        <ion-col size="10" class="ion-align-items-center text_header bold putih">Cheklist Dokumen</ion-col>
+        <ion-col size="2" class="ion-text-end">
+          <ion-button (click)="kembali()" fill="clear" class="padding_button">
+            <ion-icon name="arrow-back-outline" size="large" class="putih"></ion-icon>
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-grid fixed class="ion-no-padding" style="top: 3rem;">
+    <ion-row class=" ion-padding-top background_color_biru_gelap">
+
+      <ion-col size="12" class="">
+        <ion-card class="bayangan">
+          <ion-card-header>
+            <ion-grid fixed class="ion-no-padding">
+              <ion-row>
+                <ion-col size="12">
+
+                  <ng-container 
+                    *ngIf="loading; then loading_muncul_judul; else loading_tidak_muncul_judul">
+                  </ng-container>
+
+                  <ng-template #loading_muncul_judul>
+                    <ion-skeleton-text animated style="width: 100%; height: 2rem;"></ion-skeleton-text>
+                  </ng-template>
+
+                  <ng-template #loading_tidak_muncul_judul>
+                    <ion-card-title class="ion-text-center text_judul">{{ judul_proyek }}</ion-card-title>
+                  </ng-template>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-card-header>
+
+          <ion-card-content>
+
+            <ng-container 
+              *ngIf="loading; then loading_muncul_konten; else loading_tidak_muncul_konten">
+            </ng-container>
+
+            <ng-template #loading_muncul_konten>
+              <ion-grid fixed class="ion-no-padding">
+                <ion-row>
+                  <ion-col size="12">
+                    <ion-list class="">
+                      <ion-item>
+                        <ion-skeleton-text animated style="width: 40%; height: 1rem;"></ion-skeleton-text>
+                      </ion-item>
+                      <ion-item>
+                        <ion-skeleton-text animated style="width: 40%; height: 1rem;"></ion-skeleton-text>
+                      </ion-item>
+                      <ion-item>
+                        <ion-skeleton-text animated style="width: 40%; height: 1rem;"></ion-skeleton-text>
+                      </ion-item>
+                      <ion-item lines="none">
+                        <ion-skeleton-text animated style="width: 40%; height: 1rem;"></ion-skeleton-text>
+                      </ion-item>
+                    </ion-list>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ng-template>
+
+            <ng-template #loading_tidak_muncul_konten>
+              <ion-grid fixed class="grid_width ion-no-padding">
+                <ion-row>
+                  <ion-col size="12" class="ion-padding-bottom">
+                    <ion-searchbar class="ion-no-padding" [(ngModel)]="searchTerm" placeholder="Cari kegiatan"></ion-searchbar>
+                  </ion-col>
+                  <ion-col size="12">
+                    <ion-list>  
+                      <div class="scrollan" scrolly="true" style="max-height:43rem">
+
+                        <div *ngFor="let data of arr_cheklist_dokumen_detail | filter:searchTerm">
+
+                          <ng-container *ngIf="data.upload_dokumen == null; then tidak_ada_riwayat; else ada_riwayat" ></ng-container>
+
+                          <ng-template #tidak_ada_riwayat>
+                            <ion-item button (click)="lapordokumen(data.id, data.uraian, data.pic)">
+                              <ion-label class="text_konten">
+                                <h3 class="abu">
+                                  {{ data.pic }}
+                                </h3>
+                                <h2 class="ion-text-wrap">
+                                  {{ data.uraian }}
+                                </h2>
+                              </ion-label>
+                              <ion-icon name="chevron-forward-outline" class="ion-text-end"></ion-icon>
+                            </ion-item>
+                          </ng-template>
+
+                          <ng-template #ada_riwayat>
+                            <ion-item button (click)="riwayatlaporan(data.id, data.uraian, data.pic, data.keterangan, data.upload_dokumen)">
+                              <ion-label class="text_konten">
+                                <h3 class="abu">
+                                  {{ data.pic }}
+                                </h3>
+                                <h2 class="ion-text-wrap">
+                                  {{ data.uraian }}
+                                </h2>
+                              </ion-label>
+                              <ion-icon name="checkmark-outline" size="large" class="ion-text-end hijau_"></ion-icon>
+                            </ion-item>
+                          </ng-template>
+
+                          <!-- <ion-item button (click)="lapordokumen()">
+                            <ion-label class="text_konten">
+                              <h3 class="abu">
+                                {{ data.pic }}
+                              </h3>
+                              <h2 class="ion-text-wrap">
+                                {{ data.uraian }}
+                              </h2>
+                            </ion-label>
+                            <ion-icon name="chevron-forward-outline" class="ion-text-end"></ion-icon>
+                          </ion-item>
+  
+                          <ion-item button (click)="riwayatlaporan()">
+                            <ion-label class="text_konten">
+                              <h3 class="abu">
+                                {{ data.pic }}
+                              </h3>
+                              <h2 class="ion-text-wrap">
+                                {{ data.uraian }}
+                              </h2>
+                            </ion-label>
+                            <ion-icon name="checkmark-outline" class="ion-text-end hijau_"></ion-icon>
+                          </ion-item> -->
+
+                        </div>
+                        
+                      </div>
+                    </ion-list>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ng-template>
+
+            </ion-card-content>
+
+        </ion-card>
+      </ion-col>
+    </ion-row>
+
+  </ion-grid>
+  
+</ion-content>

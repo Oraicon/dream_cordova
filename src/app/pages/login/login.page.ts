@@ -31,6 +31,7 @@ export class LoginPage implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
+    private toast: ToastService,
     private network: Network,
     private toastService: ToastService,
     private router:Router,
@@ -49,7 +50,6 @@ export class LoginPage implements OnInit {
   ngOnInit() {
     //persiapan storage
     this.storage.create();
-    this.setget.setButton(0);
     
     //pengecekan koneksi
     this.network.onDisconnect().subscribe(() => {
@@ -68,12 +68,16 @@ export class LoginPage implements OnInit {
       sandi_pengguna: ['', [Validators.required]]
     })
   }
-  ionViewDidEnter(){
+
+  ionViewWillEnter(){
+    this.setget.setButton(0);
+
     const a = this.setget.getData();
     if (a == 1) {
       this.loadingService.tutup_loading();
     }
   }
+  
   //pindah aktiviti
   ionViewDidLeave(){
     this.router.navigate(["/tabs/tab1"], { replaceUrl: true });
@@ -102,6 +106,7 @@ export class LoginPage implements OnInit {
 
   //manggil modal lupa sandi
   async lupasandi(){
+
     const modal = await this.modalCtrl.create({
       component: ModalLupasandiPage,
       cssClass: 'small-modal',

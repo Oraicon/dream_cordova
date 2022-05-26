@@ -90,6 +90,7 @@ export class SwalServiceService {
       if (result.isConfirmed) {
         this.setget.set_swal(0);
         this.loading.tutup_loading();
+        this.loading.tutup_loading();
         this.router.navigate(["/login"], { replaceUrl: true });
       }
     });

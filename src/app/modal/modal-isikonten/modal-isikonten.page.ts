@@ -35,4 +35,8 @@ export class ModalIsikontenPage implements OnInit {
     this.modalCtrl.dismiss();
   }
 
+  errorHandler(event) {
+    event.target.src = "assets/bi.png";
+  }
+
 }

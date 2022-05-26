@@ -2,7 +2,7 @@
   <ion-toolbar class="background_color">
     <ion-grid fixed>
       <ion-row class="ion-align-items-center">
-        <ion-col size="8" class="ion-align-items-center text_header bold putih">Formulir Laporan</ion-col>
+        <ion-col size="8" class="ion-align-items-center text_header bold putih">Formulir Dokumen</ion-col>
         <ion-col size="4" class="ion-text-end">
           <ion-button (click)="kembali()" fill="clear" class="padding_button">
             <ion-icon name="arrow-back-outline" size="large" class="putih"></ion-icon>
@@ -20,7 +20,7 @@
       <ion-col size="12" class="">
         <ion-card class="bayangan">
           <ion-card-header class="no_padding_bottom">
-            <ion-card-title class="ion-text-center ion-text-wrap judul_size">{{ lapor_namakegiatan }}</ion-card-title>
+            <ion-card-title class="ion-text-center ion-text-wrap judul_size">{{ uraian_dokumen_detail }}</ion-card-title>
           </ion-card-header>
           <ion-card-content class="ion-no-padding">
             <ion-grid fixed class="ion-no-padding">
@@ -31,37 +31,9 @@
                       
                       <ion-list>
 
-                        <!-- <ion-item>
-                          <ion-grid fixed class="ion-no-padding">
-                            <ion-row>
-                              <ion-col size="12">
-                                <ion-label class="label_font hitam">Item</ion-label>
-                              </ion-col>
-                              <ion-col size="12">
-                                <ion-input class="text_keterangan ion-no-padding" formControlName="data_item" required maxlength="255" placeholder="Nama Item" (keyup)="onKey($event)"></ion-input>
-                              </ion-col>
-                            </ion-row>
-                          </ion-grid>
-                        </ion-item>
-                        <ion-label class="error ion-padding-start" *ngIf="isSubmitted && errorControl.data_item.errors?.required">
-                          *Item harus diisi.
-                        </ion-label> -->
-
                         <ion-item>
-                          <ion-grid fixed class="ion-no-padding">
-                            <ion-row>
-                              <ion-col size="12">
-                                <ion-label class="label_font hitam ion-padding-top">Volume</ion-label>
-                              </ion-col>
-                              <ion-col size="12">
-                                <ion-input class="text_keterangan ion-no-padding" [attr.disabled]="true" type="number" formControlName="data_volume" required maxlength="255" (keyup)="onKey($event)"></ion-input>
-                              </ion-col>
-                            </ion-row>
-                          </ion-grid>
+                          <ion-label class="label_font">PIC : {{ pic_dokumen_detail }}</ion-label>
                         </ion-item>
-                        <ion-label class="error ion-padding-start" *ngIf="isSubmitted && errorControl.data_volume.errors?.required">
-                          *Volume barang harus diisi.
-                        </ion-label>
 
                         <ion-item>
                           <ion-grid fixed class="ion-no-padding">
@@ -70,7 +42,7 @@
                                 <ion-label class="label_font hitam ion-padding-top">Keterangan</ion-label>
                               </ion-col>
                               <ion-col size="12">
-                                <ion-textarea class="text_keterangan ion-no-padding" formControlName="data_keterangan" required maxlength="255" placeholder="Keterangan kegiatan" (keyup)="onKey($event)"></ion-textarea>
+                                <ion-textarea class="text_keterangan ion-no-padding" formControlName="data_keterangan" required maxlength="255" placeholder="Keterangan dokumen" (keyup)="onKey($event)"></ion-textarea>
                               </ion-col>
                             </ion-row>
                           </ion-grid>
@@ -84,10 +56,10 @@
                             <ion-row>
   
                               <ion-col size="12">
-                                <ion-label class="label_font ion-text-start hitam">Lampiran Kegiatan</ion-label>
+                                <ion-label class="label_font ion-text-start hitam">Lampiran Dokumen</ion-label>
                               </ion-col>
   
-                              <ion-col size="12" class="ion-padding-top">
+                              <ion-col size="12" class="ion-padding-top" *ngIf="button_pilih_gambar; else button_hilang">
                                 <ion-button (click)="presentActionSheet()" color="main2" expand="block" class="ion-no-margin" class="button_height" fill="outline">
                                   <h2 class="label_font">
                                     Pilih lampiran
@@ -97,6 +69,8 @@
                                   *Max file lampiran 5MB
                                 </ion-label>
                               </ion-col>
+
+                              <ng-template #button_hilang></ng-template>
                               
                             </ion-row>
   
@@ -105,14 +79,22 @@
 
                         <ion-item *ngFor="let data of arr_data_img_pdf; let i = index">
                           
-                            <ion-thumbnail slot="start" *ngIf="data.tipe == 'JPEG';else pdf">
+                            <ion-thumbnail slot="start" *ngIf="data.tipe == 'JPEG'; else data_dokumen">
                               <img src="{{ data.path }}"/>
                             </ion-thumbnail>
 
-                            <ng-template #pdf>
-                              <ion-thumbnail slot="start">
+                            <ng-template #data_dokumen>
+
+                              <ion-thumbnail slot="start" *ngIf="data.tipe == 'pdf'; else docs">
                                 <img src="assets/pdf_icon.png"/>
                               </ion-thumbnail>
+
+                              <ng-template #docs>
+                                <ion-thumbnail slot="start">
+                                  <img src="assets/dok_icon.png"/>
+                                </ion-thumbnail>
+                              </ng-template>
+
                             </ng-template>
 
                             <ion-label class="ion-text-wrap">{{ data.nama }}</ion-label>
@@ -120,16 +102,12 @@
                               <ion-icon slot="icon-only" name="close-outline"></ion-icon>
                             </ion-button>
 
-
                         </ion-item>
 
                         <ion-item lines="none">
                           <ion-grid fixed class="ion-no-padding ion-padding-top">
                             <ion-row>
                               <ion-col size="6">
-                                <!-- <ion-button (click)="testgeo()" expand="block" fill="clear" shape="round">
-                                  Click me
-                                </ion-button> -->
                               </ion-col>
                               <ion-col size="6">
                                 <ion-button type="submit" expand="block" color="primary" class="ion-margin-start button_height">
@@ -159,6 +137,6 @@
 </ion-content>
 
 <ion-footer>
-  <ion-progress-bar value="{{ data_progres_bar }}" *ngIf="sedang_mengirim; else tidak_sedang_mengirim"></ion-progress-bar>
-  <ng-template #tidak_sedang_mengirim></ng-template>
+    <ion-progress-bar value="{{ data_progres_bar }}" *ngIf="sedang_mengirim; else tidak_sedang_mengirim"></ion-progress-bar>
+    <ng-template #tidak_sedang_mengirim></ng-template>
 </ion-footer>

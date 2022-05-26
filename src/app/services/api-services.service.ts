@@ -103,4 +103,22 @@ export class ApiServicesService {
     return this.http.post('https://dream-beta.technosolusitama.in/api/menampilkan_data_file', {"id_progres_harian_detail": id_progres_harian_detail}, {'Accept': 'application/json', 'Content-Type':'application/x-www-form-urlencoded'})
   }
 
+  dapatkan_data_cheklist_dokumen(username, id_master_rap){
+    // this.http.useBasicAuth('dream_1.0', 'dream_1.0');
+    this.http.setRequestTimeout(30.0);
+    return this.http.post('https://dream-beta.technosolusitama.in/api/dapatkan_dokumen_cheklist', {"username": username, "id_master_rap": id_master_rap}, {'Accept': 'application/json', 'Content-Type':'application/x-www-form-urlencoded'})
+  }
+
+  dapatkan_data_cheklist_dokumen_detail(id_cheklist_dokumen){
+    // this.http.useBasicAuth('dream_1.0', 'dream_1.0');
+    this.http.setRequestTimeout(30.0);
+    return this.http.post('https://dream-beta.technosolusitama.in/api/dokumen_cheklist_detail', {"id_cheklist_dokumen": id_cheklist_dokumen}, {'Accept': 'application/json', 'Content-Type':'application/x-www-form-urlencoded'})
+  }
+
+  update_data_cheklist_dokumen_detail(id, keterangan, nama_file){
+    // this.http.useBasicAuth('dream_1.0', 'dream_1.0');
+    this.http.setRequestTimeout(30.0);
+    return this.http.post('https://dream-beta.technosolusitama.in/api/update_dokumen_cheklist', {"id": id, "keterangan": keterangan, "nama_file": nama_file}, {'Accept': 'application/json', 'Content-Type':'application/x-www-form-urlencoded'})
+  }
+
 }

@@ -82,3 +82,30 @@ h2{
 .font_size_button{
   font-size: 115%;
 }
+
+.button_height{
+  --width: 60px;
+  --height: 60px;
+  --border-radius: 20px;
+  --vertical-align: middle;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.icon_padding_bottom{
+  padding-bottom: 8px;
+}
+
+.no_padding_left{
+  padding-left: 0px;
+}
+
+img {
+  max-width: 50%;
+}
+
+.nop_padding_right{
+  padding-right: 0px;
+}

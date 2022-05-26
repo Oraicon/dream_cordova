@@ -7,6 +7,7 @@ import { MomentService } from '../services/moment.service';
 import { SetGetServiceService } from '../services/set-get-service.service';
 import { SwalServiceService } from '../services/swal-service.service';
 import Swal from 'sweetalert2';
+import { ToastService } from '../services/toast.service';
 
 @Component({
   selector: 'app-tab1',
@@ -19,12 +20,14 @@ export class Tab1Page {
   //loading
   data_beranda = false;
   data_beranda_loading_tidak_ada = false;
+  data_kosong = false;
 
   //variable data 
   data_rap = [];
   obj_data_rap = {};
   jumlah_data_kegiatan_rap = 0;
   obj_jumlah_kegiatan = {};
+  obj_jumlah_cheklist_dokumen = {};
   tanggal_moment = {};
 
   //variable triky
@@ -33,6 +36,7 @@ export class Tab1Page {
   constructor(
     private swalService: SwalServiceService,
     private setget: SetGetServiceService,
+    private toast: ToastService,
     private loadingCtrl: LoadingServiceService, 
     private momentService: MomentService,
     private storage:Storage, 
@@ -43,7 +47,6 @@ export class Tab1Page {
     this.setget.set_koneksi(1);
     //pengecekan root page
     this.setget.set_tab_page(0);
-    this.setget.set_swal(0);
     //manggil data
     this.menampilkan_data_rap();
   }
@@ -74,7 +77,32 @@ export class Tab1Page {
     console.log(e);
     this.setget.setDatakegiatan(e, f);
     this.setget.set_tab_page(1);
-    this.router.navigate(["/kegiatan"], { replaceUrl: true });
+
+    let data_button = this.setget.getButton();
+
+    if (data_button == 0) {
+      this.setget.setButton(1);
+      this.router.navigate(["/kegiatan"], { replaceUrl: true });
+    } else {
+      this.toast.Toast_tampil();
+    }
+  }
+
+  cdokumen(e, f){
+    console.log(e, f);
+
+    this.setget.setDokumen(e, f);
+
+    this.setget.set_tab_page(1);
+
+    let data_button = this.setget.getButton();
+
+    if (data_button == 0) {
+      this.setget.setButton(1);
+      this.router.navigate(["/dokumen"], { replaceUrl: true });
+    } else {
+      this.toast.Toast_tampil();
+    }
   }
 
   async menampilkan_data_rap(){
@@ -86,13 +114,13 @@ export class Tab1Page {
     this.apiService.dapatkan_data_proyek_rap_master(data_l_nama)
     .then(data => {
 
+      console.log(data.data)
+
       const data_json = JSON.parse(data.data);
       const status_data = data_json.status;
       if (status_data == 1) {
 
         this.data_rap = data_json.data;
-
-        console.log(this.data_rap.length);
 
         for (let index = 0; index < this.data_rap.length; index++) {
           const rap_status = this.data_rap[index].id_status;
@@ -105,9 +133,7 @@ export class Tab1Page {
             this.tanggal_moment["periodeawal"+index] = this.momentService.ubah_format_tanggal(element.periode_awal);
             this.tanggal_moment["periodeakhir"+index] = this.momentService.ubah_format_tanggal(element.periode_akhir);
             
-            console.log(this.tanggal_moment["periodeawal0"]);
-            
-            this.menampilkan_seluruh_kegiatan(this.data_rap[index].id, index);
+            this.menampilkan_seluruh_kegiatan(this.data_rap[index].id, index, data_l_nama);
           } else {
             this.obj_data_rap[index] = "kosong";
 
@@ -120,6 +146,16 @@ export class Tab1Page {
         }
 
       } else {
+
+        console.log("data != 1");
+        
+        this.data_rap = [0];
+
+        this.obj_data_rap[0] = "kosong";
+
+        console.log(this.obj_data_rap);
+
+        this.data_kosong = true;
         this.data_beranda = false;
         this.data_beranda_loading_tidak_ada = true;
         this.loadingCtrl.tutup_loading();
@@ -146,12 +182,10 @@ export class Tab1Page {
 
   }
 
-  async menampilkan_seluruh_kegiatan(id_rap_master, index){
+  async menampilkan_seluruh_kegiatan(id_rap_master, index, nama){
 
     this.apiService.dapatkan_data_proyek_rap_detail(id_rap_master)
     .then(data => {
-
-      console.log(data);
 
       const data_json = JSON.parse(data.data);
       const status_data = data_json.status;
@@ -163,19 +197,79 @@ export class Tab1Page {
         this.obj_jumlah_kegiatan[index] = this.jumlah_data_kegiatan_rap;
 
         if (index == this.data_rap.length - 1 || index == 0) {
+          // this.data_beranda = true;
+          // this.data_beranda_loading_tidak_ada = true;
+          // this.loadingCtrl.tutup_loading();
+          this.menampilkan_dokumen_ceklist(id_rap_master, index, nama);
+        }
+
+      } else {
+
+        if (index == this.data_rap.length - 1 || index == 0) {
+          // this.loadingCtrl.tutup_loading();
+          // this.data_beranda = true;
+          // this.data_beranda_loading_tidak_ada = true;
+          this.menampilkan_dokumen_ceklist(id_rap_master, index, nama);
+  
+          this.obj_jumlah_kegiatan[index] = 0;
+        }
+      }
+
+  
+    })
+    .catch(error => {
+
+      console.log(error)
+  
+      this.loadingCtrl.tutup_loading();
+  
+      this.timeout++;
+      
+      if (this.timeout >= 3) {
+        this.keluar_aplikasi();
+      } else {
+        if (error.status == -4) {
+          this.tidak_ada_respon();
+        } else {
+          this.swalService.swal_code_error("Terjadi kesalahan !", "code error 16 !, kembali ke login !");
+        }
+      }
+  
+    });
+  }
+
+  async menampilkan_dokumen_ceklist(id_master_rap, index, nama){
+
+    this.apiService.dapatkan_data_cheklist_dokumen(nama, id_master_rap)
+    .then(data => {
+
+      const data_json = JSON.parse(data.data);
+      const status_data = data_json.status;
+
+      if (status_data == 1) {
+
+        let id_cheklist = data_json.data[0].id_checklist_dokumen;
+        let banyak_dokumen = data_json.data[0].banyak_data_cheklist_dokumen;
+
+        this.obj_jumlah_cheklist_dokumen["id"+index] = id_cheklist;
+        this.obj_jumlah_cheklist_dokumen["banyak"+index] = banyak_dokumen;
+
+        if (index == this.data_rap.length - 1 || index == 0) {
           this.data_beranda = true;
           this.data_beranda_loading_tidak_ada = true;
           this.loadingCtrl.tutup_loading();
         }
 
       } else {
-        this.loadingCtrl.tutup_loading();
-        this.data_beranda = true;
-        this.data_beranda_loading_tidak_ada = true;
 
-        this.obj_jumlah_kegiatan[index] = 0;
+        if (index == this.data_rap.length - 1 || index == 0) {
+          this.loadingCtrl.tutup_loading();
+          this.data_beranda = true;
+          this.data_beranda_loading_tidak_ada = true;
+  
+          this.obj_jumlah_cheklist_dokumen[index] = 0;
+        }
       }
-
   
     })
     .catch(error => {
@@ -220,7 +314,6 @@ export class Tab1Page {
     }).then((result) => {
       if (result.isConfirmed) {
         this.loadingCtrl.tutup_loading();
-        this.setget.set_swal(0);
         this.menampilkan_data_rap();
       }
     });
@@ -250,23 +343,33 @@ export class Tab1Page {
 
   //logout
   async keluar(){
-    this.loadingCtrl.tampil_loading("");
-    Swal.fire({
-      icon: 'warning',
-      title: 'Keluar akun ?',
-      text: 'Kembali ke login, anda yakin ?',
-      backdrop: false,
-      confirmButtonColor: '#3880ff',
-      confirmButtonText: 'Ya',
-      showDenyButton: true,
-      denyButtonText: `Tidak`,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.loadingCtrl.tutup_loading();
-        this.router.navigate(["/login"], { replaceUrl: true });
-      }else {
-        this.loadingCtrl.tutup_loading();
-      }
-    });
+
+    let data_button = this.setget.getButton();
+
+    if (data_button == 0) {
+      this.setget.setButton(1);
+
+      this.loadingCtrl.tampil_loading("");
+      Swal.fire({
+        icon: 'warning',
+        title: 'Keluar akun ?',
+        text: 'Kembali ke login, anda yakin ?',
+        backdrop: false,
+        confirmButtonColor: '#3880ff',
+        confirmButtonText: 'Ya',
+        showDenyButton: true,
+        denyButtonText: `Tidak`,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.loadingCtrl.tutup_loading();
+          this.router.navigate(["/login"], { replaceUrl: true });
+        }else {
+          this.loadingCtrl.tutup_loading();
+        }
+      });
+
+    } else {
+      this.toast.Toast_tampil();
+    }
   }
 }

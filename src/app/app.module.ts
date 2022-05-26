@@ -22,13 +22,14 @@ import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import { File } from '@awesome-cordova-plugins/file/ngx';
 import { DocumentViewer } from '@awesome-cordova-plugins/document-viewer/ngx';
 import { Geolocation } from '@awesome-cordova-plugins/geolocation/ngx';
+import { FileOpener } from '@awesome-cordova-plugins/file-opener/ngx';
 
 
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, IonicStorageModule.forRoot(), Ng2SearchPipeModule],
-  providers: [HTTP, Camera, SetGetServiceService, FileTransfer, FileTransferObject, File, DocumentViewer, Network, DatePipe, WebView, Chooser, InAppBrowser, Geolocation,{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
+  providers: [HTTP, Camera, SetGetServiceService, FileTransfer, FileTransferObject, File, DocumentViewer, Network, DatePipe, WebView, Chooser, InAppBrowser, Geolocation, FileOpener,{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
