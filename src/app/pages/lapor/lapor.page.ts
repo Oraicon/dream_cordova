@@ -322,6 +322,11 @@ export class LaporPage implements OnInit {
     if (this.item != "") {
       this.setget.set_lapor(this.item,this.volume,this.keterangan,this.imgURL);
       console.log(this.item);
+      this.item = null;
+    }
+
+    if (this.item == "") {
+      this.item == null;
     }
 
     if (this.volume != "") {
@@ -329,9 +334,18 @@ export class LaporPage implements OnInit {
       this.setget.set_lapor(this.item,this.volume,this.keterangan,this.imgURL);
     }
 
+    if(this. volume == ""){
+      this.volume = null;
+    }
+
     if (this.keterangan != "") {
       console.log(this.keterangan);
       this.setget.set_lapor(this.item,this.volume,this.keterangan,this.imgURL);
+
+    if(this. keterangan == ""){
+      this.keterangan = null;
+    }
+
     }
   }
 

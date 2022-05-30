@@ -6,6 +6,7 @@ import { File } from '@awesome-cordova-plugins/file/ngx';
 import { FileTransfer, FileUploadOptions, FileTransferObject} from '@awesome-cordova-plugins/file-transfer/ngx';
 import { ActionSheetController } from '@ionic/angular';
 import { LoadingServiceService } from 'src/app/services/loading-service.service';
+import { DatePipe } from '@angular/common';
 import { Camera, CameraOptions } from '@awesome-cordova-plugins/camera/ngx';
 import Swal from 'sweetalert2';
 import { SwalServiceService } from 'src/app/services/swal-service.service';
@@ -14,6 +15,7 @@ import { Router } from '@angular/router';
 import { ToastService } from 'src/app/services/toast.service';
 import { SizecountServiceService } from 'src/app/services/sizecount-service.service';
 import { FileOpener } from '@awesome-cordova-plugins/file-opener/ngx';
+import { ApiServicesService } from 'src/app/services/api-services.service';
 
 
 @Component({
@@ -33,7 +35,7 @@ export class ListPage implements OnInit {
   name_img:string="";
   format_img:string="JPEG";
 
-  data_list_data = [];
+  id;
   data_gambar_rusak = {};
   get_ext;
   loading_skeleton = true;
@@ -61,9 +63,10 @@ export class ListPage implements OnInit {
 
   constructor(
     private chooser: Chooser,
-    private navCtrl: NavController,
     private sizeService: SizecountServiceService,
+    private datepipe: DatePipe, 
     private toast: ToastService,
+    private apiService: ApiServicesService,
     private loadingCtrl: LoadingServiceService,
     private router:Router,
     private actionSheetController: ActionSheetController,
@@ -73,19 +76,19 @@ export class ListPage implements OnInit {
     private swal: SwalServiceService, 
     private file: File,
     private fileOpener: FileOpener,
-    private transfer: FileTransfer
+    private transfer: FileTransfer,
   ) { }
 
   ngOnInit() {
   }
 
   async ionViewWillEnter(){
+    this.loadingCtrl.tampil_loading("Sedang memuat . . .");
     this.data_progres_bar = 0;
     const data_mentah = this.setget.get_list_path();
-    this.data_list_data =  data_mentah[0];
-    this.kode_barang = data_mentah[1];
-    console.log(this.kode_barang);
-    await this.tampilkan_data();
+    this.id =  data_mentah[0];
+    console.log(this.id);
+    await this.tampilkan_data(this.id);
   }
 
   //delay filetranfer 30 detik
@@ -99,36 +102,108 @@ export class ListPage implements OnInit {
     return 1;
   }
 
+  //delay loading
+  async interval_counter_loading() {
+    return new Promise(resolve => { setTimeout(() => resolve(""), 500);});
+  }  
+
+  async delay_dulu(){
+    await this.interval_counter_loading();
+    this.loadingCtrl.tutup_loading();
+    return;
+  }
+
   //menampilkan data
-  async tampilkan_data(){
+  async tampilkan_data(id){
 
-    for (let index = 0; index < this.data_list_data.length; index++) {
-      let element = this.data_list_data[index];
+    this.apiService.menampilkan_data_file_sesuai_id(id)
+    .then(data => {
 
-      let nama = element.substring(14);
-      let get_ext = nama.split('.').pop();
+      const data_json = JSON.parse(data.data);
+      const status_data = data_json.status;
 
-      if (get_ext == "JPEG") {
-        let obj_data = {
-          path : element,
-          nama : nama,
-          tipe : "JPEG"
+      if (status_data == 1) {
+        
+        let arr_data_mentah = data_json.data;
+        console.log(arr_data_mentah);
+
+        for (let index = 0; index < arr_data_mentah.length; index++) {
+          const element = arr_data_mentah[index];
+          let nama = element.evidence_img.substring(14);
+          let get_ext = nama.split('.').pop();
+
+          let obj_data_evidance = {
+            "id": element.id,
+            "nama": nama,
+            "tipe": get_ext,
+            "path": element.evidence_img,
+            "status": element.status
+          }
+          
+          this.arr_data.push(obj_data_evidance);
         }
 
-        this.arr_data.push(obj_data);
+        if(this.arr_data.length == arr_data_mentah.length){
+          this.loading_skeleton = false;
+          this.delay_dulu();
+        }
+
       } else {
-        let obj_data = {
-          path : element,
-          nama : nama,
-          tipe : "pdf"
-        }
-
-        this.arr_data.push(obj_data);
+        this.swal.swal_code_error("Terjadi kesalahan !", "Data Kosong !")
       }
-    }
+  
+    })
+    .catch(error => {
+  
+      console.log(error)
+      this.loadingCtrl.tutup_loading();
+
+      this.timeout++;
+      
+      if (this.timeout >= 3) {
+        this.keluar_aplikasi();
+      } else {
+        if (error.status == -4) {
+          this.loadingCtrl.tutup_loading();
+          // this.tidak_ada_respon();
+          this.swal.swal_code_error("Terjadi kesalahan !", "RTO !")
+        } else {
+          this.loadingCtrl.tutup_loading();
+
+          this.swal.swal_code_error("Terjadi kesalahan !", "code error xxxx !, kembali ke login !");
+        }
+      }
+  
+    });
+
+    // for (let index = 0; index < this.data_list_data.length; index++) {
+    //   let element = this.data_list_data[index];
+
+    //   let nama = element.substring(14);
+    //   let get_ext = nama.split('.').pop();
+
+    //   if (get_ext == "JPEG") {
+    //     let obj_data = {
+    //       path : element,
+    //       nama : nama,
+    //       tipe : "JPEG"
+    //     }
+
+    //     this.arr_data.push(obj_data);
+    //   } else {
+    //     let obj_data = {
+    //       path : element,
+    //       nama : nama,
+    //       tipe : "pdf"
+    //     }
+
+    //     this.arr_data.push(obj_data);
+    //   }
+    // }
 
     this.loading_skeleton = false;
-
+    await this.interval_counter_loading();
+    this.loadingCtrl.tutup_loading();
   }
 
   //kembali ke aktiviti sebelumnya
@@ -162,7 +237,7 @@ export class ListPage implements OnInit {
   }
 
   //menampilkan pdf
-  tampilakn_pdf(path_pdf){
+  tampilakn_pdf(path_pdf, id){
 
     this.loadingCtrl.tampil_loading("Sedang memuat . . .");
 
@@ -198,7 +273,7 @@ export class ListPage implements OnInit {
         }).then((result) => {
           if (result.isConfirmed) {
             this.loadingCtrl.tutup_loading();
-            this.dapatkan_pdf(nama_pdf);
+            this.dapatkan_pdf(nama_pdf, null, null);
           }else {
             this.loadingCtrl.tutup_loading();
           }
@@ -209,7 +284,7 @@ export class ListPage implements OnInit {
     });
   }
 
-  dapatkan_pdf(nama){
+  dapatkan_pdf(nama, id, path){
     this.loadingCtrl.tampil_loading("Sedang Memuat . . .");
     this.chooser.getFile("application/pdf").then((data:ChooserResult)=>{
       console.log(data);
@@ -231,8 +306,15 @@ export class ListPage implements OnInit {
           this.swal.swal_aksi_gagal("Terjadi kesalahan", "File berukuran 5MB atau lebih !");
           return;
         } else {
+          // this.loadingCtrl.tutup_loading();
+          // this.swal_pdf(nama, path_uri_data, nama_data, id);          
           this.loadingCtrl.tutup_loading();
-          this.swal_pdf(nama, path_uri_data, nama_data);
+          if (nama != null) {
+            this.swal_pdf(nama, path_uri_data, nama_data, null);
+          } else {
+            let nama_timestamp = path.substring(14);
+            this.swal_pdf(nama_timestamp, path_uri_data, nama_data, id);
+          }
         }
     
       } else {
@@ -248,7 +330,7 @@ export class ListPage implements OnInit {
   }
 
   //dapatkan data gambar dari galeri/kamera
-  kamera(nama_img){
+  kamera(nama_img, id){
     this.loadingCtrl.tampil_loading("Memuat gambar . . .");
     this.camera.getPicture(this.cameraOptions).then(res=>{
 
@@ -261,7 +343,7 @@ export class ListPage implements OnInit {
       } else {
         this.loadingCtrl.tutup_loading();
         this.imgURI = 'data:image/jpeg;base64,' + res;
-        this.swal_gambar(nama_img, this.imgURI);
+        this.swal_gambar(nama_img, this.imgURI, id);
       }
     }, (err) => {
       // Handle error
@@ -270,7 +352,7 @@ export class ListPage implements OnInit {
     });
   }
 
-  galeri(nama_img){
+  galeri(nama_img, id){
     this.loadingCtrl.tampil_loading("Memuat gambar . . .");
     this.camera.getPicture(this.galeriOptions).then(res=>{
       let size_data = this.sizeService.size(res);
@@ -282,7 +364,7 @@ export class ListPage implements OnInit {
       } else {
         this.loadingCtrl.tutup_loading();
         this.imgURI = 'data:image/jpeg;base64,' + res;
-        this.swal_gambar(nama_img, this.imgURI);
+        this.swal_gambar(nama_img, this.imgURI, id);
       }
     }, (err) => {
       // Handle error
@@ -292,7 +374,7 @@ export class ListPage implements OnInit {
   }
 
   //modal ganti gambar
-  async presentActionSheet(path_data) {
+  async presentActionSheet(path_data, id) {
 
     let nama_img = path_data.substring(14);
 
@@ -303,13 +385,13 @@ export class ListPage implements OnInit {
         text: 'Kamera',
         icon: 'camera-outline',
         handler: () => {
-          this.kamera(nama_img);
+          this.kamera(nama_img, id);
         }
       }, {
         text: 'Galeri',
         icon: 'image-outline',
         handler: () => {
-          this.galeri(nama_img);
+          this.galeri(nama_img, id);
         }
       }, {
         text: 'Batal',
@@ -327,7 +409,7 @@ export class ListPage implements OnInit {
   }
 
   //alert konfirmasi ganti gambar
-  swal_gambar(nama, path_uri){
+  swal_gambar(nama, path_uri, id){
     this.loadingCtrl.tampil_loading("");
     Swal.fire({
       title: 'Peringatan !!',
@@ -346,7 +428,12 @@ export class ListPage implements OnInit {
         this.loadingCtrl.tutup_loading();
         this.sedang_mengirim = true;
         this.data_progres_bar = 0.3;
-        this.mengirim_gambar(nama, path_uri);
+        // this.mengirim_gambar(nama, path_uri);
+        if (id != null) {
+          this.update_cheklist_dokumen_detail(id, nama, path_uri, "JPEG");
+        } else {
+          this.mengirim_gambar(nama, path_uri);
+        }
       }else{
         this.loadingCtrl.tutup_loading();
       }
@@ -354,7 +441,7 @@ export class ListPage implements OnInit {
   }
 
   //alert konfirmasi pdf
-  swal_pdf(nama_pdf, uri_pdf, nama_dulu){
+  swal_pdf(nama_pdf, uri_pdf, nama_dulu, id){
   this.loadingCtrl.tampil_loading("");
     Swal.fire({
       icon: 'info',
@@ -370,7 +457,12 @@ export class ListPage implements OnInit {
         this.loadingCtrl.tutup_loading();
         this.sedang_mengirim = true;
         this.data_progres_bar = 0.3;
-        this.mengirim_pdf(nama_pdf, uri_pdf);
+        // this.mengirim_pdf(nama_pdf, uri_pdf);
+        if (id != null) {
+          this.update_cheklist_dokumen_detail(id, nama_pdf, uri_pdf, "pdf");
+        } else {
+          this.mengirim_pdf(nama_pdf, uri_pdf);
+        }
       }else {
         this.loadingCtrl.tutup_loading();
       }
@@ -415,6 +507,7 @@ export class ListPage implements OnInit {
             this.data_progres_bar = 0.9;
             this.loadingCtrl.tutup_loading();
             this.loading_skeleton = true;
+            this.arr_data = [];
             this.ionViewWillEnter();
           }
         });
@@ -490,6 +583,7 @@ export class ListPage implements OnInit {
             this.data_progres_bar = 0.9;
             this.loadingCtrl.tutup_loading();
             this.loading_skeleton = true;
+            this.arr_data = [];
             this.ionViewWillEnter();
           }
         });
@@ -526,6 +620,44 @@ export class ListPage implements OnInit {
     if (waktu_habis == 1) {
       fileTransfer.abort();
     }
+  }
+
+  async update_cheklist_dokumen_detail(id, nama, uri, tipe){
+    this.data_progres_bar = 0.5;
+
+    let nama_file  = this.datepipe.transform((new Date), 'MMddyyyyhmmss.') + tipe;
+    let name_ = nama_file.toString();
+
+    console.log(id);
+    console.log(name_);
+
+    this.apiService.update_progress_harian_evidence(id, name_)
+    .then(data => {
+
+      const data_json = JSON.parse(data.data);
+      console.log(data_json);
+      const status_data = data_json.status;
+
+      if (status_data == 0) {
+        if (tipe == "JPEG") {
+          this.mengirim_gambar(name_, uri);
+        }
+
+        if (tipe == "pdf") {
+            this.mengirim_pdf(name_, uri);
+        }
+      }
+
+  
+    })
+    .catch(error => {
+  
+      console.log(error.status);
+      console.log(error.error); // error message as string
+      console.log(error.headers);
+  
+    });
+
   }
 
   async tidak_ada_respon(tipe_data, nama, path_uri){

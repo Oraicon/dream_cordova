@@ -111,6 +111,8 @@ export class KegiatanPage implements OnInit {
         this.loading = false;
 
         this.delay_dulu();
+      } else {
+        this.swal.swal_code_error("Terjadi kesalahan !", "Data Kosong !")
       }
     })
     .catch(error => {

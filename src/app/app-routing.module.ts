@@ -71,6 +71,10 @@ const routes: Routes = [
     path: 'modal-riwayatlaporan',
     loadChildren: () => import('./modal/modal-riwayatlaporan/modal-riwayatlaporan.module').then( m => m.ModalRiwayatlaporanPageModule)
   },
+  {
+    path: 'listdokumen',
+    loadChildren: () => import('./pages/listdokumen/listdokumen.module').then( m => m.ListdokumenPageModule)
+  },
 
 
 ];

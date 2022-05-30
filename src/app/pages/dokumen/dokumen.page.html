@@ -82,7 +82,7 @@
 
                         <div *ngFor="let data of arr_cheklist_dokumen_detail | filter:searchTerm">
 
-                          <ng-container *ngIf="data.upload_dokumen == null; then tidak_ada_riwayat; else ada_riwayat" ></ng-container>
+                          <ng-container *ngIf="data.upload_dokumen == 1; then tidak_ada_riwayat; else ada_riwayat" ></ng-container>
 
                           <ng-template #tidak_ada_riwayat>
                             <ion-item button (click)="lapordokumen(data.id, data.uraian, data.pic)">

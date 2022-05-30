@@ -79,18 +79,12 @@ export class DokumenPage implements OnInit {
         console.log(this.arr_cheklist_dokumen_detail);
 
         this.loading = false;
+        this.delay_dulu();
       } else {
-        
+        this.swal.swal_code_error("Terjadi kesalahan !", "Data Kosong !")
       }
-
-      this.delay_dulu();
-      
     })
     .catch(error => {
-  
-      console.log(error.status);
-      console.log(error.error); // error message as string
-      console.log(error.headers);
   
       this.loadingService.tutup_loading();
 
@@ -106,12 +100,6 @@ export class DokumenPage implements OnInit {
         }
       }
     });
-  }
-
-  async tutup_loading(){
-    await this.interval_counter_loading();
-    this.loadingService.tutup_loading();
-    return;
   }
 
   //kembali ke aktiviti sebelumnya
@@ -131,6 +119,7 @@ export class DokumenPage implements OnInit {
   async delay_dulu(){
     await this.interval_counter_loading();
     this.loadingService.tutup_loading();
+    return;
   }
 
   async tidak_ada_respon(){
@@ -177,7 +166,7 @@ export class DokumenPage implements OnInit {
     });
   }
 
-  lapordokumen(id, uraian, pic){
+  async lapordokumen(id, uraian, pic){
 
     console.log(id, uraian, pic);
     this.setget.setDokumen_detail(id, uraian, pic, null, null);
@@ -195,9 +184,14 @@ export class DokumenPage implements OnInit {
   async riwayatlaporan(id,uraian, pic, keterangan, upload_dokumen){
     this.setget.setDokumen_detail(id, uraian, pic, keterangan, upload_dokumen);
 
-    const modal = await this.modalCtrl.create({
-      component: ModalRiwayatlaporanPage,
-    });
-    return await modal.present();
+    let data_button = this.setget.getButton();
+
+    if (data_button == 0) {
+      this.setget.setButton(1);
+      this.router.navigate(["/listdokumen"], { replaceUrl: true });
+    } else {
+      this.toast.Toast_tampil();
+    }
   }
+
 }

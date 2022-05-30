@@ -140,9 +140,9 @@ export class ProsesPage implements OnInit {
   }
 
   // pindah aktiviti detail riwayat
-  lihat_list(arr_data_list, kode_barang){
-    let arr_list_data = arr_data_list.split(",");
-    this.setget.set_list_path(arr_list_data, kode_barang);
+  lihat_list(id){
+    // let arr_list_data = arr_data_list.split(",");
+    this.setget.set_list_path(id, null);
 
     this.router.navigate(["/list"], { replaceUrl: true });
     // this.navCtrl.navigateForward(['/list']);

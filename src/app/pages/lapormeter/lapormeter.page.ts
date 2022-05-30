@@ -325,9 +325,17 @@ export class LapormeterPage implements OnInit {
     if (this.volume != "") {
       this.setget.set_lapor(this.item,this.volume,this.keterangan,this.imgURL);
     }
+    
+    if(this. volume == ""){
+      this.volume = null;
+    }
 
     if (this.keterangan != "") {
       this.setget.set_lapor(this.item,this.volume,this.keterangan,this.imgURL);
+    }
+
+    if(this. keterangan == ""){
+      this.keterangan = null;
     }
   }
 
@@ -391,7 +399,7 @@ export class LapormeterPage implements OnInit {
           let d = a + b; 
 
           if (d > c && this.total_meter !=0) {
-            this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Volume melebihi ketentuan");
+            this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Volume melebihi ketentuan !");
           }else{
             this.loadingService.tampil_loading("");
             Swal.fire({
@@ -478,40 +486,46 @@ export class LapormeterPage implements OnInit {
 
   async mengirim_informasi_data(id){
 
-      this.data_progres_bar = 0.5;
+    this.data_progres_bar = 0.5;
 
-      for (let index = 0; index < this.arr_data_img_pdf.length; index++) {
-        let element = this.arr_data_img_pdf[index];
-        this.apiService.menyimpan_path_file(id, element.nama)
-        .then(data => {
-          const data_json = JSON.parse(data.data);
-          const data_status = data_json.status;
+    for (let index = 0; index < this.arr_data_img_pdf.length; index++) {
+      let element = this.arr_data_img_pdf[index];
+      this.apiService.menyimpan_path_file(id, element.nama)
+      .then(data => {
+        const data_json = JSON.parse(data.data);
+        const data_status = data_json.status;
 
-          if (data_status == 0) {
+        if (data_status == 0) {
 
-            if (index == this.arr_data_img_pdf.length - 1) {
-              this.looping_file();
-              this.data_progres_bar = 0.6;
-            }
-            
-          } else {
-            this.swal.swal_aksi_gagal("Terjadi kesalahan", "code error 31 !");
+          if (index == this.arr_data_img_pdf.length - 1) {
+            this.looping_file();
+            this.data_progres_bar = 0.6;
           }
+          
+        } else {
+          this.swal.swal_aksi_gagal("Terjadi kesalahan", "code error 31 !");
+        }
 
-        })
-        .catch(error => {
-      
-        this.loadingService.tutup_loading();
+      })
+      .catch(error => {
+
+        console.log(error);
+
+        if (index == this.arr_data_img_pdf.length -1) {
+          this.loadingService.tutup_loading();
           if (error.status == -4) {
             this.toastService.Toast("Gagal mengirim, mencoba mengirim kembali !");
             this.mengirim_informasi_data(id);
             this.data_progres_bar = 0.5;
           } else {
-          this.swal.swal_code_error("Terjadi kesalahan", "code error 29 !, kembali ke login !");
-          return;
+            this.loadingService.tutup_loading();
+            this.swal.swal_code_error("Terjadi kesalahan", "code error 29 !, kembali ke login !");
+            return;
           }
-        });
-      }
+        }
+    
+      });
+    }
   }
 
   looping_file(){

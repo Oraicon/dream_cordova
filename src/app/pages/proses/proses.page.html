@@ -119,7 +119,7 @@
 
           <div class="scrollan" scrolly="true" style="max-height:29rem">
 
-            <ion-card *ngFor='let data of data_arr_progressmilsetone | filter:searchTerm; let i = index' class="ion-activatable" (click)="lihat_list(data.list_path, data.item)" >
+            <ion-card *ngFor='let data of data_arr_progressmilsetone | filter:searchTerm; let i = index' class="ion-activatable" (click)="lihat_list(data.id)" >
               <!-- <ion-card-content>
                 <ion-grid fixed class="ion-no-padding">
                   <ion-row>

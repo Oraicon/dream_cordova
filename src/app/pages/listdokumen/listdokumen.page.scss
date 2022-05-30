@@ -1,0 +1,65 @@
+.background_color{
+    --background: #1B2338;
+  }
+  
+  .padding_button{
+    --padding-end: 0px
+  }
+  
+  .background_color_biru_gelap{
+    background: #1B2338;
+    height: 5rem;
+    border-radius: 0 0 50% 50%;
+  }
+  
+  .border_radius{
+    border-radius: 1rem;
+  }
+  
+  .padding_bottom_detail_informasi{
+    padding-bottom: 5px;
+  }
+  
+  .padding_icon{
+    padding-right: 5px;
+    padding-bottom: 6px;
+  }
+  
+  .pad_top{
+    padding-top: 0px;
+  }
+  
+  //scroll
+  .scrollan[scrollx=true],div[scrolly=true] {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .scrollan[scrolly=true] {
+      overflow-y: auto;
+  }
+  
+  // fontsize
+  .text_header{
+    font-size: 150%;
+  }
+  
+  .text_judul{
+    font-size: 160%;
+  }
+  
+  .pad_bottom{
+    padding-bottom: 5px;
+  }
+  
+  .detail_informasi{
+    font-size: 120%;
+  }
+  
+  h3{
+    font-size: 110%;
+  }
+  
+  .font_size_button{
+    font-size: 115%;
+  }

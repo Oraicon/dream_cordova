@@ -64,19 +64,76 @@
                     </ion-thumbnail>
                     <ion-label class="ion-text-wrap" (click)="tampilkan_konten(data.path, data.nama)">{{ data.nama }}</ion-label>
   
-                    <ion-button color="primary" expand="block" fill="outline" (click)="presentActionSheet(data.path)" *ngIf="data_gambar_rusak[i] == 'rusak'; else gambar_tidak_rusak">
+                    <ion-button color="primary" expand="block" fill="outline" (click)="presentActionSheet(data.path, data.id)" *ngIf="data_gambar_rusak[i] == 'rusak'; else gambar_tidak_rusak">
                       Edit
                     </ion-button>
   
-                    <ng-template #gambar_tidak_rusak></ng-template>
+                    <ng-template #gambar_tidak_rusak>
+
+                      <ng-container *ngIf="data.status == 3; then retake else bukan3"></ng-container>
+
+                      <ng-template #retake>
+                        <ion-button color="danger" expand="block" fill="outline" (click)="presentActionSheet(data.path, data.id)">
+                          Re-Take
+                        </ion-button>
+                      </ng-template>
+                      <ng-template #bukan3>
+                        <ng-container *ngIf="data.status == 2; then waiting else bukan2"></ng-container>
+
+                        <ng-template #waiting>
+                          <ion-button color="warning" expand="block" fill="outline" [attr.disabled]="true">
+                            Waiting
+                          </ion-button>
+                        </ng-template>
+                        <ng-template #bukan2>
+                          <ng-container *ngIf="data.status == 1; then approve else bukan_approve"></ng-container>
+
+                          <ng-template #approve>
+                            <ion-button color="success" expand="block" fill="outline" [attr.disabled]="true">
+                              Approve
+                            </ion-button>
+                          </ng-template>
+                          <ng-template #bukan_approve></ng-template>
+                        </ng-template>
+                      </ng-template>
+
+                    </ng-template>
                   </ng-template>
 
                   <ng-template #tampil_pdf>
                     <ion-thumbnail slot="start">
                       <img (click)="tampilakn_pdf(data.path)" src="assets/pdf_icon.png"/>
                     </ion-thumbnail>
-                    <ion-label class="ion-text-wrap" (click)="tampilakn_pdf(data.path)"
+                    <ion-label class="ion-text-wrap" (click)="tampilakn_pdf(data.path, data.id)"
                     >{{ data.nama }}</ion-label>
+
+                    <ng-container *ngIf="data.status == 3; then retake else bukan3"></ng-container>
+
+                    <ng-template #retake>
+                      <ion-button color="danger" expand="block" fill="outline" (click)="dapatkan_pdf(null, data.id, data.path)">
+                        Re-Take
+                      </ion-button>
+                    </ng-template>
+                    <ng-template #bukan3>
+                      <ng-container *ngIf="data.status == 2; then waiting else bukan2"></ng-container>
+
+                      <ng-template #waiting>
+                        <ion-button color="warning" expand="block" fill="outline" [attr.disabled]="true">
+                          Waiting
+                        </ion-button>
+                      </ng-template>
+                      <ng-template #bukan2>
+                        <ng-container *ngIf="data.status == 1; then approve else bukan_approve"></ng-container>
+
+                        <ng-template #approve>
+                          <ion-button color="success" expand="block" fill="outline" [attr.disabled]="true">
+                            Approve
+                          </ion-button>
+                        </ng-template>
+                        <ng-template #bukan_approve></ng-template>
+                      </ng-template>
+                    </ng-template>
+
                   </ng-template>
                   
                 </ion-item>
