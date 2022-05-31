@@ -67,7 +67,7 @@
                               <ion-thumbnail slot="start" (click)="buka_pdf(data.path)">
                                 <img src="assets/pdf_icon.png" />
                               </ion-thumbnail>
-                              <ion-label (click)="buka_pdf(data.path)">{{ data.nama }}</ion-label>
+                              <ion-label class="ion-text-wrap" (click)="buka_pdf(data.path)">{{ data.nama }}</ion-label>
 
                               <ng-container *ngIf="data.status == 3; then retake else bukan3"></ng-container>
 
@@ -101,7 +101,7 @@
                               <ion-thumbnail slot="start" (click)="buka_doc(data.path)">
                                 <img src="assets/dok_icon.png" />
                               </ion-thumbnail>
-                              <ion-label (click)="buka_doc(data.path)">{{ data.nama }}</ion-label>
+                              <ion-label class="ion-text-wrap" (click)="buka_doc(data.path)">{{ data.nama }}</ion-label>
 
                               <ng-container *ngIf="data.status == 3; then retake else bukan3"></ng-container>
 

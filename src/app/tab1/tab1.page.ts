@@ -20,7 +20,6 @@ export class Tab1Page {
   //loading
   data_beranda = false;
   data_beranda_loading_tidak_ada = false;
-  data_kosong = false;
 
   //variable data 
   data_rap = [];
@@ -123,20 +122,39 @@ export class Tab1Page {
         this.data_rap = data_json.data;
 
         for (let index = 0; index < this.data_rap.length; index++) {
-          const rap_status = this.data_rap[index].id_status;
+          let rap_status = this.data_rap[index].id_status;
 
           if (rap_status == 12) {
-            const element = this.data_rap[index];
+            let element = this.data_rap[index];
             
-            this.obj_data_rap[index] = element;
+            this.obj_data_rap["data_rap1_"+index] = "tidak_kosong";
+            console.log(this.obj_data_rap);
+
+            // this.obj_data_rap[index] = element;
 
             this.tanggal_moment["periodeawal"+index] = this.momentService.ubah_format_tanggal(element.periode_awal);
             this.tanggal_moment["periodeakhir"+index] = this.momentService.ubah_format_tanggal(element.periode_akhir);
             
             this.menampilkan_seluruh_kegiatan(this.data_rap[index].id, index, data_l_nama);
-          } else {
-            this.obj_data_rap[index] = "kosong";
+          } 
+          
+          if (rap_status == 18) {
+            
+            this.obj_data_rap["data_rap1_"+index] = "kosong";
+            this.obj_data_rap["data_rap3_"+index] = "selesai";
 
+            console.log(this.obj_data_rap);
+
+            if (index == this.data_rap.length - 1 || index == 0) {
+              this.data_beranda = true;
+              this.data_beranda_loading_tidak_ada = true;
+              this.loadingCtrl.tutup_loading();
+            }
+          } 
+          
+          if (rap_status != 12 && rap_status != 18) {
+            this.obj_data_rap["data_rap1_"+index] = "kosong";
+            this.obj_data_rap["data_rap2_"+index] = false;
             if (index == this.data_rap.length - 1 || index == 0) {
               this.data_beranda = true;
               this.data_beranda_loading_tidak_ada = true;
@@ -151,11 +169,11 @@ export class Tab1Page {
         
         this.data_rap = [0];
 
-        this.obj_data_rap[0] = "kosong";
+        this.obj_data_rap["data_rap1"+0] = "kosong";
+        this.obj_data_rap["data_rap2"+0] = true;
 
         console.log(this.obj_data_rap);
 
-        this.data_kosong = true;
         this.data_beranda = false;
         this.data_beranda_loading_tidak_ada = true;
         this.loadingCtrl.tutup_loading();
@@ -204,6 +222,7 @@ export class Tab1Page {
         }
 
       } else {
+        this.obj_jumlah_kegiatan[index] = 0;
 
         if (index == this.data_rap.length - 1 || index == 0) {
           // this.loadingCtrl.tutup_loading();
@@ -211,7 +230,6 @@ export class Tab1Page {
           // this.data_beranda_loading_tidak_ada = true;
           this.menampilkan_dokumen_ceklist(id_rap_master, index, nama);
   
-          this.obj_jumlah_kegiatan[index] = 0;
         }
       }
 

@@ -455,7 +455,7 @@ export class LaporPage implements OnInit {
       const data_id_evidence = data_json.data;
   
       if (data_status == 0) {
-        this.mengirim_informasi_data(data_id_evidence);
+        this.loooping_mengirim_informasi_data(data_id_evidence);
         this.data_progres_bar = 0.4;
       } else {
         this.loadingService.tutup_loading();
@@ -468,8 +468,10 @@ export class LaporPage implements OnInit {
       this.loadingService.tutup_loading();
       if (error.status == -4) {
         console.log(error);
-        this.toastService.Toast("Gagal mengirim, mencoba mengirim kembali !");
-        this.mengirim_data_api(item, volume, keterangan, lat, long);
+        // this.toastService.Toast("Gagal mengirim, mencoba mengirim kembali !");
+        // this.mengirim_data_api(item, volume, keterangan, lat, long);
+        this.sedang_mengirim = false;
+        this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Coba beberapa saat lagi !");
         this.data_progres_bar = 0.2;
       } else {
         this.swal.swal_code_error("Terjadi kesalahan", "code error 10 !, kembali ke login !");
@@ -477,45 +479,51 @@ export class LaporPage implements OnInit {
     });
   }
 
-  async mengirim_informasi_data(id){
-
+  async loooping_mengirim_informasi_data(id){
     this.data_progres_bar = 0.5;
-
-    console.log(this.arr_data_img_pdf);
 
     for (let index = 0; index < this.arr_data_img_pdf.length; index++) {
       let element = this.arr_data_img_pdf[index];
-      this.apiService.menyimpan_path_file(id, element.nama)
-      .then(data => {
-        const data_json = JSON.parse(data.data);
-        const data_status = data_json.status;
-
-        if (data_status == 0) {
-
-          if (index == this.arr_data_img_pdf.length - 1) {
-            this.looping_file();
-            this.data_progres_bar = 0.6;
-          }
-          
-        } else {
-          this.swal.swal_aksi_gagal("Terjadi kesalahan", "code error 31 !");
-        }
-
-      })
-      .catch(error => {
-    
-      // console.log(error);
-      this.loadingService.tutup_loading();
-      console.log(error);
-      if (error.status == -4) {
-        this.toastService.Toast("Gagal mengirim, mencoba mengirim kembali !");
-        this.mengirim_informasi_data(id);
-        this.data_progres_bar = 0.5;
-      } else {
-        this.swal.swal_code_error("Terjadi kesalahan", "code error 29 !, kembali ke login !");
-      }
-      });
+      
+      this.mengirim_informasi_data(id, element.nama, index);
     }
+  }
+
+  async mengirim_informasi_data(id, nama, index){
+
+  this.data_progres_bar = 0.5;
+
+    this.apiService.menyimpan_path_file(id, nama)
+    .then(data => {
+      const data_json = JSON.parse(data.data);
+      const data_status = data_json.status;
+
+      if (data_status == 0) {
+
+        if (index == this.arr_data_img_pdf.length - 1) {
+          this.looping_file();
+          this.data_progres_bar = 0.6;
+        }
+        
+      } else {
+        this.swal.swal_code_error("Terjadi kesalahan", "code error 31 !");
+        return;
+      }
+
+    })
+    .catch(error => {
+  
+    // console.log(error);
+    this.loadingService.tutup_loading();
+    console.log(error);
+    if (error.status == -4) {
+      this.toastService.Toast("Gagal mengirim, mencoba mengirim kembali !");
+      this.mengirim_informasi_data(id, nama, index);
+      this.data_progres_bar = 0.5;
+    } else {
+      this.swal.swal_code_error("Terjadi kesalahan", "code error 29 !, kembali ke login !");
+    }
+    });
   }
 
   looping_file(){

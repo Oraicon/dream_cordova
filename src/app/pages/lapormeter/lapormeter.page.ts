@@ -36,6 +36,7 @@ export class LapormeterPage implements OnInit {
   tipe_laporan;
   total_meter = 0;
   progress_meter = 0;
+  penghitung_index = 0;
 
   cek_koneksi = true;
   keterangan;
@@ -464,7 +465,7 @@ export class LapormeterPage implements OnInit {
       const data_id_evidence = data_json.data;
 
       if (data_status == 0) {
-        this.mengirim_informasi_data(data_id_evidence);
+        this.loooping_mengirim_informasi_data(data_id_evidence);
         this.data_progres_bar = 0.4;
       } else {
         this.loadingService.tutup_loading();
@@ -475,58 +476,88 @@ export class LapormeterPage implements OnInit {
     .catch(error => {
       this.loadingService.tutup_loading();
       if (error.status == -4) {
-        this.toastService.Toast("Gagal mengirim, mencoba mengirim kembali !");
-        this.mengirim_data_api(item, volume, keterangan, lat, long);
-        this.data_progres_bar = 0.2;
+        // this.toastService.Toast("Gagal mengirim, mencoba mengirim kembali !");
+        // this.mengirim_data_api(item, volume, keterangan, lat, long);
+        // this.data_progres_bar = 0.2;
+        this.sedang_mengirim = false;
+        this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Coba beberapa saat lagi !");
       } else {
         this.swal.swal_code_error("Terjadi kesalahan", "code error 10 !, kembali ke login !");
       }
     });
   }
 
-  async mengirim_informasi_data(id){
-
+  async loooping_mengirim_informasi_data(id){
     this.data_progres_bar = 0.5;
 
     for (let index = 0; index < this.arr_data_img_pdf.length; index++) {
       let element = this.arr_data_img_pdf[index];
-      this.apiService.menyimpan_path_file(id, element.nama)
-      .then(data => {
-        const data_json = JSON.parse(data.data);
-        const data_status = data_json.status;
-
-        if (data_status == 0) {
-
-          if (index == this.arr_data_img_pdf.length - 1) {
-            this.looping_file();
-            this.data_progres_bar = 0.6;
-          }
-          
-        } else {
-          this.swal.swal_aksi_gagal("Terjadi kesalahan", "code error 31 !");
-        }
-
-      })
-      .catch(error => {
-
-        console.log(error);
-
-        if (index == this.arr_data_img_pdf.length -1) {
-          this.loadingService.tutup_loading();
-          if (error.status == -4) {
-            this.toastService.Toast("Gagal mengirim, mencoba mengirim kembali !");
-            this.mengirim_informasi_data(id);
-            this.data_progres_bar = 0.5;
-          } else {
-            this.loadingService.tutup_loading();
-            this.swal.swal_code_error("Terjadi kesalahan", "code error 29 !, kembali ke login !");
-            return;
-          }
-        }
-    
-      });
+      
+      this.mengirim_informasi_data(id, element.nama, index);
     }
   }
+
+  async mengirim_informasi_data(id, nama, index){
+
+    this.data_progres_bar = 0.5;
+
+    this.apiService.menyimpan_path_file(id, nama)
+    .then(data => {
+      const data_json = JSON.parse(data.data);
+      const data_status = data_json.status;
+
+      if (data_status == 0) {
+        // this.penghitung_index++;
+
+        if(index == this.arr_data_img_pdf.length - 1){
+          // this.pengecekan_informasi_data();
+          this.looping_file();
+          this.data_progres_bar = 0.6;
+        }
+
+        // if (this.penghitung_index == this.arr_data_img_pdf.length - 1) {
+        //   this.looping_file();
+        //   this.data_progres_bar = 0.6;
+        // }
+        
+      } else {
+        this.swal.swal_code_error("Terjadi kesalahan", "code error 31 !");
+        return;
+      }
+
+    })
+    .catch(error => {
+
+      console.log(error);
+
+      if (index == this.arr_data_img_pdf.length -1) {
+        this.loadingService.tutup_loading();
+        if (error.status == -4) {
+          this.toastService.Toast("Gagal mengirim, mencoba mengirim kembali !");
+          this.mengirim_informasi_data(id, nama, index);
+          this.data_progres_bar = 0.5;
+        } else {
+          this.loadingService.tutup_loading();
+          this.swal.swal_code_error("Terjadi kesalahan", "code error 29 !, kembali ke login !");
+          return;
+        }
+      }
+    
+    });
+  }
+
+  // async pengecekan_informasi_data(){
+  //   console.log(this.penghitung_index);
+  //   console.log(this.arr_data_img_pdf.length);
+
+  //   if (this.penghitung_index == this.arr_data_img_pdf.length - 1) {
+  //     this.looping_file();
+  //     this.data_progres_bar = 0.6;
+  //   } else {
+  //     await this.delay_pengecekan();
+  //     this.pengecekan_informasi_data();
+  //   }
+  // }
 
   looping_file(){
       this.data_progres_bar = 0.7;
@@ -656,6 +687,7 @@ export class LapormeterPage implements OnInit {
         this.hasil_file_dikirim.push(obj_hasil_akhir);
 
         if(index == this.arr_data_img_pdf.length-1){
+          
           this.pengecekan(2);
         }
       }

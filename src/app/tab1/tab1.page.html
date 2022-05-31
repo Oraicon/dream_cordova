@@ -24,11 +24,11 @@
     <ion-row class="ion-padding-top background_color_biru_gelap">
       <ion-col size="12" class="" *ngFor="let data of data_rap; let i = index">
 
-        <ng-container *ngIf="obj_data_rap[i] == 'kosong'; then rap_kosong; else rap_ada"></ng-container>
+        <ng-container *ngIf="obj_data_rap['data_rap1_'+i] == 'kosong'; then rap_kosong; else rap_ada"></ng-container>
 
         <ng-template #rap_kosong>
 
-          <ng-container *ngIf="data_kosong == true; then rap_data_kosong; else rap_data_kosong_ada"></ng-container>
+          <ng-container *ngIf="obj_data_rap['data_rap2_'+i] == true; then rap_data_kosong; else rap_data_kosong_ada"></ng-container>
 
           <ng-template #rap_data_kosong>
 
@@ -61,32 +61,65 @@
 
           <ng-template #rap_data_kosong_ada>
 
-            <ion-card class="bayangan">
-              <ion-card-header class="ion-text-center">
-                <ion-card-title class="ion-text-center text_judul">{{  data.kode_rap }}</ion-card-title>
-              </ion-card-header>
-              <ion-card-content class="ion-no-padding">
-                <ion-grid fixed class="ion-no-padding">
-                  <ion-row>
-                    <ion-col size="12">
-                      <ion-grid fixed>
-                        <ion-row class="ion-text-center">
-                          <ion-col size="12">
-                            <img class="image_size" src="assets/kosong.png" (error)="errorHandler($event)">
-                          </ion-col>
-                          <ion-col size="12">
-                            <h1 >Proyek belum siap !</h1>
-                          </ion-col>
-                          <ion-col size="12">
-                            <h2>Maaf, proyek belum siap digunakan !</h2>
-                          </ion-col>
-                        </ion-row>
-                      </ion-grid>
-                    </ion-col>
-                  </ion-row>
-                </ion-grid>
-              </ion-card-content>
-            </ion-card>
+            <ng-container *ngIf="obj_data_rap['data_rap3_'+i] == 'selesai'; then rap_data_selesai; else rap_data_belum"></ng-container>
+
+            <ng-template #rap_data_selesai>
+              <ion-card class="bayangan">
+                <ion-card-header class="ion-text-center">
+                  <ion-card-title class="ion-text-center text_judul">{{  data.kode_rap }}</ion-card-title>
+                </ion-card-header>
+                <ion-card-content class="ion-no-padding">
+                  <ion-grid fixed class="ion-no-padding">
+                    <ion-row>
+                      <ion-col size="12">
+                        <ion-grid fixed>
+                          <ion-row class="ion-text-center">
+                            <ion-col size="12">
+                              <img class="image_size" src="assets/beres.png" (error)="errorHandler($event)">
+                            </ion-col>
+                            <ion-col size="12">
+                              <h1 >Proyek selesai !</h1>
+                            </ion-col>
+                            <ion-col size="12">
+                              <h2>Proyek ini sudah selesai !</h2>
+                            </ion-col>
+                          </ion-row>
+                        </ion-grid>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+                </ion-card-content>
+              </ion-card>
+            </ng-template>
+
+            <ng-template #rap_data_belum>
+              <ion-card class="bayangan">
+                <ion-card-header class="ion-text-center">
+                  <ion-card-title class="ion-text-center text_judul">{{  data.kode_rap }}</ion-card-title>
+                </ion-card-header>
+                <ion-card-content class="ion-no-padding">
+                  <ion-grid fixed class="ion-no-padding">
+                    <ion-row>
+                      <ion-col size="12">
+                        <ion-grid fixed>
+                          <ion-row class="ion-text-center">
+                            <ion-col size="12">
+                              <img class="image_size" src="assets/kosong.png" (error)="errorHandler($event)">
+                            </ion-col>
+                            <ion-col size="12">
+                              <h1 >Proyek belum siap !</h1>
+                            </ion-col>
+                            <ion-col size="12">
+                              <h2>Maaf, proyek belum siap digunakan !</h2>
+                            </ion-col>
+                          </ion-row>
+                        </ion-grid>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+                </ion-card-content>
+              </ion-card>
+            </ng-template>
 
           </ng-template>
 

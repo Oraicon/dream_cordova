@@ -32,6 +32,7 @@ export class Tab3Page {
   imgURL:any = 'assets/pp.jpg';
   cek_koneksi = true;
   md5_upload = "assets/images/";
+  timeout = 0;
   
   //variable frontend
   lihatsandi = false;
@@ -506,10 +507,21 @@ export class Tab3Page {
 
       //error upload ke database data profil
       this.loadingCtrl.tutup_loading();
-      if(error.status == -4){
-        this.swalService.swal_aksi_gagal("Terjadi kesalahan !", "Tidak ada respon, coba beberapa saat lagi !");
+
+      console.log(error)
+  
+      this.loadingCtrl.tutup_loading();
+  
+      this.timeout++;
+      
+      if (this.timeout >= 3) {
+        this.keluar_aplikasi();
       }else{
-        this.swalService.swal_code_error("Terjadi kesalahan !", "Code error 14 !, kembali ke login !");
+        if(error.status == -4){
+          this.swalService.swal_aksi_gagal("Terjadi kesalahan !", "Tidak ada respon, coba beberapa saat lagi !");
+        }else{
+          this.swalService.swal_code_error("Terjadi kesalahan !", "Code error 14 !, kembali ke login !");
+        }
       }
 
     });
@@ -543,13 +555,20 @@ export class Tab3Page {
       console.log(err);
       this.loadingCtrl.tutup_loading();
 
-      if(err.status == -4){
-        this.swalService.swal_aksi_gagal("Terjadi kesalahan !", "Tidak ada respon, coba beberapa saat lagi !");
-        return
+      this.timeout++;
+      
+      if (this.timeout >= 3) {
+        this.keluar_aplikasi();
       }else{
-        this.swalService.swal_code_error("Terjadi kesalahan !", "code error 6 !, kembali ke login !");
-        return
+        if(err.status == -4){
+          this.swalService.swal_aksi_gagal("Terjadi kesalahan !", "Tidak ada respon, coba beberapa saat lagi !");
+          return
+        }else{
+          this.swalService.swal_code_error("Terjadi kesalahan !", "code error 6 !, kembali ke login !");
+          return
+        }
       }
+
 
     });
   }
@@ -580,11 +599,19 @@ export class Tab3Page {
     .catch(err => {
       //error
       this.loadingCtrl.tutup_loading();
-      if(err.status == -4){
-        this.swalService.swal_aksi_gagal("Terjadi kesalahan !", "Tidak ada respon, coba beberapa saat lagi !");
+
+      this.timeout++;
+      
+      if (this.timeout >= 3) {
+        this.keluar_aplikasi();
       }else{
-        this.swalService.swal_code_error("Terjadi kesalahan !", "code error 8 !, kembali ke login !");
+        if(err.status == -4){
+          this.swalService.swal_aksi_gagal("Terjadi kesalahan !", "Tidak ada respon, coba beberapa saat lagi !");
+        }else{
+          this.swalService.swal_code_error("Terjadi kesalahan !", "code error 8 !, kembali ke login !");
+        }
       }
+
     });
   }
 

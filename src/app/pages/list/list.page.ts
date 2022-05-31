@@ -73,6 +73,7 @@ export class ListPage implements OnInit {
     private setget: SetGetServiceService,
     private modalCtrl: ModalController,
     private camera: Camera,
+    private toastService: ToastService,
     private swal: SwalServiceService, 
     private file: File,
     private fileOpener: FileOpener,
@@ -165,8 +166,8 @@ export class ListPage implements OnInit {
       } else {
         if (error.status == -4) {
           this.loadingCtrl.tutup_loading();
-          // this.tidak_ada_respon();
-          this.swal.swal_code_error("Terjadi kesalahan !", "RTO !")
+          this.arr_data = [];
+          this.tidak_ada_respon("td", id, null)
         } else {
           this.loadingCtrl.tutup_loading();
 
@@ -176,34 +177,6 @@ export class ListPage implements OnInit {
   
     });
 
-    // for (let index = 0; index < this.data_list_data.length; index++) {
-    //   let element = this.data_list_data[index];
-
-    //   let nama = element.substring(14);
-    //   let get_ext = nama.split('.').pop();
-
-    //   if (get_ext == "JPEG") {
-    //     let obj_data = {
-    //       path : element,
-    //       nama : nama,
-    //       tipe : "JPEG"
-    //     }
-
-    //     this.arr_data.push(obj_data);
-    //   } else {
-    //     let obj_data = {
-    //       path : element,
-    //       nama : nama,
-    //       tipe : "pdf"
-    //     }
-
-    //     this.arr_data.push(obj_data);
-    //   }
-    // }
-
-    this.loading_skeleton = false;
-    await this.interval_counter_loading();
-    this.loadingCtrl.tutup_loading();
   }
 
   //kembali ke aktiviti sebelumnya
@@ -305,9 +278,7 @@ export class ListPage implements OnInit {
           this.loadingCtrl.tutup_loading();
           this.swal.swal_aksi_gagal("Terjadi kesalahan", "File berukuran 5MB atau lebih !");
           return;
-        } else {
-          // this.loadingCtrl.tutup_loading();
-          // this.swal_pdf(nama, path_uri_data, nama_data, id);          
+        } else {    
           this.loadingCtrl.tutup_loading();
           if (nama != null) {
             this.swal_pdf(nama, path_uri_data, nama_data, null);
@@ -430,7 +401,7 @@ export class ListPage implements OnInit {
         this.data_progres_bar = 0.3;
         // this.mengirim_gambar(nama, path_uri);
         if (id != null) {
-          this.update_cheklist_dokumen_detail(id, nama, path_uri, "JPEG");
+          this.update_progress_harian_evidance(id, nama, path_uri, "JPEG");
         } else {
           this.mengirim_gambar(nama, path_uri);
         }
@@ -459,7 +430,7 @@ export class ListPage implements OnInit {
         this.data_progres_bar = 0.3;
         // this.mengirim_pdf(nama_pdf, uri_pdf);
         if (id != null) {
-          this.update_cheklist_dokumen_detail(id, nama_pdf, uri_pdf, "pdf");
+          this.update_progress_harian_evidance(id, nama_pdf, uri_pdf, "pdf");
         } else {
           this.mengirim_pdf(nama_pdf, uri_pdf);
         }
@@ -530,7 +501,7 @@ export class ListPage implements OnInit {
       if (this.timeout >= 3) {
         this.keluar_aplikasi();
       } else {
-        if (error.status == -4) {
+        if (error.status == 4) {
           this.tidak_ada_respon("img", nama, path_uri);
         } else {
           this.swal.swal_code_error("Terjadi kesalahan !", "code error 26 !, kembali ke login !");
@@ -608,7 +579,7 @@ export class ListPage implements OnInit {
       if (this.timeout >= 3) {
         this.keluar_aplikasi();
       } else {
-        if (error.status == -4) {
+        if (error.status == 4) {
           this.tidak_ada_respon("pdf", nama, path_uri);
         } else {
           this.swal.swal_code_error("Terjadi kesalahan !", "code error 28 !, kembali ke login !");
@@ -622,7 +593,7 @@ export class ListPage implements OnInit {
     }
   }
 
-  async update_cheklist_dokumen_detail(id, nama, uri, tipe){
+  async update_progress_harian_evidance(id, nama, uri, tipe){
     this.data_progres_bar = 0.5;
 
     let nama_file  = this.datepipe.transform((new Date), 'MMddyyyyhmmss.') + tipe;
@@ -646,15 +617,24 @@ export class ListPage implements OnInit {
         if (tipe == "pdf") {
             this.mengirim_pdf(name_, uri);
         }
+      }else{
+        this.swal.swal_aksi_gagal("Terjadi kesalahan !", "code error 48 !");
+        return;
       }
 
   
     })
     .catch(error => {
   
-      console.log(error.status);
-      console.log(error.error); // error message as string
-      console.log(error.headers);
+      console.log(error);
+      this.loadingCtrl.tutup_loading();
+      if (error.status == -4) {
+        this.toastService.Toast("Gagal mengirim, mencoba mengirim kembali !");
+        this.update_progress_harian_evidance(id, nama, uri, tipe);
+        this.data_progres_bar = 0.2;
+      } else {
+        this.swal.swal_code_error("Terjadi kesalahan", "code error 49 !, kembali ke login !");
+      }
   
     });
 
@@ -678,11 +658,15 @@ export class ListPage implements OnInit {
       if (result.isConfirmed) {
         this.loadingCtrl.tutup_loading();
         this.setget.set_swal(0);
-        // if (tipe_data == "img") {
-        //   this.mengirim_gambar(nama, path_uri);
-        // } else {
-        //   this.mengirim_pdf(nama, path_uri);
-        // }
+        if (tipe_data == "img") {
+          this.mengirim_gambar(nama, path_uri);
+        } 
+        if(tipe_data == "pdf") {
+          this.mengirim_pdf(nama, path_uri);
+        }
+        if(tipe_data == "td") {
+          this.tampilkan_data(nama);
+        }
       }
     });
   }

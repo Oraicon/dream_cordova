@@ -184,8 +184,8 @@ export class ListdokumenPage implements OnInit {
       } else {
         if (error.status == -4) {
           this.loadingCtrl.tutup_loading();
-          // this.tidak_ada_respon();
-          this.swal.swal_code_error("Terjadi kesalahan !", "RTO !")
+          this.data_arr_evidance = []
+          this.tidak_ada_respon("td", null, null, null);
         } else {
           this.loadingCtrl.tutup_loading();
 
@@ -393,7 +393,7 @@ export class ListdokumenPage implements OnInit {
         this.keluar_aplikasi();
       } else {
         if (error.status == -4) {
-          this.tidak_ada_respon("docx", nama, path_uri);
+          this.tidak_ada_respon("docx", nama, path_uri, tipe_mime);
         } else {
           this.swal.swal_code_error("Terjadi kesalahan !", "code error 41 !, kembali ke login !");
         }
@@ -590,7 +590,7 @@ export class ListdokumenPage implements OnInit {
         this.keluar_aplikasi();
       } else {
         if (error.status == -4) {
-          this.tidak_ada_respon("pdf", nama, path_uri);
+          this.tidak_ada_respon("pdf", nama, path_uri, null);
         } else {
           this.swal.swal_code_error("Terjadi kesalahan !", "code error 45 !, kembali ke login !");
         }
@@ -785,7 +785,7 @@ export class ListdokumenPage implements OnInit {
         this.keluar_aplikasi();
       } else {
         if (error.status == -4) {
-          this.tidak_ada_respon("img", nama, path_uri);
+          this.tidak_ada_respon("img", nama, path_uri, null);
         } else {
           this.swal.swal_code_error("Terjadi kesalahan !", "code error 47 !, kembali ke login !");
         }
@@ -829,15 +829,21 @@ export class ListdokumenPage implements OnInit {
     })
     .catch(error => {
   
-      console.log(error.status);
-      console.log(error.error); // error message as string
-      console.log(error.headers);
-  
+      console.log(error);
+      this.loadingCtrl.tutup_loading();
+      if (error.status == -4) {
+        this.toast.Toast("Gagal mengirim, mencoba mengirim kembali !");
+        this.update_cheklist_dokumen_detail(id, nama, uri, tipe, tipe_mime);
+        this.data_progres_bar = 0.2;
+      } else {
+        this.swal.swal_code_error("Terjadi kesalahan", "code error 51 !, kembali ke login !");
+      }
+
     });
 
   }
 
-  async tidak_ada_respon(tipe_data, nama, path_uri){
+  async tidak_ada_respon(tipe_data, nama, path_uri, tipe_mime){
     const a = this.setget.getData();
     if (a == 1) {
       this.loadingCtrl.tutup_loading();
@@ -856,6 +862,18 @@ export class ListdokumenPage implements OnInit {
         this.loadingCtrl.tutup_loading();
         this.setget.set_swal(0);
         // this.mengirim_gambar(nama, path_uri);
+        if (tipe_data == "img") {
+          this.mengirim_gambar(nama, path_uri);
+        } 
+        if(tipe_data == "pdf") {
+          this.mengirim_pdf(nama, path_uri);
+        }
+        if(tipe_data == "docx") {
+          this.mengirim_docx(nama, path_uri, tipe_mime);
+        }
+        // if(tipe_data == "td") {
+        //   this.tampilkan_data(nama);
+        // }
       }
     });
   }
