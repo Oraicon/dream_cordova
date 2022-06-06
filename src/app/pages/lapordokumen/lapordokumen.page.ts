@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { Router } from '@angular/router';
+import { Storage } from '@ionic/storage-angular';
 import { Camera, CameraOptions } from '@awesome-cordova-plugins/camera/ngx';
 import { ActionSheetController, ModalController } from '@ionic/angular';
 import { Network } from '@awesome-cordova-plugins/network/ngx';
@@ -73,6 +74,7 @@ export class LapordokumenPage implements OnInit {
     // private geolocation: Geolocation,
     private apiService: ApiServicesService,
     private formBuilder: FormBuilder,
+    private storage:Storage, 
     private transfer: FileTransfer, 
     private toastService: ToastService,
     private swal: SwalServiceService,
@@ -448,7 +450,9 @@ export class LapordokumenPage implements OnInit {
 
   async mengirim_data_api(keterangan){
 
-    this.apiService.update_data_cheklist_dokumen_detail(this.id_dokumen_detail, keterangan, 2)
+    const pengirim = await this.storage.get('nama');
+
+    this.apiService.update_data_cheklist_dokumen_detail(this.id_dokumen_detail, pengirim, keterangan, 2)
     .then(data => {
 
       console.log(data);
@@ -584,7 +588,6 @@ export class LapordokumenPage implements OnInit {
 
         if(index == this.arr_data_img_pdf.length-1){
           this.data_progres_bar = 0.7;
-          this.sedang_mengirim = false;
           // this.loadingService.tutup_loading();
           this.toastService.Toast("Berhasil menyimpan "+nama_file);
 
@@ -697,7 +700,6 @@ export class LapordokumenPage implements OnInit {
 
     if (this.hasil_file_dikirim.length == this.arr_data_img_pdf.length || this.hasil_file_dikirim.length == 1 && this.arr_data_img_pdf.length == 1) {
       this.setget.set_hasil_akhir(this.hasil_file_dikirim);
-      this.sedang_mengirim = false;
       this.loadingService.tutup_loading();
       
       if (tipe == 1) {
@@ -711,6 +713,7 @@ export class LapordokumenPage implements OnInit {
           confirmButtonText: 'OK !',
         }).then((result) => {
           if (result.isConfirmed) {
+            this.sedang_mengirim = false;
             this.loadingService.tutup_loading();
           }
         });

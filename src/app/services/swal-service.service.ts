@@ -78,6 +78,7 @@ export class SwalServiceService {
   }
 
   swal_code_error(text1, text2){
+    this.loading.tutup_loading();
     this.loading.tampil_loading(null);
     Swal.fire({
       icon: 'error',

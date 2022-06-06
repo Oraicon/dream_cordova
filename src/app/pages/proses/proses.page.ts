@@ -299,10 +299,9 @@ export class ProsesPage implements OnInit {
     this.apiService.menampilkan_data_harian(this.data_id_kegiatan)
     .then(data => {
 
-      console.log(data);
-
-
       const data_json = JSON.parse(data.data);
+      console.log(data_json.data);
+
       const status_data = data_json.status;
       if (status_data == 1) {
         

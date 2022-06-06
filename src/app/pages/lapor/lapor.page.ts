@@ -4,6 +4,7 @@ import { Camera, CameraOptions } from '@awesome-cordova-plugins/camera/ngx';
 import { ActionSheetController } from '@ionic/angular';
 import { LoadingServiceService } from 'src/app/services/loading-service.service';
 import { ApiServicesService } from 'src/app/services/api-services.service';
+import { Storage } from '@ionic/storage-angular';
 import { DatePipe } from '@angular/common';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@awesome-cordova-plugins/file-transfer/ngx';
 import { SetGetServiceService } from 'src/app/services/set-get-service.service';
@@ -76,6 +77,7 @@ export class LaporPage implements OnInit {
 
   constructor(private setget: SetGetServiceService, 
     private modalCtrl: ModalController,
+    private storage:Storage, 
     private sizeService: SizecountServiceService,
     private geolocation: Geolocation,
     private toastService: ToastService,
@@ -446,7 +448,9 @@ export class LaporPage implements OnInit {
 
   async mengirim_data_api(item, volume, keterangan, lat, long){
 
-    this.apiService.kirim_data_laporan(this.lapor_id.id, item, volume, lat, long, keterangan)
+    const pengirim = await this.storage.get('nama');
+
+    this.apiService.kirim_data_laporan(this.lapor_id.id, pengirim, volume, lat, long, keterangan)
     .then(data => {
       console.log(data);
       

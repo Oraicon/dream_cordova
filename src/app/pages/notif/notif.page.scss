@@ -16,12 +16,13 @@
     border-radius: 1rem;
   }
   
+  .ngatur_gambar{
+    width: 50%;
+    height: auto;
+  }
+  
   .padding_bottom_detail_informasi{
     padding-bottom: 5px;
-  }
-
-  .pad_bottom_keterangan{
-    padding-bottom: 8px;
   }
   
   .padding_icon{
@@ -33,41 +34,19 @@
     padding-top: 0px;
   }
   
-  //scroll
-  .scrollan[scrollx=true],div[scrolly=true] {
-    position: relative;
-    overflow: hidden;
-  }
-  
-  .scrollan[scrolly=true] {
-      overflow-y: auto;
-  }
-  
   // fontsize
   .text_header{
     font-size: 150%;
   }
   
-  .text_judul{
-    font-size: 160%;
-  }
-  
   .pad_bottom{
-    padding-bottom: 5px;
-  }
-  
-  .detail_informasi{
-    font-size: 120%;
+    padding-bottom: 12px;
   }
   
   h3{
     font-size: 110%;
   }
   
-  .font_size_button{
-    font-size: 115%;
-  }
-
-  .size_nama{
-    font-size: 100%;
+  h2{
+    font-size: 130%;
   }

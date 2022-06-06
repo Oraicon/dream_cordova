@@ -85,13 +85,13 @@
                           <ng-container *ngIf="data.upload_dokumen == 1; then tidak_ada_riwayat; else ada_riwayat" ></ng-container>
 
                           <ng-template #tidak_ada_riwayat>
-                            <ion-item button (click)="lapordokumen(data.id, data.uraian, data.pic)">
+                            <ion-item button (click)="lapordokumen(data.id, data.uraian_kegiatan, data.pic, data_)">
                               <ion-label class="text_konten">
                                 <h3 class="abu">
                                   {{ data.pic }}
                                 </h3>
                                 <h2 class="ion-text-wrap">
-                                  {{ data.uraian }}
+                                  {{ data.uraian_kegiatan }}
                                 </h2>
                               </ion-label>
                               <ion-icon name="chevron-forward-outline" class="ion-text-end"></ion-icon>
@@ -99,14 +99,18 @@
                           </ng-template>
 
                           <ng-template #ada_riwayat>
-                            <ion-item button (click)="riwayatlaporan(data.id, data.uraian, data.pic, data.keterangan, data.upload_dokumen)">
+                            <ion-item button (click)="riwayatlaporan(data.id, data.uraian_kegiatan, data.pic, data.keterangan, data.upload_dokumen)">
                               <ion-label class="text_konten">
                                 <h3 class="abu">
                                   {{ data.pic }}
                                 </h3>
                                 <h2 class="ion-text-wrap">
-                                  {{ data.uraian }}
+                                  {{ data.uraian_kegiatan }}
                                 </h2>
+                                <h3 class="abu" *ngIf="data.nama !=null; else pengirim_null">
+                                  Pengirim : {{ data.nama }}
+                                </h3>
+                                <ng-template #pengirim_null></ng-template>
                               </ion-label>
                               <ion-icon name="checkmark-outline" size="large" class="ion-text-end hijau_"></ion-icon>
                             </ion-item>

@@ -62,7 +62,7 @@
                     <ion-thumbnail slot="start">
                       <img (error)="errorHandler($event, i)" (click)="tampilkan_konten(data.path, data.nama)" src="https://dream-beta.technosolusitama.in/{{ data.path }}"/>
                     </ion-thumbnail>
-                    <ion-label class="ion-text-wrap" (click)="tampilkan_konten(data.path, data.nama)">{{ data.nama }}</ion-label>
+                    <ion-label class="ion-text-wrap size_nama" (click)="tampilkan_konten(data.path, data.nama)">{{ data.nama }}</ion-label>
   
                     <ion-button color="primary" expand="block" fill="outline" (click)="presentActionSheet(data.path, data.id)" *ngIf="data_gambar_rusak[i] == 'rusak'; else gambar_tidak_rusak">
                       Edit
@@ -104,8 +104,7 @@
                     <ion-thumbnail slot="start">
                       <img (click)="tampilakn_pdf(data.path)" src="assets/pdf_icon.png"/>
                     </ion-thumbnail>
-                    <ion-label class="ion-text-wrap" (click)="tampilakn_pdf(data.path, data.id)"
-                    >{{ data.nama }}</ion-label>
+                    <ion-label class="ion-text-wrap size_nama" (click)="tampilakn_pdf(data.path, data.id)">{{ data.nama }}</ion-label>
 
                     <ng-container *ngIf="data.status == 3; then retake else bukan3"></ng-container>
 

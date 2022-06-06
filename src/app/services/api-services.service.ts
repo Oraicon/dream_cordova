@@ -81,10 +81,10 @@ export class ApiServicesService {
     return this.http.post('https://dream-beta.technosolusitama.in/api/dapatkan_kegiatan', {"id_detail_rap": $id_detail_kegiatan }, {'Accept': 'application/json', 'Content-Type':'application/x-www-form-urlencoded'})
   }
 
-  kirim_data_laporan(id_rap_detail, item, volume, lattitude, longitude, keterangan){
+  kirim_data_laporan(id_rap_detail, username, volume, lattitude, longitude, keterangan){
       // this.http.useBasicAuth('dream_1.0', 'dream_1.0');
       this.http.setRequestTimeout(30.0);
-      return this.http.post('https://dream-beta.technosolusitama.in/api/kirim_data_harian_detail', {"id_rap_detail": id_rap_detail, "item": item, "volume": volume, "lattitude": lattitude, "longitude": longitude, "keterangan": keterangan}, {'Accept': 'application/json', 'Content-Type':'application/x-www-form-urlencoded'})
+      return this.http.post('https://dream-beta.technosolusitama.in/api/kirim_data_harian_detail', {"id_rap_detail": id_rap_detail, "username": username, "volume": volume, "lattitude": lattitude, "longitude": longitude, "keterangan": keterangan}, {'Accept': 'application/json', 'Content-Type':'application/x-www-form-urlencoded'})
   }
 
   menyimpan_path_file(id_progress_harian_detail, url_image){
@@ -117,16 +117,16 @@ export class ApiServicesService {
     return this.http.post('https://dream-beta.technosolusitama.in/api/dokumen_cheklist_detail', {"id_cheklist_dokumen": id_cheklist_dokumen}, {'Accept': 'application/json', 'Content-Type':'application/x-www-form-urlencoded'})
   }
 
-  update_data_cheklist_dokumen_detail(id, keterangan, status_path){
+  update_data_cheklist_dokumen_detail(id, username, keterangan, status_path){
     // this.http.useBasicAuth('dream_1.0', 'dream_1.0');
     this.http.setRequestTimeout(30.0);
-    return this.http.post('https://dream-beta.technosolusitama.in/api/update_dokumen_cheklist', {"id": id, "keterangan": keterangan, "status_path": status_path}, {'Accept': 'application/json', 'Content-Type':'application/x-www-form-urlencoded'})
+    return this.http.post('https://dream-beta.technosolusitama.in/api/update_dokumen_cheklist', {"id": id, "username":username, "keterangan": keterangan, "status_path": status_path}, {'Accept': 'application/json', 'Content-Type':'application/x-www-form-urlencoded'})
   }
 
-  menyimpan_path_file_cheklist_dokumen(id_cheklist_dokumen_detail, evidance_file){
+  menyimpan_path_file_cheklist_dokumen(id_cheklist_dokumen_detail, evidence_file){
     // this.http.useBasicAuth('dream_1.0', 'dream_1.0');
     this.http.setRequestTimeout(30.0);
-    return this.http.post('https://dream-beta.technosolusitama.in/api/menyimpan_path_file_cheklist_dokumen', {"id_cheklist_dokumen_detail": id_cheklist_dokumen_detail, "evidance_file": evidance_file}, {'Accept': 'application/json', 'Content-Type':'application/x-www-form-urlencoded'})
+    return this.http.post('https://dream-beta.technosolusitama.in/api/menyimpan_path_file_cheklist_dokumen', {"id_cheklist_dokumen_detail": id_cheklist_dokumen_detail, "evidence_file": evidence_file}, {'Accept': 'application/json', 'Content-Type':'application/x-www-form-urlencoded'})
   }
 
   menampilkan_path_file_cheklist_dokumen(id){
@@ -135,16 +135,40 @@ export class ApiServicesService {
     return this.http.post('https://dream-beta.technosolusitama.in/api/menampilkan_evidance_cheklist_dokumen', {"id": id}, {'Accept': 'application/json', 'Content-Type':'application/x-www-form-urlencoded'})
   }
 
-  update_status_cheklist_dokumen(id, evidance_file){
+  update_status_cheklist_dokumen(id, evidence_file){
     // this.http.useBasicAuth('dream_1.0', 'dream_1.0');
     this.http.setRequestTimeout(30.0);
-    return this.http.post('https://dream-beta.technosolusitama.in/api/update_cheklist_dokumen_evidance_status', {"id": id, "evidance_file": evidance_file}, {'Accept': 'application/json', 'Content-Type':'application/x-www-form-urlencoded'})
+    return this.http.post('https://dream-beta.technosolusitama.in/api/update_cheklist_dokumen_evidance_status', {"id": id, "evidence_file": evidence_file}, {'Accept': 'application/json', 'Content-Type':'application/x-www-form-urlencoded'})
   }
 
-  update_progress_harian_evidence(id, evidence_img){
+  update_progress_harian_evidence(id, evidence_file){
     // this.http.useBasicAuth('dream_1.0', 'dream_1.0');
     this.http.setRequestTimeout(30.0);
-    return this.http.post('https://dream-beta.technosolusitama.in/api/update_progress_harian_evidence', {"id": id, "evidence_img": evidence_img}, {'Accept': 'application/json', 'Content-Type':'application/x-www-form-urlencoded'})
+    return this.http.post('https://dream-beta.technosolusitama.in/api/update_progress_harian_evidence', {"id": id, "evidence_file": evidence_file}, {'Accept': 'application/json', 'Content-Type':'application/x-www-form-urlencoded'})
+  }
+
+  get_notif_status(id_rap){
+    // this.http.useBasicAuth('dream_1.0', 'dream_1.0');
+    this.http.setRequestTimeout(30.0);
+    return this.http.post('https://dream-beta.technosolusitama.in/api/get_notif_status', {"id_master_rap": id_rap}, {'Accept': 'application/json', 'Content-Type':'application/x-www-form-urlencoded'})
+  }
+
+  get_notif_pc(id_rap){
+    // this.http.useBasicAuth('dream_1.0', 'dream_1.0');
+    this.http.setRequestTimeout(30.0);
+    return this.http.post('https://dream-beta.technosolusitama.in/api/get_notif_pc', {"id_master_rap": id_rap}, {'Accept': 'application/json', 'Content-Type':'application/x-www-form-urlencoded'})
+  }
+
+  get_notif_pd(id_rap){
+      // this.http.useBasicAuth('dream_1.0', 'dream_1.0');
+      this.http.setRequestTimeout(30.0);
+      return this.http.post('https://dream-beta.technosolusitama.in/api/get_notif_pd', {"id_master_rap": id_rap}, {'Accept': 'application/json', 'Content-Type':'application/x-www-form-urlencoded'})
+  }
+
+  update_notif(id){
+      // this.http.useBasicAuth('dream_1.0', 'dream_1.0');
+      this.http.setRequestTimeout(30.0);
+      return this.http.post('https://dream-beta.technosolusitama.in/api/update_pc_pd_notif', {"id": id}, {'Accept': 'application/json', 'Content-Type':'application/x-www-form-urlencoded'})
   }
 
 }

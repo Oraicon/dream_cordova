@@ -9,12 +9,12 @@ import { FileOpener } from '@awesome-cordova-plugins/file-opener/ngx';
 import { DatePipe } from '@angular/common';
 import { Chooser, ChooserResult } from '@awesome-cordova-plugins/chooser/ngx';
 import { LoadingServiceService } from 'src/app/services/loading-service.service';
-import Swal from 'sweetalert2';
 import { SwalServiceService } from 'src/app/services/swal-service.service';
 import { SizecountServiceService } from 'src/app/services/sizecount-service.service';
 import { ModalIsikontenPage } from 'src/app/modal/modal-isikonten/modal-isikonten.page';
 import { ToastService } from 'src/app/services/toast.service';
 import { ApiServicesService } from 'src/app/services/api-services.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-listdokumen',
@@ -57,7 +57,6 @@ export class ListdokumenPage implements OnInit {
     mediaType: this.camera.MediaType.PICTURE
   }
 
-
   constructor(
     private setget: SetGetServiceService,
     private chooser: Chooser,
@@ -80,18 +79,18 @@ export class ListdokumenPage implements OnInit {
   }
 
   ionViewWillEnter(){
-    this.setget.set_tab_page(3);
+    // this.setget.set_tab_page(3);
     this.tampilkan_data();
   }
 
   ionViewWillLeave(){
-    this.setget.set_tab_page(1);
+    // this.setget.set_tab_page(1);
   }
 
   //delay filetranfer 30 detik
   delay() {
     console.log("masuk dealy");
-    return new Promise(resolve => { setTimeout(() => resolve(""), 30000);});
+    return new Promise(resolve => { setTimeout(() => resolve(""), 40000);});
   }
 
   async delayed(){
@@ -132,6 +131,8 @@ export class ListdokumenPage implements OnInit {
     this.loadingCtrl.tampil_loading("Sedang memuat . . .");
     let a = this.setget.getDokumen_detail();
     
+    console.log(a);
+
     this.id = a[0];
     this.uraian = a[1];
     this.pic = a[2];
@@ -149,14 +150,14 @@ export class ListdokumenPage implements OnInit {
 
         for (let index = 0; index < arr_data_mentah.length; index++) {
           const element = arr_data_mentah[index];
-          let nama = element.evidance_file.substring(14);
+          let nama = element.evidence_file.substring(14);
           let get_ext = nama.split('.').pop();
 
           let obj_data_evidance = {
             "id": element.id,
             "nama": nama,
             "tipe": get_ext,
-            "path": element.evidance_file,
+            "path": element.evidence_file,
             "status": element.status
           }
           
@@ -329,7 +330,7 @@ export class ListdokumenPage implements OnInit {
           this.loadingCtrl.tutup_loading();
         }
       });
-    }
+  }
 
   //mengirim pdf ke server
   async mengirim_docx(nama, path_uri, tipe_mime){
@@ -871,9 +872,9 @@ export class ListdokumenPage implements OnInit {
         if(tipe_data == "docx") {
           this.mengirim_docx(nama, path_uri, tipe_mime);
         }
-        // if(tipe_data == "td") {
-        //   this.tampilkan_data(nama);
-        // }
+        if(tipe_data == "td") {
+          this.tampilkan_data();
+        }
       }
     });
   }

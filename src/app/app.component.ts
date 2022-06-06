@@ -37,6 +37,12 @@ export class AppComponent {
     this.pengecekan_koneksi();
   }
 
+  //delay
+  interval_counter() {
+    return new Promise(resolve => { setTimeout(() => resolve(""), 100);});
+  }
+
+
   async pengecekan_koneksi(){
     this.network.onDisconnect().subscribe(() => {
       this.cek_koneksi = false;
@@ -63,11 +69,6 @@ export class AppComponent {
     await this.interval_counter();
 
     this.swalService.swal_code_error("Tidak ada internet", "Kembali ke login !");
-  }
-
-  //delay
-  interval_counter() {
-    return new Promise(resolve => { setTimeout(() => resolve(""), 100);});
   }
   
   //backbutton logik

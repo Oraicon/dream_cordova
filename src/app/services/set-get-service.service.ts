@@ -46,6 +46,7 @@ export class SetGetServiceService {
   private data_list_nama;
   private total_meter;
   private progress_meter;
+  private notifikasi_id_rap = [];
   
   constructor() { }
 
@@ -232,6 +233,14 @@ export class SetGetServiceService {
   getMeter(){
     let a = [];
     return a = [this.total_meter, this.progress_meter];
+  }
+
+  setArrIdRap(data1){
+    this.notifikasi_id_rap = data1;
+  }
+
+  getArrIdRap(){
+    return this.notifikasi_id_rap;
   }
 
   //data tab.tabs2.page.ts

@@ -8,6 +8,7 @@ import { SetGetServiceService } from '../services/set-get-service.service';
 import { SwalServiceService } from '../services/swal-service.service';
 import Swal from 'sweetalert2';
 import { ToastService } from '../services/toast.service';
+import { NotifServiceService } from '../services/notif-service.service';
 
 @Component({
   selector: 'app-tab1',
@@ -29,11 +30,17 @@ export class Tab1Page {
   obj_jumlah_cheklist_dokumen = {};
   tanggal_moment = {};
 
+  ida_data_rap = [];
+  data_notif_ = false;
+  notif_ada = [];
+
   //variable triky
   timeout = 0;
+  penghitung_loading = 0;
 
   constructor(
     private swalService: SwalServiceService,
+    // private notifService: NotifServiceService,
     private setget: SetGetServiceService,
     private toast: ToastService,
     private loadingCtrl: LoadingServiceService, 
@@ -48,6 +55,7 @@ export class Tab1Page {
     this.setget.set_tab_page(0);
     //manggil data
     this.menampilkan_data_rap();
+    //notif
   }
 
   //delay
@@ -59,21 +67,29 @@ export class Tab1Page {
   doRefresh(event){
     event.target.complete();
     //membuat variable kosong
+    this.data_beranda = false;
+    this.data_beranda_loading_tidak_ada = false;
+  
+    //variable data 
     this.data_rap = [];
     this.obj_data_rap = {};
     this.jumlah_data_kegiatan_rap = 0;
     this.obj_jumlah_kegiatan = {};
+    this.obj_jumlah_cheklist_dokumen = {};
     this.tanggal_moment = {};
+  
+    this.ida_data_rap = [];
+    this.data_notif_ = false;
+    this.notif_ada = [];
+  
+    //variable triky
     this.timeout = 0;
-
-
-    this.data_beranda_loading_tidak_ada = false;
+    this.penghitung_loading = 0;
     this.menampilkan_data_rap();
   }
 
   //pindah aktiviti
   kegiatan(e, f){
-    console.log(e);
     this.setget.setDatakegiatan(e, f);
     this.setget.set_tab_page(1);
 
@@ -88,8 +104,6 @@ export class Tab1Page {
   }
 
   cdokumen(e, f){
-    console.log(e, f);
-
     this.setget.setDokumen(e, f);
 
     this.setget.set_tab_page(1);
@@ -104,16 +118,29 @@ export class Tab1Page {
     }
   }
 
+  notif(){
+    this.setget.set_tab_page(1);
+
+    let data_button = this.setget.getButton();
+
+    if (data_button == 0) {
+      this.setget.setButton(1);
+      this.router.navigate(["/notif"], { replaceUrl: true });
+    } else {
+      this.toast.Toast_tampil();
+    }
+  }
+
   async menampilkan_data_rap(){
 
     this.loadingCtrl.tampil_loading("Memuat data . . .");
+    this.penghitung_loading = 0;
+
     const data_l_nama = await this.storage.get('nama');
     
     await this.interval_counter();
     this.apiService.dapatkan_data_proyek_rap_master(data_l_nama)
     .then(data => {
-
-      console.log(data.data)
 
       const data_json = JSON.parse(data.data);
       const status_data = data_json.status;
@@ -128,14 +155,16 @@ export class Tab1Page {
             let element = this.data_rap[index];
             
             this.obj_data_rap["data_rap1_"+index] = "tidak_kosong";
-            console.log(this.obj_data_rap);
 
-            // this.obj_data_rap[index] = element;
+            this.ida_data_rap.push(element.id);
 
             this.tanggal_moment["periodeawal"+index] = this.momentService.ubah_format_tanggal(element.periode_awal);
             this.tanggal_moment["periodeakhir"+index] = this.momentService.ubah_format_tanggal(element.periode_akhir);
             
             this.menampilkan_seluruh_kegiatan(this.data_rap[index].id, index, data_l_nama);
+
+            // if (index == this.data_rap.length) {
+            // }
           } 
           
           if (rap_status == 18) {
@@ -143,12 +172,10 @@ export class Tab1Page {
             this.obj_data_rap["data_rap1_"+index] = "kosong";
             this.obj_data_rap["data_rap3_"+index] = "selesai";
 
-            console.log(this.obj_data_rap);
-
             if (index == this.data_rap.length - 1 || index == 0) {
               this.data_beranda = true;
               this.data_beranda_loading_tidak_ada = true;
-              this.loadingCtrl.tutup_loading();
+              this.data_notif();
             }
           } 
           
@@ -158,25 +185,22 @@ export class Tab1Page {
             if (index == this.data_rap.length - 1 || index == 0) {
               this.data_beranda = true;
               this.data_beranda_loading_tidak_ada = true;
-              this.loadingCtrl.tutup_loading();
+              this.data_notif();
             }
           }
         }
 
       } else {
 
-        console.log("data != 1");
-        
         this.data_rap = [0];
 
         this.obj_data_rap["data_rap1"+0] = "kosong";
         this.obj_data_rap["data_rap2"+0] = true;
 
-        console.log(this.obj_data_rap);
-
         this.data_beranda = false;
         this.data_beranda_loading_tidak_ada = true;
-        this.loadingCtrl.tutup_loading();
+        this.data_notif();
+
       }
   
     })
@@ -215,9 +239,7 @@ export class Tab1Page {
         this.obj_jumlah_kegiatan[index] = this.jumlah_data_kegiatan_rap;
 
         if (index == this.data_rap.length - 1 || index == 0) {
-          // this.data_beranda = true;
-          // this.data_beranda_loading_tidak_ada = true;
-          // this.loadingCtrl.tutup_loading();
+
           this.menampilkan_dokumen_ceklist(id_rap_master, index, nama);
         }
 
@@ -225,9 +247,7 @@ export class Tab1Page {
         this.obj_jumlah_kegiatan[index] = 0;
 
         if (index == this.data_rap.length - 1 || index == 0) {
-          // this.loadingCtrl.tutup_loading();
-          // this.data_beranda = true;
-          // this.data_beranda_loading_tidak_ada = true;
+
           this.menampilkan_dokumen_ceklist(id_rap_master, index, nama);
   
         }
@@ -274,18 +294,16 @@ export class Tab1Page {
 
         if (index == this.data_rap.length - 1 || index == 0) {
           this.data_beranda = true;
-          this.data_beranda_loading_tidak_ada = true;
-          this.loadingCtrl.tutup_loading();
+          this.data_notif();
         }
 
       } else {
 
         if (index == this.data_rap.length - 1 || index == 0) {
-          this.loadingCtrl.tutup_loading();
           this.data_beranda = true;
-          this.data_beranda_loading_tidak_ada = true;
   
           this.obj_jumlah_cheklist_dokumen[index] = 0;
+          this.data_notif();
         }
       }
   
@@ -389,5 +407,68 @@ export class Tab1Page {
     } else {
       this.toast.Toast_tampil();
     }
+  }
+
+  async data_notif(){
+    await this.ida_data_rap;
+    this.setget.setArrIdRap(this.ida_data_rap);
+    // this.notifService.pengecekan_notif();
+    let arr = this.ida_data_rap;
+
+    for (let index = 0; index < arr.length; index++) {
+      let element = arr[index];
+
+      this.api_data_notif(element, index)
+      
+    }
+  }
+
+  async api_data_notif(id_rap, index){
+    this.apiService.get_notif_status(id_rap)
+    .then(data => {
+
+      const data_json = JSON.parse(data.data);
+      const status_data = data_json.status;
+
+      if (status_data == 1) {
+        this.notif_ada.push(1);
+
+        this.penghitung_loading++;
+        
+        if (this.penghitung_loading == this.data_rap.length - 1 || this.penghitung_loading == 1) {
+          this.tutuploading_notif();
+        }
+      }else{
+        this.notif_ada.push(0);
+
+        this.penghitung_loading++;
+
+        if (this.penghitung_loading == this.data_rap.length - 1 || this.penghitung_loading == 1) {
+          this.tutuploading_notif();
+        }
+      }
+    })
+    .catch(error => {
+  
+      console.log(error.status);
+      console.log(error.error); // error message as string
+      console.log(error.headers);
+    });
+  }
+
+  async tutuploading_notif(){
+
+    let notif = this.notif_ada.find(element => element == 1);
+
+    this.data_beranda_loading_tidak_ada = true;
+
+    if (notif == 1) {
+      this.data_notif_ = true;
+    } else {
+      this.data_notif_ = false;
+    }
+
+    this.loadingCtrl.tutup_loading();
+
   }
 }

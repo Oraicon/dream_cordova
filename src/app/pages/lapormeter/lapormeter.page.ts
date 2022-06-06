@@ -5,6 +5,7 @@ import { ActionSheetController } from '@ionic/angular';
 import { LoadingServiceService } from 'src/app/services/loading-service.service';
 import { ApiServicesService } from 'src/app/services/api-services.service';
 import { DatePipe } from '@angular/common';
+import { Storage } from '@ionic/storage-angular';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@awesome-cordova-plugins/file-transfer/ngx';
 import { SetGetServiceService } from 'src/app/services/set-get-service.service';
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
@@ -84,6 +85,7 @@ export class LapormeterPage implements OnInit {
     private network: Network,
     private router:Router,
     private swal: SwalServiceService,
+    private storage:Storage, 
     private chooser: Chooser,
     private formBuilder: FormBuilder,
     private datepipe: DatePipe, 
@@ -457,7 +459,9 @@ export class LapormeterPage implements OnInit {
 
   async mengirim_data_api(item, volume, keterangan, lat, long){
 
-    this.apiService.kirim_data_laporan(this.lapor_id.id, item, volume, lat, long, keterangan)
+    const pengirim = await this.storage.get('nama');
+
+    this.apiService.kirim_data_laporan(this.lapor_id.id, pengirim, volume, lat, long, keterangan)
     .then(data => {
       
       const data_json = JSON.parse(data.data);

@@ -75,6 +75,14 @@ const routes: Routes = [
     path: 'listdokumen',
     loadChildren: () => import('./pages/listdokumen/listdokumen.module').then( m => m.ListdokumenPageModule)
   },
+  {
+    path: 'notif',
+    loadChildren: () => import('./pages/notif/notif.module').then( m => m.NotifPageModule)
+  },
+  {
+    path: 'listnotif',
+    loadChildren: () => import('./pages/listnotif/listnotif.module').then( m => m.ListnotifPageModule)
+  },
 
 
 ];

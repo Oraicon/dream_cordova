@@ -4,9 +4,25 @@
       <ion-row class="ion-align-items-center">
         <ion-col size="6" class="ion-align-items-center text_header bold putih">Beranda</ion-col>
         <ion-col size="6" class="ion-text-end">
-          <ion-button (click)="keluar()" fill="clear" class="padding_button">
-            <ion-icon name="exit-outline" size="large" class="putih"></ion-icon>
+          
+          <ion-button (click)="notif()" fill="clear" class="padding_button">
+            <ion-icon  size="large" class="putih" name="alert-circle-outline"></ion-icon>
+            <!-- <ion-icon name="exit-outline" size="large" class="putih"></ion-icon> -->
           </ion-button>
+          <img src="assets/rc.png" style="width: 5%;" class="posisi" alt="" srcset="" *ngIf="data_notif_ == true; else tidak_ada_notif">
+
+          <ng-template #tidak_ada_notif></ng-template>
+
+          <!-- <ion-button (click)="keluar()" fill="clear" class="padding_button ion-text-end">
+            <ion-icon  size="large" class="putih" name="alert-outline"></ion-icon>
+            <img src="assets/rc.png" style="width: 3%;" class="posisi" alt="" srcset="">
+          </ion-button> -->
+
+          <!-- <ion-item button>
+            <ion-icon name="alert-outline"></ion-icon>
+            <img src="assets/rc.png" style="width: 3%;" class="posisi" alt="" srcset="">
+          </ion-item> -->
+
         </ion-col>
       </ion-row>
     </ion-grid>

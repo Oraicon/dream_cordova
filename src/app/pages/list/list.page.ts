@@ -95,7 +95,7 @@ export class ListPage implements OnInit {
   //delay filetranfer 30 detik
   delay() {
     console.log("masuk dealy");
-    return new Promise(resolve => { setTimeout(() => resolve(""), 30000);});
+    return new Promise(resolve => { setTimeout(() => resolve(""), 40000);});
   }
 
   async delayed(){
@@ -130,14 +130,14 @@ export class ListPage implements OnInit {
 
         for (let index = 0; index < arr_data_mentah.length; index++) {
           const element = arr_data_mentah[index];
-          let nama = element.evidence_img.substring(14);
+          let nama = element.evidence_file.substring(14);
           let get_ext = nama.split('.').pop();
 
           let obj_data_evidance = {
             "id": element.id,
             "nama": nama,
             "tipe": get_ext,
-            "path": element.evidence_img,
+            "path": element.evidence_file,
             "status": element.status
           }
           
@@ -598,9 +598,6 @@ export class ListPage implements OnInit {
 
     let nama_file  = this.datepipe.transform((new Date), 'MMddyyyyhmmss.') + tipe;
     let name_ = nama_file.toString();
-
-    console.log(id);
-    console.log(name_);
 
     this.apiService.update_progress_harian_evidence(id, name_)
     .then(data => {

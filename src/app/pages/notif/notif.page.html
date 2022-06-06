@@ -1,0 +1,174 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar class="background_color">
+    <ion-grid fixed>
+      <ion-row class="ion-align-items-center">
+        <ion-col size="10" class="ion-align-items-center text_header bold putih">Notifikasi</ion-col>
+        <ion-col size="2" class="ion-text-end">
+          <ion-button (click)="kembali()" fill="clear" class="padding_button">
+            <ion-icon name="arrow-back-outline" size="large" class="putih"></ion-icon>
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="background_konten">
+
+  <ion-grid fixed class="ion-no-padding">
+    <ion-row class="background_color_biru_gelap ion-padding-top">
+
+      <ion-col size="12">
+
+        <!-- loading skeleton -->
+        <ion-card *ngIf="loading_skeleton; else data_tampil">
+        
+          <ion-card-content class="ion-no-padding">
+            <ion-list>
+
+              <ion-item class="ion-activatable" lines="none">
+                <ion-skeleton-text animated style="width: 60%; height: 2rem;"></ion-skeleton-text>
+              </ion-item>
+
+              <ion-item class="ion-activatable" lines="none">
+                <ion-thumbnail slot="start">
+                  <ion-skeleton-text animated style="width: 100%; height: 100%;"></ion-skeleton-text>
+                </ion-thumbnail>
+                <ion-ripple-effect></ion-ripple-effect>
+              </ion-item>
+
+            </ion-list>
+          </ion-card-content>
+        </ion-card>
+
+        <ng-template #data_tampil>
+
+          <ng-container *ngIf="data_tidak_ada; then data_notif_tidak_ada; else data_notif_ada"></ng-container>
+
+          <ng-template #data_notif_tidak_ada>
+            <ion-card>
+              <ion-card-content class="ion-no-padding">
+                <ion-grid fixed class="ion-no-padding">
+                  <ion-row>
+                    <ion-col size="12">
+                      <ion-grid fixed>
+                        <ion-row class="ion-text-center">
+                          <ion-col size="12">
+                            <img class="image_size" src="assets/dn.jpg" (error)="errorHandler($event)">
+                          </ion-col>
+                          <ion-col size="12">
+                            <h1 >Notifikasi kososng !</h1>
+                          </ion-col>
+                          <ion-col size="12">
+                            <h2>Maaf, belum ada notifikasi untuk anda !</h2>
+                          </ion-col>
+                        </ion-row>
+                      </ion-grid>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-card-content>
+            </ion-card>
+          </ng-template>
+
+          <ng-template #data_notif_ada>
+            <ion-card *ngFor="let data of arr_obj_data_notif; let i = index">
+              <ion-card-content>
+                <ion-grid fixed class="ion-no-padding">
+                  <ion-row class="ion-align-items-center">
+                    <ion-col size="12" class="ion-text-center bold">
+                      <h2 class="hitam">
+                        {{ data.kode_rap }}
+                      </h2>
+                    </ion-col>
+                    <ion-col size="6" class="ion-text-start hitam">
+                      {{ data.pengirim }}
+                    </ion-col>
+                    <ion-col size="6" class="ion-text-end">
+                      {{ tanggal_notif[data.id] }}
+                    </ion-col>
+                    <ion-col size="12">
+                      <h1 class="hitam">
+                        {{ data.uraian_kegiatan }}
+                      </h1>
+                    </ion-col>
+                  </ion-row>
+                  <ion-row class="ion-align-items-center">
+    
+                    <ng-container *ngIf="file_nama['ext'+data.id] == 'JPEG'; then jpeg_tampil; else dokumen_tampil"></ng-container>
+    
+                    <ng-template #jpeg_tampil>
+                      <ion-col size="5" class="ion-text-start">
+                        <ion-thumbnail (click)="buka_img(data.evidence_file, file_nama[data.id])">
+                          <img src="https://dream-beta.technosolusitama.in/{{ data.evidence_file }}">
+                        </ion-thumbnail>
+                      </ion-col>
+    
+                      <ion-col size="7" class="ion-text-end">
+                        <ion-label>
+                          <h2>{{ file_nama[data.id] }}</h2>
+                          <ion-button color="danger" fill="outline" (click)="presentActionSheet(data.id, data.id_pc_pd_evidance, data.evidence_file, data.tipe_data)">
+                            Re-take
+                          </ion-button>
+                        </ion-label>
+                      </ion-col>
+                    </ng-template>
+    
+                    <ng-template #dokumen_tampil>
+    
+                      <ng-container *ngIf="file_nama['ext'+data.id] == 'pdf'; then pdf_tampil; else docx_tampil"></ng-container>
+    
+                      <ng-template #pdf_tampil>
+                        <ion-col size="5" class="ion-text-start">
+                          <ion-thumbnail (click)="buka_pdf(data.evidence_file)">
+                            <img src="assets/pdf_icon.png"/>
+                          </ion-thumbnail>
+                        </ion-col>
+    
+                        <ion-col size="7" class="ion-text-end">
+                          <ion-label>
+                            <h2>{{ file_nama[data.id] }}</h2>
+                            <ion-button color="danger" fill="outline" (click)="dapatkan_pdf(null, null, data.id, data.id_pc_pd_evidance, data.evidence_file, data.tipe_data)">
+                              Re-take
+                            </ion-button>
+                          </ion-label>
+                        </ion-col>
+                      </ng-template>
+    
+                      <ng-template #docx_tampil>
+                        <ion-col size="5" class="ion-text-start">
+                          <ion-thumbnail (click)="buka_doc(data.evidence_file)">
+                            <img src="assets/dok_icon.png"/>
+                          </ion-thumbnail>
+                        </ion-col>
+    
+                        <ion-col size="7" class="ion-text-end">
+                          <ion-label>
+                            <h2>{{ file_nama[data.id] }}</h2>
+                            <ion-button color="danger" fill="outline" (click)="dapatkan_docx(null, null, data.id, data.id_pc_pd_evidance, data.evidence_file, data.tipe_data)">
+                              Re-take
+                            </ion-button>
+                          </ion-label>
+                        </ion-col>
+    
+                      </ng-template>
+    
+                    </ng-template>
+                  </ion-row>
+                </ion-grid>
+              </ion-card-content>
+            </ion-card>
+          </ng-template>
+
+        </ng-template>
+
+      </ion-col>
+
+    </ion-row>
+  </ion-grid> 
+</ion-content>
+
+<ion-footer>
+  <ion-progress-bar value="{{ data_progres_bar }}" *ngIf="sedang_mengirim; else tidak_sedang_mengirim"></ion-progress-bar>
+  <ng-template #tidak_sedang_mengirim></ng-template>
+</ion-footer>
