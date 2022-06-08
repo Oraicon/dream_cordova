@@ -67,7 +67,7 @@
                               <ion-thumbnail slot="start" (click)="buka_pdf(data.path)">
                                 <img src="assets/pdf_icon.png" />
                               </ion-thumbnail>
-                              <ion-label class="ion-text-wrap size_nama" (click)="buka_pdf(data.path)">{{ data.nama }}</ion-label>
+                              <ion-label class="size_nama" (click)="buka_pdf(data.path)">{{ data.nama }}</ion-label>
 
                               <ng-container *ngIf="data.status == 3; then retake else bukan3"></ng-container>
 
@@ -89,7 +89,7 @@
 
                                   <ng-template #approve>
                                     <ion-button color="success" expand="block" fill="outline" [attr.disabled]="true">
-                                      Approve
+                                      Approved
                                     </ion-button>
                                   </ng-template>
                                   <ng-template #bukan_approve></ng-template>
@@ -101,7 +101,7 @@
                               <ion-thumbnail slot="start" (click)="buka_doc(data.path)">
                                 <img src="assets/dok_icon.png" />
                               </ion-thumbnail>
-                              <ion-label class="ion-text-wrap size_nama" (click)="buka_doc(data.path)">{{ data.nama }}</ion-label>
+                              <ion-label class="size_nama" (click)="buka_doc(data.path)">{{ data.nama }}</ion-label>
 
                               <ng-container *ngIf="data.status == 3; then retake else bukan3"></ng-container>
 
@@ -123,7 +123,7 @@
 
                                   <ng-template #approve>
                                     <ion-button color="success" expand="block" fill="outline" [attr.disabled]="true">
-                                      Approve
+                                      Approved
                                     </ion-button>
                                   </ng-template>
                                   <ng-template #bukan_approve></ng-template>
@@ -134,11 +134,11 @@
     
                         <ng-template #data_gambar>
                             <ion-thumbnail slot="start" (click)="buka_img(data.path, data.nama)">
-                              <img src="https://dream-beta.technosolusitama.in/{{ data.path }}" (error)="errorHandler($event)"/>
+                              <img src="https://dream-beta.technosolusitama.in/{{ data.path }}" (error)="errorHandler($event, i)"/>
                             </ion-thumbnail>
-                            <ion-label class="ion-text-wrap size_nama" (click)="buka_img(data.path, data.nama)">{{ data.nama }}</ion-label>
+                            <ion-label class="size_nama" (click)="buka_img(data.path, data.nama)">{{ data.nama }}</ion-label>
     
-                            <ion-button color="primary" expand="block" fill="outline" (click)="presentActionSheet(data.path)" *ngIf="data_gambar_rusak == 'rusak'; else gambar_tidak_rusak">
+                            <ion-button color="primary" expand="block" fill="outline" (click)="presentActionSheet(data.id, data.path)" *ngIf="data_gambar_rusak[i] == 'rusak'; else gambar_tidak_rusak">
                               Re-Upload
                             </ion-button>
                             <ng-template #gambar_tidak_rusak>
@@ -162,7 +162,7 @@
 
                                   <ng-template #approve>
                                     <ion-button color="success" expand="block" fill="outline" [attr.disabled]="true">
-                                      Approve
+                                      Approved
                                     </ion-button>
                                   </ng-template>
                                   <ng-template #bukan_approve></ng-template>

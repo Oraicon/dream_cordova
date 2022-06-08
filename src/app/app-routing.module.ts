@@ -55,7 +55,8 @@ const routes: Routes = [
   {
     path: 'modal-hasil',
     loadChildren: () => import('./modal/modal-hasil/modal-hasil.module').then( m => m.ModalHasilPageModule)
-  },  {
+  },
+  {
     path: 'lapormeter',
     loadChildren: () => import('./pages/lapormeter/lapormeter.module').then( m => m.LapormeterPageModule)
   },
@@ -78,10 +79,6 @@ const routes: Routes = [
   {
     path: 'notif',
     loadChildren: () => import('./pages/notif/notif.module').then( m => m.NotifPageModule)
-  },
-  {
-    path: 'listnotif',
-    loadChildren: () => import('./pages/listnotif/listnotif.module').then( m => m.ListnotifPageModule)
   },
 
 

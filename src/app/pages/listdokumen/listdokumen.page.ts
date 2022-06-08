@@ -32,7 +32,7 @@ export class ListdokumenPage implements OnInit {
   data_arr_evidance = [];
   loading_skeleton = true;
   timeout = 0;
-  data_gambar_rusak;
+  data_gambar_rusak = {};
   sedang_mengirim = false;
   data_progres_bar = 0;
   imgURI;
@@ -116,9 +116,28 @@ export class ListdokumenPage implements OnInit {
     }
   }
 
-  errorHandler(event) {
+  relog(){
+    this.id;
+    this.uraian;
+    this.pic;
+    this.keterangan;
+    this.extention_file;
+  
+    this.data_arr_evidance = [];
+    this.loading_skeleton = true;
+    this.timeout = 0;
+    this.data_gambar_rusak = {};
+    this.sedang_mengirim = false;
+    this.data_progres_bar = 0;
+    this.imgURI;
+    this.URL="https://dream-beta.technosolusitama.in/api/uploadImage";
+
+    this.ionViewWillEnter();
+  }
+
+  errorHandler(event, a) {
     event.target.src = "assets/bi.png";
-    this.data_gambar_rusak = "rusak";
+    this.data_gambar_rusak[a] = "rusak";
   }
 
   async delay_dulu(){
@@ -170,7 +189,7 @@ export class ListdokumenPage implements OnInit {
         }
 
       } else {
-        this.swal.swal_code_error("Terjadi kesalahan !", "Data Kosong !")
+        this.swal.swal_code_error("Terjadi kesalahan !", "code error 64 !, kembali ke login !");
       }
   
     })
@@ -190,7 +209,7 @@ export class ListdokumenPage implements OnInit {
         } else {
           this.loadingCtrl.tutup_loading();
 
-          this.swal.swal_code_error("Terjadi kesalahan !", "code error xxxx !, kembali ke login !");
+          this.swal.swal_code_error("Terjadi kesalahan !", "code error 65 !, kembali ke login !");
         }
       }
   
@@ -369,7 +388,8 @@ export class ListdokumenPage implements OnInit {
             this.data_progres_bar = 0.9;
             this.sedang_mengirim = false;
             this.loadingCtrl.tutup_loading();
-            this.router.navigate(["/dokumen"], { replaceUrl: true });
+            // this.router.navigate(["/dokumen"], { replaceUrl: true });
+            this.relog();
           }
         });
       }else{
@@ -566,7 +586,8 @@ export class ListdokumenPage implements OnInit {
             this.data_progres_bar = 0.9;
             this.sedang_mengirim = false;
             this.loadingCtrl.tutup_loading();
-            this.router.navigate(["/dokumen"], { replaceUrl: true });
+            // this.router.navigate(["/dokumen"], { replaceUrl: true });
+            this.relog();
           }
         });
       }else{
@@ -621,6 +642,8 @@ export class ListdokumenPage implements OnInit {
 
   //modal ganti gambar
   async presentActionSheet(id, path_data) {
+
+    console.log(id, path_data);
 
     let nama_img = path_data.substring(14);
 
@@ -763,7 +786,8 @@ export class ListdokumenPage implements OnInit {
             this.data_progres_bar = 0.9;
             this.sedang_mengirim = false;
             this.loadingCtrl.tutup_loading();
-            this.router.navigate(["/dokumen"], { replaceUrl: true });
+            // this.router.navigate(["/dokumen"], { replaceUrl: true });
+            this.relog();
           }
         });
       } else {

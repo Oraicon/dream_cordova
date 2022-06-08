@@ -104,7 +104,7 @@ export class ListPage implements OnInit {
   }
 
   //delay loading
-  async interval_counter_loading() {
+  interval_counter_loading() {
     return new Promise(resolve => { setTimeout(() => resolve(""), 500);});
   }  
 
@@ -150,7 +150,7 @@ export class ListPage implements OnInit {
         }
 
       } else {
-        this.swal.swal_code_error("Terjadi kesalahan !", "Data Kosong !")
+        this.swal.swal_code_error("Terjadi kesalahan !", "code error 62 !, kembali ke login !");
       }
   
     })
@@ -171,7 +171,7 @@ export class ListPage implements OnInit {
         } else {
           this.loadingCtrl.tutup_loading();
 
-          this.swal.swal_code_error("Terjadi kesalahan !", "code error xxxx !, kembali ke login !");
+          this.swal.swal_code_error("Terjadi kesalahan !", "code error 63 !, kembali ke login !");
         }
       }
   
@@ -191,6 +191,26 @@ export class ListPage implements OnInit {
     } else {
       this.toast.Toast_tampil();
     }
+  }
+
+  relog(){
+    this.kode_barang;
+    this.timeout
+    this.arr_data = [];
+    this.sedang_mengirim = false;
+    this.data_progres_bar = 0;
+  
+    this.imgURI;
+    this.name_img="";
+    this.format_img="JPEG";
+  
+    this.id;
+    this.data_gambar_rusak = {};
+    this.get_ext;
+    this.loading_skeleton = true;
+    this.URL="https://dream-beta.technosolusitama.in/api/uploadImage";
+
+    this.ionViewWillEnter();
   }
 
   //tampilkan modal untuk menampilkan gambar
@@ -477,9 +497,10 @@ export class ListPage implements OnInit {
           if (result.isConfirmed) {
             this.data_progres_bar = 0.9;
             this.loadingCtrl.tutup_loading();
-            this.loading_skeleton = true;
-            this.arr_data = [];
-            this.ionViewWillEnter();
+            // this.loading_skeleton = true;
+            // this.arr_data = [];
+            // this.ionViewWillEnter();
+            this.relog();
           }
         });
       } else {
@@ -553,9 +574,10 @@ export class ListPage implements OnInit {
           if (result.isConfirmed) {
             this.data_progres_bar = 0.9;
             this.loadingCtrl.tutup_loading();
-            this.loading_skeleton = true;
-            this.arr_data = [];
-            this.ionViewWillEnter();
+            // this.loading_skeleton = true;
+            // this.arr_data = [];
+            // this.ionViewWillEnter();
+            this.relog();
           }
         });
       }else{

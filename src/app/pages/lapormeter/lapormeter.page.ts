@@ -511,11 +511,11 @@ export class LapormeterPage implements OnInit {
       const data_status = data_json.status;
 
       if (data_status == 0) {
-        // this.penghitung_index++;
+        this.penghitung_index++;
 
         if(index == this.arr_data_img_pdf.length - 1){
-          // this.pengecekan_informasi_data();
-          this.looping_file();
+          this.pengecekan_informasi_data();
+          // this.looping_file();
           this.data_progres_bar = 0.6;
         }
 
@@ -550,21 +550,23 @@ export class LapormeterPage implements OnInit {
     });
   }
 
-  // async pengecekan_informasi_data(){
-  //   console.log(this.penghitung_index);
-  //   console.log(this.arr_data_img_pdf.length);
+  async pengecekan_informasi_data(){
+    console.log(this.penghitung_index);
+    console.log(this.arr_data_img_pdf.length);
 
-  //   if (this.penghitung_index == this.arr_data_img_pdf.length - 1) {
-  //     this.looping_file();
-  //     this.data_progres_bar = 0.6;
-  //   } else {
-  //     await this.delay_pengecekan();
-  //     this.pengecekan_informasi_data();
-  //   }
-  // }
+    if (this.penghitung_index == this.arr_data_img_pdf.length - 1) {
+      this.looping_file();
+      this.data_progres_bar = 0.6;
+    } else {
+      await this.delay_pengecekan();
+      this.pengecekan_informasi_data();
+    }
+  }
 
   looping_file(){
-      this.data_progres_bar = 0.7;
+      // console.log("masuk looping");
+      // this.loadingService.tutup_loading();
+      // this.data_progres_bar = 0.7;
     
       for (let index = 0; index < this.arr_data_img_pdf.length; index++) {
         let element = this.arr_data_img_pdf[index];

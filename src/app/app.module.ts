@@ -23,13 +23,14 @@ import { File } from '@awesome-cordova-plugins/file/ngx';
 import { DocumentViewer } from '@awesome-cordova-plugins/document-viewer/ngx';
 import { Geolocation } from '@awesome-cordova-plugins/geolocation/ngx';
 import { FileOpener } from '@awesome-cordova-plugins/file-opener/ngx';
+import { NativeGeocoder, NativeGeocoderResult, NativeGeocoderOptions } from '@awesome-cordova-plugins/native-geocoder/ngx';
 
 
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, IonicStorageModule.forRoot(), Ng2SearchPipeModule],
-  providers: [HTTP, Camera, SetGetServiceService, FileTransfer, FileTransferObject, File, DocumentViewer, Network, DatePipe, WebView, Chooser, InAppBrowser, Geolocation, FileOpener,{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
+  providers: [HTTP, Camera, SetGetServiceService, NativeGeocoder, FileTransfer, FileTransferObject, File, DocumentViewer, Network, DatePipe, WebView, Chooser, InAppBrowser, Geolocation, FileOpener,{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

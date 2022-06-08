@@ -147,22 +147,22 @@ export class ApiServicesService {
     return this.http.post('https://dream-beta.technosolusitama.in/api/update_progress_harian_evidence', {"id": id, "evidence_file": evidence_file}, {'Accept': 'application/json', 'Content-Type':'application/x-www-form-urlencoded'})
   }
 
-  get_notif_status(id_rap){
+  get_notif_status(id_rap, username){
     // this.http.useBasicAuth('dream_1.0', 'dream_1.0');
     this.http.setRequestTimeout(30.0);
-    return this.http.post('https://dream-beta.technosolusitama.in/api/get_notif_status', {"id_master_rap": id_rap}, {'Accept': 'application/json', 'Content-Type':'application/x-www-form-urlencoded'})
+    return this.http.post('https://dream-beta.technosolusitama.in/api/get_notif_status', {"id_master_rap": id_rap, "username": username}, {'Accept': 'application/json', 'Content-Type':'application/x-www-form-urlencoded'})
   }
 
-  get_notif_pc(id_rap){
+  get_notif_pc(id_rap, username){
     // this.http.useBasicAuth('dream_1.0', 'dream_1.0');
     this.http.setRequestTimeout(30.0);
-    return this.http.post('https://dream-beta.technosolusitama.in/api/get_notif_pc', {"id_master_rap": id_rap}, {'Accept': 'application/json', 'Content-Type':'application/x-www-form-urlencoded'})
+    return this.http.post('https://dream-beta.technosolusitama.in/api/get_notif_pc', {"id_master_rap": id_rap, "username": username}, {'Accept': 'application/json', 'Content-Type':'application/x-www-form-urlencoded'})
   }
 
-  get_notif_pd(id_rap){
+  get_notif_pd(id_rap, username){
       // this.http.useBasicAuth('dream_1.0', 'dream_1.0');
       this.http.setRequestTimeout(30.0);
-      return this.http.post('https://dream-beta.technosolusitama.in/api/get_notif_pd', {"id_master_rap": id_rap}, {'Accept': 'application/json', 'Content-Type':'application/x-www-form-urlencoded'})
+      return this.http.post('https://dream-beta.technosolusitama.in/api/get_notif_pd', {"id_master_rap": id_rap, "username": username}, {'Accept': 'application/json', 'Content-Type':'application/x-www-form-urlencoded'})
   }
 
   update_notif(id){

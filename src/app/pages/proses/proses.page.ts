@@ -8,6 +8,8 @@ import { SwalServiceService } from 'src/app/services/swal-service.service';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { ToastService } from 'src/app/services/toast.service';
+import { NativegeocoderServiceService } from 'src/app/services/nativegeocoder-service.service';
+import { NativeGeocoder, NativeGeocoderResult, NativeGeocoderOptions } from '@awesome-cordova-plugins/native-geocoder/ngx';
 
 
 @Component({
@@ -27,7 +29,8 @@ export class ProsesPage implements OnInit {
   hidedetail = false;
   riwayat_laporan = false;
   riwayat_loading = true;
-  tanggal_pm =[];
+  tanggal_pm = [];
+  alamat_pm = [];
 
   searchTerm: string;
 
@@ -42,7 +45,9 @@ export class ProsesPage implements OnInit {
 
   constructor(private momentService: MomentService,
     private router:Router,
+    private nativeGeocoder: NativeGeocoder,
     private swal: SwalServiceService,
+    private ngeo: NativegeocoderServiceService,
     private apiService: ApiServicesService, 
     private toast: ToastService,
     private loadingService: LoadingServiceService, 
@@ -95,12 +100,55 @@ export class ProsesPage implements OnInit {
 
       let tanggal = this.momentService.ubah_format_tanggal_waktu(element.date_created);
       
-      this.tanggal_pm[element.id] = tanggal;
+      this.tanggal_pm["tanggal"+element.id] = tanggal;
     }
 
-    this.riwayat_laporan = true;
-    this.riwayat_loading = false;
-    this.delay_dulu();
+    this.alamat();
+  }
+
+  async alamat(){
+    const arr_ms_length = this.data_arr_progressmilsetone.length;
+
+    for (let index = 0; index < arr_ms_length; index++) {
+      let element = this.data_arr_progressmilsetone[index];
+
+      this.latlong_converter(element.lattitude, element.longitude, element.id, index, arr_ms_length);
+      
+      // this.alamat_pm["alamat"+element.id] = alamat;
+    }
+
+    // this.riwayat_laporan = true;
+    // this.riwayat_loading = false;
+    // this.delay_dulu();
+  }
+
+  async latlong_converter(lat, long, id, index, arr_ms_length){
+
+    let options: NativeGeocoderOptions = {
+      useLocale: true,
+      maxResults: 5
+    };
+
+    this.nativeGeocoder.reverseGeocode(lat, long, options)
+    .then(data => {
+      console.log(data);
+      let data_mentah = data[0];
+
+      let alamat = data_mentah.thoroughfare +" "+ data_mentah.subLocality +" "+ data_mentah.locality +" "+ data_mentah.subAdministrativeArea;
+      this.alamat_pm["alamat"+id] = alamat;
+
+      if(index == arr_ms_length-1){
+        this.riwayat_laporan = true;
+        this.riwayat_loading = false;
+        this.delay_dulu();
+      }
+
+    })
+    .catch(error => {
+  
+      console.log(error);
+  
+    });
   }
 
   async delay_dulu(){
@@ -243,10 +291,6 @@ export class ProsesPage implements OnInit {
         let kuota_progres = data_json.data[0].volume;
         let total_progres = data_json.data[0].total_volume;
 
-        console.log(kuota_progres, total_progres);
-
-        console.log("kuota dan total = " + kuota_progres, total_progres);
-
         if (total_progres == 0 || total_progres == null) {
           this.data_persen = "0%";
         } else {
@@ -261,7 +305,6 @@ export class ProsesPage implements OnInit {
 
           console.log("data persen = " + data_persen);
         }
-
 
         if (data_persen >= 100) {
           this.tipe_page = true;

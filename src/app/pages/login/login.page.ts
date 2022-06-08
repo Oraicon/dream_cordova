@@ -11,7 +11,6 @@ import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { SetGetServiceService } from 'src/app/services/set-get-service.service';
 import { ToastService } from 'src/app/services/toast.service';
 
-
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',

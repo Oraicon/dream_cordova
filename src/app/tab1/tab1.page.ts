@@ -8,7 +8,7 @@ import { SetGetServiceService } from '../services/set-get-service.service';
 import { SwalServiceService } from '../services/swal-service.service';
 import Swal from 'sweetalert2';
 import { ToastService } from '../services/toast.service';
-import { NotifServiceService } from '../services/notif-service.service';
+// import { NotifServiceService } from '../services/notif-service.service';
 
 @Component({
   selector: 'app-tab1',
@@ -131,6 +131,27 @@ export class Tab1Page {
     }
   }
 
+  relog(){
+  this.data_beranda = false;
+  this.data_beranda_loading_tidak_ada = false;
+
+  this.data_rap = [];
+  this.obj_data_rap = {};
+  this.jumlah_data_kegiatan_rap = 0;
+  this.obj_jumlah_kegiatan = {};
+  this.obj_jumlah_cheklist_dokumen = {};
+  this.tanggal_moment = {};
+
+  this.ida_data_rap = [];
+  this.data_notif_ = false;
+  this.notif_ada = [];
+
+  this.timeout = 0;
+  this.penghitung_loading = 0;
+
+    this.menampilkan_data_rap();
+  }
+
   async menampilkan_data_rap(){
 
     this.loadingCtrl.tampil_loading("Memuat data . . .");
@@ -163,8 +184,6 @@ export class Tab1Page {
             
             this.menampilkan_seluruh_kegiatan(this.data_rap[index].id, index, data_l_nama);
 
-            // if (index == this.data_rap.length) {
-            // }
           } 
           
           if (rap_status == 18) {
@@ -334,10 +353,6 @@ export class Tab1Page {
     if (a == 1) {
       this.loadingCtrl.tutup_loading();
     }
-
-    this.data_rap = [];
-    this.jumlah_data_kegiatan_rap = 0;
-    this.data_beranda_loading_tidak_ada = false;
     
     this.loadingCtrl.tampil_loading("");
     Swal.fire({
@@ -350,7 +365,7 @@ export class Tab1Page {
     }).then((result) => {
       if (result.isConfirmed) {
         this.loadingCtrl.tutup_loading();
-        this.menampilkan_data_rap();
+        this.relog();
       }
     });
   }
@@ -418,13 +433,14 @@ export class Tab1Page {
     for (let index = 0; index < arr.length; index++) {
       let element = arr[index];
 
-      this.api_data_notif(element, index)
+      this.api_data_notif(element)
       
     }
   }
 
-  async api_data_notif(id_rap, index){
-    this.apiService.get_notif_status(id_rap)
+  async api_data_notif(id_rap){
+    const data_l_nama = await this.storage.get('nama');
+    this.apiService.get_notif_status(id_rap, data_l_nama)
     .then(data => {
 
       const data_json = JSON.parse(data.data);
@@ -450,9 +466,21 @@ export class Tab1Page {
     })
     .catch(error => {
   
-      console.log(error.status);
-      console.log(error.error); // error message as string
-      console.log(error.headers);
+      console.log(error)
+  
+      this.loadingCtrl.tutup_loading();
+  
+      this.timeout++;
+      
+      if (this.timeout >= 3) {
+        this.keluar_aplikasi();
+      } else {
+        if (error.status == -4) {
+          this.tidak_ada_respon();
+        } else {
+          this.swalService.swal_code_error("Terjadi kesalahan !", "code error 52 !, kembali ke login !");
+        }
+      }
     });
   }
 

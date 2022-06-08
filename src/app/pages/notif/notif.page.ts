@@ -6,6 +6,7 @@ import { ApiServicesService } from 'src/app/services/api-services.service';
 import { LoadingServiceService } from 'src/app/services/loading-service.service';
 import { DatePipe } from '@angular/common';
 import { MomentService } from 'src/app/services/moment.service';
+import { Storage } from '@ionic/storage-angular';
 import { Camera, CameraOptions } from '@awesome-cordova-plugins/camera/ngx';
 import { Chooser, ChooserResult } from '@awesome-cordova-plugins/chooser/ngx';
 import { SetGetServiceService } from 'src/app/services/set-get-service.service';
@@ -65,6 +66,8 @@ export class NotifPage implements OnInit {
   constructor(
     private modalCtrl: ModalController,
     private chooser: Chooser,
+    private storage:Storage, 
+    private swalService:SwalServiceService,
     private camera: Camera,
     private datepipe: DatePipe, 
     private loadingCtrl: LoadingServiceService,
@@ -117,6 +120,17 @@ export class NotifPage implements OnInit {
     return 1;
   }
 
+  //delay loading
+  async interval_counter_loading() {
+    return new Promise(resolve => { setTimeout(() => resolve(""), 500);});
+  }  
+
+  async delay_dulu(){
+    await this.interval_counter_loading();
+    this.loadingCtrl.tutup_loading();
+    return;
+  }
+
   async looping_data_pc(arr){
     for (let index = 0; index < arr.length; index++) {
       let element = arr[index];
@@ -127,7 +141,10 @@ export class NotifPage implements OnInit {
   }
 
   async notif_pc(id, index){
-    this.apiService.get_notif_pc(id)
+  
+    const data_l_nama = await this.storage.get('nama');
+  
+    this.apiService.get_notif_pc(id, data_l_nama)
     .then(data => {
 
       const data_json = JSON.parse(data.data);
@@ -149,7 +166,6 @@ export class NotifPage implements OnInit {
             evidence_file: element.evidence_file,
             create_date: element.create_date,
             tipe_data : "pc",
-            pengirim : element.nama
           }
           this.arr_obj_data_notif_mentah.push(obj_data_pc);
         }
@@ -165,9 +181,21 @@ export class NotifPage implements OnInit {
     })
     .catch(error => {
   
-      console.log(error.status);
-      console.log(error.error); // error message as string
-      console.log(error.headers);
+      console.log(error)
+  
+      this.loadingCtrl.tutup_loading();
+  
+      this.timeout++;
+      
+      if (this.timeout >= 3) {
+        this.keluar_aplikasi();
+      } else {
+        if (error.status == -4) {
+          this.tidak_ada_respon2();
+        } else {
+          this.swalService.swal_code_error("Terjadi kesalahan !", "code error 53 !, kembali ke login !");
+        }
+      }
   
     });
   }
@@ -182,7 +210,10 @@ export class NotifPage implements OnInit {
   }
 
   async notif_pd(id, index){
-    this.apiService.get_notif_pd(id)
+
+    const data_l_nama = await this.storage.get('nama');
+
+    this.apiService.get_notif_pd(id, data_l_nama)
     .then(data => {
       
       const data_json = JSON.parse(data.data);
@@ -204,7 +235,6 @@ export class NotifPage implements OnInit {
             evidence_file: element.evidence_file,
             create_date: element.create_date,
             tipe_data : "pd",
-            pengirim : element.nama
           }
           this.arr_obj_data_notif_mentah.push(obj_data_pd);
         }
@@ -214,9 +244,6 @@ export class NotifPage implements OnInit {
         }
       }else{
         this.data_pd_ada = 0;
-
-        console.log(this.data_pc_ada);
-        console.log(this.data_pd_ada);
 
         if (this.data_pc_ada == 0 && this.data_pd_ada == 0) {
 
@@ -231,9 +258,21 @@ export class NotifPage implements OnInit {
     })
     .catch(error => {
   
-      console.log(error.status);
-      console.log(error.error); // error message as string
-      console.log(error.headers);
+      console.log(error)
+  
+      this.loadingCtrl.tutup_loading();
+  
+      this.timeout++;
+      
+      if (this.timeout >= 3) {
+        this.keluar_aplikasi();
+      } else {
+        if (error.status == -4) {
+          this.tidak_ada_respon2();
+        } else {
+          this.swalService.swal_code_error("Terjadi kesalahan !", "code error 54 !, kembali ke login !");
+        }
+      }
   
     });
   }
@@ -284,7 +323,8 @@ export class NotifPage implements OnInit {
       if (index == this.arr_id_rap.length - 1 || index == 0) {
         this.arr_obj_data_notif = arr;
         this.loading_skeleton = false;
-        this.loadingCtrl.tutup_loading();
+        // this.loadingCtrl.tutup_loading();
+        this.delay_dulu();
       }
     }
 
@@ -460,23 +500,24 @@ export class NotifPage implements OnInit {
     })
     .catch(error => {
 
-      console.log(error)
+      // console.log(error)
     
-      this.loadingCtrl.tutup_loading();
+      // this.loadingCtrl.tutup_loading();
 
-      this.timeout++;
+      // this.timeout++;
       
-      this.sedang_mengirim = false;
+      // this.sedang_mengirim = false;
 
-      if (this.timeout >= 3) {
-        this.keluar_aplikasi();
-      } else {
-        if (error.status == -4) {
-          this.tidak_ada_respon("img", nama, path_uri, null);
-        } else {
-          this.swal.swal_code_error("Terjadi kesalahan !", "code error 47 !, kembali ke login !");
-        }
-      }
+      // if (this.timeout >= 3) {
+      //   this.keluar_aplikasi();
+      // } else {
+      //   if (error.status == -4) {
+      //     this.tidak_ada_respon("img", nama, path_uri, null);
+      //   } else {
+      //     this.swal.swal_code_error("Terjadi kesalahan !", "code error 47 !, kembali ke login !");
+      //   }
+      // }
+      this.toast.Toast("Mencoba kembali mengirim file !");
     });
 
     let waktu_habis = await this.delayed();
@@ -517,24 +558,25 @@ export class NotifPage implements OnInit {
 
       if (code_error == 1) {
 
-        this.loadingCtrl.tampil_loading("");
-        Swal.fire({
-          icon: 'warning',
-          title: 'Terjadi kesalahan !',
-          text: 'Dokumen tidak ditemukan, kirim ulang!',
-          backdrop: false,
-          confirmButtonColor: '#3880ff',
-          confirmButtonText: 'Iya !',
-          showDenyButton: true,
-          denyButtonText: `Tidak`,
-        }).then((result) => {
-          if (result.isConfirmed) {
-            this.loadingCtrl.tutup_loading();
-            // this.dapatkan_docx(nama_pdf, tipe_mime, null, null);
-          }else {
-            this.loadingCtrl.tutup_loading();
-          }
-        });
+        this.swalService.swal_aksi_gagal("TErjadi kesalahan", "File tidak ada !");
+        // this.loadingCtrl.tampil_loading("");
+        // Swal.fire({
+        //   icon: 'warning',
+        //   title: 'Terjadi kesalahan !',
+        //   text: 'Dokumen tidak ditemukan, kirim ulang!',
+        //   backdrop: false,
+        //   confirmButtonColor: '#3880ff',
+        //   confirmButtonText: 'Iya !',
+        //   showDenyButton: true,
+        //   denyButtonText: `Tidak`,
+        // }).then((result) => {
+        //   if (result.isConfirmed) {
+        //     this.loadingCtrl.tutup_loading();
+        //     // this.dapatkan_docx(nama_pdf, tipe_mime, null, null);
+        //   }else {
+        //     this.loadingCtrl.tutup_loading();
+        //   }
+        // });
       } else {
         this.swal.swal_code_error("Terjadi kesalahan !", "code error 38 !, kembali ke login !");
       }
@@ -668,23 +710,24 @@ export class NotifPage implements OnInit {
     })
     .catch(error => {
 
-      console.log(error)
+    //   console.log(error)
     
-      this.loadingCtrl.tutup_loading();
+    //   this.loadingCtrl.tutup_loading();
 
-      this.timeout++;
+    //   this.timeout++;
 
-      this.sedang_mengirim = false;
+    //   this.sedang_mengirim = false;
       
-      if (this.timeout >= 3) {
-        this.keluar_aplikasi();
-      } else {
-        if (error.status == -4) {
-          this.tidak_ada_respon("docx", nama, path_uri, tipe_mime);
-        } else {
-          this.swal.swal_code_error("Terjadi kesalahan !", "code error 41 !, kembali ke login !");
-        }
-      }
+    //   if (this.timeout >= 3) {
+    //     this.keluar_aplikasi();
+    //   } else {
+    //     if (error.status == -4) {
+    //       this.tidak_ada_respon("docx", nama, path_uri, tipe_mime);
+    //     } else {
+    //       this.swal.swal_code_error("Terjadi kesalahan !", "code error 57 !, kembali ke login !");
+    //     }
+    //   }
+      this.toast.Toast("Mencoba kembali mengirim file !");
     });
 
     let waktu_habis = await this.delayed();
@@ -715,24 +758,25 @@ export class NotifPage implements OnInit {
 
       if (code_error == 1) {
 
-        this.loadingCtrl.tampil_loading("");
-        Swal.fire({
-          icon: 'warning',
-          title: 'Terjadi kesalahan !',
-          text: 'Dokumen tidak ditemukan, kirim ulang!',
-          backdrop: false,
-          confirmButtonColor: '#3880ff',
-          confirmButtonText: 'Iya !',
-          showDenyButton: true,
-          denyButtonText: `Tidak`,
-        }).then((result) => {
-          if (result.isConfirmed) {
-            this.loadingCtrl.tutup_loading();
-            // this.dapatkan_pdf(nama_pdf, null, null);
-          }else {
-            this.loadingCtrl.tutup_loading();
-          }
-        });
+        this.swalService.swal_aksi_gagal("Terjadi kesalahan !", "File tidak ada !");
+        // this.loadingCtrl.tampil_loading("");
+        // Swal.fire({
+        //   icon: 'warning',
+        //   title: 'Terjadi kesalahan !',
+        //   text: 'Dokumen tidak ditemukan, kirim ulang!',
+        //   backdrop: false,
+        //   confirmButtonColor: '#3880ff',
+        //   confirmButtonText: 'Iya !',
+        //   showDenyButton: true,
+        //   denyButtonText: `Tidak`,
+        // }).then((result) => {
+        //   if (result.isConfirmed) {
+        //     this.loadingCtrl.tutup_loading();
+        //     // this.dapatkan_pdf(nama_pdf, null, null);
+        //   }else {
+        //     this.loadingCtrl.tutup_loading();
+        //   }
+        // });
       } else {
         this.swal.swal_code_error("Terjadi kesalahan !", "code error 42 !, kembali ke login !");
       }
@@ -863,23 +907,24 @@ export class NotifPage implements OnInit {
     })
     .catch(error => {
 
-      console.log(error)
+      // console.log(error)
     
-      this.loadingCtrl.tutup_loading();
+      // this.loadingCtrl.tutup_loading();
 
-      this.timeout++;
+      // this.timeout++;
 
-      this.sedang_mengirim = false;
+      // this.sedang_mengirim = false;
       
-      if (this.timeout >= 3) {
-        this.keluar_aplikasi();
-      } else {
-        if (error.status == -4) {
-          this.tidak_ada_respon("pdf", nama, path_uri, null);
-        } else {
-          this.swal.swal_code_error("Terjadi kesalahan !", "code error 45 !, kembali ke login !");
-        }
-      }
+      // if (this.timeout >= 3) {
+      //   this.keluar_aplikasi();
+      // } else {
+      //   if (error.status == -4) {
+      //     this.tidak_ada_respon("pdf", nama, path_uri, null);
+      //   } else {
+      //     this.swal.swal_code_error("Terjadi kesalahan !", "code error 45 !, kembali ke login !");
+      //   }
+      // }
+      this.toast.Toast("Mencoba kembali mengirim file !");
     });
 
     let waktu_habis = await this.delayed();
@@ -904,7 +949,7 @@ export class NotifPage implements OnInit {
         if (status_data == 0) {
           this.update_log_notifikasi(id, name_, uri, tipe, tipe_mime);
         }else{
-          this.swal.swal_aksi_gagal("Terjadi kesalahan !", "code error asdasda !");
+          this.swal.swal_aksi_gagal("Terjadi kesalahan !", "code error 66 !");
           return;
         }
 
@@ -916,10 +961,10 @@ export class NotifPage implements OnInit {
         this.loadingCtrl.tutup_loading();
         if (error.status == -4) {
           this.toast.Toast("Gagal mengirim, mencoba mengirim kembali !");
-          // this.update_progress_harian_evidance(id, nama, uri, tipe);
+          this.update_cheklist_dokumen_detail(id, uri, tipe, tipe_mime ,id_pc_pd, pc_pd)
           this.data_progres_bar = 0.2;
         } else {
-          this.swal.swal_code_error("Terjadi kesalahan", "code error 4aasdasdsad9 !, kembali ke login !");
+          this.swal.swal_code_error("Terjadi kesalahan", "code error 60 !, kembali ke login !");
         }
     
       });
@@ -935,7 +980,7 @@ export class NotifPage implements OnInit {
           if (status_data == 0) {
             this.update_log_notifikasi(id, name_, uri, tipe, tipe_mime);
           }else{
-            this.swal.swal_aksi_gagal("Terjadi kesalahan !", "code error asdasda !");
+            this.swal.swal_aksi_gagal("Terjadi kesalahan !", "code error 67 !");
             return;
           }
         }
@@ -947,10 +992,10 @@ export class NotifPage implements OnInit {
         this.loadingCtrl.tutup_loading();
         if (error.status == -4) {
           this.toast.Toast("Gagal mengirim, mencoba mengirim kembali !");
-          // this.update_cheklist_dokumen_detail(id, nama, uri, tipe, tipe_mime);
+          this.update_cheklist_dokumen_detail(id, uri, tipe, tipe_mime ,id_pc_pd, pc_pd)
           this.data_progres_bar = 0.2;
         } else {
-          this.swal.swal_code_error("Terjadi kesalahan", "code error 51 !, kembali ke login !");
+          this.swal.swal_code_error("Terjadi kesalahan", "code error 61 !, kembali ke login !");
         }
 
       });
@@ -1038,11 +1083,33 @@ export class NotifPage implements OnInit {
           this.mengirim_gambar(nama, path_uri);
         } 
         if(tipe_data == "pdf") {
-          // this.mengirim_pdf(nama, path_uri);
+          this.mengirim_pdf(nama, path_uri);
         }
         if(tipe_data == "docx") {
-          // this.mengirim_docx(nama, path_uri, tipe_mime);
+          this.mengirim_docx(nama, path_uri, tipe_mime);
         }
+      }
+    });
+  }
+
+  async tidak_ada_respon2(){
+    const a = this.setget.getData();
+    if (a == 1) {
+      this.loadingCtrl.tutup_loading();
+    }
+    
+    this.loadingCtrl.tampil_loading("");
+    Swal.fire({
+      icon: 'warning',
+      title: 'Terjadi kesalahan !',
+      text: 'Tidak ada respon, coba lagi !',
+      backdrop: false,
+      confirmButtonColor: '#3880ff',
+      confirmButtonText: 'Iya !',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.loadingCtrl.tutup_loading();
+        // this.menampilkan_data_rap();
       }
     });
   }
