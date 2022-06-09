@@ -564,18 +564,18 @@ export class LapormeterPage implements OnInit {
   }
 
   looping_file(){
-      // console.log("masuk looping");
-      // this.loadingService.tutup_loading();
-      // this.data_progres_bar = 0.7;
-    
-      for (let index = 0; index < this.arr_data_img_pdf.length; index++) {
-        let element = this.arr_data_img_pdf[index];
-        let path_file = element.path;
-        let nama_file = element.nama;
-        let get_ext = element.tipe;
+    // console.log("masuk looping");
+    // this.loadingService.tutup_loading();
+    // this.data_progres_bar = 0.7;
+  
+    for (let index = 0; index < this.arr_data_img_pdf.length; index++) {
+      let element = this.arr_data_img_pdf[index];
+      let path_file = element.path;
+      let nama_file = element.nama;
+      let get_ext = element.tipe;
 
-        this.mengirim_file(nama_file, path_file, index, get_ext)
-      }
+      this.mengirim_file(nama_file, path_file, index, get_ext)
+    }
   }
 
   async mengirim_file(namafile, path_file, index, ext){

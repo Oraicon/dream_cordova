@@ -134,7 +134,7 @@ export class ProsesPage implements OnInit {
       console.log(data);
       let data_mentah = data[0];
 
-      let alamat = data_mentah.thoroughfare +" "+ data_mentah.subLocality +" "+ data_mentah.locality +" "+ data_mentah.subAdministrativeArea;
+      let alamat = data_mentah.thoroughfare +", "+ data_mentah.subLocality +", "+ data_mentah.locality +", "+ data_mentah.subAdministrativeArea;
       this.alamat_pm["alamat"+id] = alamat;
 
       if(index == arr_ms_length-1){
@@ -146,7 +146,8 @@ export class ProsesPage implements OnInit {
     })
     .catch(error => {
   
-      console.log(error);
+      // console.log(error);
+      this.swal.swal_code_error("Terjadi kesalahan !", "Code error 68 !")
   
     });
   }
@@ -188,9 +189,10 @@ export class ProsesPage implements OnInit {
   }
 
   // pindah aktiviti detail riwayat
-  lihat_list(id){
+  lihat_list(id, alamat){
     // let arr_list_data = arr_data_list.split(",");
-    this.setget.set_list_path(id, null);
+    this.setget.set_list_path(id, alamat);
+    console.log(id, alamat);
 
     this.router.navigate(["/list"], { replaceUrl: true });
     // this.navCtrl.navigateForward(['/list']);

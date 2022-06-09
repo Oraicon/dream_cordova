@@ -44,7 +44,7 @@
         <ng-template #data_tampil>
           <ion-card>
             <ion-card-header class="pad_bottom">
-              <ion-card-title>Daftar file</ion-card-title>
+              <ion-card-title>Daftar file :</ion-card-title>
             </ion-card-header>
           
             <ion-card-content class="ion-no-padding">
@@ -131,6 +131,17 @@
 
                   </ng-template>
                   
+                </ion-item>
+
+                <ion-item lines="none">
+                  <ion-label>
+                    <h2 class="ion-text-wrap padding_bottom_detail_informasi">
+                      Dikirim di :
+                    </h2>
+                    <h2 class="ion-text-wrap">
+                      {{ alamat }}
+                    </h2>
+                  </ion-label>
                 </ion-item>
   
               </ion-list>

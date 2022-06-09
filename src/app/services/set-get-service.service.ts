@@ -22,7 +22,7 @@ export class SetGetServiceService {
   private log_satuan;
 
   private list_data_img;
-  private list_data_kode_barang;
+  private alamat;
 
   private dokumen_judul;
   private dokumen_id;
@@ -142,12 +142,12 @@ export class SetGetServiceService {
   //setter getter untuk data list_path_image dari proses.page.ts ke list.page.ts 
   set_list_path(data1, data2){
     this.list_data_img = data1;
-    this.list_data_kode_barang = data2
+    this.alamat = data2;
   }
 
   get_list_path(){
     let a = [];
-    return a = [this.list_data_img, this.list_data_kode_barang];
+    return a = [this.list_data_img, this.alamat];
   }
 
   //fungsi tricky

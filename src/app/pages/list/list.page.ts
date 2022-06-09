@@ -36,6 +36,7 @@ export class ListPage implements OnInit {
   format_img:string="JPEG";
 
   id;
+  alamat;
   data_gambar_rusak = {};
   get_ext;
   loading_skeleton = true;
@@ -88,6 +89,7 @@ export class ListPage implements OnInit {
     this.data_progres_bar = 0;
     const data_mentah = this.setget.get_list_path();
     this.id =  data_mentah[0];
+    this.alamat = data_mentah[1];
     console.log(this.id);
     await this.tampilkan_data(this.id);
   }

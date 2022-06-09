@@ -40,6 +40,7 @@ export class LaporPage implements OnInit {
   volume;
   lat;
   long;
+  penghitung_index = 0;
 
   hasil_file_dikirim = [];
 
@@ -351,7 +352,6 @@ export class LaporPage implements OnInit {
     }
   }
 
-
   //kembali ke aktiviti sebelumnya
   kembali(){
     if (this.item != null || this.volume != null || this.keterangan != null || this.arr_data_img_pdf.length != 0) {
@@ -503,9 +503,11 @@ export class LaporPage implements OnInit {
       const data_status = data_json.status;
 
       if (data_status == 0) {
+        this.penghitung_index++;
 
         if (index == this.arr_data_img_pdf.length - 1) {
-          this.looping_file();
+          // this.looping_file();
+          this.pengecekan_informasi_data();
           this.data_progres_bar = 0.6;
         }
         
@@ -528,6 +530,19 @@ export class LaporPage implements OnInit {
       this.swal.swal_code_error("Terjadi kesalahan", "code error 29 !, kembali ke login !");
     }
     });
+  }
+
+  async pengecekan_informasi_data(){
+    console.log(this.penghitung_index);
+    console.log(this.arr_data_img_pdf.length);
+
+    if (this.penghitung_index == this.arr_data_img_pdf.length - 1) {
+      this.looping_file();
+      this.data_progres_bar = 0.6;
+    } else {
+      await this.delay_pengecekan();
+      this.pengecekan_informasi_data();
+    }
   }
 
   looping_file(){
