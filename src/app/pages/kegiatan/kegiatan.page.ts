@@ -20,7 +20,7 @@ export class KegiatanPage implements OnInit {
   loading = true; 
   timeout = 0;
 
-  detail_kegiatan;
+  detail_kegiatan = [];
   searchTerm: string;
 
   constructor(
@@ -52,6 +52,11 @@ export class KegiatanPage implements OnInit {
   //delay
   interval_counter() {
     return new Promise(resolve => { setTimeout(() => resolve(""), 100);});
+  }  
+
+  //delay
+  interval_counter_looping() {
+    return new Promise(resolve => { setTimeout(() => resolve(""), 50);});
   }  
 
   //delay loading
@@ -93,6 +98,7 @@ export class KegiatanPage implements OnInit {
   }
 
   async menampilkan_detail_kegiatan(){
+    this.interval_counter();
     this.loadingService.tampil_loading("Memuat data . . .");
 
     const a = this.setget.getDatakegiatan();
@@ -107,10 +113,30 @@ export class KegiatanPage implements OnInit {
       const status_data = data_json.status;
       if (status_data == 1) {
 
-        this.detail_kegiatan = data_json.data;
-        this.loading = false;
+        let arr_mentah = data_json.data;
 
-        this.delay_dulu();
+        this.looping_data(arr_mentah);
+
+        // for (let index = 0; index < arr_mentah.length; index++) {
+        // for (let index = 0; index < 11; index++) {
+        //   let element = arr_mentah[index];
+
+        //   let obj_mentah = {
+        //     id: element.id,
+        //     uraian_kegiatan: element.uraian_kegiatan
+        //   }
+          
+        //   this.detail_kegiatan.push(obj_mentah);
+
+        //   if (index == 10) {
+        //     this.loading = false;
+
+        //     this.delay_dulu();
+        //   }
+        // }
+
+        // this.detail_kegiatan = data_json.data;
+
       } else {
         this.swal.swal_code_error("Terjadi kesalahan !", "Data Kosong !")
       }
@@ -133,12 +159,39 @@ export class KegiatanPage implements OnInit {
         }
       }
     });
+  }
 
+  async looping_data(arr){
+    for (let index = 0; index < arr.length; index++) {
+      // await this.interval_counter_looping();
+      let element = arr[index];
+      
+      let obj_mentah = {
+        id: element.id,
+        uraian_kegiatan: element.uraian_kegiatan
+      }
+      
+      this.detail_kegiatan.push(obj_mentah);
+
+      if (index == arr.length - 1) {
+        this.loading = false;
+
+        this.delay_dulu();
+      }
+    }
   }
 
   async delay_dulu(){
     await this.interval_counter_loading();
     this.loadingService.tutup_loading();
+  }
+
+  relog(){
+    this.judul_proyek;
+    this.loading = true; 
+    this.timeout = 0;
+    this.detail_kegiatan;
+    this.menampilkan_detail_kegiatan();
   }
 
   async tidak_ada_respon(){
@@ -158,7 +211,7 @@ export class KegiatanPage implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         this.loadingService.tutup_loading();
-        this.menampilkan_detail_kegiatan();
+        this.relog();
       }
     });
   }

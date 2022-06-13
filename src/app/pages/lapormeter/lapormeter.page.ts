@@ -554,7 +554,7 @@ export class LapormeterPage implements OnInit {
     console.log(this.penghitung_index);
     console.log(this.arr_data_img_pdf.length);
 
-    if (this.penghitung_index == this.arr_data_img_pdf.length - 1) {
+    if (this.penghitung_index == this.arr_data_img_pdf.length) {
       this.looping_file();
       this.data_progres_bar = 0.6;
     } else {

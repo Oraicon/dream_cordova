@@ -627,6 +627,8 @@ export class ListdokumenPage implements OnInit {
 
   async buka_img(data_gambar, data_nama){
     
+    console.log("di klik")
+
     this.setget.setdatalist("https://dream-beta.technosolusitama.in/"+data_gambar, data_nama);
 
     const modal = await this.modalCtrl.create({

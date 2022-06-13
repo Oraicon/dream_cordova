@@ -122,6 +122,17 @@ export class DokumenPage implements OnInit {
     return;
   }
 
+  relog(){
+    this.judul_proyek;
+    this.loading = true; 
+    this.timeout = 0;
+  
+    this.id_cheklist_dokumen;
+    this.arr_cheklist_dokumen_detail = [];
+
+    this.ionViewWillEnter();
+  }
+
   async tidak_ada_respon(){
     const a = this.setget.getData();
     if (a == 1) {
@@ -139,7 +150,7 @@ export class DokumenPage implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         this.loadingService.tutup_loading();
-        // this.menampilkan_detail_kegiatan();
+        this.relog();
       }
     });
   }

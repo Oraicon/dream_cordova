@@ -615,6 +615,48 @@ export class Tab3Page {
     });
   }
 
+  relog(){
+    
+    this.nama_ls = "";
+    this.time_out = 0;
+
+    this.imgURL = 'assets/pp.jpg';
+    this.cek_koneksi = true;
+    this.md5_upload = "assets/images/";
+    this.timeout = 0;
+    
+    //variable frontend
+    this.lihatsandi = false;
+    this.nik_pengguna;
+    this.username_pengguna;
+    this.sandi_pengguna;
+    this.sandi_pengguna_tidak_terlihat;
+    this.nama_pengguna;
+    this.email_pengguna;
+    this.nohp_pengguna;
+    this.tempatlahir_pengguna;
+    this.tanggallahir_pengguna;
+    this.kelamin_pengguna;
+    this.alamat_pengguna;
+    this.jabatan_pengguna;
+    this.posisi_pengguna;
+    this.tanggalbergabung_pengguna;
+    this.departemen_pengguna;
+    this.bank_pengguna;
+    this.rekening_pengguna;
+
+    //gambar
+    this.base64_img="";
+    this.name_img="";
+    this.format_img="JPEG";
+
+    //update data
+    this.type_update_akun = "update_data_akun";
+    this.type_update_gambar = "update_image_akun";
+
+    this.tampilkandata();
+  }
+
   async tidak_ada_respon(){
     const a = this.setget.getData();
     if (a == 1) {
@@ -632,7 +674,7 @@ export class Tab3Page {
     }).then((result) => {
       if (result.isConfirmed) {
         this.loadingCtrl.tutup_loading();
-        this.tampilkandata();
+        this.relog();
       }
     });
   }

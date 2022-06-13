@@ -123,6 +123,7 @@ export class ProsesPage implements OnInit {
   }
 
   async latlong_converter(lat, long, id, index, arr_ms_length){
+    await this.interval_counter();
 
     let options: NativeGeocoderOptions = {
       useLocale: true,
@@ -147,7 +148,12 @@ export class ProsesPage implements OnInit {
     .catch(error => {
   
       // console.log(error);
-      this.swal.swal_code_error("Terjadi kesalahan !", "Code error 68 !")
+      this.loadingService.tutup_loading();
+      this.toast.Toast("Terjadi kesalahan !, Code error 68 !")
+      this.router.navigate(["/kegiatan"], { replaceUrl: true });
+
+      // this.swal.swal_code_error("Terjadi kesalahan !", "Code error 68 !");
+      // this.swal.swal_aksi_gagal("", "");
   
     });
   }

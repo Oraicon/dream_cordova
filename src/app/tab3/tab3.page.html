@@ -29,6 +29,7 @@
       <ion-col *ngIf="nama_pengguna; else templateName" size="12" class="ion-text-center ion-no-margin ion-text-wrap">
         <h1 class="ion-padding-start ion-padding-end">{{ nama_pengguna }}</h1>
       </ion-col>
+
       <!-- loading skeleton -->
       <ng-template #templateName>
         <ion-col size="12" size="12" class="ion-text-center ion-no-margin padding_skeleton_loading">
@@ -45,6 +46,7 @@
             <ion-label>
               <h2>Nama Pengguna</h2>
               <h3 *ngIf="nama_pengguna; else username">{{ username_pengguna }}</h3>
+              
               <!-- loading skeleton -->
               <ng-template #username>
                 <ion-skeleton-text class="" animated style="width: 30%; height: 1rem;"></ion-skeleton-text>

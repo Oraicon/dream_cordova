@@ -25,14 +25,17 @@
               <ion-row>
                 <ion-col size="12">
 
+                  <!-- loading muncul ? -->
                   <ng-container 
                     *ngIf="loading; then loading_muncul_judul; else loading_tidak_muncul_judul">
                   </ng-container>
 
+                  <!-- ya loading muncul -->
                   <ng-template #loading_muncul_judul>
                     <ion-skeleton-text animated style="width: 100%; height: 2rem;"></ion-skeleton-text>
                   </ng-template>
 
+                  <!-- tidak loading tidak muncul -->
                   <ng-template #loading_tidak_muncul_judul>
                     <ion-card-title class="ion-text-center text_judul">{{ judul_proyek }}</ion-card-title>
                   </ng-template>
@@ -43,10 +46,12 @@
 
           <ion-card-content>
 
+            <!-- loading muncul ? -->
             <ng-container 
               *ngIf="loading; then loading_muncul_konten; else loading_tidak_muncul_konten">
             </ng-container>
 
+            <!-- ya loading muncul -->
             <ng-template #loading_muncul_konten>
               <ion-grid fixed class="ion-no-padding">
                 <ion-row>
@@ -70,6 +75,7 @@
               </ion-grid>
             </ng-template>
 
+            <!-- tidak loading tidak muncul -->
             <ng-template #loading_tidak_muncul_konten>
               <ion-grid fixed class="grid_width ion-no-padding">
                 <ion-row>

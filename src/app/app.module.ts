@@ -14,13 +14,13 @@ import { IonicStorageModule } from '@ionic/storage-angular';
 import { FileTransfer, FileTransferObject } from '@awesome-cordova-plugins/file-transfer/ngx';
 import { Network } from '@awesome-cordova-plugins/network/ngx';
 import { DatePipe } from '@angular/common';
-import { WebView } from '@awesome-cordova-plugins/ionic-webview/ngx';
+// import { WebView } from '@awesome-cordova-plugins/ionic-webview/ngx';
 import { SetGetServiceService } from './services/set-get-service.service';
 import { Chooser } from '@awesome-cordova-plugins/chooser/ngx';
-import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
+// import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import { File } from '@awesome-cordova-plugins/file/ngx';
-import { DocumentViewer } from '@awesome-cordova-plugins/document-viewer/ngx';
+// import { DocumentViewer } from '@awesome-cordova-plugins/document-viewer/ngx';
 import { Geolocation } from '@awesome-cordova-plugins/geolocation/ngx';
 import { FileOpener } from '@awesome-cordova-plugins/file-opener/ngx';
 import { NativeGeocoder, NativeGeocoderResult, NativeGeocoderOptions } from '@awesome-cordova-plugins/native-geocoder/ngx';
@@ -30,7 +30,7 @@ import { NativeGeocoder, NativeGeocoderResult, NativeGeocoderOptions } from '@aw
   declarations: [AppComponent],
   entryComponents: [],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, IonicStorageModule.forRoot(), Ng2SearchPipeModule],
-  providers: [HTTP, Camera, SetGetServiceService, NativeGeocoder, FileTransfer, FileTransferObject, File, DocumentViewer, Network, DatePipe, WebView, Chooser, InAppBrowser, Geolocation, FileOpener,{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
+  providers: [HTTP, Camera, SetGetServiceService, NativeGeocoder, FileTransfer, FileTransferObject, File, Network, DatePipe, Chooser, Geolocation, FileOpener,{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

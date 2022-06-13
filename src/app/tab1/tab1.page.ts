@@ -8,7 +8,6 @@ import { SetGetServiceService } from '../services/set-get-service.service';
 import { SwalServiceService } from '../services/swal-service.service';
 import Swal from 'sweetalert2';
 import { ToastService } from '../services/toast.service';
-// import { NotifServiceService } from '../services/notif-service.service';
 
 @Component({
   selector: 'app-tab1',
@@ -40,7 +39,6 @@ export class Tab1Page {
 
   constructor(
     private swalService: SwalServiceService,
-    // private notifService: NotifServiceService,
     private setget: SetGetServiceService,
     private toast: ToastService,
     private loadingCtrl: LoadingServiceService, 
@@ -55,7 +53,6 @@ export class Tab1Page {
     this.setget.set_tab_page(0);
     //manggil data
     this.menampilkan_data_rap();
-    //notif
   }
 
   //delay
@@ -88,7 +85,7 @@ export class Tab1Page {
     this.menampilkan_data_rap();
   }
 
-  //pindah aktiviti
+  //pindah aktiviti ke kegiatan
   kegiatan(e, f){
     this.setget.setDatakegiatan(e, f);
     this.setget.set_tab_page(1);
@@ -103,6 +100,7 @@ export class Tab1Page {
     }
   }
 
+  //pindah aktiviti ke ceklist dokumen
   cdokumen(e, f){
     this.setget.setDokumen(e, f);
 
@@ -118,6 +116,7 @@ export class Tab1Page {
     }
   }
 
+  //pindah aktiviti ke notifikasi
   notif(){
     this.setget.set_tab_page(1);
 
@@ -132,22 +131,22 @@ export class Tab1Page {
   }
 
   relog(){
-  this.data_beranda = false;
-  this.data_beranda_loading_tidak_ada = false;
+    this.data_beranda = false;
+    this.data_beranda_loading_tidak_ada = false;
 
-  this.data_rap = [];
-  this.obj_data_rap = {};
-  this.jumlah_data_kegiatan_rap = 0;
-  this.obj_jumlah_kegiatan = {};
-  this.obj_jumlah_cheklist_dokumen = {};
-  this.tanggal_moment = {};
+    this.data_rap = [];
+    this.obj_data_rap = {};
+    this.jumlah_data_kegiatan_rap = 0;
+    this.obj_jumlah_kegiatan = {};
+    this.obj_jumlah_cheklist_dokumen = {};
+    this.tanggal_moment = {};
 
-  this.ida_data_rap = [];
-  this.data_notif_ = false;
-  this.notif_ada = [];
+    this.ida_data_rap = [];
+    this.data_notif_ = false;
+    this.notif_ada = [];
 
-  this.timeout = 0;
-  this.penghitung_loading = 0;
+    this.timeout = 0;
+    this.penghitung_loading = 0;
 
     this.menampilkan_data_rap();
   }
@@ -271,8 +270,6 @@ export class Tab1Page {
   
         }
       }
-
-  
     })
     .catch(error => {
 
@@ -347,7 +344,84 @@ export class Tab1Page {
   
     });
   }
+
+  //pengecekan notifikasi
+  async data_notif(){
+    await this.ida_data_rap;
+    this.setget.setArrIdRap(this.ida_data_rap);
+    let arr = this.ida_data_rap;
+
+    for (let index = 0; index < arr.length; index++) {
+      let element = arr[index];
+
+      this.api_data_notif(element)
+      
+    }
+  }
+
+  async api_data_notif(id_rap){
+    const data_l_nama = await this.storage.get('nama');
+    this.apiService.get_notif_status(id_rap, data_l_nama)
+    .then(data => {
+
+      const data_json = JSON.parse(data.data);
+      const status_data = data_json.status;
+
+      if (status_data == 1) {
+        this.notif_ada.push(1);
+
+        this.penghitung_loading++;
+        
+        if (this.penghitung_loading == this.data_rap.length - 1 || this.penghitung_loading == 1) {
+          this.tutuploading_notif();
+        }
+      }else{
+        this.notif_ada.push(0);
+
+        this.penghitung_loading++;
+
+        if (this.penghitung_loading == this.data_rap.length - 1 || this.penghitung_loading == 1) {
+          this.tutuploading_notif();
+        }
+      }
+    })
+    .catch(error => {
   
+      console.log(error)
+  
+      this.loadingCtrl.tutup_loading();
+  
+      this.timeout++;
+      
+      if (this.timeout >= 3) {
+        this.keluar_aplikasi();
+      } else {
+        if (error.status == -4) {
+          this.tidak_ada_respon();
+        } else {
+          this.swalService.swal_code_error("Terjadi kesalahan !", "code error 52 !, kembali ke login !");
+        }
+      }
+    });
+  }
+
+  //tutup loading
+  async tutuploading_notif(){
+
+    let notif = this.notif_ada.find(element => element == 1);
+
+    this.data_beranda_loading_tidak_ada = true;
+
+    if (notif == 1) {
+      this.data_notif_ = true;
+    } else {
+      this.data_notif_ = false;
+    }
+
+    this.loadingCtrl.tutup_loading();
+
+  }
+
   async tidak_ada_respon(){
     const a = this.setget.getData();
     if (a == 1) {
@@ -422,81 +496,5 @@ export class Tab1Page {
     } else {
       this.toast.Toast_tampil();
     }
-  }
-
-  async data_notif(){
-    await this.ida_data_rap;
-    this.setget.setArrIdRap(this.ida_data_rap);
-    // this.notifService.pengecekan_notif();
-    let arr = this.ida_data_rap;
-
-    for (let index = 0; index < arr.length; index++) {
-      let element = arr[index];
-
-      this.api_data_notif(element)
-      
-    }
-  }
-
-  async api_data_notif(id_rap){
-    const data_l_nama = await this.storage.get('nama');
-    this.apiService.get_notif_status(id_rap, data_l_nama)
-    .then(data => {
-
-      const data_json = JSON.parse(data.data);
-      const status_data = data_json.status;
-
-      if (status_data == 1) {
-        this.notif_ada.push(1);
-
-        this.penghitung_loading++;
-        
-        if (this.penghitung_loading == this.data_rap.length - 1 || this.penghitung_loading == 1) {
-          this.tutuploading_notif();
-        }
-      }else{
-        this.notif_ada.push(0);
-
-        this.penghitung_loading++;
-
-        if (this.penghitung_loading == this.data_rap.length - 1 || this.penghitung_loading == 1) {
-          this.tutuploading_notif();
-        }
-      }
-    })
-    .catch(error => {
-  
-      console.log(error)
-  
-      this.loadingCtrl.tutup_loading();
-  
-      this.timeout++;
-      
-      if (this.timeout >= 3) {
-        this.keluar_aplikasi();
-      } else {
-        if (error.status == -4) {
-          this.tidak_ada_respon();
-        } else {
-          this.swalService.swal_code_error("Terjadi kesalahan !", "code error 52 !, kembali ke login !");
-        }
-      }
-    });
-  }
-
-  async tutuploading_notif(){
-
-    let notif = this.notif_ada.find(element => element == 1);
-
-    this.data_beranda_loading_tidak_ada = true;
-
-    if (notif == 1) {
-      this.data_notif_ = true;
-    } else {
-      this.data_notif_ = false;
-    }
-
-    this.loadingCtrl.tutup_loading();
-
   }
 }
