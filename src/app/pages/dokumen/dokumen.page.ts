@@ -8,6 +8,7 @@ import Swal from 'sweetalert2';
 import { ToastService } from 'src/app/services/toast.service';
 import { ActionSheetController, ModalController } from '@ionic/angular';
 import { ModalRiwayatlaporanPage } from 'src/app/modal/modal-riwayatlaporan/modal-riwayatlaporan.page';
+import { IonInfiniteScroll } from '@ionic/angular';
 
 @Component({
   selector: 'app-dokumen',
@@ -20,9 +21,12 @@ export class DokumenPage implements OnInit {
     judul_proyek;
     loading = true; 
     timeout = 0;
+    
   
     id_cheklist_dokumen;
     arr_cheklist_dokumen_detail = [];
+    data_mentah = [];
+    @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
 
     searchTerm: string;
 
@@ -34,6 +38,57 @@ export class DokumenPage implements OnInit {
     private setget: SetGetServiceService,
     private apiService: ApiServicesService,
     private loadingService: LoadingServiceService) { }
+
+    async loadData(event) {
+
+      if (this.arr_cheklist_dokumen_detail.length < this.data_mentah.length) {
+        
+        await this.interval_counter_loading();
+        this.infiniteScroll.complete();
+  
+        this.tambah_data(this.arr_cheklist_dokumen_detail, this.data_mentah);
+  
+      } else {
+        this.toast.Toast("Seluruh data sudah dimuat !");
+        this.infiniteScroll.disabled = true;
+      }
+      
+      // await this.interval_counter_loading();
+      // event.target.complete();
+      // this.looping_data(this.data_array);
+  
+    }
+  
+    async tambah_data(arr_hasil, arr_mentah){
+      let length_arr_hasil = arr_hasil.length;
+      let lenth_arr_mentah = arr_mentah.length;
+      let hasil_pengolahan = length_arr_hasil + 10;
+      let limit_looping = 0;
+  
+      if (hasil_pengolahan <= lenth_arr_mentah) {
+        limit_looping = hasil_pengolahan;
+      } else {
+        let a = lenth_arr_mentah - length_arr_hasil;
+        let b = length_arr_hasil + a;
+        limit_looping = b;
+      }
+      
+  
+      console.log(limit_looping);
+  
+      this.tambahkan(length_arr_hasil, limit_looping, arr_mentah);
+    }
+  
+    async tambahkan(length_arr_hasil, limit_looping, arr_mentah){
+      for (let index = length_arr_hasil; index < limit_looping; index++) {
+        let element = arr_mentah[index];
+  
+        
+        this.arr_cheklist_dokumen_detail.push(element);
+      }
+      console.log(this.data_mentah);
+      console.log(this.arr_cheklist_dokumen_detail);
+    }
 
   //ionic lifecycle
   ngOnInit() {
@@ -75,16 +130,20 @@ export class DokumenPage implements OnInit {
       const status_data = data_json.status;
 
       if (status_data == 1) {
-        this.arr_cheklist_dokumen_detail = data_json.data;
-        console.log(this.arr_cheklist_dokumen_detail);
+        this.data_mentah = data_json.data;
+        this.looping_data(this.data_mentah);
+        // this.arr_cheklist_dokumen_detail = data_json.data;
+        // console.log(this.arr_cheklist_dokumen_detail);
 
-        this.loading = false;
-        this.delay_dulu();
+        // this.loading = false;
+        // this.delay_dulu();
       } else {
         this.swal.swal_code_error("Terjadi kesalahan !", "Data Kosong !")
       }
     })
     .catch(error => {
+      console.log(error);
+
   
       this.loadingService.tutup_loading();
 
@@ -100,6 +159,19 @@ export class DokumenPage implements OnInit {
         }
       }
     });
+  }
+
+  async looping_data(arr){
+    for (let index = 0; index < 10; index++) {
+      const element = arr[index];
+      this.arr_cheklist_dokumen_detail.push(element);
+
+      if (index == 9) {
+        this.loading = false;
+        this.delay_dulu();
+      }
+      
+    }
   }
 
   //kembali ke aktiviti sebelumnya

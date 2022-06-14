@@ -11,19 +11,112 @@
       </ion-row>
     </ion-grid>
   </ion-toolbar>
+
+  <ion-toolbar class="background_konten">
+
+  <div *ngIf="riwayat_loading; then toolbar_kosong; else toolbar_tidak_kosong"></div>
+
+  <ng-template #toolbar_kosong>
+    <ion-col size="12" class="">
+      <ion-card class="bayangan">
+        <ion-card-header>
+          <ion-skeleton-text animated style="width: 100%; height: 2rem;"></ion-skeleton-text>
+        </ion-card-header>
+        <ion-card-content class="ion-no-padding">
+          <ion-grid fixed class="ion-no-padding">
+            <ion-row>
+              <ion-col size="12">
+                <ion-list>
+
+                  <ion-item >
+                    <ion-label>
+                      <ion-skeleton-text animated style="width: 30%; height: 1rem;"></ion-skeleton-text>
+                      <ion-skeleton-text animated style="width: 100%; height: 1rem;"></ion-skeleton-text>
+                    </ion-label>
+                  </ion-item>
+
+                </ion-list>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-card-content>
+      </ion-card>
+    </ion-col>
+  </ng-template>
+
+  <ng-template #toolbar_tidak_kosong>
+      <ion-grid class="ion-no-padding">
+        <ion-row class="ion-align-items-center">
+          <ion-col size="12" class="">
+            <ion-card class="bayangan">
+              <ion-card-header class="pad_bottom" (click)="hide_detail()">
+                <ion-card-title class="ion-text-center ion-text-wrap text_judul">{{ data_detail_kegiatan.uraian_kegiatan }}</ion-card-title>
+              </ion-card-header>
+              <ion-card-content class="ion-no-padding" [hidden]=hidedetail>
+                <ion-grid fixed class="ion-no-padding">
+                  <ion-row>
+                    <ion-col size="12">
+                      <ion-item class="ion-align-items-center abu" lines="none">
+                        <ion-icon class="padding_icon" name="alert-circle-outline"></ion-icon>
+                        <h2 class="ion-no-margin detail_informasi">Detail Informasi</h2>
+                      </ion-item>
+                      <ion-list class="pad_top">
+                        <ion-item>
+                          <ion-label>
+                            <h3 class="abu padding_bottom_detail_informasi ion-no-margin detail_informasi">
+                              Target volume pengerjaan
+                            </h3>
+                            <h2 class="ion-no-margin">
+                              {{ data_detail_kegiatan.volume }} {{ data_detail_kegiatan.nama }}
+                            </h2>
+                          </ion-label>
+                        </ion-item>
+  
+                        <ion-item lines="none">
+                          <ion-label>
+                            <h3 class="abu ion-no-margin padding_bottom_detail_informasi detail_informasi">
+                              Progress pengerjaan
+                            </h3>
+                            <div class="ion-no-margin ion-text-wrap">
+                              <h2>
+                                {{ data_detail_kegiatan.total_volume }} {{ data_detail_kegiatan.nama }} ({{ data_persen }})
+                              </h2>
+                            </div>
+                          </ion-label>
+                        </ion-item>
+                      </ion-list>
+                    </ion-col>
+  
+  
+                  </ion-row>
+                </ion-grid>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+  
+          <ion-col size="12" *ngIf="riwayat_laporan; else search_kosong" class="padding_search">
+            <ion-searchbar placeholder="Cari riwayat" [(ngModel)]="searchTerm" class="ion-no-padding"></ion-searchbar>
+          </ion-col>
+  
+          <ng-template #search_kosong></ng-template>
+  
+        </ion-row>
+      </ion-grid>
+    </ng-template>
+  </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="background_konten">
 
   <ion-grid fixed class="ion-no-padding">
-    <ion-row class="background_color_biru_gelap ion-padding-top">
+    <ion-row class="">
 
       <div *ngIf="riwayat_loading; then tampilkan_loading; else tampilkan_riwayat"></div>
       
       <!-- loading skeleton -->
       <ng-template #tampilkan_loading>
 
-        <ion-col size="12" class="">
+        <!-- <ion-col size="12" class="">
           <ion-card class="bayangan">
             <ion-card-header>
               <ion-skeleton-text animated style="width: 100%; height: 2rem;"></ion-skeleton-text>
@@ -47,14 +140,15 @@
               </ion-grid>
             </ion-card-content>
           </ion-card>
-        </ion-col>
+        </ion-col> -->
 
       </ng-template>
 
       <!-- menampilkan data -->
       <ng-template #tampilkan_riwayat>
 
-        <ion-col size="12" class="">
+        <!-- <ion-col size="12" class=""> -->
+        <!-- <ion-col size="12" class="">
           <ion-card class="bayangan">
             <ion-card-header class="pad_bottom" (click)="hide_detail()">
               <ion-card-title class="ion-text-center ion-text-wrap text_judul">{{ data_detail_kegiatan.uraian_kegiatan }}</ion-card-title>
@@ -97,15 +191,11 @@
               </ion-grid>
             </ion-card-content>
           </ion-card>
-        </ion-col>
+        </ion-col> -->
 
         <!-- searchbar -->
-        <ion-col size="12" class="">
-          
-        </ion-col>
-
         <ion-col size="12" *ngIf="riwayat_laporan; else data_arr_progressmilsetone_kosong">
-          <ion-card class="">
+          <!--  <ion-card class="">
             <ion-card-content class="ion-no-padding" [hidden]=false>
               <ion-grid fixed class="ion-no-padding">
                 <ion-row>
@@ -115,11 +205,11 @@
                 </ion-row>
               </ion-grid>
             </ion-card-content>
-          </ion-card>
+          </ion-card> -->
 
-          <div class="scrollan" scrolly="true" style="max-height:29rem">
+          <!-- <div class="scrollan" scrolly="true" style="max-height:29rem"> -->
 
-            <ion-card *ngFor='let data of data_arr_progressmilsetone | filter:searchTerm; let i = index' class="ion-activatable" (click)="lihat_list(data.id, alamat_pm['alamat'+data.id])" >
+            <ion-card button *ngFor='let data of data_hasil | filter:searchTerm; let i = index' (click)="lihat_list(data.id, alamat_pm['alamat'+data.id])" >
               <ion-card-content class="nop_padding_right" >
                 <ion-grid fixed class="">
                   <ion-row>
@@ -159,10 +249,16 @@
                 </ion-grid>
               </ion-card-content>
 
-              <ion-ripple-effect></ion-ripple-effect>
+              <!-- <ion-ripple-effect></ion-ripple-effect> -->
             </ion-card>
 
-          </div>
+          <!-- </div> -->
+          <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
+            <ion-infinite-scroll-content
+              loadingSpinner="bubbles"
+              loadingText="Memuat data...">
+            </ion-infinite-scroll-content>
+          </ion-infinite-scroll>
         </ion-col>
 
         <ng-template #data_arr_progressmilsetone_kosong>

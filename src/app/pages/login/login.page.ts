@@ -126,7 +126,7 @@ export class LoginPage implements OnInit {
         
       }
     }).catch(err => {
-      // console.log(err);
+      console.log(err);
     });
     await modal.present().then(() => {
       
@@ -173,6 +173,8 @@ export class LoginPage implements OnInit {
       this.manggil_api_lupa_nama(nama);
     })
     .catch(error => {
+      console.log(error);
+
       const a = this.setget.getData();
       if (a == 1) {
         this.loadingService.tutup_loading();
@@ -224,6 +226,7 @@ export class LoginPage implements OnInit {
 
     })
     .catch(err => {
+      console.log(err);
       
       this.loadingService.tutup_loading();
       
@@ -266,6 +269,7 @@ export class LoginPage implements OnInit {
     })
     .catch(err => {
       //error
+      console.log(err);
       this.loadingService.tutup_loading();
       if (err.status == -4) {
         this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Tidak ada respon, coba beberapa saat lagi !");

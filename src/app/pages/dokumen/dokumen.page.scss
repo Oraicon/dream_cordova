@@ -37,6 +37,10 @@
   .grid_width{
     width: 100%;
   }
+
+  ion-item{
+    --inner-padding-end: 0px;
+  }
   
   //scroll
   .scrollan[scrollx=true],div[scrolly=true] {
@@ -55,7 +59,6 @@
   
   .text_judul{
     font-size: 160%;
-    padding-bottom: 5px;
   }
   
   .text_segment{

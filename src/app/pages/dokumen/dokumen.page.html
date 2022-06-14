@@ -9,18 +9,23 @@
           </ion-button>
         </ion-col>
       </ion-row>
+      <ion-row>
+        <ion-col size="12" class="">
+          <ion-searchbar class="ion-no-padding" [(ngModel)]="searchTerm" placeholder="Cari dokumen"></ion-searchbar>
+        </ion-col>
+      </ion-row>
     </ion-grid>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="background_konten">
 
   <ion-grid fixed class="ion-no-padding" style="top: 3rem;">
-    <ion-row class=" ion-padding-top background_color_biru_gelap">
+    <ion-row class="">
 
       <ion-col size="12" class="">
         <ion-card class="bayangan">
-          <ion-card-header>
+          <ion-card-header class="padding_sendiri">
             <ion-grid fixed class="ion-no-padding">
               <ion-row>
                 <ion-col size="12">
@@ -79,12 +84,12 @@
             <ng-template #loading_tidak_muncul_konten>
               <ion-grid fixed class="grid_width ion-no-padding">
                 <ion-row>
-                  <ion-col size="12" class="ion-padding-bottom">
+                  <!-- <ion-col size="12" class="ion-padding-bottom">
                     <ion-searchbar class="ion-no-padding" [(ngModel)]="searchTerm" placeholder="Cari kegiatan"></ion-searchbar>
-                  </ion-col>
+                  </ion-col> -->
                   <ion-col size="12">
                     <ion-list>  
-                      <div class="scrollan" scrolly="true" style="max-height:43rem">
+                      <!-- <div class="scrollan" scrolly="true" style="max-height:43rem"> -->
 
                         <!-- perulangan data -->
                         <div *ngFor="let data of arr_cheklist_dokumen_detail | filter:searchTerm">
@@ -103,7 +108,7 @@
                                   {{ data.uraian_kegiatan }}
                                 </h2>
                               </ion-label>
-                              <ion-icon name="chevron-forward-outline" class="ion-text-end"></ion-icon>
+                              <ion-icon name="chevron-forward-outline" class="ion-text-end" size="large"></ion-icon>
                             </ion-item>
                           </ng-template>
 
@@ -128,8 +133,16 @@
 
                         </div>
                         
-                      </div>
+                      <!-- </div> -->
                     </ion-list>
+
+                    <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
+                      <ion-infinite-scroll-content
+                        loadingSpinner="bubbles"
+                        loadingText="Memuat data...">
+                      </ion-infinite-scroll-content>
+                    </ion-infinite-scroll>
+
                   </ion-col>
                 </ion-row>
               </ion-grid>

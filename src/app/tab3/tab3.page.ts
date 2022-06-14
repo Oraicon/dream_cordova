@@ -297,7 +297,7 @@ export class Tab3Page {
           
         }
       }).catch(err => {
-        // console.log(err);
+        console.log(err);
       });
       await modal.present();
 
@@ -341,7 +341,7 @@ export class Tab3Page {
           
         }
       }).catch(err => {
-        // console.log(err);
+        console.log(err);
       });
       await modal.present();
 
@@ -391,6 +391,8 @@ export class Tab3Page {
       this.loadingCtrl.tutup_loading();
     })
     .catch(err => {
+      console.log(err);
+
       this.loadingCtrl.tutup_loading();
       this.time_out++;
 
@@ -421,6 +423,8 @@ export class Tab3Page {
 
     })
     .catch(error => {
+      console.log(error);
+
       this.loadingCtrl.tutup_loading();
       this.swalService.swal_aksi_gagal("Terjadi kesalahan !", "Tidak ada respon, coba beberapa saat lagi !");
     });
@@ -598,6 +602,7 @@ export class Tab3Page {
     })
     .catch(err => {
       //error
+      console.log(err)
       this.loadingCtrl.tutup_loading();
 
       this.timeout++;

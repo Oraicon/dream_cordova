@@ -26,8 +26,17 @@
   padding-bottom: 0px;
 }
 
+.padding_search{
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
 ion-list{
   width: 100%;
+}
+
+ion-item{
+  --inner-padding-end: 0px;
 }
 
 .grid_width{
@@ -51,7 +60,6 @@ ion-list{
 
 .text_judul{
   font-size: 160%;
-  padding-bottom: 5px;
 }
 
 .text_segment{

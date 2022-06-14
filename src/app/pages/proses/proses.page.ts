@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild  } from '@angular/core';
 import { SetGetServiceService } from 'src/app/services/set-get-service.service';
 import { NavController } from '@ionic/angular';
 import { LoadingServiceService } from 'src/app/services/loading-service.service';
@@ -8,8 +8,8 @@ import { SwalServiceService } from 'src/app/services/swal-service.service';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { ToastService } from 'src/app/services/toast.service';
-import { NativegeocoderServiceService } from 'src/app/services/nativegeocoder-service.service';
 import { NativeGeocoder, NativeGeocoderResult, NativeGeocoderOptions } from '@awesome-cordova-plugins/native-geocoder/ngx';
+import { IonInfiniteScroll } from '@ionic/angular';
 
 
 @Component({
@@ -20,7 +20,9 @@ import { NativeGeocoder, NativeGeocoderResult, NativeGeocoderOptions } from '@aw
 export class ProsesPage implements OnInit {
 
   //variable
-  
+  @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
+  data_hasil = [];
+
   timeout = 0;
   data_id_kegiatan;
   data_arr_progressmilsetone = [];
@@ -47,13 +49,63 @@ export class ProsesPage implements OnInit {
     private router:Router,
     private nativeGeocoder: NativeGeocoder,
     private swal: SwalServiceService,
-    private ngeo: NativegeocoderServiceService,
     private apiService: ApiServicesService, 
     private toast: ToastService,
     private loadingService: LoadingServiceService, 
     private navCtrl: NavController, 
     private setget: SetGetServiceService,) { 
       
+  }
+
+  async loadData(event) {
+
+    if (this.data_hasil.length < this.data_arr_progressmilsetone.length) {
+      
+      await this.interval_counter_loading();
+      this.infiniteScroll.complete();
+
+      this.tambah_data(this.data_hasil, this.data_arr_progressmilsetone);
+
+    } else {
+      this.toast.Toast("Seluruh data sudah dimuat !");
+      this.infiniteScroll.disabled = true;
+    }
+    
+    // await this.interval_counter_loading();
+    // event.target.complete();
+    // this.looping_data(this.data_array);
+
+  }
+
+  async tambah_data(arr_hasil, arr_mentah){
+    let length_arr_hasil = arr_hasil.length;
+    let lenth_arr_mentah = arr_mentah.length;
+    let hasil_pengolahan = length_arr_hasil + 10;
+    let limit_looping = 0;
+
+    if (hasil_pengolahan <= lenth_arr_mentah) {
+      limit_looping = hasil_pengolahan;
+    } else {
+      let a = lenth_arr_mentah - length_arr_hasil;
+      let b = length_arr_hasil + a;
+      limit_looping = b;
+    }
+    
+
+    console.log(limit_looping);
+
+    this.tambahkan(length_arr_hasil, limit_looping, arr_mentah);
+  }
+
+  async tambahkan(length_arr_hasil, limit_looping, arr_mentah){
+    for (let index = length_arr_hasil; index < limit_looping; index++) {
+      let element = arr_mentah[index];
+
+      
+      this.data_hasil.push(element);
+    }
+    console.log(this.data_hasil);
+    console.log(this.data_arr_progressmilsetone);
   }
 
   ngOnInit() {
@@ -139,15 +191,16 @@ export class ProsesPage implements OnInit {
       this.alamat_pm["alamat"+id] = alamat;
 
       if(index == arr_ms_length-1){
-        this.riwayat_laporan = true;
-        this.riwayat_loading = false;
-        this.delay_dulu();
+        // this.riwayat_laporan = true;
+        // this.riwayat_loading = false;
+        // this.delay_dulu();
+        this.menampilkan_sedikit_data(this.data_arr_progressmilsetone);
       }
 
     })
     .catch(error => {
   
-      // console.log(error);
+      console.log(error);
       this.loadingService.tutup_loading();
       this.toast.Toast("Terjadi kesalahan !, Code error 68 !")
       this.router.navigate(["/kegiatan"], { replaceUrl: true });
@@ -156,6 +209,19 @@ export class ProsesPage implements OnInit {
       // this.swal.swal_aksi_gagal("", "");
   
     });
+  }
+
+  async menampilkan_sedikit_data(arr){
+    for (let index = 0; index < 10; index++) {
+      let element = arr[index];
+      
+      this.data_hasil.push(element);
+      if(index == 9){
+        this.riwayat_laporan = true;
+        this.riwayat_loading = false;
+        this.delay_dulu();
+      }
+    }
   }
 
   async delay_dulu(){

@@ -444,6 +444,8 @@ export class LapordokumenPage implements OnInit {
 
     })
     .catch(error => {
+      console.log(error);
+
       this.toastService.Toast("Gagal mengirim, mencoba mengirim kembali !");
       this.data_progres_bar = 0.2;
     });
@@ -522,6 +524,7 @@ export class LapordokumenPage implements OnInit {
 
     })
     .catch(error => {
+    console.log(error);
   
     this.loadingService.tutup_loading();
       if (error.status == -4) {

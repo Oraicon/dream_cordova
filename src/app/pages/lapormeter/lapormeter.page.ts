@@ -451,6 +451,8 @@ export class LapormeterPage implements OnInit {
 
     })
     .catch(error => {
+      console.log(error);
+
       this.toastService.Toast("Gagal mengirim, mencoba mengirim kembali !");
       this.data_progres_bar = 0.2;
       this.test_koneksi_api(item, volume, keterangan, lat, long);
@@ -478,6 +480,8 @@ export class LapormeterPage implements OnInit {
 
     })
     .catch(error => {
+      console.log(error);
+  
       this.loadingService.tutup_loading();
       if (error.status == -4) {
         // this.toastService.Toast("Gagal mengirim, mencoba mengirim kembali !");

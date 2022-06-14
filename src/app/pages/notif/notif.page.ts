@@ -1026,15 +1026,22 @@ export class NotifPage implements OnInit {
               this.mengirim_pdf(name_, uri);
           }
         }else{
-          this.swal.swal_aksi_gagal("Terjadi kesalahan !", "code error asdasdsad !");
+          this.swal.swal_aksi_gagal("Terjadi kesalahan !", "code error 68 !");
           return;
         }
   
     })
     .catch(error => {
       
-
       console.log(error);
+      this.loadingCtrl.tutup_loading();
+      if (error.status == -4) {
+        this.toast.Toast("Gagal mengirim, mencoba mengirim kembali !");
+        this.update_log_notifikasi(id, name_, uri, tipe, tipe_mime);
+        this.data_progres_bar = 0.5;
+      } else {
+        this.swal.swal_code_error("Terjadi kesalahan", "code error 69 !, kembali ke login !");
+      }
 
   
     });

@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { SwalServiceService } from 'src/app/services/swal-service.service';
 import Swal from 'sweetalert2';
 import { ToastService } from 'src/app/services/toast.service';
+import { IonInfiniteScroll } from '@ionic/angular';
 
 
 @Component({
@@ -19,9 +20,12 @@ export class KegiatanPage implements OnInit {
   judul_proyek;
   loading = true; 
   timeout = 0;
+  data_array = [];
 
   detail_kegiatan = [];
   searchTerm: string;
+
+  @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
 
   constructor(
     private toast: ToastService,
@@ -32,6 +36,62 @@ export class KegiatanPage implements OnInit {
     private loadingService: LoadingServiceService
   ) { 
 
+  }
+
+  async loadData(event) {
+
+    if (this.detail_kegiatan.length < this.data_array.length) {
+      
+      await this.interval_counter_loading();
+      this.infiniteScroll.complete();
+
+      this.tambah_data(this.detail_kegiatan, this.data_array);
+
+    } else {
+      this.toast.Toast("Seluruh data sudah dimuat !");
+      this.infiniteScroll.disabled = true;
+    }
+    
+    // await this.interval_counter_loading();
+    // event.target.complete();
+    // this.looping_data(this.data_array);
+
+  }
+
+  async tambah_data(arr_hasil, arr_mentah){
+    let length_arr_hasil = arr_hasil.length;
+    let lenth_arr_mentah = arr_mentah.length;
+    let hasil_pengolahan = length_arr_hasil + 10;
+    let limit_looping = 0;
+
+    if (hasil_pengolahan <= lenth_arr_mentah) {
+      limit_looping = hasil_pengolahan;
+    } else {
+      let a = lenth_arr_mentah - length_arr_hasil;
+      let b = length_arr_hasil + a;
+      limit_looping = b;
+    }
+    
+
+    console.log(limit_looping);
+
+    this.tambahkan(length_arr_hasil, limit_looping, arr_mentah);
+  }
+
+  async tambahkan(length_arr_hasil, limit_looping, arr_mentah){
+    for (let index = length_arr_hasil; index < limit_looping; index++) {
+      let element = arr_mentah[index];
+
+      let obj_mentah = {
+        no: index + 1,
+        id: element.id,
+        uraian_kegiatan: element.uraian_kegiatan
+      }
+      
+      this.detail_kegiatan.push(obj_mentah);
+    }
+    console.log(this.detail_kegiatan);
+    console.log(this.data_array);
   }
 
   //ionic lifecycle
@@ -114,6 +174,7 @@ export class KegiatanPage implements OnInit {
       if (status_data == 1) {
 
         let arr_mentah = data_json.data;
+        this.data_array = arr_mentah;
 
         this.looping_data(arr_mentah);
 
@@ -162,21 +223,24 @@ export class KegiatanPage implements OnInit {
   }
 
   async looping_data(arr){
-    for (let index = 0; index < arr.length; index++) {
+    for (let index = 0; index < 10; index++) {
       // await this.interval_counter_looping();
       let element = arr[index];
       
       let obj_mentah = {
+        no: index + 1,
         id: element.id,
         uraian_kegiatan: element.uraian_kegiatan
       }
       
       this.detail_kegiatan.push(obj_mentah);
 
-      if (index == arr.length - 1) {
+      if (index == 9) {
         this.loading = false;
 
         this.delay_dulu();
+        console.log(this.detail_kegiatan);
+        console.log(this.data_array);
       }
     }
   }
