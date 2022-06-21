@@ -48,10 +48,12 @@ export class ModalGantisandiPage implements OnInit {
   }
 
   ionViewWillEnter(){
+    this.setget.setButton(0);
     this.setget.set_tab_page(3);
   }
 
   ionViewWillLeave(){
+    this.setget.setButton(0);
     this.setget.set_tab_page(0);
   }
 

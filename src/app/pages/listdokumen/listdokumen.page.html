@@ -186,10 +186,27 @@
 
     </ion-row>
   </ion-grid> 
+
+    <ion-fab horizontal="end" vertical="bottom" slot="fixed" (click)="modal_evidence(id)">
+      <ion-fab-button color="primary">
+        <ion-icon size="large" name="add-outline"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+
 </ion-content>
 
 <ion-footer>
   <ion-progress-bar value="{{ data_progres_bar }}" *ngIf="sedang_mengirim; else tidak_sedang_mengirim"></ion-progress-bar>
   <ng-template #tidak_sedang_mengirim></ng-template>
+  <!-- <ion-toolbar>
+    <ion-button (click)="modal_evidence(id)" expand="block">
+      Tambahkan Evidence
+    </ion-button>
+    <ion-fab horizontal="end" vertical="bottom" slot="fixed">
+      <ion-fab-button>
+        <ion-icon size="large" name="add"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+  </ion-toolbar> -->
 </ion-footer>
 

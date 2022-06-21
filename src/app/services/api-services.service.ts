@@ -171,4 +171,9 @@ export class ApiServicesService {
       return this.http.post('https://dream-beta.technosolusitama.in/api/update_pc_pd_notif', {"id": id}, {'Accept': 'application/json', 'Content-Type':'application/x-www-form-urlencoded'})
   }
 
+  update_data_poengguna(username, nama, sandi, gambar){
+    this.http.setRequestTimeout(30.0);
+    return this.http.post('https://dream-beta.technosolusitama.in/api/update_data_user', {"username": username, "nama": nama, "sandi": sandi, "gambar":gambar}, {'Accept': 'application/json', 'Content-Type':'application/x-www-form-urlencoded'})
+  }
+
 }

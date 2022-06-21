@@ -28,6 +28,9 @@ export class LoginPage implements OnInit {
   local_sandi;
   data_api_lupa_sandi_nama;
 
+  sedang_mengirim = false;
+  data_progres_bar = 0;
+
   constructor(
     private formBuilder: FormBuilder,
     private toast: ToastService,
@@ -119,6 +122,8 @@ export class LoginPage implements OnInit {
         this.data_api_lupa_sandi_nama = data.data.data;
 
         if (this.cek_koneksi == true) {
+          this.sedang_mengirim = true;
+          this.data_progres_bar = 0.1;
           this.test_koneksi(this.data_api_lupa_sandi_nama);
         }else{
           this.swal.swal_aksi_gagal("Terjadi kesalahan", "Tidak ada koneksi internet !");
@@ -154,6 +159,9 @@ export class LoginPage implements OnInit {
         this.local_nama = this.myGroup.value.nama_pengguna;
         this.local_sandi = this.myGroup.value.sandi_pengguna;
         if (this.cek_koneksi == true) {
+          this.loadingService.tampil_loading("Sedang memproses . . .");
+          this.sedang_mengirim = true;
+          this.data_progres_bar = 0.1;
           this.manggil_api_login(this.local_nama, this.local_sandi);
         }else{
           this.swal.swal_aksi_gagal("Terjadi kesalahan", "Tidak ada koneksi internet !");
@@ -167,6 +175,8 @@ export class LoginPage implements OnInit {
 
   //test koneksi
   test_koneksi(nama){
+    this.data_progres_bar = 0.3;
+
     this.toastService.Toast("Pengecekan koneksi internet . . .");
     this.apiService.cek_koneksi()
     .then(data => {
@@ -185,7 +195,7 @@ export class LoginPage implements OnInit {
 
   //memanggil api data karyawan
   manggil_api_login(var_nama, var_sandi){
-    this.loadingService.tampil_loading("Sedang memproses . . .");
+    this.data_progres_bar = 0.3;
     
     this.interval_counter();
 
@@ -196,29 +206,39 @@ export class LoginPage implements OnInit {
     const data_status = data_json.status;
 
     if (data_status == 1) {
-      this.storage.set('auth', true);
-      this.storage.set('nama', var_nama);
-      this.storage.set('sandi', var_sandi);
+      // this.storage.set('auth', true);
+      // this.storage.set('nama', var_nama);
+      // this.storage.set('sandi', var_sandi);
       
-      this.loadingService.tutup_loading();
+      // this.loadingService.tutup_loading();
 
-      this.ionViewDidLeave();
+      // this.ionViewDidLeave();
+      this.data_progres_bar = 0.6;
+      this.cek_user_rap(var_nama, var_sandi);
       
     } else if (data_status == 2) {
+      this.data_progres_bar = 0.9;
+      this.sedang_mengirim = false;
       this.loadingService.tutup_loading();
       
       this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Sandi tidak sesuai !");
 
     } else if (data_status == 3) {
+      this.data_progres_bar = 0.9;
+      this.sedang_mengirim = false;
       this.loadingService.tutup_loading();
 
       this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Pengguna tidak aktif !");
 
     } else if (data_status == 0){
+      this.data_progres_bar = 0.9;
+      this.sedang_mengirim = false;
       this.loadingService.tutup_loading();
 
       this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Pengguna tidak ditemukan !");
     } else {
+      this.data_progres_bar = 0.9;
+      this.sedang_mengirim = false;
       this.loadingService.tutup_loading();
 
       this.swal.swal_aksi_gagal("Terjadi kesalahan !", "code error 1 !");
@@ -227,7 +247,8 @@ export class LoginPage implements OnInit {
     })
     .catch(err => {
       console.log(err);
-      
+      this.data_progres_bar = 0.9;
+      this.sedang_mengirim = false;
       this.loadingService.tutup_loading();
       
       if (err.status == -4 ) {
@@ -240,6 +261,8 @@ export class LoginPage implements OnInit {
   
   //memanggil api lupa nama
   manggil_api_lupa_nama(nama_baru){
+    this.data_progres_bar = 0.6;
+
     this.interval_counter();
 
     this.apiService.panggil_api_reset_password(nama_baru)
@@ -253,16 +276,22 @@ export class LoginPage implements OnInit {
       if (data_status == 1) {
         //mendapatkan data
         const data_email = data_json.data[0].email;
+        this.data_progres_bar = 0.9;
+        this.sedang_mengirim = false;
         this.loadingService.tutup_loading();
         this.swal.swal_aksi_berhasil("Berhasil !", "Sandi baru sudah dikirim ke email: " + data_email);
   
       } else if (data_status == 0) {
         //jika status != 1
+        this.data_progres_bar = 0.9;
+        this.sedang_mengirim = false;
         this.loadingService.tutup_loading();
         this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Sandi gagal dikirim ke email");
       } 
       else if (data_status == 2) {
         //jika status != 1
+        this.data_progres_bar = 0.9;
+        this.sedang_mengirim = false;
         this.loadingService.tutup_loading();
         this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Nama tidak ditemukan !");
       }         
@@ -270,6 +299,8 @@ export class LoginPage implements OnInit {
     .catch(err => {
       //error
       console.log(err);
+      this.data_progres_bar = 0.9;
+      this.sedang_mengirim = false;
       this.loadingService.tutup_loading();
       if (err.status == -4) {
         this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Tidak ada respon, coba beberapa saat lagi !");
@@ -278,4 +309,50 @@ export class LoginPage implements OnInit {
       }
     });
   }
+
+  async cek_user_rap(var_nama, var_sandi){
+    this.data_progres_bar = 0.7;
+    this.apiService.dapatkan_data_proyek_rap_master(var_nama)
+    .then(data => {
+
+      const data_json = JSON.parse(data.data);
+      const status_data = data_json.status;
+
+      if (status_data == 1) {
+        this.storage.set('auth', true);
+        this.storage.set('nama', var_nama);
+        this.storage.set('sandi', var_sandi);
+
+        this.data_progres_bar = 0.9;
+        this.sedang_mengirim = false;
+        
+        this.loadingService.tutup_loading();
+  
+        this.ionViewDidLeave();
+      } else {
+        this.data_progres_bar = 0.9;
+        this.sedang_mengirim = false;
+        this.loadingService.tutup_loading();
+
+        this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Tidak ada proyek untuk anda !");
+      }
+  
+    })
+    .catch(error => {
+  
+      console.log(error);
+      this.data_progres_bar = 0.9;
+      this.sedang_mengirim = false;
+      this.loadingService.tutup_loading();
+      
+      if (error.status == -4 ) {
+        this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Code error 70 !");
+      } else {
+        this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Code error 71 !");
+      }
+  
+    });
+
+  }
+  
 }

@@ -452,7 +452,6 @@ export class NotifPage implements OnInit {
 
   //mengirim gambar ke server
   async mengirim_gambar(nama, path_uri){
-    this.loadingCtrl.tampil_loading("Sedang mengirim . . .");
 
     const fileTransfer: FileTransferObject = this.transfer.create();
 
@@ -662,8 +661,6 @@ export class NotifPage implements OnInit {
   //mengirim pdf ke server
   async mengirim_docx(nama, path_uri, tipe_mime){
 
-    this.loadingCtrl.tampil_loading("Sedang mengirim . . .");
-
     const fileTransfer: FileTransferObject = this.transfer.create();
 
     let options: FileUploadOptions = {
@@ -844,6 +841,7 @@ export class NotifPage implements OnInit {
         if (result.isConfirmed) {
           this.loadingCtrl.tutup_loading();
           this.sedang_mengirim = true;
+          this.loadingCtrl.tampil_loading("Sedang mengirim . . .");
           this.data_progres_bar = 0.3;
 
           this.update_cheklist_dokumen_detail(id, uri_pdf, ext, null, id_pc_pd, pc_pd);
@@ -856,8 +854,6 @@ export class NotifPage implements OnInit {
 
   //mengirim pdf ke server
   async mengirim_pdf(nama, path_uri){
-
-    this.loadingCtrl.tampil_loading("Sedang mengirim . . .");
 
     const fileTransfer: FileTransferObject = this.transfer.create();
 

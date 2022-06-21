@@ -13,7 +13,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="background_konten">
+<ion-content class="">
   <ion-grid fixed class="ion-no-padding">
     <ion-row class="background_color_biru_gelap ion-padding-top">
       <ion-col size="12" class="ion-text-center">
@@ -243,3 +243,8 @@
     </ion-row>
   </ion-grid>
 </ion-content>
+
+<ion-footer>
+  <ion-progress-bar value="{{ data_progres_bar }}" *ngIf="sedang_mengirim; else tidak_sedang_mengirim"></ion-progress-bar>
+  <ng-template #tidak_sedang_mengirim></ng-template>
+</ion-footer>

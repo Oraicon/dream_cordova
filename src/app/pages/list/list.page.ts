@@ -132,7 +132,7 @@ export class ListPage implements OnInit {
 
         for (let index = 0; index < arr_data_mentah.length; index++) {
           const element = arr_data_mentah[index];
-          let nama = element.evidence_file.substring(14);
+          let nama = element.evidence_file.substring(28);
           let get_ext = nama.split('.').pop();
 
           let obj_data_evidance = {
@@ -236,7 +236,7 @@ export class ListPage implements OnInit {
 
     this.loadingCtrl.tampil_loading("Sedang memuat . . .");
 
-    let nama_pdf = path_pdf.substring(14);
+    let nama_pdf = path_pdf.substring(28);
     let data_url = "https://dream-beta.technosolusitama.in/" + path_pdf;
 
     const trans = this.transfer.create();
@@ -303,10 +303,10 @@ export class ListPage implements OnInit {
         } else {    
           this.loadingCtrl.tutup_loading();
           if (nama != null) {
-            this.swal_pdf(nama, path_uri_data, nama_data, null);
+            this.swal_pdf(nama, path_uri_data, nama_data, null, null);
           } else {
-            let nama_timestamp = path.substring(14);
-            this.swal_pdf(nama_timestamp, path_uri_data, nama_data, id);
+            let nama_timestamp = path.substring(28);
+            this.swal_pdf(nama_timestamp, path_uri_data, nama_data, id, null);
           }
         }
     
@@ -323,7 +323,7 @@ export class ListPage implements OnInit {
   }
 
   //dapatkan data gambar dari galeri/kamera
-  kamera(nama_img, id){
+  kamera(nama_img, id, evidence){
     this.loadingCtrl.tampil_loading("Memuat gambar . . .");
     this.camera.getPicture(this.cameraOptions).then(res=>{
 
@@ -336,7 +336,7 @@ export class ListPage implements OnInit {
       } else {
         this.loadingCtrl.tutup_loading();
         this.imgURI = 'data:image/jpeg;base64,' + res;
-        this.swal_gambar(nama_img, this.imgURI, id);
+        this.swal_gambar(nama_img, this.imgURI, id, evidence);
       }
     }, (err) => {
       // Handle error
@@ -345,7 +345,7 @@ export class ListPage implements OnInit {
     });
   }
 
-  galeri(nama_img, id){
+  galeri(nama_img, id, evidence){
     this.loadingCtrl.tampil_loading("Memuat gambar . . .");
     this.camera.getPicture(this.galeriOptions).then(res=>{
       let size_data = this.sizeService.size(res);
@@ -357,7 +357,7 @@ export class ListPage implements OnInit {
       } else {
         this.loadingCtrl.tutup_loading();
         this.imgURI = 'data:image/jpeg;base64,' + res;
-        this.swal_gambar(nama_img, this.imgURI, id);
+        this.swal_gambar(nama_img, this.imgURI, id, evidence);
       }
     }, (err) => {
       // Handle error
@@ -369,7 +369,7 @@ export class ListPage implements OnInit {
   //modal ganti gambar
   async presentActionSheet(path_data, id) {
 
-    let nama_img = path_data.substring(14);
+    let nama_img = path_data.substring(28);
 
     const actionSheet = await this.actionSheetController.create({
       header: 'Kirim ulang gambar',
@@ -378,13 +378,13 @@ export class ListPage implements OnInit {
         text: 'Kamera',
         icon: 'camera-outline',
         handler: () => {
-          this.kamera(nama_img, id);
+          this.kamera(nama_img, id, null);
         }
       }, {
         text: 'Galeri',
         icon: 'image-outline',
         handler: () => {
-          this.galeri(nama_img, id);
+          this.galeri(nama_img, id, null);
         }
       }, {
         text: 'Batal',
@@ -402,7 +402,7 @@ export class ListPage implements OnInit {
   }
 
   //alert konfirmasi ganti gambar
-  swal_gambar(nama, path_uri, id){
+  swal_gambar(nama, path_uri, id, evidence){
     this.loadingCtrl.tampil_loading("");
     Swal.fire({
       title: 'Peringatan !!',
@@ -421,9 +421,14 @@ export class ListPage implements OnInit {
         this.loadingCtrl.tutup_loading();
         this.sedang_mengirim = true;
         this.data_progres_bar = 0.3;
-        // this.mengirim_gambar(nama, path_uri);
+        this.loadingCtrl.tampil_loading("Sedang mengirim . . .");
+
         if (id != null) {
-          this.update_progress_harian_evidance(id, nama, path_uri, "JPEG");
+          if (evidence == 1) {
+            this.mengirim_informasi_data(path_uri, id, "JPEG");
+          } else {
+            this.update_progress_harian_evidance(id, nama, path_uri, "JPEG");
+          }
         } else {
           this.mengirim_gambar(nama, path_uri);
         }
@@ -434,7 +439,7 @@ export class ListPage implements OnInit {
   }
 
   //alert konfirmasi pdf
-  swal_pdf(nama_pdf, uri_pdf, nama_dulu, id){
+  swal_pdf(nama_pdf, uri_pdf, nama_dulu, id, evidence){
   this.loadingCtrl.tampil_loading("");
     Swal.fire({
       icon: 'info',
@@ -450,9 +455,14 @@ export class ListPage implements OnInit {
         this.loadingCtrl.tutup_loading();
         this.sedang_mengirim = true;
         this.data_progres_bar = 0.3;
-        // this.mengirim_pdf(nama_pdf, uri_pdf);
+        this.loadingCtrl.tampil_loading("Sedang mengirim . . .");
+
         if (id != null) {
-          this.update_progress_harian_evidance(id, nama_pdf, uri_pdf, "pdf");
+          if (evidence == 1) {
+            this.mengirim_informasi_data(uri_pdf, id, "pdf");
+          } else {
+            this.update_progress_harian_evidance(id, nama_pdf, uri_pdf, "pdf");
+          }
         } else {
           this.mengirim_pdf(nama_pdf, uri_pdf);
         }
@@ -464,8 +474,6 @@ export class ListPage implements OnInit {
 
   //mengirim gambar ke server
   async mengirim_gambar(nama, path_uri){
-    this.loadingCtrl.tampil_loading("Sedang mengirim . . .");
-
     const fileTransfer: FileTransferObject = this.transfer.create();
 
     let options: FileUploadOptions = {
@@ -540,8 +548,6 @@ export class ListPage implements OnInit {
 
   //mengirim pdf ke server
   async mengirim_pdf(nama, path_uri){
-
-    this.loadingCtrl.tampil_loading("Sedang mengirim . . .");
 
     const fileTransfer: FileTransferObject = this.transfer.create();
 
@@ -658,7 +664,6 @@ export class ListPage implements OnInit {
       }
   
     });
-
   }
 
   async tidak_ada_respon(tipe_data, nama, path_uri){
@@ -713,5 +718,124 @@ export class ListPage implements OnInit {
       }
     });
   }
+
+    //modal mendapatkan gambar
+    async modal_evidence(id) {
+      console.log(id)
+      const actionSheet = await this.actionSheetController.create({
+        header: 'Pilih Gambar',
+        cssClass: 'my-custom-class',
+        buttons: [{
+          text: 'Kamera',
+          icon: 'camera-outline',
+          handler: () => {
+            this.kamera(null, id, 1);
+          }
+        }, {
+          text: 'Galeri',
+          icon: 'image-outline',
+          handler: () => {
+            this.galeri(null, id, 1);
+          }
+        },{
+          text: 'PDF',
+          icon: 'document-outline',
+          handler: () => {
+            this.dapatkan_dokumen(id);
+          }
+        }, {
+          text: 'Batal',
+          icon: 'close',
+          role: 'cancel',
+        }]
+      });
+      await actionSheet.present();
+    }
+  
+    async dapatkan_dokumen(id){
+      this.loadingCtrl.tampil_loading("Sedang Memuat");
+      await this.interval_counter_loading();
+  
+      let tipe_data;
+  
+      this.chooser.getFile("application/pdf").then((data:ChooserResult)=>{
+  
+        if (data == undefined) {
+        this.loadingCtrl.tutup_loading();
+        }
+  
+        let type_data = data.mediaType;
+        let nama_dulu = data.name;
+        let nama_file  = this.datepipe.transform((new Date), 'MMddyyyyhmmss.') + tipe_data;
+        let path_uri_data = data.dataURI;
+        let size_data = data.data.byteLength;
+        let int_size_data = +size_data;
+  
+        if (type_data == "application/pdf") {
+            
+          if (int_size_data >= 5242880) {
+            this.loadingCtrl.tutup_loading();
+            this.swal.swal_aksi_gagal("Terjadi kesalahan", "File berukuran 5MB atau lebih !");
+            return;
+          } else {
+            // this.arr_data_img_pdf.push(obj_dokumen);
+            this.swal_pdf(null, path_uri_data, nama_dulu, id, 1);
+            this.loadingCtrl.tutup_loading();
+            
+            // this.setget.set_lapor(this.item, this.volume, this.keterangan, "ada");
+          }
+          // this.setget.set_lapor(this.item, this.volume, this.keterangan, "ada");
+        } else {
+          this.loadingCtrl.tutup_loading();
+          this.swal.swal_aksi_gagal("Terjadi kesalahan !", "File bukan bertipe PDF/WORD !");
+          // this.setget.set_lapor(this.item, this.volume, this.keterangan, "assets/ss_.png");
+        }
+  
+      },(err)=>{
+        this.loadingCtrl.tutup_loading();
+        this.swal.swal_code_error("Terjadi kesalahan !", "Code error 72 !");
+      })
+    }
+  
+    async mengirim_informasi_data(path_uri, id, tipe_data){
+  
+      this.data_progres_bar = 0.5;
+      
+      let nama_file  = this.datepipe.transform((new Date), 'MMddyyyyhmmss.') + tipe_data;
+      let name_ = nama_file.toString();
+  
+      this.apiService.menyimpan_path_file(id, name_)
+      .then(data => {
+        console.log(data);
+        const data_json = JSON.parse(data.data);
+        const data_status = data_json.status;
+  
+        if (data_status == 0) {
+          if (tipe_data == "JPEG") {
+            this.mengirim_gambar(name_, path_uri);
+          }
+          if (tipe_data == "pdf") {
+            this.mengirim_pdf(name_, path_uri);
+          }
+        } else {
+          this.swal.swal_code_error("Terjadi kesalahan", "code error 73 !");
+          return;
+        }
+  
+      })
+      .catch(error => {
+      console.log(error);
+    
+      this.loadingCtrl.tutup_loading();
+        if (error.status == -4) {
+          this.toast.Toast("Gagal mengirim, mencoba mengirim kembali !");
+          this.mengirim_informasi_data(path_uri, id, tipe_data);
+          this.data_progres_bar = 0.4;
+        } else {
+        this.swal.swal_code_error("Terjadi kesalahan", "code error 74 !, kembali ke login !");
+        return;
+        }
+      });
+    }
 
 }

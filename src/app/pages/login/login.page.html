@@ -74,3 +74,8 @@
 
 </ion-content>
 
+<ion-footer>
+  <ion-progress-bar value="{{ data_progres_bar }}" *ngIf="sedang_mengirim; else tidak_sedang_mengirim"></ion-progress-bar>
+  <ng-template #tidak_sedang_mengirim></ng-template>
+</ion-footer>
+

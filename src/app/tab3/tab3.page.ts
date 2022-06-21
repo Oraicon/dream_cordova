@@ -31,8 +31,9 @@ export class Tab3Page {
   //persiapan variable
   imgURL:any = 'assets/pp.jpg';
   cek_koneksi = true;
-  md5_upload = "assets/images/";
   timeout = 0;
+  sedang_mengirim = false;
+  data_progres_bar = 0;
   
   //variable frontend
   lihatsandi = false;
@@ -101,7 +102,6 @@ export class Tab3Page {
     private apiService:ApiServicesService) {
     
     this.tampilkandata();
-    this.get_data_lokal();
     this.setget.setButton(0);
     
     //pengecekan koneksi
@@ -227,7 +227,9 @@ export class Tab3Page {
       this.loadingCtrl.tutup_loading();
 
       if (this.cek_koneksi == true) {
-        this.loadingCtrl.tampil_loading("Menyimpan gambar . . .");
+        this.loadingCtrl.tampil_loading("Mengubah profil . . .");
+        this.sedang_mengirim = true;
+        this.data_progres_bar = 0.3;
         this.test_koneksi(null, null);
       } else {
         this.loadingCtrl.tutup_loading();
@@ -254,7 +256,9 @@ export class Tab3Page {
       this.loadingCtrl.tutup_loading();
 
       if (this.cek_koneksi == true) {
-        this.loadingCtrl.tampil_loading("Menyimpan gambar . . .");
+        this.loadingCtrl.tampil_loading("Mengubah profil . . .");
+        this.sedang_mengirim = true;
+        this.data_progres_bar = 0.3;
         this.test_koneksi(null, null);
       } else {
         this.loadingCtrl.tutup_loading();
@@ -289,6 +293,10 @@ export class Tab3Page {
           if (this.cek_koneksi == true) {
   
             let nama_baru = data.data.data;
+
+            this.sedang_mengirim = true;
+            this.data_progres_bar = 0.3;
+
             this.test_koneksi(nama_baru, null);
   
           } else {
@@ -330,6 +338,9 @@ export class Tab3Page {
           if (this.cek_koneksi == true) {
   
             let sandi_baru = data.data.data;
+
+            this.sedang_mengirim = true;
+            this.data_progres_bar = 0.3;
   
             this.test_koneksi(null, sandi_baru);
   
@@ -349,10 +360,6 @@ export class Tab3Page {
       this.toast.Toast_tampil();
     }
 
-  }
-
-  async get_data_lokal(){
-    this.nama_ls = await this.storage.get('nama');
   }
 
   async tampilkandata(){
@@ -408,17 +415,20 @@ export class Tab3Page {
     });
   }
 
-  test_koneksi(nama, sandi){
-    this.toastCtrl.Toast("Pengecekan koneksi internet . . .");
+  async test_koneksi(nama, sandi){
+
     this.apiService.cek_koneksi()
     .then(data => {
+
+      this.sedang_mengirim = true;
+      this.data_progres_bar = 0.6;
 
       if (nama != null) {
         this.api_ubah_nama(nama);
       } else if (sandi != null){
         this.api_ubah_sandi(sandi);
       }else {
-        this.upload();
+        this.upload_data_server();
       }
 
     })
@@ -431,15 +441,13 @@ export class Tab3Page {
   }
 
   //upload gambar + update di api
-  async upload(){
+  async upload(nama_file){
     //perisapan mengirim
     const fileTransfer: FileTransferObject = this.transfer.create();
-    const l_storage_data_nama = await this.storage.get('nama');
 
     //persiapan url dan nama
     let URL="https://dream-beta.technosolusitama.in/api/uploadImage";
-    this.name_img = this.datepipe.transform((new Date), 'MMddyyyyhmmss.')+ this.format_img;
-    let nama_file = this.name_img.toString();
+
 
     //mengisi data option
     let options: FileUploadOptions = {
@@ -462,11 +470,17 @@ export class Tab3Page {
       
       if (data_status == 0) {
         
-        this.upload_data_server(l_storage_data_nama);
+        this.imgURL = this.base64_img;
+        this.data_progres_bar = 0.9;
+        this.sedang_mengirim = false;
+        this.loadingCtrl.tutup_loading();
+        this.swalService.swal_aksi_berhasil("Berhasil !", "Foto profil anda berhasil diubah !");
 
       } else {
         console.log(res);
         //error response upload foto
+        this.data_progres_bar = 0.9;
+        this.sedang_mengirim = false;
         this.loadingCtrl.tutup_loading();
         this.swalService.swal_aksi_gagal("Terjadi kesalahan !", "code error 4 !");
       }
@@ -476,9 +490,13 @@ export class Tab3Page {
       // error
       let status = err.code;
       if (status == 4) {
+        this.data_progres_bar = 0.9;
+        this.sedang_mengirim = false;
         this.loadingCtrl.tutup_loading();
         this.swalService.swal_aksi_gagal("Terjadi kesalahan !", "Mengirim gambar terlalu lama");
       } else {
+        this.data_progres_bar = 0.9;
+        this.sedang_mengirim = false;
         this.loadingCtrl.tutup_loading();
         this.swalService.swal_code_error("Terjadi kesalahan !", "code error 13 !, kembali ke login !");
       }
@@ -490,19 +508,28 @@ export class Tab3Page {
     }
   }
 
-  upload_data_server(nama){
-    const url_path = this.md5_upload+"/"+this.name_img;
-    this.apiService.panggil_api_update_data_karyawan(this.type_update_gambar, nama, "", "", url_path)
+  async upload_data_server(){
+    this.name_img = this.datepipe.transform((new Date), 'MMddyyyyhmmss.')+ this.format_img;
+    let nama_file = this.name_img.toString();
+    let nama_ls = await this.storage.get('nama');
+    console.log(nama_ls);
+
+    this.apiService.update_data_poengguna(nama_ls, null, null, nama_file)
     .then(res => {
+      console.log(res);
 
       const data_json = JSON.parse(res.data);
       const status_data = data_json.status;
 
       if (status_data == 1) {
-        this.imgURL = this.base64_img;
-        this.loadingCtrl.tutup_loading();
-        this.swalService.swal_aksi_berhasil("Berhasil !", "Foto profil anda berhasil diubah !");
+        this.data_progres_bar = 0.8;
+
+        this.upload(nama_file);
+        // this.loadingCtrl.tutup_loading();
+        // this.swalService.swal_aksi_berhasil("Berhasil !", "Foto profil anda berhasil diubah !");
       } else {
+        this.data_progres_bar = 0.9;
+        this.sedang_mengirim = false;
         this.loadingCtrl.tutup_loading();
         this.swalService.swal_aksi_gagal("Terjadi kesalahan !", "Foto profil anda gagal diubah !");
       }
@@ -510,7 +537,8 @@ export class Tab3Page {
     .catch(error => {
 
       //error upload ke database data profil
-      this.loadingCtrl.tutup_loading();
+      this.data_progres_bar = 0.9;
+      this.sedang_mengirim = false;
 
       console.log(error)
   
@@ -531,12 +559,15 @@ export class Tab3Page {
     });
   }
 
-  api_ubah_nama(nama_baru){
+  async api_ubah_nama(nama_baru){
 
     this.interval_counter();
 
-    this.apiService.panggil_api_update_data_karyawan(this.type_update_akun, this.nama_ls, nama_baru, "", "")
+    let nama_ls = await this.storage.get('nama');
+
+    this.apiService.update_data_poengguna(nama_ls, nama_baru, null, null)
     .then(res => {
+      console.log(res);
       const data_json = JSON.parse(res.data);
       const data_status = data_json.status;
 
@@ -545,10 +576,14 @@ export class Tab3Page {
         //mendapatkan data
         this.storage.set('nama', nama_baru);
         this.username_pengguna = nama_baru;
+        this.data_progres_bar = 0.9;
+        this.sedang_mengirim = false;
         this.loadingCtrl.tutup_loading();
         this.swalService.swal_aksi_berhasil("Berhasil !", "Nama pengguna anda telah diganti dengan " + nama_baru);
       } else {
         //jika status != 1
+        this.data_progres_bar = 0.9;
+        this.sedang_mengirim = false;
         this.loadingCtrl.tutup_loading();
         this.swalService.swal_aksi_gagal("Terjadi kesalahan !", "code error 5 !");
       }
@@ -557,6 +592,8 @@ export class Tab3Page {
     .catch(err => {
       //error
       console.log(err);
+      this.data_progres_bar = 0.9;
+      this.sedang_mengirim = false;
       this.loadingCtrl.tutup_loading();
 
       this.timeout++;
@@ -577,12 +614,16 @@ export class Tab3Page {
     });
   }
 
-  api_ubah_sandi(sandi_baru){
+  async api_ubah_sandi(sandi_baru){
 
     this.interval_counter();
 
-    this.apiService.panggil_api_update_data_karyawan(this.type_update_akun, this.nama_ls, "", sandi_baru, "")
+    let nama_ls = await this.storage.get('nama');
+
+    this.apiService.update_data_poengguna(nama_ls, null, sandi_baru, null)
     .then(res => {
+      console.log(res);
+
       const data_json = JSON.parse(res.data);
       const data_status = data_json.status;
 
@@ -591,10 +632,14 @@ export class Tab3Page {
         //mendapatkan data
         this.storage.set('sandi', sandi_baru);
         this.sandi_pengguna = sandi_baru;
+        this.data_progres_bar = 0.9;
+        this.sedang_mengirim = false;
         this.loadingCtrl.tutup_loading();
         this.swalService.swal_aksi_berhasil("Berhasil !", "Sandi pengguna anda telah diubah !");
       } else {
         //jika status != 1
+        this.data_progres_bar = 0.9;
+        this.sedang_mengirim = false;
         this.loadingCtrl.tutup_loading();
         this.swalService.swal_aksi_gagal("Terjadi kesalahan !", "code error 7 !");
       }
@@ -602,7 +647,9 @@ export class Tab3Page {
     })
     .catch(err => {
       //error
-      console.log(err)
+      console.log(err);
+      this.data_progres_bar = 0.9;
+      this.sedang_mengirim = false;
       this.loadingCtrl.tutup_loading();
 
       this.timeout++;
@@ -620,14 +667,13 @@ export class Tab3Page {
     });
   }
 
-  relog(){
+  async relog(){
     
     this.nama_ls = "";
     this.time_out = 0;
 
     this.imgURL = 'assets/pp.jpg';
     this.cek_koneksi = true;
-    this.md5_upload = "assets/images/";
     this.timeout = 0;
     
     //variable frontend
