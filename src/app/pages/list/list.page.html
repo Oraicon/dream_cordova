@@ -3,11 +3,14 @@
     <ion-grid fixed>
       <ion-row class="ion-align-items-center">
         <ion-col size="10" class="ion-align-items-center text_header bold putih">Riwayat Lampiran</ion-col>
+        
+        <!-- kembali -->
         <ion-col size="2" class="ion-text-end">
           <ion-button (click)="kembali()" fill="clear" class="padding_button">
             <ion-icon name="arrow-back-outline" size="large" class="putih"></ion-icon>
           </ion-button>
         </ion-col>
+
       </ion-row>
     </ion-grid>
   </ion-toolbar>
@@ -41,14 +44,15 @@
           </ion-card-content>
         </ion-card>
 
+        <!-- menampilkan data -->
         <ng-template #data_tampil>
           <ion-card>
-            <ion-card-header class="pad_bottom">
-              <ion-card-title>Daftar file :</ion-card-title>
-            </ion-card-header>
-          
-            <ion-card-content class="ion-no-padding">
+            <ion-card-content class="">
               <ion-list>
+
+                <ion-item>
+                  <ion-card-title>Daftar file evidence :</ion-card-title>
+                </ion-item>
   
                 <ion-item *ngFor="let data of arr_data; let i = index" button>
 
@@ -133,7 +137,7 @@
                   
                 </ion-item>
 
-                <ion-item lines="none">
+                <ion-item lines="none" *ngIf="alamat != null; else tidak_ada_alamat">
                   <ion-label>
                     <h2 class="ion-text-wrap padding_bottom_detail_informasi">
                       Dikirim di :
@@ -143,6 +147,8 @@
                     </h2>
                   </ion-label>
                 </ion-item>
+
+                <ng-template #tidak_ada_alamat></ng-template>
   
               </ion-list>
             </ion-card-content>
@@ -154,6 +160,7 @@
     </ion-row>
   </ion-grid> 
 
+  <!-- button nambah evidence -->
   <ion-fab horizontal="end" vertical="bottom" slot="fixed" (click)="modal_evidence(id)">
     <ion-fab-button color="primary">
       <ion-icon size="large" name="add-outline"></ion-icon>
@@ -162,6 +169,7 @@
 </ion-content>
 
 <ion-footer>
+  <!-- menampilkan loading -->
   <ion-progress-bar value="{{ data_progres_bar }}" *ngIf="sedang_mengirim; else tidak_sedang_mengirim"></ion-progress-bar>
   <!-- <ion-toolbar> -->
     <!-- <ion-button (click)="modal_evidence(id)" expand="block">

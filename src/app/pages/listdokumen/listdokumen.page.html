@@ -3,11 +3,14 @@
     <ion-grid fixed>
       <ion-row class="ion-align-items-center">
         <ion-col size="10" class="ion-align-items-center text_header bold putih">Riwayat Lampiran</ion-col>
+        
+        <!-- kembali -->
         <ion-col size="2" class="ion-text-end">
           <ion-button (click)="kembali()" fill="clear" class="padding_button">
             <ion-icon name="arrow-back-outline" size="large" class="putih"></ion-icon>
           </ion-button>
         </ion-col>
+
       </ion-row>
     </ion-grid>
   </ion-toolbar>
@@ -41,6 +44,7 @@
           </ion-card-content>
         </ion-card>
 
+        <!-- menampilkan data -->
         <ng-template #data_tampil>
           <ion-card>
             <ion-card-content>
@@ -49,12 +53,20 @@
                   <ion-col size="12">
                     <ion-list>
   
-                      <ion-item>
+                      <ion-item *ngIf="keterangan != null; else keterangan_null">
                         <ion-label class="ion-text-wrap">
-                          <h2 class="pad_bottom_keterangan">Keterangan: </h2>
-                          <h2>{{ keterangan }}</h2>
+                          <ion-label class="size_keterangan">Keterangan: </ion-label>
+                          <ion-label class="size_keterangan">{{ keterangan }}</ion-label>
                         </ion-label>
                       </ion-item>
+
+                      <ng-template #keterangan_null>
+                        <ion-item>
+                          <ion-label class="ion-text-wrap">
+                            <ion-label class="hitam size_keterangan">Daftar file evidence : </ion-label>
+                          </ion-label>
+                        </ion-item>
+                      </ng-template>
 
                       <ion-item *ngFor="let data of data_arr_evidance; let i = index" button>
 
@@ -72,7 +84,7 @@
                               <ng-container *ngIf="data.status == 3; then retake else bukan3"></ng-container>
 
                               <ng-template #retake>
-                                <ion-button color="danger" expand="block" fill="outline" (click)="dapatkan_pdf(null, data.id, data.path)">
+                                <ion-button color="danger" expand="block" fill="outline" (click)="dapatkan_data20(null, null, data.id, data.path)">
                                   Re-Take
                                 </ion-button>
                               </ng-template>
@@ -98,37 +110,196 @@
                           </ng-template>
   
                           <ng-template #data_docx>
-                              <ion-thumbnail slot="start" (click)="buka_doc(data.path)">
-                                <img src="assets/dok_icon.png" />
-                              </ion-thumbnail>
-                              <ion-label class="size_nama" (click)="buka_doc(data.path)">{{ data.nama }}</ion-label>
 
-                              <ng-container *ngIf="data.status == 3; then retake else bukan3"></ng-container>
+                            <ng-container *ngIf="data.tipe == 'docx'; then data_beneran_docx; else data_xlsx"></ng-container>
 
-                              <ng-template #retake>
-                                <ion-button color="danger" expand="block" fill="outline" (click)="dapatkan_docx(null, null, data.id, data.path)">
-                                  Re-Take
-                                </ion-button>
-                              </ng-template>
-                              <ng-template #bukan3>
-                                <ng-container *ngIf="data.status == 2; then waiting else bukan2"></ng-container>
-
-                                <ng-template #waiting>
-                                  <ion-button color="warning" expand="block" fill="outline" [attr.disabled]="true">
-                                    Waiting
+                              <ng-template #data_beneran_docx>
+                                <ion-thumbnail slot="start" (click)="buka_doc(data.path)">
+                                  <img src="assets/dok_icon.png" />
+                                </ion-thumbnail>
+                                <ion-label class="size_nama" (click)="buka_doc(data.path)">{{ data.nama }}</ion-label>
+  
+                                <ng-container *ngIf="data.status == 3; then retake else bukan3"></ng-container>
+  
+                                <ng-template #retake>
+                                  <ion-button color="danger" expand="block" fill="outline" (click)="dapatkan_data20(null, null, data.id, data.path)">
+                                    Re-Take
                                   </ion-button>
                                 </ng-template>
-                                <ng-template #bukan2>
-                                  <ng-container *ngIf="data.status == 1; then approve else bukan_approve"></ng-container>
-
-                                  <ng-template #approve>
-                                    <ion-button color="success" expand="block" fill="outline" [attr.disabled]="true">
-                                      Approved
+                                <ng-template #bukan3>
+                                  <ng-container *ngIf="data.status == 2; then waiting else bukan2"></ng-container>
+  
+                                  <ng-template #waiting>
+                                    <ion-button color="warning" expand="block" fill="outline" [attr.disabled]="true">
+                                      Waiting
                                     </ion-button>
                                   </ng-template>
-                                  <ng-template #bukan_approve></ng-template>
+                                  <ng-template #bukan2>
+                                    <ng-container *ngIf="data.status == 1; then approve else bukan_approve"></ng-container>
+  
+                                    <ng-template #approve>
+                                      <ion-button color="success" expand="block" fill="outline" [attr.disabled]="true">
+                                        Approved
+                                      </ion-button>
+                                    </ng-template>
+                                    <ng-template #bukan_approve></ng-template>
+                                  </ng-template>
                                 </ng-template>
                               </ng-template>
+
+                              <ng-template #data_xlsx>
+                               <ng-container *ngIf="data.tipe == 'xlsx'; then data_beneran_xlsx; else data_pptx"></ng-container>
+                              
+                                <ng-template #data_beneran_xlsx>
+                                  <ion-thumbnail slot="start" (click)="buka_xlsx(data.path)">
+                                    <img src="assets/xlsx_icon.png" />
+                                  </ion-thumbnail>
+                                  <ion-label class="size_nama" (click)="buka_xlsx(data.path)">{{ data.nama }}</ion-label>
+    
+                                  <ng-container *ngIf="data.status == 3; then retake else bukan3"></ng-container>
+    
+                                  <ng-template #retake>
+                                    <ion-button color="danger" expand="block" fill="outline" (click)="dapatkan_data20(null, null, data.id, data.path)">
+                                      Re-Take
+                                    </ion-button>
+                                  </ng-template>
+                                  <ng-template #bukan3>
+                                    <ng-container *ngIf="data.status == 2; then waiting else bukan2"></ng-container>
+    
+                                    <ng-template #waiting>
+                                      <ion-button color="warning" expand="block" fill="outline" [attr.disabled]="true">
+                                        Waiting
+                                      </ion-button>
+                                    </ng-template>
+                                    <ng-template #bukan2>
+                                      <ng-container *ngIf="data.status == 1; then approve else bukan_approve"></ng-container>
+    
+                                      <ng-template #approve>
+                                        <ion-button color="success" expand="block" fill="outline" [attr.disabled]="true">
+                                          Approved
+                                        </ion-button>
+                                      </ng-template>
+                                      <ng-template #bukan_approve></ng-template>
+                                    </ng-template>
+                                  </ng-template>
+                                </ng-template>
+
+                                <ng-template #data_pptx>
+                                  <ng-container *ngIf="data.tipe == 'pptx'; then data_beneran_pptx; else data_rar"></ng-container>
+
+                                  <ng-template #data_beneran_pptx>
+                                    <ion-thumbnail slot="start" (click)="buka_pptx(data.path)">
+                                      <img src="assets/pptx_icon.png" />
+                                    </ion-thumbnail>
+                                    <ion-label class="size_nama" (click)="buka_pptx(data.path)">{{ data.nama }}</ion-label>
+      
+                                    <ng-container *ngIf="data.status == 3; then retake else bukan3"></ng-container>
+      
+                                    <ng-template #retake>
+                                      <ion-button color="danger" expand="block" fill="outline" (click)="dapatkan_data20(null, null, data.id, data.path)">
+                                        Re-Take
+                                      </ion-button>
+                                    </ng-template>
+                                    <ng-template #bukan3>
+                                      <ng-container *ngIf="data.status == 2; then waiting else bukan2"></ng-container>
+      
+                                      <ng-template #waiting>
+                                        <ion-button color="warning" expand="block" fill="outline" [attr.disabled]="true">
+                                          Waiting
+                                        </ion-button>
+                                      </ng-template>
+                                      <ng-template #bukan2>
+                                        <ng-container *ngIf="data.status == 1; then approve else bukan_approve"></ng-container>
+      
+                                        <ng-template #approve>
+                                          <ion-button color="success" expand="block" fill="outline" [attr.disabled]="true">
+                                            Approved
+                                          </ion-button>
+                                        </ng-template>
+                                        <ng-template #bukan_approve></ng-template>
+                                      </ng-template>
+                                    </ng-template>
+                                  </ng-template>
+
+                                  <ng-template #data_rar>
+                                    <ng-container *ngIf="data.tipe == 'rar'; then data_beneran_rar; else data_zip"></ng-container>
+
+                                    <ng-template #data_beneran_rar>
+                                      <ion-thumbnail slot="start" (click)="buka_rar(data.path)">
+                                        <img src="assets/rar_icon.png" />
+                                      </ion-thumbnail>
+                                      <ion-label class="size_nama" (click)="buka_rar(data.path)">{{ data.nama }}</ion-label>
+        
+                                      <ng-container *ngIf="data.status == 3; then retake else bukan3"></ng-container>
+        
+                                      <ng-template #retake>
+                                        <ion-button color="danger" expand="block" fill="outline" (click)="dapatkan_data20(null, null, data.id, data.path)">
+                                          Re-Take
+                                        </ion-button>
+                                      </ng-template>
+                                      <ng-template #bukan3>
+                                        <ng-container *ngIf="data.status == 2; then waiting else bukan2"></ng-container>
+        
+                                        <ng-template #waiting>
+                                          <ion-button color="warning" expand="block" fill="outline" [attr.disabled]="true">
+                                            Waiting
+                                          </ion-button>
+                                        </ng-template>
+                                        <ng-template #bukan2>
+                                          <ng-container *ngIf="data.status == 1; then approve else bukan_approve"></ng-container>
+        
+                                          <ng-template #approve>
+                                            <ion-button color="success" expand="block" fill="outline" [attr.disabled]="true">
+                                              Approved
+                                            </ion-button>
+                                          </ng-template>
+                                          <ng-template #bukan_approve></ng-template>
+                                        </ng-template>
+                                      </ng-template>
+                                    </ng-template>
+
+                                    <ng-template #data_zip>
+                                      <ion-thumbnail slot="start" (click)="buka_zip(data.path)">
+                                        <img src="assets/zip_icon.png" />
+                                      </ion-thumbnail>
+                                      <ion-label class="size_nama" (click)="buka_zip(data.path)">{{ data.nama }}</ion-label>
+        
+                                      <ng-container *ngIf="data.status == 3; then retake else bukan3"></ng-container>
+        
+                                      <ng-template #retake>
+                                        <ion-button color="danger" expand="block" fill="outline" (click)="dapatkan_data20(null, null, data.id, data.path)">
+                                          Re-Take
+                                        </ion-button>
+                                      </ng-template>
+                                      <ng-template #bukan3>
+                                        <ng-container *ngIf="data.status == 2; then waiting else bukan2"></ng-container>
+        
+                                        <ng-template #waiting>
+                                          <ion-button color="warning" expand="block" fill="outline" [attr.disabled]="true">
+                                            Waiting
+                                          </ion-button>
+                                        </ng-template>
+                                        <ng-template #bukan2>
+                                          <ng-container *ngIf="data.status == 1; then approve else bukan_approve"></ng-container>
+        
+                                          <ng-template #approve>
+                                            <ion-button color="success" expand="block" fill="outline" [attr.disabled]="true">
+                                              Approved
+                                            </ion-button>
+                                          </ng-template>
+                                          <ng-template #bukan_approve></ng-template>
+                                        </ng-template>
+                                      </ng-template>
+                                    </ng-template>
+
+                                  </ng-template>
+
+                                </ng-template>
+
+                              </ng-template>
+
+
+
                           </ng-template>
                         </ng-template>
     
@@ -187,6 +358,7 @@
     </ion-row>
   </ion-grid> 
 
+  <!-- jika mau nambah evidence -->
     <ion-fab horizontal="end" vertical="bottom" slot="fixed" (click)="modal_evidence(id)">
       <ion-fab-button color="primary">
         <ion-icon size="large" name="add-outline"></ion-icon>
@@ -196,6 +368,7 @@
 </ion-content>
 
 <ion-footer>
+  <!-- loading -->
   <ion-progress-bar value="{{ data_progres_bar }}" *ngIf="sedang_mengirim; else tidak_sedang_mengirim"></ion-progress-bar>
   <ng-template #tidak_sedang_mengirim></ng-template>
   <!-- <ion-toolbar>

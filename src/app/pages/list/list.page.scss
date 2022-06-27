@@ -28,6 +28,10 @@
   .pad_top{
     padding-top: 0px;
   }
+
+  ion-item{
+    --inner-padding-end: 0px;
+  }
   
   //scroll
   .scrollan[scrollx=true],div[scrolly=true] {

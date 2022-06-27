@@ -28,6 +28,10 @@
     padding-right: 5px;
     padding-bottom: 6px;
   }
+
+  ion-item{
+    --inner-padding-end: 0px;
+  }
   
   .pad_top{
     padding-top: 0px;
@@ -70,4 +74,8 @@
 
   .size_nama{
     font-size: 100%;
+  }
+
+  .size_keterangan{
+    font-size: 110%;
   }

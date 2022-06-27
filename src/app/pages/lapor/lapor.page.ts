@@ -9,6 +9,7 @@ import { DatePipe } from '@angular/common';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@awesome-cordova-plugins/file-transfer/ngx';
 import { SetGetServiceService } from 'src/app/services/set-get-service.service';
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
+import { Router } from '@angular/router';
 import { SwalServiceService } from 'src/app/services/swal-service.service';
 import { Network } from '@awesome-cordova-plugins/network/ngx';
 import { ToastService } from 'src/app/services/toast.service';
@@ -40,21 +41,23 @@ export class LaporPage implements OnInit {
   volume;
   lat;
   long;
-  penghitung_index = 0;
+  data_id_list;
 
+  penghitung_index = 0;
   arr_looping_mengirim_path = [];
   arr_looping_pengecekan = [];
   hasil_file_dikirim = [];
   arr_data_img_pdf = [];
   sedang_mengirim = false;
   data_progres_bar = 0;
+  data_path_terkirim = [];
 
   name_img:string="";
   format_img:string="JPEG";
 
   //persiapan kamera
   cameraOptions: CameraOptions = {
-    quality: 50,
+    quality: 80,
     correctOrientation: true,
     sourceType: this.camera.PictureSourceType.CAMERA,
     destinationType: this.camera.DestinationType.DATA_URL,
@@ -63,7 +66,7 @@ export class LaporPage implements OnInit {
   }
 
   galeriOptions: CameraOptions = {
-    quality: 50,
+    quality: 80,
     correctOrientation: true,
     sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
     destinationType: this.camera.DestinationType.DATA_URL,
@@ -84,6 +87,7 @@ export class LaporPage implements OnInit {
     private geolocation: Geolocation,
     private toastService: ToastService,
     private network: Network,
+    private router:Router,
     private swal: SwalServiceService,
     private chooser: Chooser,
     public formBuilder: FormBuilder,
@@ -147,6 +151,10 @@ export class LaporPage implements OnInit {
     return new Promise(resolve => { setTimeout(() => resolve(""), 500);});
   }
 
+  delay_tunggu_internet() {
+    return new Promise(resolve => { setTimeout(() => resolve(""), 5000);});
+  }
+
   tampilkan_data(){
 
     let a = this.setget.getLog();
@@ -194,7 +202,7 @@ export class LaporPage implements OnInit {
     this.camera.getPicture(this.cameraOptions).then(res=>{
       let size_data = this.sizeService.size(res);
       let int_size = +size_data.byteLength;
-      if (int_size >= 5242880 ) {
+      if (int_size >= 10485760 ) {
         this.loadingService.tutup_loading();
         this.swal.swal_aksi_gagal("Terjadi kesalahan", "File berukuran 5MB atau lebih !");
         return;
@@ -218,7 +226,7 @@ export class LaporPage implements OnInit {
     this.camera.getPicture(this.galeriOptions).then(res=>{
       let size_data = this.sizeService.size(res);
       let int_size = +size_data.byteLength;
-      if (int_size >= 5242880 ) {
+      if (int_size >= 10485760 ) {
         this.loadingService.tutup_loading();
         this.swal.swal_aksi_gagal("Terjadi kesalahan", "File berukuran 5MB atau lebih !");
         return;
@@ -393,7 +401,6 @@ export class LaporPage implements OnInit {
         this.data_progres_bar = 0;
 
         if(this.imgURL != 'assets/ss_.png' || this.arr_data_img_pdf.length != 0){
-          this.item = this.myGroup.value.data_item;
           this.volume = this.myGroup.value.data_volume;
           this.keterangan = this.myGroup.value.data_keterangan;
           this.hasil_file_dikirim = [];
@@ -415,7 +422,8 @@ export class LaporPage implements OnInit {
                   this.loadingService.tampil_loading("Mengirim data . . .");
                   this.sedang_mengirim = true;
                   this.data_progres_bar = 0.1;
-                  this.get_geo();
+                  // this.get_geo();
+                  this.test_koneksi_api(this.volume, this.keterangan);
                 } else {
                   this.swal.swal_aksi_gagal("Terjadi kesalahan", "Tidak ada koneksi internet !");
                 }
@@ -431,24 +439,132 @@ export class LaporPage implements OnInit {
     }
   }
 
-  test_koneksi_api(item, volume, keterangan, lat, long){
+  //pengecekan koneksi api
+  test_koneksi_api(volume, keterangan){
+    this.data_progres_bar = 0.2;
     this.apiService.cek_koneksi()
     .then(data => {
   
-      this.mengirim_data_api(item, volume, keterangan, lat, long);
-      this.data_progres_bar = 0.3;
+      this.get_geo(volume, keterangan);
   
     })
     .catch(error => {
       console.log(error);
-      this.toastService.Toast("Gagal mengirim, mencoba mengirim kembali !");
-      this.data_progres_bar = 0.2;
-      this.test_koneksi_api(item, volume, keterangan, lat, long);
+      if (error.status == -4) {
+        this.toastService.Toast("Gagal mengirim, mencoba mengirim kembali !");
+        this.test_koneksi_api(volume, keterangan);
+      }
+
+      if (error.status == -3) {
+        this.loadingService.tutup_loading();
+        this.loadingService.tampil_loading("");
+        Swal.fire({
+          title: 'Terjadi kesalahan !',
+          text: "Restart data seluler, lalu tekan 'kirim ulang' untuk mengirim kembali !",
+          icon: 'error',
+          backdrop: false,
+          confirmButtonColor: '#3880ff',
+          confirmButtonText: 'Kirim ulang !',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.loadingService.tutup_loading();
+            this.loadingService.tampil_loading("Mengirim data . . .");
+            this.delay_tunggu_internet();
+            this.test_koneksi_api(volume, keterangan);
+          }
+        })
+      }
+
+      if (error.status != -4 && error.status != -3) {
+        this.loadingService.tutup_loading();
+        this.swal.swal_code_error("Terjadi kesalahan", "Code error salah test koenksi");
+      }
+      // this.toastService.Toast("Gagal mengirim, mencoba mengirim kembali !");
+      // this.data_progres_bar = 0.2;
+      // this.test_koneksi_api(volume, keterangan);
     });
   }
 
-  async mengirim_data_api(item, volume, keterangan, lat, long){
+  //dapatkan geolocation
+  async get_geo(volume, keterangan){
+    this.data_progres_bar = 0.3;
+    this.geolocation.getCurrentPosition({
+      timeout: 10000,
+      enableHighAccuracy: true })
+      .then((res) => {
+        this.lat = res.coords.latitude;
+        this.long = res.coords.longitude;
+        this.data_progres_bar = 0.2;
+        this.pengecekan_pc_master(volume, keterangan, this.lat, this.long);
+      }).catch((e) =>{
+        let error_code = e.code
+        this.sedang_mengirim = false;
+        this.loadingService.tutup_loading();
 
+        if (error_code == 3) {
+          this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Aktifkan GPS !");
+          return;
+        }
+    })
+  }
+
+  //pengecekan querry ada ?
+  async pengecekan_pc_master(volume, keterangan, lat, long){
+    this.data_progres_bar = 0.4;
+    this.apiService.pengecekan_data_kegiatan_master(keterangan)    
+    .then(data => {
+      console.log(data);
+      
+      const data_json = JSON.parse(data.data);
+      const data_status = data_json.status;
+
+      if (data_status == 0) {
+        // this.mengirim_data_api(keterangan);
+        console.log("data tidak ada");
+        this.mengirim_data_api(volume, keterangan, lat, long)
+      } else {
+        console.log("data ada");
+        // this.loooping_mengirim_informasi_data(this.id_dokumen_detail);
+      }
+  
+    })
+    .catch(error => {
+      if(error.status == -4){
+        // return 4;
+        this.toastService.Toast("Mengirim gagal, mencoba mengirim kembali . . . ");
+        this.pengecekan_pc_master(volume, keterangan, lat, long);
+      }
+  
+      if(error.status == -3){
+        this.loadingService.tutup_loading();
+        this.loadingService.tampil_loading("");
+          Swal.fire({
+            title: 'Terjadi kesalahan !',
+            text: "Restart data seluler, lalu tekan 'kirim ulang' untuk mengirim kembali !",
+            icon: 'error',
+            backdrop: false,
+            confirmButtonColor: '#3880ff',
+            confirmButtonText: 'Kirim ulang !',
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this.loadingService.tutup_loading();
+              this.loadingService.tampil_loading("Mengirim data . . .");
+              this.delay_tunggu_internet();
+              this.pengecekan_pc_master(volume, keterangan, lat, long);
+            }
+          })
+      }
+
+      if (error.status != 4 && error.status != 3) {
+        this.swal.swal_code_error("Terjadi kesalahan", "pengecekan pc master");
+      }
+
+    });
+  }
+
+  // mengirim data kegiatan master
+  async mengirim_data_api(volume, keterangan, lat, long){
+    this.data_progres_bar = 0.5;
     const pengirim = await this.storage.get('nama');
 
     this.apiService.kirim_data_laporan(this.lapor_id.id, pengirim, volume, lat, long, keterangan)
@@ -461,7 +577,6 @@ export class LaporPage implements OnInit {
   
       if (data_status == 0) {
         this.loooping_mengirim_informasi_data(data_id_evidence);
-        this.data_progres_bar = 0.4;
       } else {
         this.loadingService.tutup_loading();
         this.swal.swal_aksi_gagal("Terjadi kesalahan", "code error 9 !");
@@ -477,80 +592,256 @@ export class LaporPage implements OnInit {
         // this.mengirim_data_api(item, volume, keterangan, lat, long);
         this.sedang_mengirim = false;
         this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Coba beberapa saat lagi !");
-        this.data_progres_bar = 0.2;
+      } else if (error.status == -3){
+        this.loadingService.tutup_loading();
+        this.loadingService.tutup_loading();
+        this.loadingService.tampil_loading("");
+          Swal.fire({
+            title: 'Terjadi kesalahan !',
+            text: "Restart data seluler, lalu tekan 'kirim ulang' untuk mengirim kembali !",
+            icon: 'error',
+            backdrop: false,
+            confirmButtonColor: '#3880ff',
+            confirmButtonText: 'Kirim ulang !',
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this.loadingService.tutup_loading();
+              this.loadingService.tampil_loading("Mengirim data . . .");
+              this.delay_tunggu_internet();
+              this.mengirim_data_api(volume, keterangan, lat, long);
+            }
+          });
       } else {
         this.swal.swal_code_error("Terjadi kesalahan", "code error 10 !, kembali ke login !");
       }
     });
   }
 
+  // persiapan looping data path kegiatan evidance
   async loooping_mengirim_informasi_data(id){
-    this.data_progres_bar = 0.5;
+    this.data_progres_bar = 0.6;
+    this.data_id_list = id;
 
-    for (let index = 0; index < this.arr_data_img_pdf.length; index++) {
-      let element = this.arr_data_img_pdf[index];
+    this.looping_do_while(id);
+
+    // for (let index = 0; index < this.arr_data_img_pdf.length; index++) {
+    //   let element = this.arr_data_img_pdf[index];
       
-      this.mengirim_informasi_data(id, element.nama, index);
-    }
+    //   this.mengirim_informasi_data(id, element.nama, index);
+    // }
   }
 
-  async mengirim_informasi_data(id, nama, index){
+  data_looping_index_arr;
+  data_index_arr_dilooping = 0;
 
-  this.data_progres_bar = 0.5;
+  //logika looping data untuk mengirim sesuai panjang array
+  async looping_do_while(id){
+    let i = 0;
+    let element = this.arr_data_img_pdf[this.data_index_arr_dilooping];
+    this.mengirim_informasi_data(id, element.nama, null)
+    do {
+      console.log("sedang do while");
+      await this.delay_pengecekan();
+      if (this.data_looping_index_arr != null) {
+        //mengolah data jika sukses
+        if (this.data_looping_index_arr == 1) {
+          console.log("sedang do while 1");
+          console.log(this.hasil_file_dikirim);
+          console.log(this.arr_data_img_pdf.length);
 
-    this.apiService.menyimpan_path_file(id, nama)
+          if(this.data_index_arr_dilooping == this.arr_data_img_pdf.length-1){
+            // this.pengecekan_informasi_data(id);
+            // console.log("Logika Sukses !!!");
+            this.data_looping_index_arr = 7;
+            this.looping_file();
+            return;
+          }else{
+            ++this.data_index_arr_dilooping;
+            this.data_looping_index_arr = 7;
+            this.looping_do_while(id);
+            return;
+          }
+        }
+
+        //mengolah data jika gagal
+        if (this.data_looping_index_arr == 0) {
+          console.log("sedang do while 0");
+          this.data_looping_index_arr = 7;
+          this.swal.swal_code_error("123","123");
+          return;
+        }
+
+        //mengolah data jika code error status 4 RTO
+        if (this.data_looping_index_arr == 4) {
+          console.log("sedang do while 4");
+          this.toastService.Toast("Mengirim gagal, mencoba mengirim kembali . . . ");
+          this.data_looping_index_arr = 7;
+          // this.looping_do_while(id);
+          this.pengecekan_pc_evidence(id, element.nama);
+          return;
+        }
+
+        //mengolah data jika code error status 3 unable to resolve url
+        if (this.data_looping_index_arr == 3) {
+          console.log("sedang do while 3");
+          this.loadingService.tutup_loading();
+          this.loadingService.tampil_loading("");
+          Swal.fire({
+            title: 'Terjadi kesalahan !',
+            text: "Restart data seluler, lalu tekan 'kirim ulang' untuk mengirim kembali !",
+            icon: 'error',
+            backdrop: false,
+            confirmButtonColor: '#3880ff',
+            confirmButtonText: 'Kirim ulang !',
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this.loadingService.tutup_loading();
+              this.loadingService.tampil_loading("Mengirim data . . .");
+              this.delay_tunggu_internet();
+              this.data_looping_index_arr = 7;
+              this.pengecekan_pc_evidence(id, element.nama);
+              return;
+            }
+          })
+        }
+
+        if (this.data_looping_index_arr == 123) {
+          console.log("sedang do while 123");
+          this.data_looping_index_arr = 7;
+          this.swal.swal_code_error("123","123");
+          return;
+        }
+      }
+      i++
+    }
+    while (i < 120);
+  }
+
+  //pengecekan path data evidence
+  async pengecekan_pc_evidence(id, nama_file){
+    this.apiService.pengecekan_data_kegiatan_evidence(nama_file)    
     .then(data => {
+      console.log(data);
+      
       const data_json = JSON.parse(data.data);
       const data_status = data_json.status;
 
       if (data_status == 0) {
-        this.penghitung_index++;
-        this.arr_looping_mengirim_path.push(1);
-
-        if (index == this.arr_data_img_pdf.length - 1) {
-          // this.looping_file();
-          this.pengecekan_informasi_data();
-          this.data_progres_bar = 0.6;
-        }
-        
+        // mengirim ulang data jika tidak ada
+        this.looping_do_while(id);
       } else {
-        // this.swal.swal_code_error("Terjadi kesalahan", "code error 31 !");
-        // return;
-        this.penghitung_index++;
-        this.arr_looping_mengirim_path.push(2);
-
-        if(index == this.arr_data_img_pdf.length - 1){
-          this.pengecekan_informasi_data();
-          // this.looping_file();
-          this.data_progres_bar = 0.6;
-        }
+        // jika ada maka langsung ke index berikutnya
+        ++this.data_index_arr_dilooping;
+        this.looping_do_while(id);
       }
-
+  
     })
     .catch(error => {
+      // jika error status 4 / RTO
+      if(error.status == -4){
+        // return 4;
+        this.toastService.Toast("Mengirim gagal !, mencoba mengirim kembali . . . ");
+        this.pengecekan_pc_evidence(id, nama_file)
+      }
   
-      console.log(error);
+      //jika error status 3 / unable to resolve url
+      if(error.status == -3){
+        this.loadingService.tutup_loading();
+        this.loadingService.tampil_loading("");
+          Swal.fire({
+            title: 'Terjadi kesalahan !',
+            text: "Restart data seluler terlebih dahulu, lalu tekan 'kirim ulang' untuk mengirim kembali !",
+            icon: 'error',
+            backdrop: false,
+            confirmButtonColor: '#3880ff',
+            confirmButtonText: 'Kirim ulang !',
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this.loadingService.tutup_loading();
+              this.loadingService.tampil_loading("Mengirim data . . .");
+              this.delay_tunggu_internet();
+              this.pengecekan_pc_evidence(id, nama_file);
+            }
+          })
+      }
+
+      if (error.status != 4 && error.status != 3) {
+        this.swal.swal_code_error("0", "0");
+      }
+
+    });
+  }
+
+  // mengirim data path
+  async mengirim_informasi_data(id, nama, index){
+
+  this.apiService.menyimpan_path_file(id, nama)
+  .then(data => {
+    const data_json = JSON.parse(data.data);
+    const data_status = data_json.status;
+
+    if (data_status == 0) {
+      this.penghitung_index++;
+      this.arr_looping_mengirim_path.push(1);
+      this.data_looping_index_arr = 1;
+
+      // if (index == this.arr_data_img_pdf.length - 1 || this.arr_data_img_pdf.length == 1) {
+      //   // this.looping_file();
+      //   this.data_path_terkirim.push(1);
+      //   this.pengecekan_informasi_data(id);
+      //   this.data_progres_bar = 0.6;
+      // }
+      
+    } else {
+      // this.swal.swal_code_error("Terjadi kesalahan", "code error 31 !");
+      // return;
       this.penghitung_index++;
       this.arr_looping_mengirim_path.push(2);
+      this.data_looping_index_arr = 0;
 
-      if(index == this.arr_data_img_pdf.length - 1){
-        this.pengecekan_informasi_data();
-        // this.looping_file();
-        this.data_progres_bar = 0.6;
-      }
-    //   this.loadingService.tutup_loading();
-    //   console.log(error);
-    //   if (error.status == -4) {
-    //     this.toastService.Toast("Gagal mengirim, mencoba mengirim kembali !");
-    //     this.mengirim_informasi_data(id, nama, index);
-    //     this.data_progres_bar = 0.5;
-    //   } else {
-    //     this.swal.swal_code_error("Terjadi kesalahan", "code error 29 !, kembali ke login !");
-    //   }
-      });
+      // if(index == this.arr_data_img_pdf.length - 1 || this.arr_data_img_pdf.length == 1){
+      //   this.pengecekan_informasi_data(id);
+      //   // this.looping_file();
+      //   this.data_progres_bar = 0.6;
+      // }
     }
 
-  async pengecekan_informasi_data(){
+  })
+  .catch(error => {
+
+    // this.toastService.Toast("Mengirim ulang data " + nama);
+    // this.mengirim_informasi_data(id, nama, index);
+    console.log(error);
+    this.penghitung_index++;
+    this.arr_looping_mengirim_path.push(2);
+
+    if (error.status == -4) {
+      this.data_looping_index_arr = 4;
+    } else if (error.status == -3) {
+      this.data_looping_index_arr = 3;
+    } else {
+      this.data_looping_index_arr = 123;
+    }
+
+    // if(index == this.arr_data_img_pdf.length - 1 || this.arr_data_img_pdf.length == 1){
+    //   this.pengecekan_informasi_data(id);
+    //   // this.looping_file();
+    //   this.data_progres_bar = 0.6;
+    // }
+
+  //   this.loadingService.tutup_loading();
+  //   console.log(error);
+  //   if (error.status == -4) {
+  //     this.toastService.Toast("Gagal mengirim, mencoba mengirim kembali !");
+  //     this.mengirim_informasi_data(id, nama, index);
+  //     this.data_progres_bar = 0.5;
+  //   } else {
+  //     this.swal.swal_code_error("Terjadi kesalahan", "code error 29 !, kembali ke login !");
+  //   }
+    });
+  }
+
+  async pengecekan_informasi_data(id){
     console.log(this.penghitung_index);
     console.log(this.arr_data_img_pdf.length);
 
@@ -561,32 +852,137 @@ export class LaporPage implements OnInit {
 
       const a = pengecekan_arr_looping.every(isBelowThreshold);
 
-      if (a == true) {
-        this.looping_file();
-      } else {
-        this.toastService.Toast("Gagal menyimpan salah satu data !");
-        this.looping_file();
+      if (this.data_path_terkirim.length == 0) {
+        this.arr_looping_mengirim_path = [];
+        this.data_path_terkirim = [];
+        this.loadingService.tutup_loading();
+        this.swal.swal_aksi_gagal("Ganguan Koneksi !", "Restart data seluler handphone !");
+        await this.delay_tunggu_internet();
+        this.loadingService.tampil_loading("Mengirim data . . .");
+        this.loooping_mengirim_informasi_data(id);
+
+      } else {        
+        if (a == true) {
+          this.looping_file();
+        } else {
+          this.toastService.Toast("Gagal menyimpan salah satu data !");
+          this.looping_file();
+        }
       }
+
 
       this.looping_file();
       this.data_progres_bar = 0.6;
     } else {
       await this.delay_pengecekan();
-      this.pengecekan_informasi_data();
+      this.pengecekan_informasi_data(id);
     }
   }
 
+  // persiapan looping data file kegiatan evidance dikirim ke server
   looping_file(){
     this.data_progres_bar = 0.7;
+    this.toastService.Toast("Sedang mengirim file, tunggu sampai proses selesai !");
 
-    for (let index = 0; index < this.arr_data_img_pdf.length; index++) {
-      let element = this.arr_data_img_pdf[index];
-      let path_file = element.path;
-      let nama_file = element.nama;
-      let get_ext = element.tipe;
+    this.looping_do_while_file_transfer(this.arr_data_img_pdf);
 
-      this.mengirim_file(nama_file, path_file, index, get_ext)
+    // for (let index = 0; index < this.arr_data_img_pdf.length; index++) {
+    //   let element = this.arr_data_img_pdf[index];
+    //   let path_file = element.path;
+    //   let nama_file = element.nama;
+    //   let get_ext = element.tipe;
+
+    //   this.mengirim_file(nama_file, path_file, index, get_ext)
+    // }
+  }
+
+  data_looping_index_filetransfer;
+  data_index_filetransfer_dilooping = 0;
+
+  // mengirim data file 
+  async looping_do_while_file_transfer(arr){
+    let i = 0;
+    let element = arr[this.data_index_filetransfer_dilooping];
+    this.mengirim_file(element.nama, element.path, null, element.tipe);
+    do {
+      console.log("sedang do while");
+      await this.delay_pengecekan();
+      if (this.data_looping_index_filetransfer != null) {
+        //mengolah data jika sukses
+        if (this.data_looping_index_filetransfer == 1) {
+          console.log("sedang do while 1");
+          console.log(this.data_index_arr_dilooping);
+          console.log(this.arr_data_img_pdf.length);
+
+          if(this.data_index_filetransfer_dilooping == this.arr_data_img_pdf.length-1){
+            // this.pengecekan_informasi_data(id);
+            // console.log("Logika Sukses !!!");
+            // this.loadingService.tutup_loading();
+            // this.setget.setDokumen_detail(this.data_id_list, null, null, null, null);
+            // this.router.navigate(["/listdokumen"], { replaceUrl: true });
+            this.data_looping_index_filetransfer = 7;
+            this.pengecekan();
+            return;
+          }else{
+            ++this.data_index_filetransfer_dilooping;
+            this.data_looping_index_filetransfer = 7;
+            this.looping_do_while_file_transfer(arr);
+            return;
+          }
+        }
+
+        //mengolah data jika gagal
+        if (this.data_looping_index_filetransfer == 0) {
+          console.log("sedang do while 0");
+          this.data_looping_index_filetransfer = 7;
+
+          this.swal.swal_code_error("123","123");
+          return;
+        }
+
+        //mengolah data jika code error status 4 RTO
+        if (this.data_looping_index_filetransfer == 4) {
+          console.log("sedang do while 4");
+          this.data_looping_index_filetransfer = 7;
+          this.toastService.Toast("Mengirim gagal, mencoba mengirim kembali . . . ");
+          this.looping_do_while_file_transfer(arr);
+          return;
+        }
+
+        //mengolah data jika code error status 3 unable to resolve url
+        if (this.data_looping_index_filetransfer == 3) {
+          console.log("sedang do while 3");
+          this.data_looping_index_filetransfer = 7;
+          this.loadingService.tutup_loading();
+          this.loadingService.tampil_loading("");
+          Swal.fire({
+            title: 'Terjadi kesalahan !',
+            text: "Restart data seluler, lalu tekan 'kirim ulang' untuk mengirim kembali !",
+            icon: 'error',
+            backdrop: false,
+            confirmButtonColor: '#3880ff',
+            confirmButtonText: 'Kirim ulang !',
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this.loadingService.tutup_loading();
+              this.loadingService.tampil_loading("Mengirim data . . .");
+              this.delay_tunggu_internet();
+              this.looping_do_while_file_transfer(arr);
+              return;
+            }
+          })
+        }
+
+        if (this.data_looping_index_filetransfer == 123) {
+          console.log("sedang do while 123");
+          this.data_looping_index_filetransfer = 7;
+          this.swal.swal_code_error("123","123");
+          return;
+        }
+      }
+      i++
     }
+    while (i < 240);
   }
 
   async mengirim_file(namafile, path_file, index, ext){
@@ -619,9 +1015,9 @@ export class LaporPage implements OnInit {
 
       if (data_status == 0) {
 
-        if(index == this.arr_data_img_pdf.length-1){
-          this.data_progres_bar = 0.7;
-          this.sedang_mengirim = false;
+        // if(index == this.arr_data_img_pdf.length-1){
+        //   this.data_progres_bar = 0.7;
+        //   this.sedang_mengirim = false;
           // this.loadingService.tutup_loading();
           this.toastService.Toast("Berhasil menyimpan "+namafile);
 
@@ -630,9 +1026,11 @@ export class LaporPage implements OnInit {
             hasil: "Berhasil !"
           }
           this.hasil_file_dikirim.push(obj_hasil_akhir);
-          this.arr_looping_pengecekan.push(1);
+          this.data_looping_index_filetransfer = 1;
 
-          this.pengecekan();
+          // this.arr_looping_pengecekan.push(1);
+
+          // this.pengecekan();
 
           // this.loadingService.tampil_loading(null);
           // Swal.fire({
@@ -649,23 +1047,23 @@ export class LaporPage implements OnInit {
           // });
           // this.hasil_kirim();
 
-        }else{
-          this.toastService.Toast("Berhasil menyimpan "+namafile);
+        // }else{
+        //   this.toastService.Toast("Berhasil menyimpan "+namafile);
 
-          let obj_hasil_akhir = {
-            namna_file: namafile,
-            hasil: "Berhasil !"
-          }
-          this.hasil_file_dikirim.push(obj_hasil_akhir);
+        //   let obj_hasil_akhir = {
+        //     namna_file: namafile,
+        //     hasil: "Berhasil !"
+        //   }
+        //   this.hasil_file_dikirim.push(obj_hasil_akhir);
 
-          if(index == this.arr_data_img_pdf.length-1){
-            this.data_progres_bar = 0.7;
+        //   if(index == this.arr_data_img_pdf.length-1){
+        //     this.data_progres_bar = 0.7;
 
-            this.hasil_file_dikirim.push(obj_hasil_akhir);
-            this.arr_looping_pengecekan.push(2);
-            this.pengecekan();
-          }
-        }
+        //     this.hasil_file_dikirim.push(obj_hasil_akhir);
+        //     this.arr_looping_pengecekan.push(2);
+        //     this.pengecekan();
+        //   }
+        // }
       } else {    
         this.toastService.Toast("Gagal menyimpan "+namafile);
     
@@ -675,12 +1073,14 @@ export class LaporPage implements OnInit {
         }
         this.hasil_file_dikirim.push(obj_hasil_akhir);
 
-        if(index == this.arr_data_img_pdf.length-1){
-          this.data_progres_bar = 0.7;
-          this.arr_looping_pengecekan.push(2);
-          this.pengecekan();
+        this.data_looping_index_filetransfer = 0;
 
-        }
+        // if(index == this.arr_data_img_pdf.length-1){
+        //   this.data_progres_bar = 0.7;
+        //   this.arr_looping_pengecekan.push(2);
+        //   this.pengecekan();
+
+        // }
       }
     })
     .catch(error => {
@@ -694,10 +1094,18 @@ export class LaporPage implements OnInit {
       }
       this.hasil_file_dikirim.push(obj_hasil_akhir);
 
-      if(index == this.arr_data_img_pdf.length-1){
-        this.arr_looping_pengecekan.push(2);
-        this.pengecekan();
+      if (error.status == 4) {
+        this.data_looping_index_filetransfer = 4;
+      } else if (error.status == 3) {
+        this.data_looping_index_filetransfer = 3;
+      } else {
+        this.data_looping_index_filetransfer = 123;
       }
+
+      // if(index == this.arr_data_img_pdf.length-1){
+      //   this.arr_looping_pengecekan.push(2);
+      //   this.pengecekan();
+      // }
 
       // let status = error.code;
       
@@ -765,7 +1173,7 @@ export class LaporPage implements OnInit {
         this.setget.set_hasil_akhir(this.hasil_file_dikirim);
         this.sedang_mengirim = false;
         this.loadingService.tutup_loading();
-        this.swal.swal_aksi_gagal("Terjadi kesalahan", " kirim lampiran kembali di riwayat lampiran !");
+        this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Kirim lampiran kembali di riwayat lampiran !");
         this.hasil_kirim();
         return;
       }
@@ -800,33 +1208,18 @@ export class LaporPage implements OnInit {
     });
     modal.onDidDismiss().then(data => {
 
-      this.navCtrl.back();
+      // this.navCtrl.back();
+      if (this.data_id_list != null) {
+        this.setget.set_list_path(this.data_id_list, null);
+        this.router.navigate(["/list"], { replaceUrl: true });
+      } else {
+        this.router.navigate(["/proses"], { replaceUrl: true });
+      }
+  
     }).catch(err => {
     });
     await modal.present().then(data => {
     }).catch(err => {
     });
   }
-
-  get_geo(){
-    this.geolocation.getCurrentPosition({
-      timeout: 10000,
-      enableHighAccuracy: true })
-      .then((res) => {
-        this.lat = res.coords.latitude;
-        this.long = res.coords.longitude;
-        this.data_progres_bar = 0.2;
-        this.test_koneksi_api(this.item, this.volume, this.keterangan, this.lat, this.long);
-      }).catch((e) =>{
-        let error_code = e.code
-        this.sedang_mengirim = false;
-        this.loadingService.tutup_loading();
-
-        if (error_code == 3) {
-          this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Aktifkan GPS !");
-          return;
-        }
-    })
-  }
-
 }

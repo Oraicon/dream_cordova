@@ -100,7 +100,7 @@
                           <!-- memunculkan laporan -->
                           <ng-template #tidak_ada_riwayat>
                             <ion-item button (click)="lapordokumen(data.id, data.uraian_kegiatan, data.pic, data_)">
-                              <ion-label class="text_konten">
+                              <ion-label class="text_konten ion-text-start">
                                 <h3 class="abu">
                                   {{ data.pic }}
                                 </h3>
@@ -115,7 +115,7 @@
                           <!-- memunculkan riwayat lampiran -->
                           <ng-template #ada_riwayat>
                             <ion-item button (click)="riwayatlaporan(data.id, data.uraian_kegiatan, data.pic, data.keterangan, data.upload_dokumen)">
-                              <ion-label class="text_konten">
+                              <ion-label class="text_konten ion-text-start">
                                 <h3 class="abu">
                                   {{ data.pic }}
                                 </h3>
@@ -136,12 +136,15 @@
                       <!-- </div> -->
                     </ion-list>
 
-                    <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
+                    <!-- memuat data -->
+                    <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)" *ngIf="arr_cheklist_dokumen_detail > 9; else is_tidak_ada">
                       <ion-infinite-scroll-content
                         loadingSpinner="bubbles"
                         loadingText="Memuat data...">
                       </ion-infinite-scroll-content>
                     </ion-infinite-scroll>
+
+                    <ng-template #is_tidak_ada></ng-template>
 
                   </ion-col>
                 </ion-row>

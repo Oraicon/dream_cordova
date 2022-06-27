@@ -18,12 +18,13 @@ export class KegiatanPage implements OnInit {
 
   //variable
   judul_proyek;
+  searchTerm: string;
+
+  //variable tricky
   loading = true; 
   timeout = 0;
   data_array = [];
-
   detail_kegiatan = [];
-  searchTerm: string;
 
   @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
 
@@ -38,62 +39,6 @@ export class KegiatanPage implements OnInit {
 
   }
 
-  async loadData(event) {
-
-    if (this.detail_kegiatan.length < this.data_array.length) {
-      
-      await this.interval_counter_loading();
-      this.infiniteScroll.complete();
-
-      this.tambah_data(this.detail_kegiatan, this.data_array);
-
-    } else {
-      this.toast.Toast("Seluruh data sudah dimuat !");
-      this.infiniteScroll.disabled = true;
-    }
-    
-    // await this.interval_counter_loading();
-    // event.target.complete();
-    // this.looping_data(this.data_array);
-
-  }
-
-  async tambah_data(arr_hasil, arr_mentah){
-    let length_arr_hasil = arr_hasil.length;
-    let lenth_arr_mentah = arr_mentah.length;
-    let hasil_pengolahan = length_arr_hasil + 10;
-    let limit_looping = 0;
-
-    if (hasil_pengolahan <= lenth_arr_mentah) {
-      limit_looping = hasil_pengolahan;
-    } else {
-      let a = lenth_arr_mentah - length_arr_hasil;
-      let b = length_arr_hasil + a;
-      limit_looping = b;
-    }
-    
-
-    console.log(limit_looping);
-
-    this.tambahkan(length_arr_hasil, limit_looping, arr_mentah);
-  }
-
-  async tambahkan(length_arr_hasil, limit_looping, arr_mentah){
-    for (let index = length_arr_hasil; index < limit_looping; index++) {
-      let element = arr_mentah[index];
-
-      let obj_mentah = {
-        no: index + 1,
-        id: element.id,
-        uraian_kegiatan: element.uraian_kegiatan
-      }
-      
-      this.detail_kegiatan.push(obj_mentah);
-    }
-    console.log(this.detail_kegiatan);
-    console.log(this.data_array);
-  }
-
   //ionic lifecycle
   ngOnInit() {
   }
@@ -104,6 +49,7 @@ export class KegiatanPage implements OnInit {
     this.setget.setButton(0);
   }
 
+  //kektika keluar page
   ionViewDidLeave(){
     this.loading = true;
     this.setget.setButton(0);
@@ -157,6 +103,7 @@ export class KegiatanPage implements OnInit {
     }
   }
 
+  //menampilkan data kegiatan
   async menampilkan_detail_kegiatan(){
     this.interval_counter();
     this.loadingService.tampil_loading("Memuat data . . .");
@@ -199,7 +146,9 @@ export class KegiatanPage implements OnInit {
         // this.detail_kegiatan = data_json.data;
 
       } else {
-        this.swal.swal_code_error("Terjadi kesalahan !", "Data Kosong !")
+        this.loadingService.tutup_loading();
+        this.toast.Toast("Terjadi kesalahan !, Data kosong !")
+        this.router.navigate(["/tabs/tab1"], { replaceUrl: true });
       }
     })
     .catch(error => {
@@ -222,11 +171,105 @@ export class KegiatanPage implements OnInit {
     });
   }
 
+  //mengolah data kegiatan
   async looping_data(arr){
-    for (let index = 0; index < 10; index++) {
-      // await this.interval_counter_looping();
-      let element = arr[index];
+
+    if (arr.length < 10) {
+      for (let index = 0; index < arr.length; index++) {
+        // await this.interval_counter_looping();
+        let element = arr[index];
+        
+        let obj_mentah = {
+          no: index + 1,
+          id: element.id,
+          uraian_kegiatan: element.uraian_kegiatan
+        }
+        
+        this.detail_kegiatan.push(obj_mentah);
+  
+        if (index == arr.length - 1) {
+          this.loading = false;
+  
+          this.delay_dulu();
+          console.log(this.detail_kegiatan);
+          console.log(this.data_array);
+        }
+      }
+    } else {
+      for (let index = 0; index < 10; index++) {
+        // await this.interval_counter_looping();
+        let element = arr[index];
+        
+        let obj_mentah = {
+          no: index + 1,
+          id: element.id,
+          uraian_kegiatan: element.uraian_kegiatan
+        }
+        
+        this.detail_kegiatan.push(obj_mentah);
+  
+        if (index == 9) {
+          this.loading = false;
+  
+          this.delay_dulu();
+          console.log(this.detail_kegiatan);
+          console.log(this.data_array);
+        }
+      }
+    }
+
+
+  }
+
+  //memuat banyak data
+  async loadData(event) {
+
+    if (this.detail_kegiatan.length < this.data_array.length && this.detail_kegiatan.length > 9) {
       
+      await this.interval_counter_loading();
+      this.infiniteScroll.complete();
+
+      this.tambah_data(this.detail_kegiatan, this.data_array);
+
+    } else {
+      if(this.detail_kegiatan.length > 9){
+        this.toast.Toast("Seluruh data sudah dimuat !");
+      }
+      this.infiniteScroll.disabled = true;
+    }
+    
+    // await this.interval_counter_loading();
+    // event.target.complete();
+    // this.looping_data(this.data_array);
+
+  }
+
+  //persiapan logika penambahan data
+  async tambah_data(arr_hasil, arr_mentah){
+    let length_arr_hasil = arr_hasil.length;
+    let lenth_arr_mentah = arr_mentah.length;
+    let hasil_pengolahan = length_arr_hasil + 10;
+    let limit_looping = 0;
+
+    if (hasil_pengolahan <= lenth_arr_mentah) {
+      limit_looping = hasil_pengolahan;
+    } else {
+      let a = lenth_arr_mentah - length_arr_hasil;
+      let b = length_arr_hasil + a;
+      limit_looping = b;
+    }
+    
+
+    console.log(limit_looping);
+
+    this.tambahkan(length_arr_hasil, limit_looping, arr_mentah);
+  }
+
+  //menambahkan data pada variable
+  async tambahkan(length_arr_hasil, limit_looping, arr_mentah){
+    for (let index = length_arr_hasil; index < limit_looping; index++) {
+      let element = arr_mentah[index];
+
       let obj_mentah = {
         no: index + 1,
         id: element.id,
@@ -234,22 +277,18 @@ export class KegiatanPage implements OnInit {
       }
       
       this.detail_kegiatan.push(obj_mentah);
-
-      if (index == 9) {
-        this.loading = false;
-
-        this.delay_dulu();
-        console.log(this.detail_kegiatan);
-        console.log(this.data_array);
-      }
     }
+    console.log(this.detail_kegiatan);
+    console.log(this.data_array);
   }
 
+  //delay
   async delay_dulu(){
     await this.interval_counter_loading();
     this.loadingService.tutup_loading();
   }
 
+  //memuat ulang
   relog(){
     this.judul_proyek;
     this.loading = true; 
@@ -258,6 +297,7 @@ export class KegiatanPage implements OnInit {
     this.menampilkan_detail_kegiatan();
   }
 
+  //jika tidak ada respon
   async tidak_ada_respon(){
     const a = this.setget.getData();
     if (a == 1) {
@@ -280,6 +320,7 @@ export class KegiatanPage implements OnInit {
     });
   }
 
+  //jika terjadi kesalahan / error
   async keluar_aplikasi(){
     const a = this.setget.getData();
     if (a == 1) {

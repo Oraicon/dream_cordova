@@ -17,6 +17,7 @@ export class ModalIsikontenPage implements OnInit {
     private setget: SetGetServiceService
   ) { }
 
+  // ionic lifecycle
   ngOnInit() {
   }
 
@@ -31,10 +32,12 @@ export class ModalIsikontenPage implements OnInit {
     this.setget.set_tab_page(1);
   }
 
+  // tutup modal
   tutup(){
     this.modalCtrl.dismiss();
   }
 
+  // jika gambar rusak
   errorHandler(event) {
     event.target.src = "assets/bi.png";
   }

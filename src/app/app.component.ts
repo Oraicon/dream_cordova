@@ -34,7 +34,7 @@ export class AppComponent {
     this.setget.setButton(0);
 
     //pengecekan koneksi
-    this.pengecekan_koneksi();
+    // this.pengecekan_koneksi();
   }
 
   //delay

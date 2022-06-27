@@ -3,11 +3,14 @@
     <ion-grid fixed>
       <ion-row class="ion-align-items-center">
         <ion-col size="10" class="ion-align-items-center text_header bold putih">Notifikasi</ion-col>
+        
+        <!-- kembali -->
         <ion-col size="2" class="ion-text-end">
           <ion-button (click)="kembali()" fill="clear" class="padding_button">
             <ion-icon name="arrow-back-outline" size="large" class="putih"></ion-icon>
           </ion-button>
         </ion-col>
+        
       </ion-row>
     </ion-grid>
   </ion-toolbar>
@@ -41,10 +44,12 @@
           </ion-card-content>
         </ion-card>
 
+        <!-- menampilkan data -->
         <ng-template #data_tampil>
 
           <ng-container *ngIf="data_tidak_ada; then data_notif_tidak_ada; else data_notif_ada"></ng-container>
 
+          <!-- jika notif kosong -->
           <ng-template #data_notif_tidak_ada>
             <ion-card>
               <ion-card-content class="ion-no-padding">
@@ -71,6 +76,7 @@
             </ion-card>
           </ng-template>
 
+          <!-- menampilkan notif -->
           <ng-template #data_notif_ada>
             <ion-card *ngFor="let data of arr_obj_data_notif; let i = index">
               <ion-card-content>
@@ -78,7 +84,7 @@
                   <ion-row class="ion-align-items-center">
                     <ion-col size="12" class="ion-text-center bold">
                       <h2 class="hitam">
-                        {{ data.kode_rap }}
+                        {{ data.nama_proyek }}
                       </h2>
                     </ion-col>
                     <ion-col size="12" class="ion-text-start">
@@ -95,13 +101,13 @@
                     <ng-container *ngIf="file_nama['ext'+data.id] == 'JPEG'; then jpeg_tampil; else dokumen_tampil"></ng-container>
     
                     <ng-template #jpeg_tampil>
-                      <ion-col size="5" class="ion-text-start">
+                      <ion-col size="4" class="ion-text-start">
                         <ion-thumbnail (click)="buka_img(data.evidence_file, file_nama[data.id])">
                           <img src="https://dream-beta.technosolusitama.in/{{ data.evidence_file }}">
                         </ion-thumbnail>
                       </ion-col>
     
-                      <ion-col size="7" class="ion-text-end">
+                      <ion-col size="8" class="ion-text-end">
                         <ion-label>
                           <h2>{{ file_nama[data.id] }}</h2>
                           <ion-button color="danger" fill="outline" (click)="presentActionSheet(data.id, data.id_pc_pd_evidance, data.evidence_file, data.tipe_data)">
@@ -113,26 +119,59 @@
     
                     <ng-template #dokumen_tampil>
     
-                      <ng-container *ngIf="file_nama['ext'+data.id] == 'pdf'; then pdf_tampil; else docx_tampil"></ng-container>
+                      <ion-col size="4" class="ion-text-start" *ngIf="file_nama['ext'+data.id] == 'pdf'; else pdf_kosong">
+                        <ion-thumbnail (click)="buka_pdf(data.evidence_file)">
+                          <img src="assets/pdf_icon.png"/>
+                        </ion-thumbnail>
+                      </ion-col>
+
+                      <ion-col size="4" class="ion-text-start" *ngIf="file_nama['ext'+data.id] == 'docx'; else docx_kosong">
+                        <ion-thumbnail (click)="buka_pdf(data.evidence_file)">
+                          <img src="assets/dok_icon.png"/>
+                        </ion-thumbnail>
+                      </ion-col>
+
+                      <ion-col size="4" class="ion-text-start" *ngIf="file_nama['ext'+data.id] == 'xlsx'; else xlsx_kosong">
+                        <ion-thumbnail (click)="buka_pdf(data.evidence_file)">
+                          <img src="assets/xlsx_icon.png"/>
+                        </ion-thumbnail>
+                      </ion-col>
+
+                      <ion-col size="4" class="ion-text-start" *ngIf="file_nama['ext'+data.id] == 'pptx'; else pptx_kosong">
+                        <ion-thumbnail (click)="buka_pdf(data.evidence_file)">
+                          <img src="assets/pptx_icon.png"/>
+                        </ion-thumbnail>
+                      </ion-col>
+
+                      <ion-col size="4" class="ion-text-start" *ngIf="file_nama['ext'+data.id] == 'rar'; else rar_kosong">
+                        <ion-thumbnail (click)="buka_pdf(data.evidence_file)">
+                          <img src="assets/rar_icon.png"/>
+                        </ion-thumbnail>
+                      </ion-col>
+
+                      <ion-col size="4" class="ion-text-start" *ngIf="file_nama['ext'+data.id] == 'zip'; else zip_kosong">
+                        <ion-thumbnail (click)="buka_pdf(data.evidence_file)">
+                          <img src="assets/zip_icon.png"/>
+                        </ion-thumbnail>
+                      </ion-col>
+
+                      <ng-template #pdf_kosong></ng-template>
+                      <ng-template #docx_kosong></ng-template>
+                      <ng-template #xlsx_kosong></ng-template>
+                      <ng-template #pptx_kosong></ng-template>
+                      <ng-template #rar_kosong></ng-template>
+                      <ng-template #zip_kosong></ng-template>
+  
+                      <ion-col size="8" class="ion-text-end">
+                        <ion-label>
+                          <h2>{{ file_nama[data.id] }}</h2>
+                          <ion-button color="danger" fill="outline" (click)="dapatkan_data20(data.id, data.id_pc_pd_evidance, data.evidence_file, data.tipe_data)">
+                            Re-take
+                          </ion-button>
+                        </ion-label>
+                      </ion-col>
     
-                      <ng-template #pdf_tampil>
-                        <ion-col size="5" class="ion-text-start">
-                          <ion-thumbnail (click)="buka_pdf(data.evidence_file)">
-                            <img src="assets/pdf_icon.png"/>
-                          </ion-thumbnail>
-                        </ion-col>
-    
-                        <ion-col size="7" class="ion-text-end">
-                          <ion-label>
-                            <h2>{{ file_nama[data.id] }}</h2>
-                            <ion-button color="danger" fill="outline" (click)="dapatkan_pdf(null, null, data.id, data.id_pc_pd_evidance, data.evidence_file, data.tipe_data)">
-                              Re-take
-                            </ion-button>
-                          </ion-label>
-                        </ion-col>
-                      </ng-template>
-    
-                      <ng-template #docx_tampil>
+                      <!-- <ng-template #docx_tampil>
                         <ion-col size="5" class="ion-text-start">
                           <ion-thumbnail (click)="buka_doc(data.evidence_file)">
                             <img src="assets/dok_icon.png"/>
@@ -148,7 +187,7 @@
                           </ion-label>
                         </ion-col>
     
-                      </ng-template>
+                      </ng-template> -->
     
                     </ng-template>
                   </ion-row>
@@ -166,6 +205,7 @@
 </ion-content>
 
 <ion-footer>
+  <!-- menampilkan loading -->
   <ion-progress-bar value="{{ data_progres_bar }}" *ngIf="sedang_mengirim; else tidak_sedang_mengirim"></ion-progress-bar>
   <ng-template #tidak_sedang_mengirim></ng-template>
 </ion-footer>

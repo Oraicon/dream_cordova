@@ -36,6 +36,7 @@ export class ModalGantisandiPage implements OnInit {
     private formBuilder: FormBuilder,
     private modalCtrl: ModalController) { }
 
+  // ionic lifecycle
   ngOnInit() {
     this.myGroup = this.formBuilder.group({
       sandi_lama: ['', [Validators.required, Validators.minLength(8)]],
@@ -57,6 +58,7 @@ export class ModalGantisandiPage implements OnInit {
     this.setget.set_tab_page(0);
   }
 
+  // dapatkan data sandi lokal
   async get_data_lokal(){
     this.pasword_ls = await this.storage.get('sandi');
   }
@@ -65,10 +67,12 @@ export class ModalGantisandiPage implements OnInit {
     return this.myGroup.controls;
   }
 
+  // tutup modal
   tutup(){
     this.modalCtrl.dismiss();
   }
 
+  // lihat sandi 1
   lihat_sandi1(){
     this.showPassword1 = !this.showPassword1;
 
@@ -79,6 +83,7 @@ export class ModalGantisandiPage implements OnInit {
     }
   }
 
+  // lihat sandi 2
   lihat_sandi2(){
     this.showPassword2 = !this.showPassword2;
 
@@ -89,6 +94,7 @@ export class ModalGantisandiPage implements OnInit {
     }
   }
 
+  // lihat sandi 3
   lihat_sandi3(){
     this.showPassword3 = !this.showPassword3;
 
@@ -99,6 +105,7 @@ export class ModalGantisandiPage implements OnInit {
     }
   }
 
+  // mengirim data ke tab3 untuk diolah
   onSubmit(){
     this.isSubmitted = true;
 

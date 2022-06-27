@@ -3,6 +3,7 @@
     <ion-grid fixed>
       <ion-row class="ion-align-items-center">
         <ion-col size="8" class="ion-align-items-center text_header bold putih">Formulir Laporan</ion-col>
+        <!-- kembali -->
         <ion-col size="4" class="ion-text-end">
           <ion-button (click)="kembali()" fill="clear" class="padding_button">
             <ion-icon name="arrow-back-outline" size="large" class="putih"></ion-icon>
@@ -26,13 +27,16 @@
             <ion-grid fixed class="ion-no-padding">
               <ion-row>
                 <ion-col size="12">
+                  <!-- form laporan -->
                   <form (ngSubmit)="onSubmit()" [formGroup]="myGroup" novalidate>
                     <ion-col size="12">
                       
                       <ion-list>
 
+                        <!-- apakah tipe laporan satuannya meter ? -->
                         <ng-container *ngIf="tipe_laporan == 'Meter'; then _meter; else bukan_meter"></ng-container>
 
+                        <!-- ya tipe laporan satuannya meter -->
                         <ng-template #_meter>
                           <ion-item>
                             <ion-grid fixed class="ion-no-padding">
@@ -51,6 +55,7 @@
                           </ion-label>
                         </ng-template>
 
+                        <!-- tidak tipe laporan satuannya bukan meter meter -->
                         <ng-template #bukan_meter>
                           <ion-item>
                             <ion-grid fixed class="ion-no-padding">
@@ -100,7 +105,7 @@
                                   </h2>
                                 </ion-button>
                                 <ion-label>
-                                  *Max file lampiran 5MB
+                                  *Max file lampiran 10MB
                                 </ion-label>
                               </ion-col>
                               
@@ -109,6 +114,7 @@
                           </ion-grid>
                         </ion-item>
 
+                        <!-- menampilkan tumbnail data-->
                         <ion-item *ngFor="let data of arr_data_img_pdf; let i = index">
                           
                             <ion-thumbnail slot="start" *ngIf="data.tipe == 'JPEG';else pdf">

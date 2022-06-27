@@ -176,4 +176,28 @@ export class ApiServicesService {
     return this.http.post('https://dream-beta.technosolusitama.in/api/update_data_user', {"username": username, "nama": nama, "sandi": sandi, "gambar":gambar}, {'Accept': 'application/json', 'Content-Type':'application/x-www-form-urlencoded'})
   }
 
+  //pengecekan data cheklist dokumen
+  pengecekan_data_kegiatan_master(keterangan){
+    // this.http.useBasicAuth('dream_1.0', 'dream_1.0');
+    this.http.setRequestTimeout(30.0);
+    return this.http.post('https://dream-beta.technosolusitama.in/api/pengecekan_pc_kegiatan_detail', {"keterangan": keterangan}, {'Accept': 'application/json', 'Content-Type':'application/x-www-form-urlencoded'})
+  }
+
+  pengecekan_data_kegiatan_evidence(evidence_file){
+    // this.http.useBasicAuth('dream_1.0', 'dream_1.0');
+    this.http.setRequestTimeout(30.0);
+    return this.http.post('https://dream-beta.technosolusitama.in/api/pengecekan_pc_kegiatan_evidence', {"evidence_file": evidence_file}, {'Accept': 'application/json', 'Content-Type':'application/x-www-form-urlencoded'})
+  }
+
+  pengecekan_data_cheklist_dokumen_master(keterangan){
+    // this.http.useBasicAuth('dream_1.0', 'dream_1.0');
+    this.http.setRequestTimeout(30.0);
+    return this.http.post('https://dream-beta.technosolusitama.in/api/pengecekan_pd_checklist_dokumen_detail', {"keterangan": keterangan}, {'Accept': 'application/json', 'Content-Type':'application/x-www-form-urlencoded'})
+  }
+
+  pengecekan_data_cheklist_dokumen_evidence(evidence_file){
+    // this.http.useBasicAuth('dream_1.0', 'dream_1.0');
+    this.http.setRequestTimeout(30.0);
+    return this.http.post('https://dream-beta.technosolusitama.in/api/pengecekan_pd_checklist_dokumen_detail', {"evidence_file": evidence_file}, {'Accept': 'application/json', 'Content-Type':'application/x-www-form-urlencoded'})
+  }
 }

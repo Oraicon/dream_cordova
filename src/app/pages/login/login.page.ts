@@ -20,16 +20,17 @@ export class LoginPage implements OnInit {
   
   //variable
   myGroup: FormGroup;
-  isSubmitted = false;
-  cek_koneksi = true;
-  showPassword = false;
-  passwordToggleIcon = 'eye-outline';
   local_nama;
   local_sandi;
   data_api_lupa_sandi_nama;
 
+  //variable tricky
   sedang_mengirim = false;
   data_progres_bar = 0;
+  isSubmitted = false;
+  cek_koneksi = true;
+  showPassword = false;
+  passwordToggleIcon = 'eye-outline';
 
   constructor(
     private formBuilder: FormBuilder,
@@ -44,6 +45,7 @@ export class LoginPage implements OnInit {
     private modalCtrl: ModalController,
     private swal: SwalServiceService) { 
 
+    //menjalankan oninit dan setget koneksi
     this.ngOnInit();
     this.setget.set_koneksi(0);
   }
@@ -206,16 +208,18 @@ export class LoginPage implements OnInit {
     const data_status = data_json.status;
 
     if (data_status == 1) {
-      // this.storage.set('auth', true);
-      // this.storage.set('nama', var_nama);
-      // this.storage.set('sandi', var_sandi);
-      
-      // this.loadingService.tutup_loading();
-
-      // this.ionViewDidLeave();
       this.data_progres_bar = 0.6;
-      this.cek_user_rap(var_nama, var_sandi);
+      // this.cek_user_rap(var_nama, var_sandi);
+      this.storage.set('auth', true);
+      this.storage.set('nama', var_nama);
+      this.storage.set('sandi', var_sandi);
+
+      this.data_progres_bar = 0.9;
+      this.sedang_mengirim = false;
       
+      this.loadingService.tutup_loading();
+
+      this.ionViewDidLeave();
     } else if (data_status == 2) {
       this.data_progres_bar = 0.9;
       this.sedang_mengirim = false;

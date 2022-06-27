@@ -25,6 +25,7 @@ export class ModalLupasandiPage implements OnInit {
     private modalCtrl: ModalController) {
     }
 
+  // ionic lifecycle
   ngOnInit() {
     this.myGroup = this.formBuilder.group({
       nama_pengguna: ['', [Validators.required]]
@@ -41,10 +42,12 @@ export class ModalLupasandiPage implements OnInit {
     this.setget.set_tab_page(0);
   }
 
+  // jika form tidak valid
   get errorControl() {
     return this.myGroup.controls;
   }
 
+  // mengirim data ke login untuk diolah
   onSubmit(){
     this.isSubmitted = true;
 
@@ -64,6 +67,7 @@ export class ModalLupasandiPage implements OnInit {
     }
   }
 
+  // tutup modal
   tutup(){
     this.modalCtrl.dismiss();
   }

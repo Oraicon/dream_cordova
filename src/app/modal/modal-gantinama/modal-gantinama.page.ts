@@ -15,6 +15,9 @@ import { SwalServiceService } from 'src/app/services/swal-service.service';
 })
 export class ModalGantinamaPage implements OnInit {
 
+  // variable tricky
+  showPassword1 = false;
+  passwordToggleIcon1 = 'eye-outline';
   pasword_ls;
 
   myGroup: FormGroup;
@@ -29,6 +32,7 @@ export class ModalGantinamaPage implements OnInit {
     private toastService: ToastService,
     private modalCtrl: ModalController) { }
 
+  // ionic lifecycle
   ngOnInit() {
     this.myGroup = this.formBuilder.group({
       nama_pengguna: ['', [Validators.required, Validators.minLength(8)]],
@@ -48,18 +52,33 @@ export class ModalGantinamaPage implements OnInit {
     this.setget.setButton(0);
   }
 
+  // dapatkan data lokal
   async get_data_lokal(){
     this.pasword_ls = await this.storage.get('sandi');
   }
 
+// error jika form tidak valid
   get errorControl() {
     return this.myGroup.controls;
   }
 
+  // tutup modal
   tutup(){
     this.modalCtrl.dismiss();
   }
 
+  // lihat sandi
+  lihat_sandi1(){
+    this.showPassword1 = !this.showPassword1;
+
+    if (this.passwordToggleIcon1 == 'eye-outline') {
+      this.passwordToggleIcon1 = 'eye-off-outline';
+    } else {
+      this.passwordToggleIcon1 = 'eye-outline';
+    }
+  }
+
+  // mengirim data ke tab3 untuk di olah
   onSubmit(){
     const password_lama = this.myGroup.value.sandi_lama;
     this.isSubmitted = true;

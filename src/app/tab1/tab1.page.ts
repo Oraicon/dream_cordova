@@ -130,6 +130,7 @@ export class Tab1Page {
     }
   }
 
+  //memuat ulang
   relog(){
     this.data_beranda = false;
     this.data_beranda_loading_tidak_ada = false;
@@ -151,6 +152,8 @@ export class Tab1Page {
     this.menampilkan_data_rap();
   }
 
+  //menampilkan data
+  //menampilkan data part 1
   async menampilkan_data_rap(){
 
     this.loadingCtrl.tampil_loading("Memuat data . . .");
@@ -164,9 +167,12 @@ export class Tab1Page {
 
       const data_json = JSON.parse(data.data);
       const status_data = data_json.status;
-      if (status_data == 1) {
 
+      console.log(data_json);
+
+      if (status_data == 1) {
         this.data_rap = data_json.data;
+        this.data_rap.reverse();
 
         for (let index = 0; index < this.data_rap.length; index++) {
           let rap_status = this.data_rap[index].id_status;
@@ -190,6 +196,8 @@ export class Tab1Page {
             this.obj_data_rap["data_rap1_"+index] = "kosong";
             this.obj_data_rap["data_rap3_"+index] = "selesai";
 
+            this.ida_data_rap.push(0);
+
             if (index == this.data_rap.length - 1 || index == 0) {
               this.data_beranda = true;
               this.data_beranda_loading_tidak_ada = true;
@@ -200,6 +208,8 @@ export class Tab1Page {
           if (rap_status != 12 && rap_status != 18) {
             this.obj_data_rap["data_rap1_"+index] = "kosong";
             this.obj_data_rap["data_rap2_"+index] = false;
+            this.ida_data_rap.push(0);
+
             if (index == this.data_rap.length - 1 || index == 0) {
               this.data_beranda = true;
               this.data_beranda_loading_tidak_ada = true;
@@ -209,16 +219,16 @@ export class Tab1Page {
         }
 
       } else {
+        this.data_rap.push(0);
 
-        this.data_rap = [0];
-
-        this.obj_data_rap["data_rap1"+0] = "kosong";
-        this.obj_data_rap["data_rap2"+0] = true;
+        this.obj_data_rap["data_rap1_"+0] = "kosong";
+        this.obj_data_rap["data_rap2_"+0] = true;
 
         this.data_beranda = false;
         this.data_beranda_loading_tidak_ada = true;
-        this.data_notif();
 
+        this.loadingCtrl.tutup_loading();
+        // this.data_notif();
       }
   
     })
@@ -242,6 +252,7 @@ export class Tab1Page {
 
   }
 
+  //menampilkan data part 2
   async menampilkan_seluruh_kegiatan(id_rap_master, index, nama){
 
     this.apiService.dapatkan_data_proyek_rap_detail(id_rap_master)
@@ -292,6 +303,7 @@ export class Tab1Page {
     });
   }
 
+  //menampilkan data part 3
   async menampilkan_dokumen_ceklist(id_master_rap, index, nama){
 
     this.apiService.dapatkan_data_cheklist_dokumen(nama, id_master_rap)
@@ -355,14 +367,17 @@ export class Tab1Page {
       let element = arr[index];
 
       this.api_data_notif(element)
-      
     }
+
   }
 
+  //menampilkan notif sesuai rapnya
   async api_data_notif(id_rap){
+    console.log(2);
     const data_l_nama = await this.storage.get('nama');
     this.apiService.get_notif_status(id_rap, data_l_nama)
     .then(data => {
+      console.log(data)
 
       const data_json = JSON.parse(data.data);
       const status_data = data_json.status;
@@ -422,6 +437,7 @@ export class Tab1Page {
 
   }
 
+  //tidak ada respon
   async tidak_ada_respon(){
     const a = this.setget.getData();
     if (a == 1) {
@@ -444,6 +460,7 @@ export class Tab1Page {
     });
   }
 
+  //tidak ada respon keluar / terjadi error
   async keluar_aplikasi(){
     const a = this.setget.getData();
     if (a == 1) {
@@ -464,37 +481,5 @@ export class Tab1Page {
         navigator['app'].exitApp();
       }
     });
-  }
-
-  //logout
-  async keluar(){
-
-    let data_button = this.setget.getButton();
-
-    if (data_button == 0) {
-      this.setget.setButton(1);
-
-      this.loadingCtrl.tampil_loading("");
-      Swal.fire({
-        icon: 'warning',
-        title: 'Keluar akun ?',
-        text: 'Kembali ke login, anda yakin ?',
-        backdrop: false,
-        confirmButtonColor: '#3880ff',
-        confirmButtonText: 'Ya',
-        showDenyButton: true,
-        denyButtonText: `Tidak`,
-      }).then((result) => {
-        if (result.isConfirmed) {
-          this.loadingCtrl.tutup_loading();
-          this.router.navigate(["/login"], { replaceUrl: true });
-        }else {
-          this.loadingCtrl.tutup_loading();
-        }
-      });
-
-    } else {
-      this.toast.Toast_tampil();
-    }
   }
 }

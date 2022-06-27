@@ -116,12 +116,15 @@
                       <!-- </div> -->
                     </ion-list>
 
-                    <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
+
+                    <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)" *ngIf="detail_kegiatan > 9; else is_tidak_ada">
                       <ion-infinite-scroll-content
                         loadingSpinner="bubbles"
                         loadingText="Memuat data...">
                       </ion-infinite-scroll-content>
                     </ion-infinite-scroll>
+
+                    <ng-template #is_tidak_ada></ng-template>
 
                   </ion-col>
                 </ion-row>

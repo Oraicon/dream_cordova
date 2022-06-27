@@ -66,7 +66,7 @@
                                   </h2>
                                 </ion-button>
                                 <ion-label>
-                                  *Max file lampiran 5MB
+                                  *Max file lampiran 10MB
                                 </ion-label>
                               </ion-col>
 
@@ -90,9 +90,35 @@
                               </ion-thumbnail>
 
                               <ng-template #docs>
-                                <ion-thumbnail slot="start">
+                                <ion-thumbnail slot="start" *ngIf="data.tipe == 'docx'; else xlsx">
                                   <img src="assets/dok_icon.png"/>
                                 </ion-thumbnail>
+
+                                <ng-template #xlsx>
+                                  <ion-thumbnail slot="start" *ngIf="data.tipe == 'xlsx'; else pptx">
+                                    <img src="assets/xlsx_icon.png"/>
+                                  </ion-thumbnail>
+
+                                  <ng-template #pptx>
+                                    <ion-thumbnail slot="start" *ngIf="data.tipe == 'pptx'; else rar">
+                                      <img src="assets/pptx_icon.png"/>
+                                    </ion-thumbnail>
+                                  </ng-template>
+
+                                  <ng-template #rar>
+                                    <ion-thumbnail slot="start" *ngIf="data.tipe == 'rar'; else zip">
+                                      <img src="assets/rar_icon.png"/>
+                                    </ion-thumbnail>
+                                  </ng-template>
+
+                                  <ng-template #zip>
+                                    <ion-thumbnail slot="start">
+                                      <img src="assets/zip_icon.png"/>
+                                    </ion-thumbnail>
+                                  </ng-template>
+
+                                </ng-template>
+
                               </ng-template>
 
                             </ng-template>

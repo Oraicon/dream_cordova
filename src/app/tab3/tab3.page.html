@@ -3,6 +3,7 @@
     <ion-grid fixed>
       <ion-row class="ion-align-items-center">
         <ion-col size="6" class="text_header bold putih">Profil</ion-col>
+        <!-- logout -->
         <ion-col size="6" class="ion-text-end">
           <ion-button (click)="keluar()" fill="clear" class="padding_button">
             <ion-icon name="exit-outline" size="large" class="putih"></ion-icon>
@@ -245,6 +246,7 @@
 </ion-content>
 
 <ion-footer>
+  <!-- loading bar -->
   <ion-progress-bar value="{{ data_progres_bar }}" *ngIf="sedang_mengirim; else tidak_sedang_mengirim"></ion-progress-bar>
   <ng-template #tidak_sedang_mengirim></ng-template>
 </ion-footer>

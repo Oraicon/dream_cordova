@@ -127,11 +127,13 @@ export class Tab3Page {
     return new Promise(resolve => { setTimeout(() => resolve(""), 30000);});
   }
 
+  //fungsi menunggu delay
   async delayed(){
     await this.delay();
     return 1;
   }
 
+  //fungsi jika gambar rusak
   errorHandler(event) {
     event.target.src = "assets/bi.png";
   }
@@ -362,6 +364,7 @@ export class Tab3Page {
 
   }
 
+  //menampilkan data
   async tampilkandata(){
     this.loadingCtrl.tampil_loading("Memuat data . . .");
     const data_l_nama = await this.storage.get('nama');
@@ -415,6 +418,7 @@ export class Tab3Page {
     });
   }
 
+  //test koneksi dengan menghit api
   async test_koneksi(nama, sandi){
 
     this.apiService.cek_koneksi()
@@ -508,6 +512,7 @@ export class Tab3Page {
     }
   }
 
+  //update data server
   async upload_data_server(){
     this.name_img = this.datepipe.transform((new Date), 'MMddyyyyhmmss.')+ this.format_img;
     let nama_file = this.name_img.toString();
@@ -525,8 +530,6 @@ export class Tab3Page {
         this.data_progres_bar = 0.8;
 
         this.upload(nama_file);
-        // this.loadingCtrl.tutup_loading();
-        // this.swalService.swal_aksi_berhasil("Berhasil !", "Foto profil anda berhasil diubah !");
       } else {
         this.data_progres_bar = 0.9;
         this.sedang_mengirim = false;
@@ -559,6 +562,7 @@ export class Tab3Page {
     });
   }
 
+  //update nama
   async api_ubah_nama(nama_baru){
 
     this.interval_counter();
@@ -614,6 +618,7 @@ export class Tab3Page {
     });
   }
 
+  //update sandi
   async api_ubah_sandi(sandi_baru){
 
     this.interval_counter();
@@ -667,6 +672,7 @@ export class Tab3Page {
     });
   }
 
+  //memuat ulang
   async relog(){
     
     this.nama_ls = "";
@@ -708,6 +714,7 @@ export class Tab3Page {
     this.tampilkandata();
   }
 
+  //jika tidak ada respon
   async tidak_ada_respon(){
     const a = this.setget.getData();
     if (a == 1) {
@@ -730,6 +737,7 @@ export class Tab3Page {
     });
   }
 
+  //keluar aplikasi jika terjadi error
   async keluar_aplikasi(){
     const a = this.setget.getData();
     if (a == 1) {

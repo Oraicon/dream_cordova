@@ -25,22 +25,23 @@ import { ApiServicesService } from 'src/app/services/api-services.service';
 })
 export class ListPage implements OnInit {
 
+  // variable
+  id;
   kode_barang;
-  timeout
+  alamat;
   arr_data = [];
-  sedang_mengirim = false;
   data_progres_bar = 0;
-
   imgURI;
   name_img:string="";
   format_img:string="JPEG";
-
-  id;
-  alamat;
+  URL="https://dream-beta.technosolusitama.in/api/uploadImage";
+  
+  // variable tricky
+  timeout = 0;
+  sedang_mengirim = false;
   data_gambar_rusak = {};
   get_ext;
   loading_skeleton = true;
-  URL="https://dream-beta.technosolusitama.in/api/uploadImage";
 
   //persiapan kamera
   cameraOptions: CameraOptions = {
@@ -81,6 +82,7 @@ export class ListPage implements OnInit {
     private transfer: FileTransfer,
   ) { }
 
+  // ionic lifecycle
   ngOnInit() {
   }
 
@@ -89,7 +91,11 @@ export class ListPage implements OnInit {
     this.data_progres_bar = 0;
     const data_mentah = this.setget.get_list_path();
     this.id =  data_mentah[0];
-    this.alamat = data_mentah[1];
+    if (data_mentah[1] != null) {
+      this.alamat = data_mentah[1];
+    } else {
+      this.alamat = null;
+    }
     console.log(this.id);
     await this.tampilkan_data(this.id);
   }
@@ -97,7 +103,7 @@ export class ListPage implements OnInit {
   //delay filetranfer 30 detik
   delay() {
     console.log("masuk dealy");
-    return new Promise(resolve => { setTimeout(() => resolve(""), 40000);});
+    return new Promise(resolve => { setTimeout(() => resolve(""), 120000);});
   }
 
   async delayed(){
@@ -195,6 +201,7 @@ export class ListPage implements OnInit {
     }
   }
 
+  // memuat seluruh data
   relog(){
     this.kode_barang;
     this.timeout
@@ -279,6 +286,7 @@ export class ListPage implements OnInit {
     });
   }
 
+  // dapatkan pdf dai lokal
   dapatkan_pdf(nama, id, path){
     this.loadingCtrl.tampil_loading("Sedang Memuat . . .");
     this.chooser.getFile("application/pdf").then((data:ChooserResult)=>{
@@ -296,7 +304,7 @@ export class ListPage implements OnInit {
 
       if (type_data == "application/pdf") {
 
-        if (int_size_data >= 5242880) {
+        if (int_size_data >= 10485760) {
           this.loadingCtrl.tutup_loading();
           this.swal.swal_aksi_gagal("Terjadi kesalahan", "File berukuran 5MB atau lebih !");
           return;
@@ -329,7 +337,7 @@ export class ListPage implements OnInit {
 
       let size_data = this.sizeService.size(res);
       let int_size = +size_data.byteLength;
-      if (int_size >= 5242880 ) {
+      if (int_size >= 10485760 ) {
         this.loadingCtrl.tutup_loading();
         this.swal.swal_aksi_gagal("Terjadi kesalahan", "File berukuran 5MB atau lebih !");
         return;
@@ -350,7 +358,7 @@ export class ListPage implements OnInit {
     this.camera.getPicture(this.galeriOptions).then(res=>{
       let size_data = this.sizeService.size(res);
       let int_size = +size_data.byteLength;
-      if (int_size >= 5242880 ) {
+      if (int_size >= 10485760 ) {
         this.loadingCtrl.tutup_loading();
         this.swal.swal_aksi_gagal("Terjadi kesalahan", "File berukuran 5MB atau lebih !");
         return;
@@ -623,6 +631,7 @@ export class ListPage implements OnInit {
     }
   }
 
+  // update data evidence harian
   async update_progress_harian_evidance(id, nama, uri, tipe){
     this.data_progres_bar = 0.5;
 
@@ -666,6 +675,7 @@ export class ListPage implements OnInit {
     });
   }
 
+  // jika fungsi api tidak ada respon
   async tidak_ada_respon(tipe_data, nama, path_uri){
     const a = this.setget.getData();
     if (a == 1) {
@@ -697,6 +707,7 @@ export class ListPage implements OnInit {
     });
   }
 
+  // keluar aplikasi jika terjadi kesalahan/error
   async keluar_aplikasi(){
     const a = this.setget.getData();
     if (a == 1) {
@@ -719,123 +730,125 @@ export class ListPage implements OnInit {
     });
   }
 
-    //modal mendapatkan gambar
-    async modal_evidence(id) {
-      console.log(id)
-      const actionSheet = await this.actionSheetController.create({
-        header: 'Pilih Gambar',
-        cssClass: 'my-custom-class',
-        buttons: [{
-          text: 'Kamera',
-          icon: 'camera-outline',
-          handler: () => {
-            this.kamera(null, id, 1);
-          }
-        }, {
-          text: 'Galeri',
-          icon: 'image-outline',
-          handler: () => {
-            this.galeri(null, id, 1);
-          }
-        },{
-          text: 'PDF',
-          icon: 'document-outline',
-          handler: () => {
-            this.dapatkan_dokumen(id);
-          }
-        }, {
-          text: 'Batal',
-          icon: 'close',
-          role: 'cancel',
-        }]
-      });
-      await actionSheet.present();
-    }
-  
-    async dapatkan_dokumen(id){
-      this.loadingCtrl.tampil_loading("Sedang Memuat");
-      await this.interval_counter_loading();
-  
-      let tipe_data;
-  
-      this.chooser.getFile("application/pdf").then((data:ChooserResult)=>{
-  
-        if (data == undefined) {
-        this.loadingCtrl.tutup_loading();
+  //modal mendapatkan evidence
+  async modal_evidence(id) {
+    console.log(id)
+    const actionSheet = await this.actionSheetController.create({
+      header: 'Pilih Gambar',
+      cssClass: 'my-custom-class',
+      buttons: [{
+        text: 'Kamera',
+        icon: 'camera-outline',
+        handler: () => {
+          this.kamera(null, id, 1);
         }
-  
-        let type_data = data.mediaType;
-        let nama_dulu = data.name;
-        let nama_file  = this.datepipe.transform((new Date), 'MMddyyyyhmmss.') + tipe_data;
-        let path_uri_data = data.dataURI;
-        let size_data = data.data.byteLength;
-        let int_size_data = +size_data;
-  
-        if (type_data == "application/pdf") {
-            
-          if (int_size_data >= 5242880) {
-            this.loadingCtrl.tutup_loading();
-            this.swal.swal_aksi_gagal("Terjadi kesalahan", "File berukuran 5MB atau lebih !");
-            return;
-          } else {
-            // this.arr_data_img_pdf.push(obj_dokumen);
-            this.swal_pdf(null, path_uri_data, nama_dulu, id, 1);
-            this.loadingCtrl.tutup_loading();
-            
-            // this.setget.set_lapor(this.item, this.volume, this.keterangan, "ada");
-          }
-          // this.setget.set_lapor(this.item, this.volume, this.keterangan, "ada");
-        } else {
-          this.loadingCtrl.tutup_loading();
-          this.swal.swal_aksi_gagal("Terjadi kesalahan !", "File bukan bertipe PDF/WORD !");
-          // this.setget.set_lapor(this.item, this.volume, this.keterangan, "assets/ss_.png");
+      }, {
+        text: 'Galeri',
+        icon: 'image-outline',
+        handler: () => {
+          this.galeri(null, id, 1);
         }
-  
-      },(err)=>{
-        this.loadingCtrl.tutup_loading();
-        this.swal.swal_code_error("Terjadi kesalahan !", "Code error 72 !");
-      })
-    }
-  
-    async mengirim_informasi_data(path_uri, id, tipe_data){
-  
-      this.data_progres_bar = 0.5;
-      
-      let nama_file  = this.datepipe.transform((new Date), 'MMddyyyyhmmss.') + tipe_data;
-      let name_ = nama_file.toString();
-  
-      this.apiService.menyimpan_path_file(id, name_)
-      .then(data => {
-        console.log(data);
-        const data_json = JSON.parse(data.data);
-        const data_status = data_json.status;
-  
-        if (data_status == 0) {
-          if (tipe_data == "JPEG") {
-            this.mengirim_gambar(name_, path_uri);
-          }
-          if (tipe_data == "pdf") {
-            this.mengirim_pdf(name_, path_uri);
-          }
-        } else {
-          this.swal.swal_code_error("Terjadi kesalahan", "code error 73 !");
-          return;
+      },{
+        text: 'PDF',
+        icon: 'document-outline',
+        handler: () => {
+          this.dapatkan_dokumen(id);
         }
-  
-      })
-      .catch(error => {
-      console.log(error);
-    
+      }, {
+        text: 'Batal',
+        icon: 'close',
+        role: 'cancel',
+      }]
+    });
+    await actionSheet.present();
+  }
+
+  //dapatkan data dokumen pdf dari lokal untuk fungsi menambah evidence 
+  async dapatkan_dokumen(id){
+    this.loadingCtrl.tampil_loading("Sedang Memuat");
+    await this.interval_counter_loading();
+
+    let tipe_data;
+
+    this.chooser.getFile("application/pdf").then((data:ChooserResult)=>{
+
+      if (data == undefined) {
       this.loadingCtrl.tutup_loading();
-        if (error.status == -4) {
-          this.toast.Toast("Gagal mengirim, mencoba mengirim kembali !");
-          this.mengirim_informasi_data(path_uri, id, tipe_data);
-          this.data_progres_bar = 0.4;
+      }
+
+      let type_data = data.mediaType;
+      let nama_dulu = data.name;
+      let nama_file  = this.datepipe.transform((new Date), 'MMddyyyyhmmss.') + tipe_data;
+      let path_uri_data = data.dataURI;
+      let size_data = data.data.byteLength;
+      let int_size_data = +size_data;
+
+      if (type_data == "application/pdf") {
+          
+        if (int_size_data >= 5242880) {
+          this.loadingCtrl.tutup_loading();
+          this.swal.swal_aksi_gagal("Terjadi kesalahan", "File berukuran 5MB atau lebih !");
+          return;
         } else {
-        this.swal.swal_code_error("Terjadi kesalahan", "code error 74 !, kembali ke login !");
-        return;
+          // this.arr_data_img_pdf.push(obj_dokumen);
+          this.swal_pdf(null, path_uri_data, nama_dulu, id, 1);
+          this.loadingCtrl.tutup_loading();
+          
+          // this.setget.set_lapor(this.item, this.volume, this.keterangan, "ada");
         }
-      });
-    }
+        // this.setget.set_lapor(this.item, this.volume, this.keterangan, "ada");
+      } else {
+        this.loadingCtrl.tutup_loading();
+        this.swal.swal_aksi_gagal("Terjadi kesalahan !", "File bukan bertipe PDF/WORD !");
+        // this.setget.set_lapor(this.item, this.volume, this.keterangan, "assets/ss_.png");
+      }
+
+    },(err)=>{
+      this.loadingCtrl.tutup_loading();
+      this.swal.swal_code_error("Terjadi kesalahan !", "Code error 72 !");
+    })
+  }
+
+  // mengirim data menambah evidence
+  async mengirim_informasi_data(path_uri, id, tipe_data){
+
+    this.data_progres_bar = 0.5;
+    
+    let nama_file  = this.datepipe.transform((new Date), 'MMddyyyyhmmss.') + tipe_data;
+    let name_ = nama_file.toString();
+
+    this.apiService.menyimpan_path_file(id, name_)
+    .then(data => {
+      console.log(data);
+      const data_json = JSON.parse(data.data);
+      const data_status = data_json.status;
+
+      if (data_status == 0) {
+        if (tipe_data == "JPEG") {
+          this.mengirim_gambar(name_, path_uri);
+        }
+        if (tipe_data == "pdf") {
+          this.mengirim_pdf(name_, path_uri);
+        }
+      } else {
+        this.swal.swal_code_error("Terjadi kesalahan", "code error 73 !");
+        return;
+      }
+
+    })
+    .catch(error => {
+    console.log(error);
+  
+    this.loadingCtrl.tutup_loading();
+      if (error.status == -4) {
+        this.toast.Toast("Gagal mengirim, mencoba mengirim kembali !");
+        this.mengirim_informasi_data(path_uri, id, tipe_data);
+        this.data_progres_bar = 0.4;
+      } else {
+      this.swal.swal_code_error("Terjadi kesalahan", "code error 74 !, kembali ke login !");
+      return;
+      }
+    });
+  }
 
 }

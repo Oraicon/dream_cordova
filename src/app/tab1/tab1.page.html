@@ -5,6 +5,7 @@
         <ion-col size="6" class="ion-align-items-center text_header bold putih">Beranda</ion-col>
         <ion-col size="6" class="ion-text-end">
           
+          <!-- notifikasi -->
           <ion-button (click)="notif()" fill="clear" class="padding_button">
             <ion-icon  size="large" class="putih" name="alert-circle-outline"></ion-icon>
           </ion-button>
@@ -78,7 +79,7 @@
             <ng-template #rap_data_selesai>
               <ion-card class="bayangan">
                 <ion-card-header class="ion-text-center">
-                  <ion-card-title class="ion-text-center text_judul">{{  data.kode_rap }}</ion-card-title>
+                  <ion-card-title class="ion-text-center text_judul">{{  data.nama_proyek }}</ion-card-title>
                 </ion-card-header>
                 <ion-card-content class="ion-no-padding">
                   <ion-grid fixed class="ion-no-padding">
@@ -108,7 +109,7 @@
             <ng-template #rap_data_belum>
               <ion-card class="bayangan">
                 <ion-card-header class="ion-text-center">
-                  <ion-card-title class="ion-text-center text_judul">{{  data.kode_rap }}</ion-card-title>
+                  <ion-card-title class="ion-text-center text_judul">{{  data.nama_proyek }}</ion-card-title>
                 </ion-card-header>
                 <ion-card-content class="ion-no-padding">
                   <ion-grid fixed class="ion-no-padding">
@@ -142,7 +143,7 @@
         <ng-template #rap_ada>
           <ion-card class="bayangan">
             <ion-card-header class="padding_buttom">
-              <ion-card-title class="ion-text-center text_judul">{{  data.kode_rap }}</ion-card-title>
+              <ion-card-title class="ion-text-center text_judul">{{  data.nama_proyek }}</ion-card-title>
             </ion-card-header>
             <ion-card-content class="ion-no-padding">
               <ion-grid fixed class="ion-no-padding">
@@ -177,7 +178,7 @@
   
                 <ion-row class="ion-align-items-center">
                   <ion-col size="6" class="ion-padding-bottom">
-                    <ion-card color="secondary" class="bayangan ion-activatable ripple-parent" (click)="kegiatan(data.id, data.kode_rap)">
+                    <ion-card color="secondary" class="bayangan ion-activatable ripple-parent" (click)="kegiatan(data.id, data.nama_proyek)">
                       <ion-card-content>
                         <ion-grid fixed class="ion-no-padding">
                           <ion-row class="ion-text-start ion-align-items-center">
@@ -200,7 +201,7 @@
                   </ion-col>
 
                   <ion-col size="6" class="ion-padding-bottom">
-                    <ion-card color="medium" class="bayangan ion-activatable ripple-parent" (click)="cdokumen(obj_jumlah_cheklist_dokumen['id'+i], data.kode_rap)">
+                    <ion-card color="medium" class="bayangan ion-activatable ripple-parent" (click)="cdokumen(obj_jumlah_cheklist_dokumen['id'+i], data.nama_proyek)">
                       <ion-card-content>
                         <ion-grid fixed class="ion-no-padding">
                           <ion-row class="ion-text-start ion-align-items-center">
