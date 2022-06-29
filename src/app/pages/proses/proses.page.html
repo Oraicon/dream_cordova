@@ -17,8 +17,7 @@
   <div *ngIf="riwayat_loading; then toolbar_kosong; else toolbar_tidak_kosong"></div>
 
   <ng-template #toolbar_kosong>
-    <ion-col size="12" class="">
-      <ion-card class="bayangan">
+      <ion-card class="bayangan ion-no-padding">
         <ion-card-header>
           <ion-skeleton-text animated style="width: 100%; height: 2rem;"></ion-skeleton-text>
         </ion-card-header>
@@ -41,7 +40,6 @@
           </ion-grid>
         </ion-card-content>
       </ion-card>
-    </ion-col>
   </ng-template>
 
   <ng-template #toolbar_tidak_kosong>

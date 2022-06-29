@@ -66,7 +66,7 @@ export class Tab3Page {
 
   //camera setting
   cameraOptions: CameraOptions = {
-    quality: 50,
+    quality: 80,
     correctOrientation: true,
     sourceType: this.camera.PictureSourceType.CAMERA,
     destinationType: this.camera.DestinationType.DATA_URL,
@@ -75,7 +75,7 @@ export class Tab3Page {
   }
 
   galeriOptions: CameraOptions = {
-    quality: 50,
+    quality: 80,
     correctOrientation: true,
     sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
     destinationType: this.camera.DestinationType.DATA_URL,
@@ -116,20 +116,18 @@ export class Tab3Page {
     });
   }
 
-  //delay 
-  interval_counter() {
-    return new Promise(resolve => { setTimeout(() => resolve(""), 100);});
+  ionViewWillEnter(){
+    this.setget.setButton(0);
   }
 
-  //delay file transfer 30 detik
-  delay() {
-    console.log("masuk dealy");
-    return new Promise(resolve => { setTimeout(() => resolve(""), 30000);});
+  //delay 
+  interval_counter(timer) {
+    return new Promise(resolve => { setTimeout(() => resolve(""), timer);});
   }
 
   //fungsi menunggu delay
   async delayed(){
-    await this.delay();
+    await this.interval_counter(6000);
     return 1;
   }
 
@@ -369,7 +367,7 @@ export class Tab3Page {
     this.loadingCtrl.tampil_loading("Memuat data . . .");
     const data_l_nama = await this.storage.get('nama');
     const data_l_sandi = await this.storage.get('sandi');
-    await this.interval_counter();
+    await this.interval_counter(100);
   
     this.apiService.panggil_api_data_karyawan(data_l_nama, data_l_sandi)
     .then(res => {
@@ -565,7 +563,7 @@ export class Tab3Page {
   //update nama
   async api_ubah_nama(nama_baru){
 
-    this.interval_counter();
+    this.interval_counter(100);
 
     let nama_ls = await this.storage.get('nama');
 
@@ -621,7 +619,7 @@ export class Tab3Page {
   //update sandi
   async api_ubah_sandi(sandi_baru){
 
-    this.interval_counter();
+    this.interval_counter(100);
 
     let nama_ls = await this.storage.get('nama');
 

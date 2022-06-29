@@ -55,9 +55,13 @@ export class Tab1Page {
     this.menampilkan_data_rap();
   }
 
+  ionViewWillEnter(){
+    this.setget.setButton(0);
+  }
+
   //delay
-  interval_counter() {
-    return new Promise(resolve => { setTimeout(() => resolve(""), 100);});
+  interval_counter(timer) {
+    return new Promise(resolve => { setTimeout(() => resolve(""), timer);});
   }
 
   //refresh page
@@ -160,10 +164,11 @@ export class Tab1Page {
     this.penghitung_loading = 0;
 
     const data_l_nama = await this.storage.get('nama');
-    
-    await this.interval_counter();
+
     this.apiService.dapatkan_data_proyek_rap_master(data_l_nama)
     .then(data => {
+
+      console.log(data);
 
       const data_json = JSON.parse(data.data);
       const status_data = data_json.status;
@@ -191,23 +196,23 @@ export class Tab1Page {
 
           } 
           
-          if (rap_status == 18) {
+          // if (rap_status == 18) {
             
-            this.obj_data_rap["data_rap1_"+index] = "kosong";
-            this.obj_data_rap["data_rap3_"+index] = "selesai";
+          //   this.obj_data_rap["data_rap1_"+index] = "kosong";
+          //   this.obj_data_rap["data_rap3_"+index] = "selesai";
 
-            this.ida_data_rap.push(0);
+          //   this.ida_data_rap.push(0);
 
-            if (index == this.data_rap.length - 1 || index == 0) {
-              this.data_beranda = true;
-              this.data_beranda_loading_tidak_ada = true;
-              this.data_notif();
-            }
-          } 
+          //   if (index == this.data_rap.length - 1 || index == 0) {
+          //     this.data_beranda = true;
+          //     this.data_beranda_loading_tidak_ada = true;
+          //     this.data_notif();
+          //   }
+          // } 
           
-          if (rap_status != 12 && rap_status != 18) {
+          if (rap_status != 12 ) {
             this.obj_data_rap["data_rap1_"+index] = "kosong";
-            this.obj_data_rap["data_rap2_"+index] = false;
+            this.obj_data_rap["data_rap2_"+index] = true;
             this.ida_data_rap.push(0);
 
             if (index == this.data_rap.length - 1 || index == 0) {

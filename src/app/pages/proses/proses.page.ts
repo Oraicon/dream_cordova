@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild  } from '@angular/core';
 import { SetGetServiceService } from 'src/app/services/set-get-service.service';
-import { NavController } from '@ionic/angular';
 import { LoadingServiceService } from 'src/app/services/loading-service.service';
 import { MomentService } from 'src/app/services/moment.service';
 import { ApiServicesService } from 'src/app/services/api-services.service';
@@ -8,7 +7,7 @@ import { SwalServiceService } from 'src/app/services/swal-service.service';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { ToastService } from 'src/app/services/toast.service';
-import { NativeGeocoder, NativeGeocoderResult, NativeGeocoderOptions } from '@awesome-cordova-plugins/native-geocoder/ngx';
+import { NativeGeocoder, NativeGeocoderOptions } from '@awesome-cordova-plugins/native-geocoder/ngx';
 import { IonInfiniteScroll } from '@ionic/angular';
 
 
@@ -48,7 +47,6 @@ export class ProsesPage implements OnInit {
     private apiService: ApiServicesService, 
     private toast: ToastService,
     private loadingService: LoadingServiceService, 
-    private navCtrl: NavController, 
     private setget: SetGetServiceService,) { 
   }
 

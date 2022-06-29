@@ -9,6 +9,7 @@ import { LoadingServiceService } from 'src/app/services/loading-service.service'
 import { SwalServiceService } from 'src/app/services/swal-service.service';
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { SetGetServiceService } from 'src/app/services/set-get-service.service';
+import Swal from 'sweetalert2';
 import { ToastService } from 'src/app/services/toast.service';
 
 @Component({
@@ -34,7 +35,6 @@ export class LoginPage implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private toast: ToastService,
     private network: Network,
     private toastService: ToastService,
     private router:Router,
@@ -82,14 +82,13 @@ export class LoginPage implements OnInit {
     }
   }
   
-  //pindah aktiviti
   ionViewDidLeave(){
     this.router.navigate(["/tabs/tab1"], { replaceUrl: true });
   }
 
   //delay
-  interval_counter() {
-    return new Promise(resolve => { setTimeout(() => resolve(""), 250);});
+  interval_counter(timer) {
+    return new Promise(resolve => { setTimeout(() => resolve(""), timer);});
   }
 
   //fungsi lihat sandi
@@ -199,7 +198,7 @@ export class LoginPage implements OnInit {
   manggil_api_login(var_nama, var_sandi){
     this.data_progres_bar = 0.3;
     
-    this.interval_counter();
+    this.interval_counter(250);
 
     this.apiService.panggil_api_data_karyawan(var_nama, var_sandi)
     .then(res => {
@@ -209,17 +208,8 @@ export class LoginPage implements OnInit {
 
     if (data_status == 1) {
       this.data_progres_bar = 0.6;
-      // this.cek_user_rap(var_nama, var_sandi);
-      this.storage.set('auth', true);
-      this.storage.set('nama', var_nama);
-      this.storage.set('sandi', var_sandi);
+      this.cek_user_rap(var_nama, var_sandi);
 
-      this.data_progres_bar = 0.9;
-      this.sedang_mengirim = false;
-      
-      this.loadingService.tutup_loading();
-
-      this.ionViewDidLeave();
     } else if (data_status == 2) {
       this.data_progres_bar = 0.9;
       this.sedang_mengirim = false;
@@ -257,7 +247,29 @@ export class LoginPage implements OnInit {
       
       if (err.status == -4 ) {
         this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Tidak ada respon, coba beberapa saat lagi !");
-      } else {
+      } 
+      
+      if (err.status == -3) {
+        this.loadingService.tutup_loading();
+        this.loadingService.tampil_loading("");
+        Swal.fire({
+          title: 'Terjadi kesalahan !',
+          text: "Restart data seluler terlebih dahulu, lalu tekan 'kirim ulang' untuk mengirim kembali !",
+          icon: 'error',
+          backdrop: false,
+          confirmButtonColor: '#3880ff',
+          confirmButtonText: 'Kirim ulang !',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.loadingService.tutup_loading();
+            this.loadingService.tampil_loading("Mengirim data . . .");
+            this.interval_counter(5000);
+            this.manggil_api_login(var_nama, var_sandi);
+          }
+        })
+      }
+      
+      if(err.status != -4 && err.status != -3) {
         this.swal.swal_aksi_gagal("Terjadi kesalahan !", "code error 2 !");
       }
     });
@@ -267,7 +279,7 @@ export class LoginPage implements OnInit {
   manggil_api_lupa_nama(nama_baru){
     this.data_progres_bar = 0.6;
 
-    this.interval_counter();
+    this.interval_counter(250);
 
     this.apiService.panggil_api_reset_password(nama_baru)
     .then(res => {
@@ -308,12 +320,35 @@ export class LoginPage implements OnInit {
       this.loadingService.tutup_loading();
       if (err.status == -4) {
         this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Tidak ada respon, coba beberapa saat lagi !");
-      } else {
+      } 
+      
+      if (err.status == -3) {
+        this.loadingService.tutup_loading();
+        this.loadingService.tampil_loading("");
+        Swal.fire({
+          title: 'Terjadi kesalahan !',
+          text: "Restart data seluler terlebih dahulu, lalu tekan 'kirim ulang' untuk mengirim kembali !",
+          icon: 'error',
+          backdrop: false,
+          confirmButtonColor: '#3880ff',
+          confirmButtonText: 'Kirim ulang !',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.loadingService.tutup_loading();
+            this.loadingService.tampil_loading("Mengirim data . . .");
+            this.interval_counter(5000);
+            this.manggil_api_lupa_nama(nama_baru)
+          }
+        })
+      }
+
+      if (err.status !=4 && err.status != 3) {
         this.swal.swal_aksi_gagal("Terjadi kesalahan !", "code error 3 !");
       }
     });
   }
 
+  //pengecekan user jika user terdaftar pada proyek
   async cek_user_rap(var_nama, var_sandi){
     this.data_progres_bar = 0.7;
     this.apiService.dapatkan_data_proyek_rap_master(var_nama)
@@ -351,7 +386,28 @@ export class LoginPage implements OnInit {
       
       if (error.status == -4 ) {
         this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Code error 70 !");
-      } else {
+      } 
+      
+      if (error.status == -3) {
+        this.loadingService.tampil_loading("");
+        Swal.fire({
+          title: 'Terjadi kesalahan !',
+          text: "Restart data seluler terlebih dahulu, lalu tekan 'kirim ulang' untuk mengirim kembali !",
+          icon: 'error',
+          backdrop: false,
+          confirmButtonColor: '#3880ff',
+          confirmButtonText: 'Kirim ulang !',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.loadingService.tutup_loading();
+            this.loadingService.tampil_loading("Mengirim data . . .");
+            this.interval_counter(5000);
+            this.cek_user_rap(var_nama, var_sandi);
+          }
+        })
+      }
+
+      if (error.status !=4 && error.status != 3) {
         this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Code error 71 !");
       }
   

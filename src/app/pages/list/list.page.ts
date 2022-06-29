@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, NgZone, OnInit } from '@angular/core';
 import { ModalController, NavController } from '@ionic/angular';
 import { ModalIsikontenPage } from 'src/app/modal/modal-isikonten/modal-isikonten.page';
 import { SetGetServiceService } from 'src/app/services/set-get-service.service';
@@ -45,7 +45,7 @@ export class ListPage implements OnInit {
 
   //persiapan kamera
   cameraOptions: CameraOptions = {
-    quality: 50,
+    quality: 80,
     correctOrientation: true,
     sourceType: this.camera.PictureSourceType.CAMERA,
     destinationType: this.camera.DestinationType.DATA_URL,
@@ -54,7 +54,7 @@ export class ListPage implements OnInit {
   }
 
   galeriOptions: CameraOptions = {
-    quality: 50,
+    quality: 80,
     correctOrientation: true,
     sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
     destinationType: this.camera.DestinationType.DATA_URL,
@@ -80,6 +80,7 @@ export class ListPage implements OnInit {
     private file: File,
     private fileOpener: FileOpener,
     private transfer: FileTransfer,
+    private ngzone: NgZone
   ) { }
 
   // ionic lifecycle
@@ -238,8 +239,10 @@ export class ListPage implements OnInit {
     await modal.present();
   }
 
+  progress = 0;
+  sedang_download = false;
   //menampilkan pdf
-  tampilakn_pdf(path_pdf, id){
+  async tampilakn_pdf(path_pdf, id){
 
     this.loadingCtrl.tampil_loading("Sedang memuat . . .");
 
@@ -247,15 +250,26 @@ export class ListPage implements OnInit {
     let data_url = "https://dream-beta.technosolusitama.in/" + path_pdf;
 
     const trans = this.transfer.create();
+
+    trans.onProgress((progressEvent) => {
+      this.progress = 0;
+      this.sedang_download = true;
+      let perc = Math.floor(progressEvent.loaded / progressEvent.total * 100);
+      this.ngzone.run(() => {
+        this.progress = perc / 100;
+      });
+      });
     
     trans.download(data_url, this.file.dataDirectory + nama_pdf).then((entry) => {
       console.log('download complete: ' + entry.toURL());
+      this.sedang_download = false
       let hasil =  entry.toURL(); 
       this.loadingCtrl.tutup_loading();
       this.fileOpener.open(hasil, 'application/pdf')
       .then(() => console.log('File is opened'))
       .catch(e => console.log('Error opening file', e));
     }, (error) => {
+      this.sedang_download = false;
       // handle error
       const code_error = error.code;
       this.loadingCtrl.tutup_loading();
@@ -280,10 +294,21 @@ export class ListPage implements OnInit {
             this.loadingCtrl.tutup_loading();
           }
         });
-      } else {
-        this.swal.swal_code_error("Terjadi kesalahan !", "code error 23 !, kembali ke login !");
+      } 
+      
+      if (code_error == 4) {
+        this.swal.swal_aksi_gagal("Mendownload gagal !", "Waktu terlalu lama, coba beberapa saat lagi !")
+      }
+      
+      if( code_error != 1 && code_error != 4){
+        this.swal.swal_code_error("Terjadi kesalahan !", "code error 95 !, kembali ke login !");
       }
     });
+
+    let waktu_habis = await this.delayed();
+    if (waktu_habis == 1) {
+      trans.abort();
+    }
   }
 
   // dapatkan pdf dai lokal
@@ -306,7 +331,7 @@ export class ListPage implements OnInit {
 
         if (int_size_data >= 10485760) {
           this.loadingCtrl.tutup_loading();
-          this.swal.swal_aksi_gagal("Terjadi kesalahan", "File berukuran 5MB atau lebih !");
+          this.swal.swal_aksi_gagal("Terjadi kesalahan", "File berukuran 10MB atau lebih !");
           return;
         } else {    
           this.loadingCtrl.tutup_loading();
@@ -339,7 +364,7 @@ export class ListPage implements OnInit {
       let int_size = +size_data.byteLength;
       if (int_size >= 10485760 ) {
         this.loadingCtrl.tutup_loading();
-        this.swal.swal_aksi_gagal("Terjadi kesalahan", "File berukuran 5MB atau lebih !");
+        this.swal.swal_aksi_gagal("Terjadi kesalahan", "File berukuran 10MB atau lebih !");
         return;
       } else {
         this.loadingCtrl.tutup_loading();
@@ -360,7 +385,7 @@ export class ListPage implements OnInit {
       let int_size = +size_data.byteLength;
       if (int_size >= 10485760 ) {
         this.loadingCtrl.tutup_loading();
-        this.swal.swal_aksi_gagal("Terjadi kesalahan", "File berukuran 5MB atau lebih !");
+        this.swal.swal_aksi_gagal("Terjadi kesalahan", "File berukuran 10MB atau lebih !");
         return;
       } else {
         this.loadingCtrl.tutup_loading();
@@ -482,6 +507,7 @@ export class ListPage implements OnInit {
 
   //mengirim gambar ke server
   async mengirim_gambar(nama, path_uri){
+    this.data_progres_bar = 0.6;
     const fileTransfer: FileTransferObject = this.transfer.create();
 
     let options: FileUploadOptions = {
@@ -492,12 +518,20 @@ export class ListPage implements OnInit {
       headers: {}
     }
 
-    this.data_progres_bar = 0.6;
+    fileTransfer.onProgress((progressEvent) => {
+      this.progress = 0;
+      this.sedang_download = true;
+      let perc = Math.floor(progressEvent.loaded / progressEvent.total * 100);
+      this.ngzone.run(() => {
+        this.progress = perc / 100;
+      });
+    });
 
     fileTransfer.upload(path_uri, this.URL, options)
     .then(data => {
       
       console.log(data);
+      this.sedang_download = false;
 
       const data_json = JSON.parse(data.response);
       const data_status = data_json.status;
@@ -530,6 +564,7 @@ export class ListPage implements OnInit {
     .catch(error => {
 
       console.log(error)
+      this.sedang_download = false;
     
       this.loadingCtrl.tutup_loading();
 
@@ -556,6 +591,7 @@ export class ListPage implements OnInit {
 
   //mengirim pdf ke server
   async mengirim_pdf(nama, path_uri){
+    this.data_progres_bar = 0.6;
 
     const fileTransfer: FileTransferObject = this.transfer.create();
 
@@ -567,12 +603,20 @@ export class ListPage implements OnInit {
       headers: {}
     }
 
-    this.data_progres_bar = 0.6;
+    fileTransfer.onProgress((progressEvent) => {
+      this.progress = 0;
+      this.sedang_download = true;
+      let perc = Math.floor(progressEvent.loaded / progressEvent.total * 100);
+      this.ngzone.run(() => {
+        this.progress = perc / 100;
+      });
+    });
 
     fileTransfer.upload(path_uri, this.URL, options)
     .then(data => {
       
       console.log(data);
+      this.sedang_download = false;
 
       const data_json = JSON.parse(data.response);
       const data_status = data_json.status;
@@ -607,6 +651,7 @@ export class ListPage implements OnInit {
     .catch(error => {
 
       console.log(error)
+      this.sedang_download = false;
     
       this.loadingCtrl.tutup_loading();
 
@@ -785,9 +830,9 @@ export class ListPage implements OnInit {
 
       if (type_data == "application/pdf") {
           
-        if (int_size_data >= 5242880) {
+        if (int_size_data >= 10485760) {
           this.loadingCtrl.tutup_loading();
-          this.swal.swal_aksi_gagal("Terjadi kesalahan", "File berukuran 5MB atau lebih !");
+          this.swal.swal_aksi_gagal("Terjadi kesalahan", "File berukuran 10MB atau lebih !");
           return;
         } else {
           // this.arr_data_img_pdf.push(obj_dokumen);

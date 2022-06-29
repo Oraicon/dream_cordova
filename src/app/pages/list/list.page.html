@@ -170,7 +170,11 @@
 
 <ion-footer>
   <!-- menampilkan loading -->
+  <ion-progress-bar color="success" value="{{ progress }}" *ngIf="sedang_download; else tidak_sedang_download"></ion-progress-bar>
+  <ng-template #tidak_sedang_download></ng-template>
+
   <ion-progress-bar value="{{ data_progres_bar }}" *ngIf="sedang_mengirim; else tidak_sedang_mengirim"></ion-progress-bar>
+  <ng-template #tidak_sedang_mengirim></ng-template>
   <!-- <ion-toolbar> -->
     <!-- <ion-button (click)="modal_evidence(id)" expand="block">
       Tambah Evidence

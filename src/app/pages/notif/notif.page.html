@@ -126,31 +126,31 @@
                       </ion-col>
 
                       <ion-col size="4" class="ion-text-start" *ngIf="file_nama['ext'+data.id] == 'docx'; else docx_kosong">
-                        <ion-thumbnail (click)="buka_pdf(data.evidence_file)">
+                        <ion-thumbnail (click)="buka_doc(data.evidence_file)">
                           <img src="assets/dok_icon.png"/>
                         </ion-thumbnail>
                       </ion-col>
 
                       <ion-col size="4" class="ion-text-start" *ngIf="file_nama['ext'+data.id] == 'xlsx'; else xlsx_kosong">
-                        <ion-thumbnail (click)="buka_pdf(data.evidence_file)">
+                        <ion-thumbnail (click)="buka_xlsx(data.evidence_file)">
                           <img src="assets/xlsx_icon.png"/>
                         </ion-thumbnail>
                       </ion-col>
 
                       <ion-col size="4" class="ion-text-start" *ngIf="file_nama['ext'+data.id] == 'pptx'; else pptx_kosong">
-                        <ion-thumbnail (click)="buka_pdf(data.evidence_file)">
+                        <ion-thumbnail (click)="buka_pptx(data.evidence_file)">
                           <img src="assets/pptx_icon.png"/>
                         </ion-thumbnail>
                       </ion-col>
 
                       <ion-col size="4" class="ion-text-start" *ngIf="file_nama['ext'+data.id] == 'rar'; else rar_kosong">
-                        <ion-thumbnail (click)="buka_pdf(data.evidence_file)">
+                        <ion-thumbnail (click)="buka_rar(data.evidence_file)">
                           <img src="assets/rar_icon.png"/>
                         </ion-thumbnail>
                       </ion-col>
 
                       <ion-col size="4" class="ion-text-start" *ngIf="file_nama['ext'+data.id] == 'zip'; else zip_kosong">
-                        <ion-thumbnail (click)="buka_pdf(data.evidence_file)">
+                        <ion-thumbnail (click)="buka_zip(data.evidence_file)">
                           <img src="assets/zip_icon.png"/>
                         </ion-thumbnail>
                       </ion-col>
@@ -206,6 +206,9 @@
 
 <ion-footer>
   <!-- menampilkan loading -->
+  <ion-progress-bar color="success" value="{{ progress }}" *ngIf="sedang_download; else tidak_sedang_download"></ion-progress-bar>
+  <ng-template #tidak_sedang_download></ng-template>
+
   <ion-progress-bar value="{{ data_progres_bar }}" *ngIf="sedang_mengirim; else tidak_sedang_mengirim"></ion-progress-bar>
   <ng-template #tidak_sedang_mengirim></ng-template>
 </ion-footer>
