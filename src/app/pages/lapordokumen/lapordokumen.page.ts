@@ -56,7 +56,7 @@ export class LapordokumenPage implements OnInit {
 
   //persiapan kamera
   cameraOptions: CameraOptions = {
-    quality: 80,
+    quality: 100,
     correctOrientation: true,
     sourceType: this.camera.PictureSourceType.CAMERA,
     destinationType: this.camera.DestinationType.DATA_URL,
@@ -65,7 +65,7 @@ export class LapordokumenPage implements OnInit {
   }
 
   galeriOptions: CameraOptions = {
-    quality: 80,
+    quality: 100,
     correctOrientation: true,
     sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
     destinationType: this.camera.DestinationType.DATA_URL,
@@ -397,7 +397,7 @@ export class LapordokumenPage implements OnInit {
 
     },(err)=>{
       this.loadingService.tutup_loading();
-      this.swal.swal_code_error("Terjadi kesalahan !", "Code error 34 !");
+      this.swal.swal_code_error("Terjadi kesalahan !", "Code error 34, kembali ke login !");
     })
   }
 
@@ -547,7 +547,7 @@ export class LapordokumenPage implements OnInit {
       } else {
         console.log(data);
         this.loadingService.tutup_loading();
-        this.swal.swal_aksi_gagal("Terjadi kesalahan", "code error 35 !");
+        this.swal.swal_aksi_gagal("Terjadi kesalahan", "Code error 35 !");
       }
 
     })
@@ -576,7 +576,7 @@ export class LapordokumenPage implements OnInit {
             }
           })
       } else {
-        this.swal.swal_code_error("Terjadi kesalahan", "code error 36 !, kembali ke login !");
+        this.swal.swal_code_error("Terjadi kesalahan", "Code error 36 !, kembali ke login !");
       }
     });
   }

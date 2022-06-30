@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 import { ActionSheetController, ModalController } from '@ionic/angular';
 import { Storage } from '@ionic/storage-angular';
 import { ApiServicesService } from '../services/api-services.service';
@@ -16,6 +16,7 @@ import { Network } from '@awesome-cordova-plugins/network/ngx';
 import { SetGetServiceService } from '../services/set-get-service.service';
 import Swal from 'sweetalert2';
 import { ToastService } from '../services/toast.service';
+import { SizecountServiceService } from '../services/sizecount-service.service';
 
 @Component({
   selector: 'app-tab3',
@@ -66,7 +67,7 @@ export class Tab3Page {
 
   //camera setting
   cameraOptions: CameraOptions = {
-    quality: 80,
+    quality: 100,
     correctOrientation: true,
     sourceType: this.camera.PictureSourceType.CAMERA,
     destinationType: this.camera.DestinationType.DATA_URL,
@@ -75,7 +76,7 @@ export class Tab3Page {
   }
 
   galeriOptions: CameraOptions = {
-    quality: 80,
+    quality: 100,
     correctOrientation: true,
     sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
     destinationType: this.camera.DestinationType.DATA_URL,
@@ -87,11 +88,13 @@ export class Tab3Page {
   constructor(private momentService: MomentService,
     private setget: SetGetServiceService,
     private toastCtrl: ToastService,
+    private sizeService: SizecountServiceService,
     private network: Network,
     private toast: ToastService,
     private swalService: SwalServiceService,
     private actionSheetController: ActionSheetController,
     private router: Router, 
+    private ngzone: NgZone,
     private passwordService: PasswordServiceService, 
     private datepipe: DatePipe, 
     private transfer: FileTransfer, 
@@ -127,7 +130,7 @@ export class Tab3Page {
 
   //fungsi menunggu delay
   async delayed(){
-    await this.interval_counter(6000);
+    await this.interval_counter(120000);
     return 1;
   }
 
@@ -179,37 +182,28 @@ export class Tab3Page {
   //modal ganti gambar
   async presentActionSheet() {
 
-    let data_button = this.setget.getButton();
-
-    if (data_button == 0) {
-      this.setget.setButton(1);
-
-      const actionSheet = await this.actionSheetController.create({
-        header: 'Pilih Gambar',
-        cssClass: 'my-custom-class',
-        buttons: [{
-          text: 'Kamera',
-          icon: 'camera-outline',
-          handler: () => {
-            this.kamera();
-          }
-        }, {
-          text: 'Galeri',
-          icon: 'image-outline',
-          handler: () => {
-            this.galeri();
-          }
-        }, {
-          text: 'Batal',
-          icon: 'close',
-          role: 'cancel',
-        }]
-      });
-      await actionSheet.present();
-
-    } else {
-      this.toast.Toast_tampil();
-    }
+    const actionSheet = await this.actionSheetController.create({
+      header: 'Pilih Gambar',
+      cssClass: 'my-custom-class',
+      buttons: [{
+        text: 'Kamera',
+        icon: 'camera-outline',
+        handler: () => {
+          this.kamera();
+        }
+      }, {
+        text: 'Galeri',
+        icon: 'image-outline',
+        handler: () => {
+          this.galeri();
+        }
+      }, {
+        text: 'Batal',
+        icon: 'close',
+        role: 'cancel',
+      }]
+    });
+    await actionSheet.present();
 
   }
 
@@ -223,19 +217,22 @@ export class Tab3Page {
       console.log(res);
       let data_img_base64 = 'data:image/jpeg;base64,' + res;
       this.base64_img = data_img_base64;
+      let size_data = this.sizeService.size(res);
+      let int_size = +size_data.byteLength;
 
       this.loadingCtrl.tutup_loading();
 
-      if (this.cek_koneksi == true) {
-        this.loadingCtrl.tampil_loading("Mengubah profil . . .");
-        this.sedang_mengirim = true;
-        this.data_progres_bar = 0.3;
-        this.test_koneksi(null, null);
+      if (int_size >= 10485760 ) {
+        this.swalService.swal_aksi_gagal("Terjadi kesalahan", "File berukuran 10MB atau lebih !");
+        return;
       } else {
-        this.loadingCtrl.tutup_loading();
-        this.swalService.swal_aksi_gagal("Terjadi kesalahan", "Tidak ada koneksi internet !");
+        if (this.cek_koneksi == true) {
+          this.swal_gambar(this.base64_img);
+        } else {
+          this.loadingCtrl.tutup_loading();
+          this.swalService.swal_aksi_gagal("Terjadi kesalahan", "Tidak ada koneksi internet !");
+        }
       }
-
     }, (err) => {
       // Handle error
       console.log("error");
@@ -252,17 +249,21 @@ export class Tab3Page {
       console.log(res);
       let data_img_base64 = 'data:image/jpeg;base64,' + res;
       this.base64_img = data_img_base64;
+      let size_data = this.sizeService.size(res);
+      let int_size = +size_data.byteLength;
 
       this.loadingCtrl.tutup_loading();
 
-      if (this.cek_koneksi == true) {
-        this.loadingCtrl.tampil_loading("Mengubah profil . . .");
-        this.sedang_mengirim = true;
-        this.data_progres_bar = 0.3;
-        this.test_koneksi(null, null);
+      if (int_size >= 10485760 ) {
+        this.swalService.swal_aksi_gagal("Terjadi kesalahan", "File berukuran 10MB atau lebih !");
+        return;
       } else {
-        this.loadingCtrl.tutup_loading();
-        this.swalService.swal_aksi_gagal("Terjadi kesalahan", "Tidak ada koneksi internet !");
+        if (this.cek_koneksi == true) {
+          this.swal_gambar(this.base64_img);
+        } else {
+          this.loadingCtrl.tutup_loading();
+          this.swalService.swal_aksi_gagal("Terjadi kesalahan", "Tidak ada koneksi internet !");
+        }
       }
     }, (err) => {
       // Handle error
@@ -270,6 +271,34 @@ export class Tab3Page {
       this.loadingCtrl.tutup_loading();
     });
   }
+
+    //alert konfirmasi ganti gambar
+    swal_gambar(path_uri){
+      this.loadingCtrl.tutup_loading();
+      this.loadingCtrl.tampil_loading("");
+      Swal.fire({
+        title: 'Peringatan !!',
+        text: 'Ubah profil dengan foto di atas ?!',
+        imageUrl: '' + path_uri,
+        imageWidth: 300,
+        imageHeight: 200,
+        imageAlt: 'Custom image',
+        backdrop: false,
+        confirmButtonColor: '#3880ff',
+        confirmButtonText: 'Simpan !',
+        showDenyButton: true,
+        denyButtonText: `Batal `,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.loadingCtrl.tutup_loading();
+          this.sedang_mengirim = true;
+          this.loadingCtrl.tampil_loading("Mengubah profil . . .");
+          this.test_koneksi(null, null);
+        }else{
+          this.loadingCtrl.tutup_loading();
+        }
+      })
+    }
 
   //mengubah nama pengguna
   async ubahnama(){
@@ -410,7 +439,7 @@ export class Tab3Page {
         if (err.status == -4) {
           this.tidak_ada_respon();
         } else {
-          this.swalService.swal_code_error("Terjadi kesalahan !", "code error 17, kembali ke login !");
+          this.swalService.swal_code_error("Terjadi kesalahan !", "Code error 17, kembali ke login !");
         }
       }
     });
@@ -443,6 +472,8 @@ export class Tab3Page {
   }
 
   //upload gambar + update di api
+  progress = 0
+  sedang_upload = false;
   async upload(nama_file){
     //perisapan mengirim
     const fileTransfer: FileTransferObject = this.transfer.create();
@@ -463,12 +494,22 @@ export class Tab3Page {
       }
     }
 
+    fileTransfer.onProgress((progressEvent) => {
+      this.progress = 0;
+      this.sedang_upload = true;
+      let perc = Math.floor(progressEvent.loaded / progressEvent.total * 100);
+      this.ngzone.run(() => {
+        this.progress = perc / 100;
+      });
+    });
+
     //upload ke server
     fileTransfer.upload(this.base64_img, URL, options)
     .then((res) => {
       // success upload foto
       const data_json = JSON.parse(res.response);
       const data_status = data_json.status;
+      this.sedang_upload = false;
       
       if (data_status == 0) {
         
@@ -484,23 +525,25 @@ export class Tab3Page {
         this.data_progres_bar = 0.9;
         this.sedang_mengirim = false;
         this.loadingCtrl.tutup_loading();
-        this.swalService.swal_aksi_gagal("Terjadi kesalahan !", "code error 4 !");
+        this.swalService.swal_aksi_gagal("Terjadi kesalahan !", "Code error 4 !");
       }
 
     }, (err) => {
       console.log(err);
       // error
       let status = err.code;
+      this.sedang_upload = false;
+
       if (status == 4) {
         this.data_progres_bar = 0.9;
         this.sedang_mengirim = false;
         this.loadingCtrl.tutup_loading();
-        this.swalService.swal_aksi_gagal("Terjadi kesalahan !", "Mengirim gambar terlalu lama");
+        this.swalService.swal_aksi_gagal("Terjadi kesalahan !", "Mengirim gambar terlalu lama !");
       } else {
         this.data_progres_bar = 0.9;
         this.sedang_mengirim = false;
         this.loadingCtrl.tutup_loading();
-        this.swalService.swal_code_error("Terjadi kesalahan !", "code error 13 !, kembali ke login !");
+        this.swalService.swal_code_error("Terjadi kesalahan !", "Code error 13 !, kembali ke login !");
       }
     });
 
@@ -587,7 +630,7 @@ export class Tab3Page {
         this.data_progres_bar = 0.9;
         this.sedang_mengirim = false;
         this.loadingCtrl.tutup_loading();
-        this.swalService.swal_aksi_gagal("Terjadi kesalahan !", "code error 5 !");
+        this.swalService.swal_aksi_gagal("Terjadi kesalahan !", "Code error 5 !");
       }
       
     })
@@ -607,7 +650,7 @@ export class Tab3Page {
           this.swalService.swal_aksi_gagal("Terjadi kesalahan !", "Tidak ada respon, coba beberapa saat lagi !");
           return
         }else{
-          this.swalService.swal_code_error("Terjadi kesalahan !", "code error 6 !, kembali ke login !");
+          this.swalService.swal_code_error("Terjadi kesalahan !", "Code error 6 !, kembali ke login !");
           return
         }
       }
@@ -644,7 +687,7 @@ export class Tab3Page {
         this.data_progres_bar = 0.9;
         this.sedang_mengirim = false;
         this.loadingCtrl.tutup_loading();
-        this.swalService.swal_aksi_gagal("Terjadi kesalahan !", "code error 7 !");
+        this.swalService.swal_aksi_gagal("Terjadi kesalahan !", "Code error 7 !");
       }
       
     })
@@ -663,7 +706,7 @@ export class Tab3Page {
         if(err.status == -4){
           this.swalService.swal_aksi_gagal("Terjadi kesalahan !", "Tidak ada respon, coba beberapa saat lagi !");
         }else{
-          this.swalService.swal_code_error("Terjadi kesalahan !", "code error 8 !, kembali ke login !");
+          this.swalService.swal_code_error("Terjadi kesalahan !", "Code error 8 !, kembali ke login !");
         }
       }
 
@@ -778,6 +821,9 @@ export class Tab3Page {
         denyButtonText: `Tidak`,
       }).then((result) => {
         if (result.isConfirmed) {
+          this.storage.set('auth', false);
+          this.storage.set('nama', null);
+          this.storage.set('sandi', null);
           this.loadingCtrl.tutup_loading();
           this.router.navigate(["/login"], { replaceUrl: true });
         }else {

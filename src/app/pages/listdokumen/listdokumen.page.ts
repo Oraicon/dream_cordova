@@ -42,7 +42,7 @@ export class ListdokumenPage implements OnInit {
 
   //persiapan kamera
   cameraOptions: CameraOptions = {
-    quality: 50,
+    quality: 100,
     correctOrientation: true,
     sourceType: this.camera.PictureSourceType.CAMERA,
     destinationType: this.camera.DestinationType.DATA_URL,
@@ -51,7 +51,7 @@ export class ListdokumenPage implements OnInit {
   }
 
   galeriOptions: CameraOptions = {
-    quality: 50,
+    quality: 100,
     correctOrientation: true,
     sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
     destinationType: this.camera.DestinationType.DATA_URL,
@@ -821,13 +821,13 @@ export class ListdokumenPage implements OnInit {
         // this.setget.set_lapor(this.item, this.volume, this.keterangan, "ada");
       } else {
         this.loadingCtrl.tutup_loading();
-        this.swal.swal_aksi_gagal("Terjadi kesalahan !", "File bukan bertipe PDF/WORD !");
+        this.swal.swal_aksi_gagal("Terjadi kesalahan !", "File bukan bertipe "+tipe_data.toUpperCase() +" !");
         // this.setget.set_lapor(this.item, this.volume, this.keterangan, "assets/ss_.png");
       }
 
     },(err)=>{
       this.loadingCtrl.tutup_loading();
-      this.swal.swal_code_error("Terjadi kesalahan !", "Code error 75 !");
+      this.swal.swal_code_error("Terjadi kesalahan !", "Code error 75, kembali ke login !");
     })
   }
 
@@ -882,7 +882,7 @@ export class ListdokumenPage implements OnInit {
         }
         
       } else {
-        this.swal.swal_code_error("Terjadi kesalahan", "code error 76 !");
+        this.swal.swal_code_error("Terjadi kesalahan", "code error 76, kembali ke login !");
         return;
       }
 
@@ -962,7 +962,7 @@ export class ListdokumenPage implements OnInit {
       }
       
       if( code_error != 1 && code_error != 4){
-        this.swal.swal_code_error("Terjadi kesalahan !", "code error 87 !, kembali ke login !");
+        this.swal.swal_code_error("Terjadi kesalahan !", "Code error 87 !, kembali ke login !");
       }
     });
 
@@ -1031,7 +1031,7 @@ export class ListdokumenPage implements OnInit {
       }
       
       if( code_error != 1 && code_error != 4){
-        this.swal.swal_code_error("Terjadi kesalahan !", "code error 88 !, kembali ke login !");
+        this.swal.swal_code_error("Terjadi kesalahan !", "Code error 88 !, kembali ke login !");
       }
     });
 
@@ -1101,7 +1101,7 @@ export class ListdokumenPage implements OnInit {
       }
       
       if( code_error != 1 && code_error != 4){
-        this.swal.swal_code_error("Terjadi kesalahan !", "code error 89 !, kembali ke login !");
+        this.swal.swal_code_error("Terjadi kesalahan !", "Code error 89 !, kembali ke login !");
       }
     });
 
@@ -1533,7 +1533,7 @@ export class ListdokumenPage implements OnInit {
         if (error.status == -4) {
           // this.tidak_ada_respon("docx", nama, path_uri, tipe_mime);
         } else {
-          this.swal.swal_code_error("Terjadi kesalahan !", "code error 94 !, kembali ke login !");
+          this.swal.swal_code_error("Terjadi kesalahan !", "Code error 94 !, kembali ke login !");
         }
       }
     });

@@ -57,7 +57,7 @@ export class LaporPage implements OnInit {
 
   //persiapan kamera
   cameraOptions: CameraOptions = {
-    quality: 80,
+    quality: 100,
     correctOrientation: true,
     sourceType: this.camera.PictureSourceType.CAMERA,
     destinationType: this.camera.DestinationType.DATA_URL,
@@ -66,7 +66,7 @@ export class LaporPage implements OnInit {
   }
 
   galeriOptions: CameraOptions = {
-    quality: 80,
+    quality: 100,
     correctOrientation: true,
     sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
     destinationType: this.camera.DestinationType.DATA_URL,

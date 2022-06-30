@@ -146,9 +146,7 @@ export class KegiatanPage implements OnInit {
         // this.detail_kegiatan = data_json.data;
 
       } else {
-        this.loadingService.tutup_loading();
-        this.toast.Toast("Terjadi kesalahan !, Data kosong !")
-        this.router.navigate(["/tabs/tab1"], { replaceUrl: true });
+        this.data_kosong();
       }
     })
     .catch(error => {
@@ -165,10 +163,17 @@ export class KegiatanPage implements OnInit {
         if (error.status == -4) {
           this.tidak_ada_respon();
         } else {
-          this.swal.swal_code_error("Terjadi kesalahan !", "code error 18 !, kembali ke login !");
+          this.swal.swal_code_error("Terjadi kesalahan !", "Code error 18 !, kembali ke login !");
         }
       }
     });
+  }
+
+  async data_kosong(){
+    await this.interval_counter_loading();
+    this.loadingService.tutup_loading();
+    this.toast.Toast("Terjadi kesalahan !, Data kosong !")
+    this.router.navigate(["/tabs/tab1"], { replaceUrl: true });
   }
 
   //mengolah data kegiatan

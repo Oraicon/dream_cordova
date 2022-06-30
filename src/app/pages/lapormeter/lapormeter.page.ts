@@ -61,7 +61,7 @@ export class LapormeterPage implements OnInit {
 
   //persiapan kamera
   cameraOptions: CameraOptions = {
-    quality: 80,
+    quality: 100,
     correctOrientation: true,
     sourceType: this.camera.PictureSourceType.CAMERA,
     destinationType: this.camera.DestinationType.DATA_URL,
@@ -70,7 +70,7 @@ export class LapormeterPage implements OnInit {
   }
 
   galeriOptions: CameraOptions = {
-    quality: 80,
+    quality: 100,
     correctOrientation: true,
     sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
     destinationType: this.camera.DestinationType.DATA_URL,
@@ -587,7 +587,7 @@ export class LapormeterPage implements OnInit {
         this.loooping_mengirim_informasi_data(data_id_evidence);
       } else {
         this.loadingService.tutup_loading();
-        this.swal.swal_aksi_gagal("Terjadi kesalahan", "code error 9 !");
+        this.swal.swal_aksi_gagal("Terjadi kesalahan", "Code error 9 !");
       }
 
     })

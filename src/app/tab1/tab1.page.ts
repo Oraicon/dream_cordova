@@ -250,7 +250,7 @@ export class Tab1Page {
         if (error.status == -4) {
           this.tidak_ada_respon();
         } else {
-          this.swalService.swal_code_error("Terjadi kesalahan !", "code error 15 !, kembali ke login !");
+          this.swalService.swal_code_error("Terjadi kesalahan !", "Code error 15 !, kembali ke login !");
         }
       }
     });
@@ -301,7 +301,7 @@ export class Tab1Page {
         if (error.status == -4) {
           this.tidak_ada_respon();
         } else {
-          this.swalService.swal_code_error("Terjadi kesalahan !", "code error 16 !, kembali ke login !");
+          this.swalService.swal_code_error("Terjadi kesalahan !", "Code error 16 !, kembali ke login !");
         }
       }
   
@@ -355,7 +355,7 @@ export class Tab1Page {
         if (error.status == -4) {
           this.tidak_ada_respon();
         } else {
-          this.swalService.swal_code_error("Terjadi kesalahan !", "code error 16 !, kembali ke login !");
+          this.swalService.swal_code_error("Terjadi kesalahan !", "code error 70 !, kembali ke login !");
         }
       }
   
@@ -419,7 +419,7 @@ export class Tab1Page {
         if (error.status == -4) {
           this.tidak_ada_respon();
         } else {
-          this.swalService.swal_code_error("Terjadi kesalahan !", "code error 52 !, kembali ke login !");
+          this.swalService.swal_code_error("Terjadi kesalahan !", "Code error 52 !, kembali ke login !");
         }
       }
     });

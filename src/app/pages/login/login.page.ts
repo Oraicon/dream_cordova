@@ -66,6 +66,7 @@ export class LoginPage implements OnInit {
       }, );
     });
 
+
     //validasi
     this.myGroup = this.formBuilder.group({
       nama_pengguna: ['', [Validators.required]],
@@ -81,6 +82,11 @@ export class LoginPage implements OnInit {
       this.loadingService.tutup_loading();
     }
   }
+
+  async ionViewDidEnter(){
+    this.interval_counter(500);
+    this.auto_login();
+  }
   
   ionViewDidLeave(){
     this.router.navigate(["/tabs/tab1"], { replaceUrl: true });
@@ -89,6 +95,19 @@ export class LoginPage implements OnInit {
   //delay
   interval_counter(timer) {
     return new Promise(resolve => { setTimeout(() => resolve(""), timer);});
+  }
+
+  async auto_login(){
+    const data_l_nama = await this.storage.get('nama');
+    const data_l_sandi = await this.storage.get('sandi');
+
+    if (data_l_nama != null && data_l_sandi != null) {
+      this.toastService.Toast("Data akun masih terimpan");
+      this.sedang_mengirim = true;
+      this.data_progres_bar = 0.1;
+      this.loadingService.tampil_loading("Auto login . . . ");
+      this.manggil_api_login(data_l_nama, data_l_sandi);
+    }
   }
 
   //fungsi lihat sandi
@@ -142,10 +161,6 @@ export class LoginPage implements OnInit {
   //validasi
   onSubmit(){
     this.isSubmitted = true;
-
-    this.storage.set('auth', false);
-    this.storage.set('nama', null);
-    this.storage.set('sandi', null);
 
     let data_button = this.setget.getButton();
     console.log(data_button);
@@ -235,7 +250,7 @@ export class LoginPage implements OnInit {
       this.sedang_mengirim = false;
       this.loadingService.tutup_loading();
 
-      this.swal.swal_aksi_gagal("Terjadi kesalahan !", "code error 1 !");
+      this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Code error 1 !");
     }
 
     })
@@ -270,7 +285,7 @@ export class LoginPage implements OnInit {
       }
       
       if(err.status != -4 && err.status != -3) {
-        this.swal.swal_aksi_gagal("Terjadi kesalahan !", "code error 2 !");
+        this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Code error 2 !");
       }
     });
   }
@@ -302,7 +317,7 @@ export class LoginPage implements OnInit {
         this.data_progres_bar = 0.9;
         this.sedang_mengirim = false;
         this.loadingService.tutup_loading();
-        this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Sandi gagal dikirim ke email");
+        this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Sandi gagal dikirim ke email !");
       } 
       else if (data_status == 2) {
         //jika status != 1
@@ -385,7 +400,7 @@ export class LoginPage implements OnInit {
       this.loadingService.tutup_loading();
       
       if (error.status == -4 ) {
-        this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Code error 70 !");
+        this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Tidak ada respon, coba beberapa saat lagi !");
       } 
       
       if (error.status == -3) {

@@ -47,7 +47,7 @@ export class NotifPage implements OnInit {
 
   //persiapan kamera
   cameraOptions: CameraOptions = {
-    quality: 80,
+    quality: 100,
     correctOrientation: true,
     sourceType: this.camera.PictureSourceType.CAMERA,
     destinationType: this.camera.DestinationType.DATA_URL,
@@ -56,7 +56,7 @@ export class NotifPage implements OnInit {
   }
 
   galeriOptions: CameraOptions = {
-    quality: 80,
+    quality: 100,
     correctOrientation: true,
     sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
     destinationType: this.camera.DestinationType.DATA_URL,
@@ -195,7 +195,7 @@ export class NotifPage implements OnInit {
         if (error.status == -4) {
           this.tidak_ada_respon2();
         } else {
-          this.swalService.swal_code_error("Terjadi kesalahan !", "code error 53 !, kembali ke login !");
+          this.swalService.swal_code_error("Terjadi kesalahan !", "Code error 53 !, kembali ke login !");
         }
       }
   
@@ -274,7 +274,7 @@ export class NotifPage implements OnInit {
         if (error.status == -4) {
           this.tidak_ada_respon2();
         } else {
-          this.swalService.swal_code_error("Terjadi kesalahan !", "code error 54 !, kembali ke login !");
+          this.swalService.swal_code_error("Terjadi kesalahan !", "Code error 54 !, kembali ke login !");
         }
       }
   
@@ -374,7 +374,7 @@ export class NotifPage implements OnInit {
       let int_size = +size_data.byteLength;
       if (int_size >= 10485760 ) {
         this.loadingCtrl.tutup_loading();
-        this.swal.swal_aksi_gagal("Terjadi kesalahan", "File berukuran 5MB atau lebih !");
+        this.swal.swal_aksi_gagal("Terjadi kesalahan", "File berukuran 10MB atau lebih !");
         return;
       } else {
         this.loadingCtrl.tutup_loading();
@@ -395,7 +395,7 @@ export class NotifPage implements OnInit {
       let int_size = +size_data.byteLength;
       if (int_size >= 10485760 ) {
         this.loadingCtrl.tutup_loading();
-        this.swal.swal_aksi_gagal("Terjadi kesalahan", "File berukuran 5MB atau lebih !");
+        this.swal.swal_aksi_gagal("Terjadi kesalahan", "File berukuran 10MB atau lebih !");
         return;
       } else {
         this.loadingCtrl.tutup_loading();
@@ -483,7 +483,7 @@ export class NotifPage implements OnInit {
       }
       
       if( code_error != 1 && code_error != 4){
-        this.swal.swal_code_error("Terjadi kesalahan !", "code error 78 !, kembali ke login !");
+        this.swal.swal_code_error("Terjadi kesalahan !", "Code error 78 !, kembali ke login !");
       }
     });
 
@@ -553,7 +553,7 @@ export class NotifPage implements OnInit {
       }
       
       if( code_error != 1 && code_error != 4){
-        this.swal.swal_code_error("Terjadi kesalahan !", "code error 79 !, kembali ke login !");
+        this.swal.swal_code_error("Terjadi kesalahan !", "Code error 79 !, kembali ke login !");
       }
     });
 
@@ -619,7 +619,7 @@ export class NotifPage implements OnInit {
       }
       
       if( code_error != 1 && code_error != 4){
-        this.swal.swal_code_error("Terjadi kesalahan !", "code error 80 !, kembali ke login !");
+        this.swal.swal_code_error("Terjadi kesalahan !", "Code error 80 !, kembali ke login !");
       }
 
     });
@@ -686,7 +686,7 @@ export class NotifPage implements OnInit {
       }
       
       if( code_error != 1 && code_error != 4){
-        this.swal.swal_code_error("Terjadi kesalahan !", "code error 81 !, kembali ke login !");
+        this.swal.swal_code_error("Terjadi kesalahan !", "Code error 81 !, kembali ke login !");
       }
 
     });
@@ -753,7 +753,7 @@ export class NotifPage implements OnInit {
       }
       
       if( code_error != 1 && code_error != 4){
-        this.swal.swal_code_error("Terjadi kesalahan !", "code error 82 !, kembali ke login !");
+        this.swal.swal_code_error("Terjadi kesalahan !", "Code error 82 !, kembali ke login !");
       }
 
     });
@@ -820,7 +820,7 @@ export class NotifPage implements OnInit {
       }
       
       if( code_error != 1 && code_error != 4){
-        this.swal.swal_code_error("Terjadi kesalahan !", "code error 83 !, kembali ke login !");
+        this.swal.swal_code_error("Terjadi kesalahan !", "Code error 83 !, kembali ke login !");
       }
 
     });
@@ -907,7 +907,7 @@ export class NotifPage implements OnInit {
 
     },(err)=>{
       this.loadingCtrl.tutup_loading();
-      this.swal.swal_code_error("Terjadi kesalahan !", "code error 84 !, kembali ke login !");
+      this.swal.swal_code_error("Terjadi kesalahan !", "Code error 84 !, kembali ke login !");
     })
   }
 
@@ -984,7 +984,7 @@ export class NotifPage implements OnInit {
         if (status_data == 0) {
           this.update_log_notifikasi(id, name_, uri, tipe, tipe_mime);
         }else{
-          this.swal.swal_aksi_gagal("Terjadi kesalahan !", "code error 66 !");
+          this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Code error 66 !");
           return;
         }
 
@@ -1020,7 +1020,7 @@ export class NotifPage implements OnInit {
         }
         
         if (error.status !=4 && error.status != 3) {
-          this.swal.swal_code_error("Terjadi kesalahan", "code error 60 !, kembali ke login !");
+          this.swal.swal_code_error("Terjadi kesalahan", "Code error 60 !, kembali ke login !");
         }
     
       });
@@ -1036,7 +1036,7 @@ export class NotifPage implements OnInit {
           if (status_data == 0) {
             this.update_log_notifikasi(id, name_, uri, tipe, tipe_mime);
           }else{
-            this.swal.swal_aksi_gagal("Terjadi kesalahan !", "code error 67 !");
+            this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Code error 67 !");
             return;
           }
         }
@@ -1072,7 +1072,7 @@ export class NotifPage implements OnInit {
         }
 
         if (error.status !=4 && error.status != 3) {
-          this.swal.swal_code_error("Terjadi kesalahan", "code error 61 !, kembali ke login !");
+          this.swal.swal_code_error("Terjadi kesalahan", "Code error 61 !, kembali ke login !");
         }
 
       });
@@ -1098,7 +1098,7 @@ export class NotifPage implements OnInit {
             this.mengirim_data_file(name_, uri, tipe_mime)
           }
         }else{
-          this.swal.swal_aksi_gagal("Terjadi kesalahan !", "code error 68 !");
+          this.swal.swal_aksi_gagal("Terjadi kesalahan !", "Code error 68 !");
           return;
         }
   
@@ -1132,7 +1132,7 @@ export class NotifPage implements OnInit {
       }
       
       if (error.status !=4 && error.status != 3) {
-        this.swal.swal_code_error("Terjadi kesalahan", "code error 69 !, kembali ke login !");
+        this.swal.swal_code_error("Terjadi kesalahan", "Code error 69 !, kembali ke login !");
       }
 
   
@@ -1211,7 +1211,7 @@ export class NotifPage implements OnInit {
         if (error.status == -4) {
           this.tidak_ada_respon("img", nama, path_uri, null);
         } else {
-          this.swal.swal_code_error("Terjadi kesalahan !", "code error 85 !, kembali ke login !");
+          this.swal.swal_code_error("Terjadi kesalahan !", "Code error 85 !, kembali ke login !");
         }
       }
     });
@@ -1293,7 +1293,7 @@ export class NotifPage implements OnInit {
         if (error.status == -4) {
           this.tidak_ada_respon("else", nama_baru, path_uri, tipe_mime);
         } else {
-          this.swal.swal_code_error("Terjadi kesalahan !", "code error 86 !, kembali ke login !");
+          this.swal.swal_code_error("Terjadi kesalahan !", "Code error 86 !, kembali ke login !");
         }
       }
     });

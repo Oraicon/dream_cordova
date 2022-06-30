@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { LoadingServiceService } from './loading-service.service';
 import { SetGetServiceService } from './set-get-service.service';
 import { Router } from '@angular/router';
+import { Storage } from '@ionic/storage-angular';
 import Swal from 'sweetalert2';
 
 
@@ -13,7 +14,8 @@ export class SwalServiceService {
   constructor(
     private setget: SetGetServiceService,
     private loading: LoadingServiceService,
-    private router: Router
+    private router: Router,
+    private storage: Storage
   ) { }
 
   //info
@@ -88,7 +90,10 @@ export class SwalServiceService {
       confirmButtonColor: '#3880ff',
       confirmButtonText: 'OK !',
     }).then((result) => {
-      if (result.isConfirmed) {
+      if (result.isConfirmed) {          
+        this.storage.set('auth', false);
+        this.storage.set('nama', null);
+        this.storage.set('sandi', null);
         this.setget.set_swal(0);
         this.loading.tutup_loading();
         this.loading.tutup_loading();

@@ -44,7 +44,7 @@ export class DokumenPage implements OnInit {
   }
 
   //awal masuk page
-  ionViewWillEnter(){
+  async ionViewWillEnter(){
     this.setget.setButton(0);
     this.menampilkan_detail_dokumen();
   }
@@ -89,9 +89,7 @@ export class DokumenPage implements OnInit {
         // this.delay_dulu();
       } else {
         // this.swal.swal_code_error("Terjadi kesalahan !", "Data Kosong !")
-        this.loadingService.tutup_loading();
-        this.toast.Toast("Terjadi kesalahan !, Data kosong !")
-        this.router.navigate(["/tabs/tab1"], { replaceUrl: true });
+        this.data_kosong();
       }
     })
     .catch(error => {
@@ -112,6 +110,13 @@ export class DokumenPage implements OnInit {
         }
       }
     });
+  }
+
+  async data_kosong(){
+    await this.interval_counter_loading();
+    this.loadingService.tutup_loading();
+    this.toast.Toast("Terjadi kesalahan !, Data kosong !")
+    this.router.navigate(["/tabs/tab1"], { replaceUrl: true });
   }
 
   //menambahkan kedalam variable

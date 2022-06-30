@@ -203,7 +203,7 @@ export class ProsesPage implements OnInit {
         if (error.status == -4) {
           this.tidak_ada_respon();
         } else {
-          this.swal.swal_code_error("Terjadi kesalahan !", "code error 19 !, kembali ke login !");
+          this.swal.swal_code_error("Terjadi kesalahan !", "Code error 19 !, kembali ke login !");
         }
       }
   
@@ -247,7 +247,7 @@ export class ProsesPage implements OnInit {
         if (error.status == -4) {
           this.tidak_ada_respon();
         } else {
-          this.swal.swal_code_error("Terjadi kesalahan !", "code error 20 !, kembali ke login !");
+          this.swal.swal_code_error("Terjadi kesalahan !", "Code error 20 !, kembali ke login !");
         }
       }
   
